@@ -1,0 +1,83 @@
+name: 每日股票分析
+
+on:
+  schedule:
+    # 每个工作日北京时间 18:00 = UTC 10:00
+    - cron: '0 10 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      stocks:
+        description: '自选股代码（逗号分隔，留空使用默认）'
+        required: false
+        default: ''
+      no_llm:
+        description: '禁用 LLM（true/false）'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run analysis
+        env:
+          STOCK_LIST: ${{ github.event.inputs.stocks || '' }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+          LOW_PRICE_THRESHOLD: ${{ secrets.LOW_PRICE_THRESHOLD }}
+          SCREENER_MAX_RESULTS: ${{ secrets.SCREENER_MAX_RESULTS }}
+          ENABLE_LLM: ${{ github.event.inputs.no_llm == 'true' && 'false' || 'true' }}
+        run: |
+          cd backend
+          python main.py --force
+
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/latest.json data/reports/ || true
+          git diff --staged --quiet || git commit -m "📊 每日分析报告 $(date +'%Y-%m-%d')"
+          git push || echo "Nothing to push or push failed"
+
+      - name: Build and deploy frontend
+        if: success()
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+          # 将 data 目录复制到 dist 供前端访问
+          cp -r ../data dist/data
+        continue-on-error: true
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/dist
+        continue-on-error: true
