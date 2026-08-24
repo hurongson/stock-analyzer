@@ -29,7 +29,7 @@ class FundamentalStrategy(BaseStrategy):
             (df["amount"] > 5e7)
         ].copy()
 
-        candidates = candidates.head(200)
+        candidates = candidates.head(100)
 
         for _, row in candidates.iterrows():
             code = row["code"]

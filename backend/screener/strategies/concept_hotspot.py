@@ -33,7 +33,7 @@ class ConceptHotspotStrategy(BaseStrategy):
             (df["turnover"] > 2)
         ].copy()
 
-        candidates = candidates.sort_values("pct_change", ascending=False).head(150)
+        candidates = candidates.sort_values("pct_change", ascending=False).head(80)
 
         for _, row in candidates.iterrows():
             code = row["code"]

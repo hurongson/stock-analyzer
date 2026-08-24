@@ -28,7 +28,7 @@ class TechnicalPatternStrategy(BaseStrategy):
         ].copy()
 
         # 限制分析数量（避免请求过多）
-        candidates = candidates.head(200)
+        candidates = candidates.head(80)
 
         for _, row in candidates.iterrows():
             code = row["code"]

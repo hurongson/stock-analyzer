@@ -27,7 +27,7 @@ class CapitalFlowStrategy(BaseStrategy):
             (df["turnover"] > 1)
         ].copy()
 
-        candidates = candidates.head(150)
+        candidates = candidates.head(80)
 
         for _, row in candidates.iterrows():
             code = row["code"]
