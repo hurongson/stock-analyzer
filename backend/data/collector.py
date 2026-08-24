@@ -169,6 +169,18 @@ class DataCollector:
         return None
 
     # ============ 实时/最新行情 ============
+    # 常见股票名称映射（stock_basic 接口频率受限，用此兜底）
+    STOCK_NAME_MAP = {
+        "600519": "贵州茅台", "000001": "平安银行", "300750": "宁德时代",
+        "002594": "比亚迪", "601318": "中国平安", "600036": "招商银行",
+        "000858": "五粮液", "601899": "紫金矿业", "600900": "长江电力",
+        "000333": "美的集团", "601166": "兴业银行", "600276": "恒瑞医药",
+        "002415": "海康威视", "601012": "隆基绿能", "300059": "东方财富",
+        "600030": "中信证券", "000725": "京东方A", "601888": "中国中免",
+        "600887": "伊利股份", "000568": "泸州老窖", "002475": "立讯精密",
+        "600309": "万华化学", "601668": "中国建筑", "601398": "工商银行",
+    }
+
     def get_realtime_quote(self, code: str) -> Optional[Dict]:
         code = normalize_stock_code(code)
         key = f"quote_{code}"
@@ -176,46 +188,38 @@ class DataCollector:
         if cached:
             return cached
 
-        # 优先 Tushare（用最新交易日日线 + 每日指标）
+        # 优先 Tushare：从K线最新数据获取价格（不依赖频率受限的 stock_basic/daily_basic）
         if TUSHARE_AVAILABLE:
             try:
-                ts_code = to_ts_code(code)
-                trade_date = self.latest_trade_date
-                # 日线
-                daily_df = pro.daily(ts_code=ts_code, trade_date=trade_date)
-                # 每日指标（PE/PB/市值/换手率）
-                basic_df = pro.daily_basic(ts_code=ts_code, trade_date=trade_date,
-                    fields='ts_code,trade_date,close,turnover_rate,pe,pe_ttm,pb,total_mv,circ_mv')
-                # 股票名称
-                name_df = pro.stock_basic(ts_code=ts_code, fields='ts_code,name')
+                kline = self.get_daily_kline(code, days=10)
+                if kline is not None and not kline.empty:
+                    latest = kline.iloc[-1]
+                    prev = kline.iloc[-2] if len(kline) >= 2 else None
+                    price = safe_float(latest.get("close"), 0)
+                    prev_close = safe_float(latest.get("prev_close"), safe_float(prev.get("close") if prev is not None else 0, 0))
+                    change = price - prev_close if prev_close else 0
+                    pct_change = (change / prev_close * 100) if prev_close else 0
 
-                result = {"code": code, "name": code}
-                if name_df is not None and not name_df.empty:
-                    result["name"] = name_df.iloc[0]["name"]
-                if daily_df is not None and not daily_df.empty:
-                    r = daily_df.iloc[0]
-                    result.update({
-                        "price": safe_float(r.get("close"), 0),
-                        "pct_change": safe_float(r.get("pct_chg"), 0),
-                        "change": safe_float(r.get("change"), 0),
-                        "volume": safe_float(r.get("vol"), 0) * 100,
-                        "amount": safe_float(r.get("amount"), 0) * 1000,  # Tushare amount 单位千元
-                        "high": safe_float(r.get("high"), 0),
-                        "low": safe_float(r.get("low"), 0),
-                        "open": safe_float(r.get("open"), 0),
-                        "prev_close": safe_float(r.get("pre_close"), 0),
-                    })
-                if basic_df is not None and not basic_df.empty:
-                    b = basic_df.iloc[0]
-                    result.update({
-                        "turnover": safe_float(b.get("turnover_rate"), 0),
-                        "pe": safe_float(b.get("pe")),
-                        "pb": safe_float(b.get("pb")),
-                        "total_mv": safe_float(b.get("total_mv"), 0) * 10000,  # Tushare 单位万元
-                        "circ_mv": safe_float(b.get("circ_mv"), 0) * 10000,
-                    })
-                cache.set("quote", key, result)
-                return result
+                    result = {
+                        "code": code,
+                        "name": self.STOCK_NAME_MAP.get(code, code),
+                        "price": price,
+                        "pct_change": round(pct_change, 2),
+                        "change": round(change, 2),
+                        "volume": safe_float(latest.get("volume"), 0),
+                        "amount": safe_float(latest.get("amount"), 0),
+                        "high": safe_float(latest.get("high"), 0),
+                        "low": safe_float(latest.get("low"), 0),
+                        "open": safe_float(latest.get("open"), 0),
+                        "prev_close": prev_close,
+                        "turnover": safe_float(latest.get("turnover"), 0),
+                        "pe": None,
+                        "pb": None,
+                        "total_mv": 0,
+                        "circ_mv": 0,
+                    }
+                    cache.set("quote", key, result)
+                    return result
             except Exception as e:
                 logger.debug(f"Tushare 获取行情失败 {code}: {e}")
 
@@ -479,52 +483,32 @@ class DataCollector:
         if cached is not None and not cached.empty:
             return cached
 
-        # 优先 Tushare
+        # 优先 Tushare：用 daily(trade_date) 获取全量股票日线，不依赖频率受限的 stock_basic
         if TUSHARE_AVAILABLE:
             try:
                 trade_date = self.latest_trade_date
-                # 股票基本信息
-                basic_df = pro.stock_basic(exchange='', list_status='L',
-                    fields='ts_code,symbol,name,area,industry,list_date')
-                # 每日指标（价格/PE/PB/市值/换手率/涨跌幅）
-                daily_basic_df = pro.daily_basic(trade_date=trade_date,
-                    fields='ts_code,close,turnover_rate,pe,pe_ttm,pb,total_mv,circ_mv')
-                # 日线（涨跌幅/成交量/成交额/高低开）
                 daily_df = pro.daily(trade_date=trade_date,
                     fields='ts_code,open,high,low,close,pre_close,change,pct_chg,vol,amount')
 
-                if basic_df is None or basic_df.empty:
-                    raise ValueError("stock_basic 返回空")
+                if daily_df is None or daily_df.empty:
+                    raise ValueError("daily 返回空")
 
-                df = basic_df.copy()
-                df["code"] = df["symbol"]
-                # 合并 daily_basic
-                if daily_basic_df is not None and not daily_basic_df.empty:
-                    df = df.merge(daily_basic_df, on="ts_code", how="left")
-                    df["price"] = df["close"]
-                    df["turnover"] = df["turnover_rate"]
-                    df["total_mv"] = df["total_mv"] * 10000  # 万元→元
-                    df["circ_mv"] = df["circ_mv"] * 10000
-                # 合并 daily
-                if daily_df is not None and not daily_df.empty:
-                    df = df.merge(daily_df, on="ts_code", how="left", suffixes=("", "_daily"))
-                    df["pct_change"] = df["pct_chg"]
-                    df["change"] = df["change"]
-                    df["volume"] = df["vol"] * 100  # 手→股
-                    df["amount"] = df["amount"] * 1000  # 千元→元
-                    if "price" not in df.columns or df["price"].isna().all():
-                        df["price"] = df["close_daily"].fillna(df["close"])
+                df = daily_df.copy()
+                df["code"] = df["ts_code"].apply(from_ts_code)
+                # 股票名称用映射表兜底
+                df["name"] = df["code"].apply(lambda c: self.STOCK_NAME_MAP.get(c, c))
+                df["price"] = df["close"]
+                df["pct_change"] = df["pct_chg"]
+                df["volume"] = df["vol"] * 100  # 手→股
+                df["amount"] = df["amount"] * 1000  # 千元→元
 
-                # 统一列名
-                for col in ["price", "pct_change", "change", "volume", "amount",
-                           "high", "low", "open", "pre_close", "turnover", "pe", "pb",
-                           "total_mv", "circ_mv", "amplitude"]:
+                # 统一列名（PE/PB/市值等无权限接口，留空）
+                for col in ["turnover", "pe", "pb", "total_mv", "circ_mv", "amplitude"]:
                     if col not in df.columns:
                         df[col] = 0
 
-                # 过滤 ST、退市
+                # 过滤 ST、退市（名称中包含的）
                 df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
-                # 过滤北交所（可选，这里保留）
                 cache.set_dataframe("stock_list", key, df)
                 return df
             except Exception as e:
