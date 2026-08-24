@@ -1,13 +1,13 @@
 {
   "date": "2026-08-24",
-  "generated_at": "2026-08-24T15:40:48.169503",
+  "generated_at": "2026-08-24T15:54:26.127792",
   "stock_analyses": [
     {
       "code": "600519",
       "name": "贵州茅台",
       "price": 1304.66,
       "pct_change": 2.5,
-      "analysis_time": "2026-08-24 15:40:13",
+      "analysis_time": "2026-08-24 15:53:58",
       "total_score": 43,
       "rating": "偏空",
       "action": "减仓",
@@ -125,7 +125,7 @@
       "name": "平安银行",
       "price": 11.56,
       "pct_change": 1.31,
-      "analysis_time": "2026-08-24 15:40:48",
+      "analysis_time": "2026-08-24 15:54:26",
       "total_score": 45,
       "rating": "中性",
       "action": "观望",
@@ -242,25 +242,1048 @@
   ],
   "screener_result": {
     "strategies": {
-      "low_price": [],
-      "technical_pattern": [],
+      "low_price": [
+        {
+          "code": "000002",
+          "name": "000002",
+          "price": 3.05,
+          "pct_change": -0.974,
+          "strategy": "low_price",
+          "reason": "股价3.0元（超低价）；市值0亿（小盘）；今日-1.0%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000008",
+          "name": "000008",
+          "price": 2.45,
+          "pct_change": -0.4065,
+          "strategy": "low_price",
+          "reason": "股价2.5元（超低价）；市值0亿（小盘）；今日-0.4%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000031",
+          "name": "000031",
+          "price": 2.12,
+          "pct_change": -1.3953,
+          "strategy": "low_price",
+          "reason": "股价2.1元（超低价）；市值0亿（小盘）；今日-1.4%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000035",
+          "name": "000035",
+          "price": 4.62,
+          "pct_change": 1.0941,
+          "strategy": "low_price",
+          "reason": "股价4.6元（超低价）；市值0亿（小盘）；今日+1.1%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000036",
+          "name": "000036",
+          "price": 4.0,
+          "pct_change": -0.9901,
+          "strategy": "low_price",
+          "reason": "股价4.0元（超低价）；市值0亿（小盘）；今日-1.0%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000059",
+          "name": "000059",
+          "price": 4.66,
+          "pct_change": -1.0616,
+          "strategy": "low_price",
+          "reason": "股价4.7元（超低价）；市值0亿（小盘）；今日-1.1%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000078",
+          "name": "000078",
+          "price": 1.59,
+          "pct_change": -1.8519,
+          "strategy": "low_price",
+          "reason": "股价1.6元（超低价）；市值0亿（小盘）；今日-1.9%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000088",
+          "name": "000088",
+          "price": 4.49,
+          "pct_change": 1.1261,
+          "strategy": "low_price",
+          "reason": "股价4.5元（超低价）；市值0亿（小盘）；今日+1.1%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000090",
+          "name": "000090",
+          "price": 3.42,
+          "pct_change": -0.5814,
+          "strategy": "low_price",
+          "reason": "股价3.4元（超低价）；市值0亿（小盘）；今日-0.6%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000166",
+          "name": "000166",
+          "price": 4.44,
+          "pct_change": 0.6803,
+          "strategy": "low_price",
+          "reason": "股价4.4元（超低价）；市值0亿（小盘）；今日+0.7%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000402",
+          "name": "000402",
+          "price": 2.43,
+          "pct_change": -1.2195,
+          "strategy": "low_price",
+          "reason": "股价2.4元（超低价）；市值0亿（小盘）；今日-1.2%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000407",
+          "name": "000407",
+          "price": 4.06,
+          "pct_change": -1.2165,
+          "strategy": "low_price",
+          "reason": "股价4.1元（超低价）；市值0亿（小盘）；今日-1.2%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000420",
+          "name": "000420",
+          "price": 3.64,
+          "pct_change": -0.8174,
+          "strategy": "low_price",
+          "reason": "股价3.6元（超低价）；市值0亿（小盘）；今日-0.8%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000428",
+          "name": "000428",
+          "price": 3.93,
+          "pct_change": -1.2563,
+          "strategy": "low_price",
+          "reason": "股价3.9元（超低价）；市值0亿（小盘）；今日-1.3%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000509",
+          "name": "000509",
+          "price": 3.4,
+          "pct_change": 1.7964,
+          "strategy": "low_price",
+          "reason": "股价3.4元（超低价）；市值0亿（小盘）；今日+1.8%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000520",
+          "name": "000520",
+          "price": 4.26,
+          "pct_change": -0.2342,
+          "strategy": "low_price",
+          "reason": "股价4.3元（超低价）；市值0亿（小盘）；今日-0.2%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000525",
+          "name": "000525",
+          "price": 4.31,
+          "pct_change": 1.1737,
+          "strategy": "low_price",
+          "reason": "股价4.3元（超低价）；市值0亿（小盘）；今日+1.2%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000530",
+          "name": "000530",
+          "price": 4.99,
+          "pct_change": 1.8367,
+          "strategy": "low_price",
+          "reason": "股价5.0元（超低价）；市值0亿（小盘）；今日+1.8%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000536",
+          "name": "000536",
+          "price": 3.16,
+          "pct_change": -1.8634,
+          "strategy": "low_price",
+          "reason": "股价3.2元（超低价）；市值0亿（小盘）；今日-1.9%（走势稳健）",
+          "score": 90
+        },
+        {
+          "code": "000545",
+          "name": "000545",
+          "price": 2.52,
+          "pct_change": -0.3953,
+          "strategy": "low_price",
+          "reason": "股价2.5元（超低价）；市值0亿（小盘）；今日-0.4%（走势稳健）",
+          "score": 90
+        }
+      ],
+      "technical_pattern": [
+        {
+          "code": "000426",
+          "name": "000426",
+          "price": 42.29,
+          "pct_change": 3.4491,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、放量突破（量比1.6）、MACD多头",
+          "score": 88
+        },
+        {
+          "code": "000025",
+          "name": "000025",
+          "price": 15.66,
+          "pct_change": 2.086,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头、KDJ金叉",
+          "score": 76
+        },
+        {
+          "code": "000007",
+          "name": "000007",
+          "price": 12.74,
+          "pct_change": 2.0833,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000008",
+          "name": "000008",
+          "price": 2.45,
+          "pct_change": -0.4065,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000019",
+          "name": "000019",
+          "price": 6.42,
+          "pct_change": 0.9434,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000020",
+          "name": "000020",
+          "price": 12.3,
+          "pct_change": 4.77,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000026",
+          "name": "000026",
+          "price": 19.71,
+          "pct_change": -6.8526,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000039",
+          "name": "000039",
+          "price": 9.25,
+          "pct_change": -0.9636,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000045",
+          "name": "000045",
+          "price": 10.55,
+          "pct_change": 1.7358,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000059",
+          "name": "000059",
+          "price": 4.66,
+          "pct_change": -1.0616,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000153",
+          "name": "000153",
+          "price": 5.92,
+          "pct_change": -2.4712,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000301",
+          "name": "000301",
+          "price": 13.34,
+          "pct_change": -2.3426,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000421",
+          "name": "000421",
+          "price": 5.52,
+          "pct_change": -2.1277,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000505",
+          "name": "000505",
+          "price": 6.66,
+          "pct_change": -1.1869,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000506",
+          "name": "000506",
+          "price": 22.34,
+          "pct_change": 7.559,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 68
+        },
+        {
+          "code": "000001",
+          "name": "平安银行",
+          "price": 11.56,
+          "pct_change": 1.3146,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：MACD金叉、平台突破",
+          "score": 67
+        },
+        {
+          "code": "000415",
+          "name": "000415",
+          "price": 4.5,
+          "pct_change": -2.1739,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列",
+          "score": 60
+        },
+        {
+          "code": "000166",
+          "name": "000166",
+          "price": 4.44,
+          "pct_change": 0.6803,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：KDJ超卖金叉",
+          "score": 55
+        },
+        {
+          "code": "000006",
+          "name": "000006",
+          "price": 6.88,
+          "pct_change": -2.5496,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：MACD多头",
+          "score": 48
+        },
+        {
+          "code": "000060",
+          "name": "000060",
+          "price": 6.66,
+          "pct_change": -0.2994,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：KDJ金叉",
+          "score": 48
+        }
+      ],
       "capital_flow": [],
-      "fundamental": [],
+      "fundamental": [
+        {
+          "code": "000078",
+          "name": "000078",
+          "price": 1.59,
+          "pct_change": -1.8519,
+          "strategy": "fundamental",
+          "reason": "ROE=21.9%（优秀）；毛利率58.6%（高毛利）",
+          "score": 65
+        },
+        {
+          "code": "000417",
+          "name": "000417",
+          "price": 5.5,
+          "pct_change": -1.4337,
+          "strategy": "fundamental",
+          "reason": "ROE=29.4%（优秀）",
+          "score": 60
+        },
+        {
+          "code": "000422",
+          "name": "000422",
+          "price": 12.28,
+          "pct_change": 0.2449,
+          "strategy": "fundamental",
+          "reason": "ROE=21.2%（优秀）",
+          "score": 60
+        }
+      ],
       "concept_hotspot": []
     },
-    "combined": [],
+    "combined": [
+      {
+        "code": "000008",
+        "name": "000008",
+        "price": 2.45,
+        "pct_change": -0.4065,
+        "strategies": [
+          "low_price",
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[low_price] 股价2.5元（超低价）；市值0亿（小盘）；今日-0.4%（走势稳健）",
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 173,
+        "strategy_count": 2,
+        "resonance": false,
+        "avg_score": 86.5
+      },
+      {
+        "code": "000059",
+        "name": "000059",
+        "price": 4.66,
+        "pct_change": -1.0616,
+        "strategies": [
+          "low_price",
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[low_price] 股价4.7元（超低价）；市值0亿（小盘）；今日-1.1%（走势稳健）",
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 173,
+        "strategy_count": 2,
+        "resonance": false,
+        "avg_score": 86.5
+      },
+      {
+        "code": "000078",
+        "name": "000078",
+        "price": 1.59,
+        "pct_change": -1.8519,
+        "strategies": [
+          "low_price",
+          "fundamental"
+        ],
+        "reasons": [
+          "[low_price] 股价1.6元（超低价）；市值0亿（小盘）；今日-1.9%（走势稳健）",
+          "[fundamental] ROE=21.9%（优秀）；毛利率58.6%（高毛利）"
+        ],
+        "total_score": 170,
+        "strategy_count": 2,
+        "resonance": false,
+        "avg_score": 85.0
+      },
+      {
+        "code": "000166",
+        "name": "000166",
+        "price": 4.44,
+        "pct_change": 0.6803,
+        "strategies": [
+          "low_price",
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[low_price] 股价4.4元（超低价）；市值0亿（小盘）；今日+0.7%（走势稳健）",
+          "[technical_pattern] 技术形态：KDJ超卖金叉"
+        ],
+        "total_score": 160,
+        "strategy_count": 2,
+        "resonance": false,
+        "avg_score": 80.0
+      },
+      {
+        "code": "000002",
+        "name": "000002",
+        "price": 3.05,
+        "pct_change": -0.974,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.0元（超低价）；市值0亿（小盘）；今日-1.0%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000031",
+        "name": "000031",
+        "price": 2.12,
+        "pct_change": -1.3953,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.1元（超低价）；市值0亿（小盘）；今日-1.4%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000035",
+        "name": "000035",
+        "price": 4.62,
+        "pct_change": 1.0941,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价4.6元（超低价）；市值0亿（小盘）；今日+1.1%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000036",
+        "name": "000036",
+        "price": 4.0,
+        "pct_change": -0.9901,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价4.0元（超低价）；市值0亿（小盘）；今日-1.0%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000088",
+        "name": "000088",
+        "price": 4.49,
+        "pct_change": 1.1261,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价4.5元（超低价）；市值0亿（小盘）；今日+1.1%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000090",
+        "name": "000090",
+        "price": 3.42,
+        "pct_change": -0.5814,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.4元（超低价）；市值0亿（小盘）；今日-0.6%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000402",
+        "name": "000402",
+        "price": 2.43,
+        "pct_change": -1.2195,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.4元（超低价）；市值0亿（小盘）；今日-1.2%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000407",
+        "name": "000407",
+        "price": 4.06,
+        "pct_change": -1.2165,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价4.1元（超低价）；市值0亿（小盘）；今日-1.2%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000420",
+        "name": "000420",
+        "price": 3.64,
+        "pct_change": -0.8174,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.6元（超低价）；市值0亿（小盘）；今日-0.8%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000428",
+        "name": "000428",
+        "price": 3.93,
+        "pct_change": -1.2563,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.9元（超低价）；市值0亿（小盘）；今日-1.3%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000509",
+        "name": "000509",
+        "price": 3.4,
+        "pct_change": 1.7964,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.4元（超低价）；市值0亿（小盘）；今日+1.8%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000520",
+        "name": "000520",
+        "price": 4.26,
+        "pct_change": -0.2342,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价4.3元（超低价）；市值0亿（小盘）；今日-0.2%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000525",
+        "name": "000525",
+        "price": 4.31,
+        "pct_change": 1.1737,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价4.3元（超低价）；市值0亿（小盘）；今日+1.2%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000530",
+        "name": "000530",
+        "price": 4.99,
+        "pct_change": 1.8367,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价5.0元（超低价）；市值0亿（小盘）；今日+1.8%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000536",
+        "name": "000536",
+        "price": 3.16,
+        "pct_change": -1.8634,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.2元（超低价）；市值0亿（小盘）；今日-1.9%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000545",
+        "name": "000545",
+        "price": 2.52,
+        "pct_change": -0.3953,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.5元（超低价）；市值0亿（小盘）；今日-0.4%（走势稳健）"
+        ],
+        "total_score": 90,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 90.0
+      },
+      {
+        "code": "000426",
+        "name": "000426",
+        "price": 42.29,
+        "pct_change": 3.4491,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、放量突破（量比1.6）、MACD多头"
+        ],
+        "total_score": 88,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 88.0
+      },
+      {
+        "code": "000025",
+        "name": "000025",
+        "price": 15.66,
+        "pct_change": 2.086,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、KDJ金叉"
+        ],
+        "total_score": 76,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 76.0
+      },
+      {
+        "code": "000007",
+        "name": "000007",
+        "price": 12.74,
+        "pct_change": 2.0833,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000019",
+        "name": "000019",
+        "price": 6.42,
+        "pct_change": 0.9434,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000020",
+        "name": "000020",
+        "price": 12.3,
+        "pct_change": 4.77,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000026",
+        "name": "000026",
+        "price": 19.71,
+        "pct_change": -6.8526,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000039",
+        "name": "000039",
+        "price": 9.25,
+        "pct_change": -0.9636,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000045",
+        "name": "000045",
+        "price": 10.55,
+        "pct_change": 1.7358,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000153",
+        "name": "000153",
+        "price": 5.92,
+        "pct_change": -2.4712,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000301",
+        "name": "000301",
+        "price": 13.34,
+        "pct_change": -2.3426,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000421",
+        "name": "000421",
+        "price": 5.52,
+        "pct_change": -2.1277,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000505",
+        "name": "000505",
+        "price": 6.66,
+        "pct_change": -1.1869,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000506",
+        "name": "000506",
+        "price": 22.34,
+        "pct_change": 7.559,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
+        ],
+        "total_score": 68,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 68.0
+      },
+      {
+        "code": "000001",
+        "name": "平安银行",
+        "price": 11.56,
+        "pct_change": 1.3146,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：MACD金叉、平台突破"
+        ],
+        "total_score": 67,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 67.0
+      },
+      {
+        "code": "000415",
+        "name": "000415",
+        "price": 4.5,
+        "pct_change": -2.1739,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列"
+        ],
+        "total_score": 60,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 60.0
+      },
+      {
+        "code": "000417",
+        "name": "000417",
+        "price": 5.5,
+        "pct_change": -1.4337,
+        "strategies": [
+          "fundamental"
+        ],
+        "reasons": [
+          "[fundamental] ROE=29.4%（优秀）"
+        ],
+        "total_score": 60,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 60.0
+      },
+      {
+        "code": "000422",
+        "name": "000422",
+        "price": 12.28,
+        "pct_change": 0.2449,
+        "strategies": [
+          "fundamental"
+        ],
+        "reasons": [
+          "[fundamental] ROE=21.2%（优秀）"
+        ],
+        "total_score": 60,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 60.0
+      },
+      {
+        "code": "000006",
+        "name": "000006",
+        "price": 6.88,
+        "pct_change": -2.5496,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：MACD多头"
+        ],
+        "total_score": 48,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 48.0
+      },
+      {
+        "code": "000060",
+        "name": "000060",
+        "price": 6.66,
+        "pct_change": -0.2994,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：KDJ金叉"
+        ],
+        "total_score": 48,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 48.0
+      }
+    ],
     "summary": {
-      "run_time": "2026-08-24 15:39:39",
+      "run_time": "2026-08-24 15:53:23",
       "total_stocks": 5545,
       "strategy_counts": {
-        "low_price": 0,
-        "technical_pattern": 0,
+        "low_price": 20,
+        "technical_pattern": 20,
         "capital_flow": 0,
-        "fundamental": 0,
+        "fundamental": 3,
         "concept_hotspot": 0
       },
-      "combined_count": 0
+      "combined_count": 39
     }
   },
-  "markdown": "# 📈 股票分析日报 - 2026-08-24\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 贵州茅台(600519) | 1304.66 | +2.50% | 43 | 偏空 | 减仓 |\n| 平安银行(000001) | 11.56 | +1.31% | 45 | 中性 | 观望 |\n\n## 详细分析\n\n## 贵州茅台(600519)\n**现价**: 1304.66 | **涨跌幅**: +2.50% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 45 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=1294.97, MA20=1323.43）\n- MACD 空头排列\n- RSI=44.76（正常）\n- 布林带位置：32%，带宽7.9%\n- 量能：量能正常（量比1.32）\n- 支撑位：1271.16，压力位：1323.43\n\n### 基本面\n- ROE=54.3%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率87.8%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 平安银行(000001)\n**现价**: 11.56 | **涨跌幅**: +1.31% | **综合评分**: 45/100 | **评级**: 中性\n**操作建议**: 观望\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 74 |\n| 基本面 | 20 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：偏强震荡（MA5=11.34, MA20=11.32）\n- MACD 金叉，短期动能转强\n- RSI=55.26（正常）\n- 布林带位置：84%，带宽6.2%\n- 量能：量能正常（量比1.09）\n- 支撑位：11.32，压力位：11.66\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*"
+  "markdown": "# 📈 股票分析日报 - 2026-08-24\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 贵州茅台(600519) | 1304.66 | +2.50% | 43 | 偏空 | 减仓 |\n| 平安银行(000001) | 11.56 | +1.31% | 45 | 中性 | 观望 |\n\n## 详细分析\n\n## 贵州茅台(600519)\n**现价**: 1304.66 | **涨跌幅**: +2.50% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 45 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=1294.97, MA20=1323.43）\n- MACD 空头排列\n- RSI=44.76（正常）\n- 布林带位置：32%，带宽7.9%\n- 量能：量能正常（量比1.32）\n- 支撑位：1271.16，压力位：1323.43\n\n### 基本面\n- ROE=54.3%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率87.8%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 平安银行(000001)\n**现价**: 11.56 | **涨跌幅**: +1.31% | **综合评分**: 45/100 | **评级**: 中性\n**操作建议**: 观望\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 74 |\n| 基本面 | 20 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：偏强震荡（MA5=11.34, MA20=11.32）\n- MACD 金叉，短期动能转强\n- RSI=55.26（正常）\n- 布林带位置：84%，带宽6.2%\n- 量能：量能正常（量比1.09）\n- 支撑位：11.32，压力位：11.66\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 000002(000002) | 3.05 | -0.97% | 90 | 股价3.0元（超低价）；市值0亿（小盘）；今日-1.0%（走势稳健） |\n| 000008(000008) | 2.45 | -0.41% | 90 | 股价2.5元（超低价）；市值0亿（小盘）；今日-0.4%（走势稳健） |\n| 000031(000031) | 2.12 | -1.40% | 90 | 股价2.1元（超低价）；市值0亿（小盘）；今日-1.4%（走势稳健） |\n| 000035(000035) | 4.62 | +1.09% | 90 | 股价4.6元（超低价）；市值0亿（小盘）；今日+1.1%（走势稳健） |\n| 000036(000036) | 4.0 | -0.99% | 90 | 股价4.0元（超低价）；市值0亿（小盘）；今日-1.0%（走势稳健） |\n\n### 技术形态选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 000426(000426) | 42.29 | +3.45% | 88 | 技术形态：均线多头排列、放量突破（量比1.6）、MACD多头 |\n| 000025(000025) | 15.66 | +2.09% | 76 | 技术形态：均线多头排列、MACD多头、KDJ金叉 |\n| 000007(000007) | 12.74 | +2.08% | 68 | 技术形态：均线多头排列、MACD多头 |\n| 000008(000008) | 2.45 | -0.41% | 68 | 技术形态：均线多头排列、MACD多头 |\n| 000019(000019) | 6.42 | +0.94% | 68 | 技术形态：均线多头排列、MACD多头 |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 000078(000078) | 1.59 | -1.85% | 65 | ROE=21.9%（优秀）；毛利率58.6%（高毛利） |\n| 000417(000417) | 5.5 | -1.43% | 60 | ROE=29.4%（优秀） |\n| 000422(000422) | 12.28 | +0.24% | 60 | ROE=21.2%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*"
 }
