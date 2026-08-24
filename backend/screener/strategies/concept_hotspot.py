@@ -29,9 +29,12 @@ class ConceptHotspotStrategy(BaseStrategy):
             (df["price"] < 80) &
             (df["pct_change"] > 1) &
             (df["pct_change"] < 9.5) &
-            (df["amount"] > 1e8) &
-            (df["turnover"] > 2)
+            (df["amount"] > 1e8)
         ].copy()
+
+        # 换手率过滤（数据可用时）
+        if df["turnover"].max() > 0:
+            candidates = candidates[candidates["turnover"] > 2]
 
         candidates = candidates.sort_values("pct_change", ascending=False).head(80)
 

@@ -23,9 +23,12 @@ class TechnicalPatternStrategy(BaseStrategy):
             (df["price"] > 2) &
             (df["price"] < 100) &
             (df["amount"] > 1e8) &  # 成交额大于1亿
-            (df["pct_change"].abs() < 9.5) &
-            (df["turnover"] > 1)
+            (df["pct_change"].abs() < 9.5)
         ].copy()
+
+        # 换手率过滤（数据可用时）
+        if df["turnover"].max() > 0:
+            candidates = candidates[candidates["turnover"] > 1]
 
         # 限制分析数量（避免请求过多）
         candidates = candidates.head(80)

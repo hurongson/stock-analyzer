@@ -23,9 +23,12 @@ class CapitalFlowStrategy(BaseStrategy):
             (df["price"] < 100) &
             (df["amount"] > 2e8) &  # 成交额大于2亿
             (df["pct_change"] > -3) &
-            (df["pct_change"] < 9) &
-            (df["turnover"] > 1)
+            (df["pct_change"] < 9)
         ].copy()
+
+        # 换手率过滤（数据可用时）
+        if df["turnover"].max() > 0:
+            candidates = candidates[candidates["turnover"] > 1]
 
         candidates = candidates.head(80)
 

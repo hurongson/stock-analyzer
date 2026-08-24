@@ -17,17 +17,19 @@ class FundamentalStrategy(BaseStrategy):
     def screen(self, df: pd.DataFrame, **kwargs) -> List[Dict]:
         results = []
 
-        # 初筛：盈利（PE>0）+ 合理估值 + 合理市值
-        candidates = df[
-            (df["price"] > 0) &
-            (df["pe"] > 0) &
-            (df["pe"] < 60) &
-            (df["pb"] > 0) &
-            (df["pb"] < 10) &
-            (df["total_mv"] > 30e8) &  # 市值大于30亿
-            (df["total_mv"] < 2000e8) &  # 排除超大盘
-            (df["amount"] > 5e7)
-        ].copy()
+        # 判断数据可用性
+        has_pe = df["pe"].max() > 0
+        has_pb = df["pb"].max() > 0
+        has_mv = df["total_mv"].max() > 0
+
+        # 初筛：基于可用数据过滤
+        candidates = df[(df["price"] > 0) & (df["amount"] > 5e7)].copy()
+        if has_pe:
+            candidates = candidates[(candidates["pe"] > 0) & (candidates["pe"] < 60)]
+        if has_pb:
+            candidates = candidates[(candidates["pb"] > 0) & (candidates["pb"] < 10)]
+        if has_mv:
+            candidates = candidates[(candidates["total_mv"] > 30e8) & (candidates["total_mv"] < 2000e8)]
 
         candidates = candidates.head(100)
 

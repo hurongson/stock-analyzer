@@ -16,20 +16,29 @@ class LowPriceStrategy(BaseStrategy):
         price_threshold = kwargs.get("price_threshold", Config.LOW_PRICE_THRESHOLD)
         results = []
 
+        # 判断数据可用性（Tushare低积分时 turnover/pe/total_mv 可能为0）
+        has_turnover = df["turnover"].max() > 0
+        has_pe = df["pe"].max() > 0
+        has_mv = df["total_mv"].max() > 0
+
         # 基础过滤
         filtered = df[
             (df["price"] > 0) &
             (df["price"] <= price_threshold) &
             (df["pct_change"].abs() < 9.5) &  # 排除涨跌停
-            (df["turnover"] > 0.5) &  # 有一定换手率
             (df["amount"] > 5e7)  # 成交额大于5000万
         ].copy()
 
-        # 小市值优先（总市值 < 200亿）
-        filtered = filtered[filtered["total_mv"] < 200e8]
+        # 换手率过滤（数据可用时）
+        if has_turnover:
+            filtered = filtered[filtered["turnover"] > 0.5]
 
-        # PE 合理（盈利且PE < 80）
-        if "pe" in filtered.columns:
+        # 小市值优先（数据可用时）
+        if has_mv:
+            filtered = filtered[filtered["total_mv"] < 200e8]
+
+        # PE 合理（数据可用时）
+        if has_pe:
             filtered = filtered[(filtered["pe"] > 0) & (filtered["pe"] < 80)]
 
         # 评分：价格越低分越高，市值越小分越高，换手率适中加分
