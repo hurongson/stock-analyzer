@@ -1,0 +1,99 @@
+{
+  "date": "2026-08-24",
+  "generated_at": "2026-08-24T15:02:51.627314",
+  "stock_analyses": [
+    {
+      "code": "600519",
+      "name": "600519",
+      "price": 0,
+      "pct_change": 0,
+      "analysis_time": "2026-08-24 15:01:39",
+      "total_score": 45,
+      "rating": "中性",
+      "action": "观望",
+      "scores": {
+        "technical": 50,
+        "fundamental": 50,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "error": "无法获取K线数据",
+        "score": 50
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "1998"
+        },
+        "score": 50,
+        "conclusions": []
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "risks": []
+    },
+    {
+      "code": "000001",
+      "name": "000001",
+      "price": 0,
+      "pct_change": 0,
+      "analysis_time": "2026-08-24 15:02:51",
+      "total_score": 45,
+      "rating": "中性",
+      "action": "观望",
+      "scores": {
+        "technical": 50,
+        "fundamental": 50,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "error": "无法获取K线数据",
+        "score": 50
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "1989",
+          "revenue": 0.0
+        },
+        "score": 50,
+        "conclusions": []
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "risks": []
+    }
+  ],
+  "screener_result": {
+    "error": "无法获取股票列表"
+  },
+  "markdown": "# 📈 股票分析日报 - 2026-08-24\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 600519(600519) | 0 | +0.00% | 45 | 中性 | 观望 |\n| 000001(000001) | 0 | +0.00% | 45 | 中性 | 观望 |\n\n## 详细分析\n\n## 600519(600519)\n**现价**: 0 | **涨跌幅**: +0.00% | **综合评分**: 45/100 | **评级**: 中性\n**操作建议**: 观望\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 50 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 基本面\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 000001(000001)\n**现价**: 0 | **涨跌幅**: +0.00% | **综合评分**: 45/100 | **评级**: 中性\n**操作建议**: 观望\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 50 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 基本面\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*"
+}
