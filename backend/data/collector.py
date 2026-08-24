@@ -1,121 +1,260 @@
 """
-数据采集层：封装 akshare 接口，统一数据格式，带本地缓存
+数据采集层：Tushare 优先 + akshare 备用，统一数据格式，带本地缓存
 所有方法返回标准化的 pandas DataFrame 或 dict
 """
 import time
 import logging
 import pandas as pd
+import numpy as np
 from typing import Optional, List, Dict, Any
 from backend.data.cache import cache
 from backend.utils.helpers import normalize_stock_code, retry, today_str
+from backend.config import Config
 
 logger = logging.getLogger(__name__)
 
-# 延迟导入 akshare，避免未安装时报错
+# ============ 延迟导入数据源 ============
 try:
     import akshare as ak
     AKSHARE_AVAILABLE = True
 except ImportError:
     AKSHARE_AVAILABLE = False
-    logger.warning("akshare 未安装，数据采集功能不可用")
+    logger.info("akshare 未安装")
+
+try:
+    import tushare as ts
+    if Config.TUSHARE_TOKEN:
+        ts.set_token(Config.TUSHARE_TOKEN)
+        pro = ts.pro_api()
+        TUSHARE_AVAILABLE = True
+        logger.info("Tushare 已初始化")
+    else:
+        TUSHARE_AVAILABLE = False
+        pro = None
+        logger.info("Tushare 未配置 token")
+except ImportError:
+    TUSHARE_AVAILABLE = False
+    pro = None
+    logger.info("tushare 未安装")
+
+
+# ============ 工具函数 ============
+def to_ts_code(code: str) -> str:
+    """股票代码转 Tushare 格式：600519 → 600519.SH"""
+    code = normalize_stock_code(code)
+    if code.startswith(("60", "68", "90")):
+        return f"{code}.SH"
+    elif code.startswith(("00", "30", "20")):
+        return f"{code}.SZ"
+    elif code.startswith(("43", "83", "87", "88", "92")):
+        return f"{code}.BJ"
+    return f"{code}.SH"
+
+
+def from_ts_code(ts_code: str) -> str:
+    """Tushare 代码转纯数字：600519.SH → 600519"""
+    return ts_code.split(".")[0]
+
+
+def safe_float(val, default=None):
+    """安全转换 float，处理带单位的字符串（亿/万/%）"""
+    if val is None or (isinstance(val, float) and np.isnan(val)):
+        return default
+    if isinstance(val, (int, float)):
+        return float(val)
+    s = str(val).strip()
+    if not s or s in ("-", "--", "None", "nan"):
+        return default
+    try:
+        multiplier = 1.0
+        if "亿" in s:
+            multiplier = 1e8
+            s = s.replace("亿", "")
+        elif "万" in s:
+            multiplier = 1e4
+            s = s.replace("万", "")
+        if "%" in s:
+            s = s.replace("%", "")
+        return float(s) * multiplier
+    except (ValueError, TypeError):
+        return default
+
+
+def get_latest_trade_date() -> str:
+    """获取最近交易日（Tushare 格式 YYYYMMDD）"""
+    if TUSHARE_AVAILABLE:
+        try:
+            df = pro.trade_cal(exchange='SSE', start_date=(pd.Timestamp.now() - pd.Timedelta(days=10)).strftime("%Y%m%d"),
+                               end_date=today_str("%Y%m%d"), is_open='1')
+            if df is not None and not df.empty:
+                return df.iloc[-1]["cal_date"]
+        except Exception as e:
+            logger.debug(f"获取交易日历失败: {e}")
+    # fallback：简单判断，周末回退
+    d = pd.Timestamp.now()
+    while d.weekday() >= 5:
+        d -= pd.Timedelta(days=1)
+    return d.strftime("%Y%m%d")
 
 
 class DataCollector:
-    """A股数据采集器"""
+    """A股数据采集器：Tushare 优先，akshare 备用"""
 
     def __init__(self):
-        if not AKSHARE_AVAILABLE:
-            raise RuntimeError("akshare 未安装，请运行 pip install akshare")
+        if not TUSHARE_AVAILABLE and not AKSHARE_AVAILABLE:
+            raise RuntimeError("Tushare 和 akshare 均未安装/配置")
+        self._latest_trade_date = None
 
-    # ============ 行情数据 ============
+    @property
+    def latest_trade_date(self):
+        if self._latest_trade_date is None:
+            self._latest_trade_date = get_latest_trade_date()
+        return self._latest_trade_date
 
-    @retry(max_retries=3, delay=2)
+    # ============ 日线K线 ============
     def get_daily_kline(self, code: str, days: int = 120, adjust: str = "qfq") -> Optional[pd.DataFrame]:
-        """
-        获取日线K线数据
-        :param code: 股票代码
-        :param days: 获取天数
-        :param adjust: 复权方式 qfq=前复权 hfq=后复权 ""=不复权
-        """
         code = normalize_stock_code(code)
         key = f"kline_{code}_{days}_{adjust}"
         cached = cache.get_dataframe("kline", key)
         if cached is not None and not cached.empty:
             return cached
 
-        try:
-            df = ak.stock_zh_a_hist(
-                symbol=code,
-                period="daily",
-                start_date=(pd.Timestamp.now() - pd.Timedelta(days=days * 2)).strftime("%Y%m%d"),
-                end_date=today_str("%Y%m%d"),
-                adjust=adjust
-            )
-            if df is None or df.empty:
-                return None
-            # 标准化列名
-            df = df.rename(columns={
-                "日期": "date", "开盘": "open", "收盘": "close",
-                "最高": "high", "最低": "low", "成交量": "volume",
-                "成交额": "amount", "振幅": "amplitude", "涨跌幅": "pct_change",
-                "涨跌额": "change", "换手率": "turnover"
-            })
-            df["date"] = pd.to_datetime(df["date"])
-            df = df.sort_values("date").reset_index(drop=True)
-            df = df.tail(days).reset_index(drop=True)
-            cache.set_dataframe("kline", key, df)
-            return df
-        except Exception as e:
-            logger.error(f"获取K线失败 {code}: {e}")
-            return None
+        # 优先 Tushare
+        if TUSHARE_AVAILABLE:
+            try:
+                ts_code = to_ts_code(code)
+                start = (pd.Timestamp.now() - pd.Timedelta(days=days * 2)).strftime("%Y%m%d")
+                df = pro.daily(ts_code=ts_code, start_date=start, end_date=today_str("%Y%m%d"))
+                if df is not None and not df.empty:
+                    df = df.rename(columns={
+                        "trade_date": "date", "vol": "volume", "pct_chg": "pct_change"
+                    })
+                    df["date"] = pd.to_datetime(df["date"])
+                    df = df.sort_values("date").reset_index(drop=True)
+                    # Tushare vol 单位是手，转成股
+                    df["volume"] = df["volume"] * 100
+                    df = df.tail(days).reset_index(drop=True)
+                    # 确保列存在
+                    for col in ["open", "high", "low", "close", "volume", "amount", "pct_change", "change"]:
+                        if col not in df.columns:
+                            df[col] = 0
+                    cache.set_dataframe("kline", key, df)
+                    return df
+            except Exception as e:
+                logger.debug(f"Tushare 获取K线失败 {code}: {e}")
 
-    @retry(max_retries=2, delay=1)
+        # fallback akshare
+        if AKSHARE_AVAILABLE:
+            try:
+                df = ak.stock_zh_a_hist(
+                    symbol=code, period="daily",
+                    start_date=(pd.Timestamp.now() - pd.Timedelta(days=days * 2)).strftime("%Y%m%d"),
+                    end_date=today_str("%Y%m%d"), adjust=adjust
+                )
+                if df is None or df.empty:
+                    return None
+                df = df.rename(columns={
+                    "日期": "date", "开盘": "open", "收盘": "close", "最高": "high", "最低": "low",
+                    "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
+                    "涨跌幅": "pct_change", "涨跌额": "change", "换手率": "turnover"
+                })
+                df["date"] = pd.to_datetime(df["date"])
+                df = df.sort_values("date").reset_index(drop=True)
+                df = df.tail(days).reset_index(drop=True)
+                cache.set_dataframe("kline", key, df)
+                return df
+            except Exception as e:
+                logger.error(f"akshare 获取K线失败 {code}: {e}")
+
+        return None
+
+    # ============ 实时/最新行情 ============
     def get_realtime_quote(self, code: str) -> Optional[Dict]:
-        """获取实时行情快照"""
         code = normalize_stock_code(code)
         key = f"quote_{code}"
         cached = cache.get("quote", key)
         if cached:
             return cached
 
-        try:
-            df = ak.stock_zh_a_spot_em()
-            if df is None or df.empty:
-                return None
-            row = df[df["代码"] == code]
-            if row.empty:
-                return None
-            r = row.iloc[0]
-            result = {
-                "code": code,
-                "name": r.get("名称", ""),
-                "price": float(r.get("最新价", 0)),
-                "pct_change": float(r.get("涨跌幅", 0)),
-                "change": float(r.get("涨跌额", 0)),
-                "volume": float(r.get("成交量", 0)),
-                "amount": float(r.get("成交额", 0)),
-                "amplitude": float(r.get("振幅", 0)),
-                "high": float(r.get("最高", 0)),
-                "low": float(r.get("最低", 0)),
-                "open": float(r.get("今开", 0)),
-                "prev_close": float(r.get("昨收", 0)),
-                "turnover": float(r.get("换手率", 0)),
-                "pe": float(r.get("市盈率-动态", 0)) if pd.notna(r.get("市盈率-动态")) else None,
-                "pb": float(r.get("市净率", 0)) if pd.notna(r.get("市净率")) else None,
-                "total_mv": float(r.get("总市值", 0)),
-                "circ_mv": float(r.get("流通市值", 0)),
-            }
-            cache.set("quote", key, result)
-            return result
-        except Exception as e:
-            logger.error(f"获取实时行情失败 {code}: {e}")
-            return None
+        # 优先 Tushare（用最新交易日日线 + 每日指标）
+        if TUSHARE_AVAILABLE:
+            try:
+                ts_code = to_ts_code(code)
+                trade_date = self.latest_trade_date
+                # 日线
+                daily_df = pro.daily(ts_code=ts_code, trade_date=trade_date)
+                # 每日指标（PE/PB/市值/换手率）
+                basic_df = pro.daily_basic(ts_code=ts_code, trade_date=trade_date,
+                    fields='ts_code,trade_date,close,turnover_rate,pe,pe_ttm,pb,total_mv,circ_mv')
+                # 股票名称
+                name_df = pro.stock_basic(ts_code=ts_code, fields='ts_code,name')
 
-    # ============ 基本面数据 ============
+                result = {"code": code, "name": code}
+                if name_df is not None and not name_df.empty:
+                    result["name"] = name_df.iloc[0]["name"]
+                if daily_df is not None and not daily_df.empty:
+                    r = daily_df.iloc[0]
+                    result.update({
+                        "price": safe_float(r.get("close"), 0),
+                        "pct_change": safe_float(r.get("pct_chg"), 0),
+                        "change": safe_float(r.get("change"), 0),
+                        "volume": safe_float(r.get("vol"), 0) * 100,
+                        "amount": safe_float(r.get("amount"), 0) * 1000,  # Tushare amount 单位千元
+                        "high": safe_float(r.get("high"), 0),
+                        "low": safe_float(r.get("low"), 0),
+                        "open": safe_float(r.get("open"), 0),
+                        "prev_close": safe_float(r.get("pre_close"), 0),
+                    })
+                if basic_df is not None and not basic_df.empty:
+                    b = basic_df.iloc[0]
+                    result.update({
+                        "turnover": safe_float(b.get("turnover_rate"), 0),
+                        "pe": safe_float(b.get("pe")),
+                        "pb": safe_float(b.get("pb")),
+                        "total_mv": safe_float(b.get("total_mv"), 0) * 10000,  # Tushare 单位万元
+                        "circ_mv": safe_float(b.get("circ_mv"), 0) * 10000,
+                    })
+                cache.set("quote", key, result)
+                return result
+            except Exception as e:
+                logger.debug(f"Tushare 获取行情失败 {code}: {e}")
 
-    @retry(max_retries=2, delay=1)
+        # fallback akshare
+        if AKSHARE_AVAILABLE:
+            try:
+                df = ak.stock_zh_a_spot_em()
+                if df is None or df.empty:
+                    return None
+                row = df[df["代码"] == code]
+                if row.empty:
+                    return None
+                r = row.iloc[0]
+                result = {
+                    "code": code, "name": r.get("名称", ""),
+                    "price": safe_float(r.get("最新价"), 0),
+                    "pct_change": safe_float(r.get("涨跌幅"), 0),
+                    "change": safe_float(r.get("涨跌额"), 0),
+                    "volume": safe_float(r.get("成交量"), 0),
+                    "amount": safe_float(r.get("成交额"), 0),
+                    "amplitude": safe_float(r.get("振幅"), 0),
+                    "high": safe_float(r.get("最高"), 0),
+                    "low": safe_float(r.get("最低"), 0),
+                    "open": safe_float(r.get("今开"), 0),
+                    "prev_close": safe_float(r.get("昨收"), 0),
+                    "turnover": safe_float(r.get("换手率"), 0),
+                    "pe": safe_float(r.get("市盈率-动态")),
+                    "pb": safe_float(r.get("市净率")),
+                    "total_mv": safe_float(r.get("总市值"), 0),
+                    "circ_mv": safe_float(r.get("流通市值"), 0),
+                }
+                cache.set("quote", key, result)
+                return result
+            except Exception as e:
+                logger.error(f"akshare 获取行情失败 {code}: {e}")
+        return None
+
+    # ============ 基本面 ============
     def get_fundamental(self, code: str) -> Optional[Dict]:
-        """获取基本面指标（PE/PB/ROE/营收等）"""
         code = normalize_stock_code(code)
         key = f"fundamental_{code}"
         cached = cache.get("fundamental", key)
@@ -123,22 +262,53 @@ class DataCollector:
             return cached
 
         result = {}
-        try:
-            # 主要财务指标
-            df = ak.stock_financial_abstract_ths(symbol=code, indicator="按年度")
-            if df is not None and not df.empty:
-                latest = df.iloc[0]
-                result["report_date"] = str(latest.get("报告期", ""))
-                result["revenue"] = float(latest.get("营业总收入", 0)) if pd.notna(latest.get("营业总收入")) else None
-                result["net_profit"] = float(latest.get("净利润", 0)) if pd.notna(latest.get("净利润")) else None
-                result["roe"] = float(latest.get("净资产收益率", 0)) if pd.notna(latest.get("净资产收益率")) else None
-                result["gross_margin"] = float(latest.get("销售毛利率", 0)) if pd.notna(latest.get("销售毛利率")) else None
-                result["revenue_yoy"] = float(latest.get("营业总收入同比增长率", 0)) if pd.notna(latest.get("营业总收入同比增长率")) else None
-                result["profit_yoy"] = float(latest.get("净利润同比增长率", 0)) if pd.notna(latest.get("净利润同比增长率")) else None
-        except Exception as e:
-            logger.warning(f"获取财务摘要失败 {code}: {e}")
 
-        # 补充实时行情中的 PE/PB
+        # 优先 Tushare
+        if TUSHARE_AVAILABLE:
+            try:
+                ts_code = to_ts_code(code)
+                # 财务指标
+                fina_df = pro.fina_indicator(ts_code=ts_code,
+                    fields='ts_code,end_date,roe,roe_waa,grossprofit_margin,netprofit_margin,or_yoy,netprofit_yoy,eps,dt_eps')
+                if fina_df is not None and not fina_df.empty:
+                    latest = fina_df.iloc[0]
+                    result.update({
+                        "report_date": str(latest.get("end_date", "")),
+                        "roe": safe_float(latest.get("roe")),
+                        "gross_margin": safe_float(latest.get("grossprofit_margin")),
+                        "revenue_yoy": safe_float(latest.get("or_yoy")),
+                        "profit_yoy": safe_float(latest.get("netprofit_yoy")),
+                        "eps": safe_float(latest.get("eps")),
+                    })
+                # 利润表（营收/净利润绝对值）
+                income_df = pro.income(ts_code=ts_code,
+                    fields='ts_code,end_date,total_revenue,n_income')
+                if income_df is not None and not income_df.empty:
+                    latest = income_df.iloc[0]
+                    result["revenue"] = safe_float(latest.get("total_revenue"))
+                    result["net_profit"] = safe_float(latest.get("n_income"))
+            except Exception as e:
+                logger.debug(f"Tushare 获取基本面失败 {code}: {e}")
+
+        # fallback akshare 财务摘要
+        if AKSHARE_AVAILABLE and not result:
+            try:
+                df = ak.stock_financial_abstract_ths(symbol=code, indicator="按年度")
+                if df is not None and not df.empty:
+                    latest = df.iloc[0]
+                    result.update({
+                        "report_date": str(latest.get("报告期", "")),
+                        "revenue": safe_float(latest.get("营业总收入")),
+                        "net_profit": safe_float(latest.get("净利润")),
+                        "roe": safe_float(latest.get("净资产收益率")),
+                        "gross_margin": safe_float(latest.get("销售毛利率")),
+                        "revenue_yoy": safe_float(latest.get("营业总收入同比增长率")),
+                        "profit_yoy": safe_float(latest.get("净利润同比增长率")),
+                    })
+            except Exception as e:
+                logger.warning(f"akshare 获取财务摘要失败 {code}: {e}")
+
+        # 补充行情中的 PE/PB/市值/名称
         quote = self.get_realtime_quote(code)
         if quote:
             result["pe"] = quote.get("pe")
@@ -150,57 +320,121 @@ class DataCollector:
             cache.set("fundamental", key, result)
         return result if result else None
 
-    # ============ 资金流向数据 ============
-
-    @retry(max_retries=2, delay=1)
+    # ============ 资金流向 ============
     def get_capital_flow(self, code: str) -> Optional[Dict]:
-        """获取个股资金流向（主力/超大单/大单/中单/小单）"""
         code = normalize_stock_code(code)
         key = f"capital_{code}"
         cached = cache.get("capital", key)
         if cached:
             return cached
 
-        try:
-            df = ak.stock_individual_fund_flow(stock=code, market="sh" if code.startswith("6") else "sz")
-            if df is None or df.empty:
-                return None
-            latest = df.iloc[-1]
-            result = {
-                "date": str(latest.get("日期", "")),
-                "main_net_inflow": float(latest.get("主力净流入-净额", 0)),
-                "main_net_pct": float(latest.get("主力净流入-净占比", 0)),
-                "super_large_net": float(latest.get("超大单净流入-净额", 0)),
-                "large_net": float(latest.get("大单净流入-净额", 0)),
-                "medium_net": float(latest.get("中单净流入-净额", 0)),
-                "small_net": float(latest.get("小单净流入-净额", 0)),
-            }
-            # 近5日主力净流入
-            recent = df.tail(5)
-            result["main_net_inflow_5d"] = float(recent["主力净流入-净额"].sum()) if "主力净流入-净额" in recent.columns else None
-            cache.set("capital", key, result)
-            return result
-        except Exception as e:
-            logger.warning(f"获取资金流向失败 {code}: {e}")
-            return None
+        # 优先 Tushare
+        if TUSHARE_AVAILABLE:
+            try:
+                ts_code = to_ts_code(code)
+                trade_date = self.latest_trade_date
+                df = pro.moneyflow(ts_code=ts_code, start_date=(pd.Timestamp.now() - pd.Timedelta(days=10)).strftime("%Y%m%d"),
+                                   end_date=today_str("%Y%m%d"))
+                if df is not None and not df.empty:
+                    df = df.sort_values("trade_date").reset_index(drop=True)
+                    latest = df.iloc[-1]
+                    # Tushare moneyflow 字段：
+                    # buy_sm_vol/amount, sell_sm_vol/amount (小单)
+                    # buy_md_vol/amount, sell_md_vol/amount (中单)
+                    # buy_lg_vol/amount, sell_lg_vol/amount (大单)
+                    # buy_elg_vol/amount, sell_elg_vol/amount (超大单)
+                    # net_mf_vol, net_mf_amount (主力净流入)
+                    super_large_net = safe_float(latest.get("buy_elg_amount"), 0) - safe_float(latest.get("sell_elg_amount"), 0)
+                    large_net = safe_float(latest.get("buy_lg_amount"), 0) - safe_float(latest.get("sell_lg_amount"), 0)
+                    medium_net = safe_float(latest.get("buy_md_amount"), 0) - safe_float(latest.get("sell_md_amount"), 0)
+                    small_net = safe_float(latest.get("buy_sm_amount"), 0) - safe_float(latest.get("sell_sm_amount"), 0)
+                    main_net = safe_float(latest.get("net_mf_amount"), 0)
+                    # 金额单位：Tushare 是千元，转元
+                    main_net *= 1000
+                    super_large_net *= 1000
+                    large_net *= 1000
+                    medium_net *= 1000
+                    small_net *= 1000
+
+                    # 计算净占比（需要成交额）
+                    quote = self.get_realtime_quote(code)
+                    amount = quote.get("amount", 1) if quote else 1
+                    main_pct = (main_net / amount * 100) if amount else 0
+
+                    # 近5日主力净流入
+                    recent = df.tail(5)
+                    main_5d = safe_float(recent["net_mf_amount"].sum(), 0) * 1000 if "net_mf_amount" in recent.columns else None
+
+                    result = {
+                        "date": str(latest.get("trade_date", "")),
+                        "main_net_inflow": main_net,
+                        "main_net_pct": round(main_pct, 2),
+                        "super_large_net": super_large_net,
+                        "large_net": large_net,
+                        "medium_net": medium_net,
+                        "small_net": small_net,
+                        "main_net_inflow_5d": main_5d,
+                    }
+                    cache.set("capital", key, result)
+                    return result
+            except Exception as e:
+                logger.debug(f"Tushare 获取资金流向失败 {code}: {e}")
+
+        # fallback akshare
+        if AKSHARE_AVAILABLE:
+            try:
+                df = ak.stock_individual_fund_flow(stock=code, market="sh" if code.startswith("6") else "sz")
+                if df is None or df.empty:
+                    return None
+                latest = df.iloc[-1]
+                result = {
+                    "date": str(latest.get("日期", "")),
+                    "main_net_inflow": safe_float(latest.get("主力净流入-净额"), 0),
+                    "main_net_pct": safe_float(latest.get("主力净流入-净占比"), 0),
+                    "super_large_net": safe_float(latest.get("超大单净流入-净额"), 0),
+                    "large_net": safe_float(latest.get("大单净流入-净额"), 0),
+                    "medium_net": safe_float(latest.get("中单净流入-净额"), 0),
+                    "small_net": safe_float(latest.get("小单净流入-净额"), 0),
+                }
+                recent = df.tail(5)
+                result["main_net_inflow_5d"] = safe_float(recent["主力净流入-净额"].sum(), 0) if "主力净流入-净额" in recent.columns else None
+                cache.set("capital", key, result)
+                return result
+            except Exception as e:
+                logger.warning(f"akshare 获取资金流向失败 {code}: {e}")
+        return None
 
     # ============ 概念板块 ============
-
-    @retry(max_retries=2, delay=1)
     def get_stock_concepts(self, code: str) -> Optional[List[str]]:
-        """获取个股所属概念板块"""
         code = normalize_stock_code(code)
         key = f"concept_{code}"
         cached = cache.get("concept", key)
         if cached:
             return cached
 
-        try:
-            df = ak.stock_board_concept_name_em()
-            if df is None or df.empty:
-                return None
-            # 这个接口返回所有概念板块，需要逐个查成分股，效率低
-            # 改用个股详情接口
+        # 优先 Tushare
+        if TUSHARE_AVAILABLE:
+            try:
+                ts_code = to_ts_code(code)
+                df = pro.concept_detail(ts_code=ts_code, fields='id,concept_name')
+                if df is not None and not df.empty:
+                    concepts = df["concept_name"].tolist()
+                    # 补充行业
+                    try:
+                        basic_df = pro.stock_basic(ts_code=ts_code, fields='ts_code,industry')
+                        if basic_df is not None and not basic_df.empty:
+                            industry = basic_df.iloc[0].get("industry")
+                            if industry and industry not in concepts:
+                                concepts.insert(0, industry)
+                    except Exception:
+                        pass
+                    cache.set("concept", key, concepts)
+                    return concepts
+            except Exception as e:
+                logger.debug(f"Tushare 获取概念失败 {code}: {e}")
+
+        # fallback akshare
+        if AKSHARE_AVAILABLE:
             try:
                 detail = ak.stock_individual_info_em(symbol=code)
                 if detail is not None and not detail.empty:
@@ -209,72 +443,116 @@ class DataCollector:
                         concepts = [industry_row.iloc[0]["value"]]
                         cache.set("concept", key, concepts)
                         return concepts
-            except Exception:
-                pass
-            return None
-        except Exception as e:
-            logger.warning(f"获取概念板块失败 {code}: {e}")
-            return None
+            except Exception as e:
+                logger.warning(f"akshare 获取概念失败 {code}: {e}")
+        return None
 
-    @retry(max_retries=2, delay=1)
     def get_hot_concepts(self, top_n: int = 20) -> Optional[pd.DataFrame]:
-        """获取热门概念板块涨幅榜"""
         key = f"hot_concepts_{top_n}"
         cached = cache.get_dataframe("concept", key)
         if cached is not None and not cached.empty:
             return cached
 
-        try:
-            df = ak.stock_board_concept_name_em()
-            if df is None or df.empty:
-                return None
-            df = df.rename(columns={
-                "板块名称": "name", "板块代码": "code", "最新价": "price",
-                "涨跌幅": "pct_change", "总市值": "total_mv",
-                "换手率": "turnover", "上涨家数": "up_count", "下跌家数": "down_count",
-                "领涨股票": "leading_stock", "领涨股票-涨跌幅": "leading_pct"
-            })
-            df = df.sort_values("pct_change", ascending=False).head(top_n).reset_index(drop=True)
-            cache.set_dataframe("concept", key, df)
-            return df
-        except Exception as e:
-            logger.error(f"获取热门概念失败: {e}")
-            return None
+        # Tushare 没有直接的概念涨幅榜，用 akshare
+        if AKSHARE_AVAILABLE:
+            try:
+                df = ak.stock_board_concept_name_em()
+                if df is None or df.empty:
+                    return None
+                df = df.rename(columns={
+                    "板块名称": "name", "板块代码": "code", "最新价": "price",
+                    "涨跌幅": "pct_change", "总市值": "total_mv",
+                    "换手率": "turnover", "上涨家数": "up_count", "下跌家数": "down_count",
+                    "领涨股票": "leading_stock", "领涨股票-涨跌幅": "leading_pct"
+                })
+                df = df.sort_values("pct_change", ascending=False).head(top_n).reset_index(drop=True)
+                cache.set_dataframe("concept", key, df)
+                return df
+            except Exception as e:
+                logger.error(f"akshare 获取热门概念失败: {e}")
+        return None
 
-    # ============ 股票列表 ============
-
-    @retry(max_retries=2, delay=2)
+    # ============ 全量股票列表 ============
     def get_all_stocks(self) -> Optional[pd.DataFrame]:
-        """获取全部A股列表（用于选股）"""
         key = "all_stocks"
         cached = cache.get_dataframe("stock_list", key)
         if cached is not None and not cached.empty:
             return cached
 
-        try:
-            df = ak.stock_zh_a_spot_em()
-            if df is None or df.empty:
-                return None
-            df = df.rename(columns={
-                "序号": "idx", "代码": "code", "名称": "name",
-                "最新价": "price", "涨跌幅": "pct_change", "涨跌额": "change",
-                "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
-                "最高": "high", "最低": "low", "今开": "open", "昨收": "prev_close",
-                "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
-                "总市值": "total_mv", "流通市值": "circ_mv"
-            })
-            # 过滤 ST、退市股
-            df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
-            cache.set_dataframe("stock_list", key, df)
-            return df
-        except Exception as e:
-            logger.error(f"获取股票列表失败: {e}")
-            return None
+        # 优先 Tushare
+        if TUSHARE_AVAILABLE:
+            try:
+                trade_date = self.latest_trade_date
+                # 股票基本信息
+                basic_df = pro.stock_basic(exchange='', list_status='L',
+                    fields='ts_code,symbol,name,area,industry,list_date')
+                # 每日指标（价格/PE/PB/市值/换手率/涨跌幅）
+                daily_basic_df = pro.daily_basic(trade_date=trade_date,
+                    fields='ts_code,close,turnover_rate,pe,pe_ttm,pb,total_mv,circ_mv')
+                # 日线（涨跌幅/成交量/成交额/高低开）
+                daily_df = pro.daily(trade_date=trade_date,
+                    fields='ts_code,open,high,low,close,pre_close,change,pct_chg,vol,amount')
+
+                if basic_df is None or basic_df.empty:
+                    raise ValueError("stock_basic 返回空")
+
+                df = basic_df.copy()
+                df["code"] = df["symbol"]
+                # 合并 daily_basic
+                if daily_basic_df is not None and not daily_basic_df.empty:
+                    df = df.merge(daily_basic_df, on="ts_code", how="left")
+                    df["price"] = df["close"]
+                    df["turnover"] = df["turnover_rate"]
+                    df["total_mv"] = df["total_mv"] * 10000  # 万元→元
+                    df["circ_mv"] = df["circ_mv"] * 10000
+                # 合并 daily
+                if daily_df is not None and not daily_df.empty:
+                    df = df.merge(daily_df, on="ts_code", how="left", suffixes=("", "_daily"))
+                    df["pct_change"] = df["pct_chg"]
+                    df["change"] = df["change"]
+                    df["volume"] = df["vol"] * 100  # 手→股
+                    df["amount"] = df["amount"] * 1000  # 千元→元
+                    if "price" not in df.columns or df["price"].isna().all():
+                        df["price"] = df["close_daily"].fillna(df["close"])
+
+                # 统一列名
+                for col in ["price", "pct_change", "change", "volume", "amount",
+                           "high", "low", "open", "pre_close", "turnover", "pe", "pb",
+                           "total_mv", "circ_mv", "amplitude"]:
+                    if col not in df.columns:
+                        df[col] = 0
+
+                # 过滤 ST、退市
+                df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
+                # 过滤北交所（可选，这里保留）
+                cache.set_dataframe("stock_list", key, df)
+                return df
+            except Exception as e:
+                logger.error(f"Tushare 获取股票列表失败: {e}")
+
+        # fallback akshare
+        if AKSHARE_AVAILABLE:
+            try:
+                df = ak.stock_zh_a_spot_em()
+                if df is None or df.empty:
+                    return None
+                df = df.rename(columns={
+                    "序号": "idx", "代码": "code", "名称": "name",
+                    "最新价": "price", "涨跌幅": "pct_change", "涨跌额": "change",
+                    "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
+                    "最高": "high", "最低": "low", "今开": "open", "昨收": "prev_close",
+                    "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
+                    "总市值": "total_mv", "流通市值": "circ_mv"
+                })
+                df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
+                cache.set_dataframe("stock_list", key, df)
+                return df
+            except Exception as e:
+                logger.error(f"akshare 获取股票列表失败: {e}")
+        return None
 
     # ============ 股票名称 ============
-
     def get_stock_name(self, code: str) -> str:
-        """获取股票名称"""
         code = normalize_stock_code(code)
         quote = self.get_realtime_quote(code)
         if quote and quote.get("name"):
