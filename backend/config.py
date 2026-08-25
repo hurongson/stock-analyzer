@@ -36,7 +36,7 @@ class Config:
     TUSHARE_TOKEN = _get_env("TUSHARE_TOKEN", "")
 
     # ===== 选股 =====
-    LOW_PRICE_THRESHOLD = float(_get_env("LOW_PRICE_THRESHOLD", "15"))
+    LOW_PRICE_THRESHOLD = float(_get_env("LOW_PRICE_THRESHOLD", "10"))
     SCREENER_MAX_RESULTS = int(_get_env("SCREENER_MAX_RESULTS", "50"))
     SCREENER_UNIVERSE = _get_env("SCREENER_UNIVERSE", "all")
 

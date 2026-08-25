@@ -101,10 +101,10 @@ class ScreenerEngine:
         combined = list(stock_map.values())
         for item in combined:
             if item["strategy_count"] >= 3:
-                item["total_score"] += 30  # 三策略共振
+                item["total_score"] += 40  # 三策略共振（大幅加分）
                 item["resonance"] = True
             elif item["strategy_count"] == 2:
-                item["total_score"] += 15
+                item["total_score"] += 20  # 双策略共振
                 item["resonance"] = False
             else:
                 item["resonance"] = False
