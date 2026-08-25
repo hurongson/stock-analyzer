@@ -32,6 +32,65 @@ logging.basicConfig(
 logger = logging.getLogger("main")
 
 
+def run_quick_analysis(stocks: list = None, enable_push: bool = True):
+    """
+    快速分析模式（盘中使用）
+    只分析自选股，不跑选股，禁用LLM，重点输出交易信号，速度快
+    """
+    Config.ensure_dirs()
+    Config.ENABLE_LLM = False  # 快速模式禁用LLM
+    stock_list = stocks or Config.STOCK_LIST
+    logger.info(f"===== 快速盘中分析 =====")
+    logger.info(f"自选股: {stock_list}")
+
+    # 只分析自选股
+    try:
+        stock_analyses = analyze_batch(stock_list)
+        logger.info(f"完成 {len(stock_analyses)} 只股票分析")
+    except Exception as e:
+        logger.error(f"自选股分析失败: {e}")
+        stock_analyses = []
+
+    # 生成简洁报告（不含选股）
+    report = generate_daily_report(stock_analyses, None)
+
+    # 保存 latest.json 供前端读取
+    latest_path = os.path.join(Config.DATA_DIR, "latest.json")
+    from backend.utils.helpers import save_json
+    save_json(report["json"], latest_path)
+    logger.info(f"最新报告已保存: {latest_path}")
+
+    # 推送飞书（简洁版，重点买卖信号）
+    if enable_push and Config.FEISHU_WEBHOOK_URL:
+        logger.info("--- 推送飞书买卖信号 ---")
+        push_daily_report(report["json"])
+    else:
+        logger.info("跳过飞书推送（未配置 Webhook 或禁用推送）")
+
+    # 控制台输出买卖信号
+    print("\n" + "="*60)
+    print(f"📊 盘中快速分析 - {today_str()}")
+    print("="*60)
+    for r in stock_analyses:
+        if "error" in r:
+            print(f"\n❌ {r.get('code','')} 分析失败: {r['error']}")
+            continue
+        ts = r.get("trading_signal", {})
+        signal = ts.get("action", "观望")
+        conf = ts.get("confidence", 0)
+        emoji = "🟩" if "买" in signal else ("🟥" if "卖" in signal else "⬜")
+        print(f"\n{emoji} {r['name']}({r['code']}) {r['price']}元 {r['pct_change']:+.2f}%")
+        print(f"   信号: {signal} (置信度{conf}%)")
+        if ts.get("buy_signals"):
+            print(f"   买入理由: {', '.join(ts['buy_signals'][:3])}")
+        if ts.get("sell_signals"):
+            print(f"   卖出理由: {', '.join(ts['sell_signals'][:3])}")
+    print("\n" + "="*60)
+
+    logger.info("===== 快速分析完成 =====")
+    return report
+
+
 def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm: bool = None):
     """运行完整分析流程"""
     Config.ensure_dirs()
@@ -137,6 +196,7 @@ def main():
     parser = argparse.ArgumentParser(description="股票分析系统")
     parser.add_argument("--analyze", type=str, help="分析指定股票，逗号分隔")
     parser.add_argument("--screener", action="store_true", help="仅运行选股")
+    parser.add_argument("--quick", action="store_true", help="快速盘中分析（只分析自选股，不选股，重点买卖信号）")
     parser.add_argument("--no-push", action="store_true", help="禁用飞书推送")
     parser.add_argument("--no-llm", action="store_true", help="禁用 LLM 分析")
     parser.add_argument("--dry-run", action="store_true", help="试运行（不保存不推送）")
@@ -153,6 +213,9 @@ def main():
         run_analyze_only(codes)
     elif args.screener:
         run_screener_only()
+    elif args.quick:
+        push = not args.no_push and not args.dry_run
+        run_quick_analysis(enable_push=push)
     else:
         push = not args.no_push and not args.dry_run
         llm = not args.no_llm

@@ -1,0 +1,70 @@
+name: 盘中快速分析
+on:
+  schedule:
+    # 盘中多个时间点（北京时间）= UTC
+    # 9:45 = 1:45 UTC（开盘15分钟后）
+    - cron: '45 1 * * 1-5'
+    # 10:30 = 2:30 UTC（上午盘中）
+    - cron: '30 2 * * 1-5'
+    # 11:15 = 3:15 UTC（上午收盘前）
+    - cron: '15 3 * * 1-5'
+    # 13:30 = 5:30 UTC（下午开盘后）
+    - cron: '30 5 * * 1-5'
+    # 14:00 = 6:00 UTC（下午盘中）
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      stocks:
+        description: '自选股代码（逗号分隔，留空使用默认）'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  quick-analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate stock name map (if not exists)
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+        run: |
+          cd backend
+          python scripts/generate_stock_name_map.py || echo "使用已有映射表或默认映射表"
+
+      - name: Run quick analysis
+        env:
+          STOCK_LIST: ${{ github.event.inputs.stocks || '' }}
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          cd backend
+          python main.py --quick --force
+
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/latest.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "⚡ 盘中快速分析 $(date +'%Y-%m-%d %H:%M')"
+          git push || echo "Nothing to push or push failed"
