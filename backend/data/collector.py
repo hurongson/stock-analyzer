@@ -170,7 +170,7 @@ class DataCollector:
 
     # ============ 实时/最新行情 ============
     # 常见股票名称映射（stock_basic 接口频率受限，用此兜底）
-    STOCK_NAME_MAP = {
+    DEFAULT_STOCK_NAME_MAP = {
         "600519": "贵州茅台", "000001": "平安银行", "300750": "宁德时代",
         "002594": "比亚迪", "601318": "中国平安", "600036": "招商银行",
         "000858": "五粮液", "601899": "紫金矿业", "600900": "长江电力",
@@ -180,6 +180,20 @@ class DataCollector:
         "600887": "伊利股份", "000568": "泸州老窖", "002475": "立讯精密",
         "600309": "万华化学", "601668": "中国建筑", "601398": "工商银行",
     }
+
+    def __init__(self):
+        self._latest_trade_date = None
+        # 加载外部股票名称映射表（如果存在）
+        self.STOCK_NAME_MAP = dict(self.DEFAULT_STOCK_NAME_MAP)
+        map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "stock_name_map.json")
+        if os.path.exists(map_path):
+            try:
+                with open(map_path, "r", encoding="utf-8") as f:
+                    external_map = json.load(f)
+                self.STOCK_NAME_MAP.update(external_map)
+                logger.info(f"加载外部股票名称映射表: {len(external_map)} 只")
+            except Exception as e:
+                logger.warning(f"加载股票名称映射表失败: {e}")
 
     def get_realtime_quote(self, code: str) -> Optional[Dict]:
         code = normalize_stock_code(code)
