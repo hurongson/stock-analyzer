@@ -8,6 +8,19 @@ import json
 import sys
 
 def main():
+    # 如果映射表已存在，直接使用，避免重复调用接口触发频率限制
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(os.path.dirname(script_dir), "data")
+    output_path = os.path.join(data_dir, "stock_name_map.json")
+    if os.path.exists(output_path):
+        try:
+            with open(output_path, 'r', encoding='utf-8') as f:
+                existing = json.load(f)
+            print(f"映射表已存在，跳过生成: {len(existing)} 只")
+            return 0
+        except Exception:
+            pass
+
     token = os.getenv("TUSHARE_TOKEN", "")
     if not token:
         print("未配置 TUSHARE_TOKEN，跳过映射表生成")
@@ -20,15 +33,9 @@ def main():
         df = pro.stock_basic(exchange='', list_status='L', fields='symbol,name')
         name_map = dict(zip(df['symbol'], df['name']))
 
-        # 保存到 backend/data/stock_name_map.json
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        data_dir = os.path.join(os.path.dirname(script_dir), "data")
         os.makedirs(data_dir, exist_ok=True)
-        output_path = os.path.join(data_dir, "stock_name_map.json")
-
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(name_map, f, ensure_ascii=False)
-
         print(f"生成股票名称映射表: {len(name_map)} 只 -> {output_path}")
         return 0
     except Exception as e:
