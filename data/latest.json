@@ -1,13 +1,13 @@
 {
   "date": "2026-08-25",
-  "generated_at": "2026-08-25T16:51:28.150385",
+  "generated_at": "2026-08-25T17:09:54.159312",
   "stock_analyses": [
     {
       "code": "600519",
       "name": "贵州茅台",
       "price": 1304.0,
       "pct_change": -0.05,
-      "analysis_time": "2026-08-25 16:50:59",
+      "analysis_time": "2026-08-25 17:09:24",
       "total_score": 42,
       "rating": "偏空",
       "action": "减仓",
@@ -140,7 +140,7 @@
       "name": "平安银行",
       "price": 11.59,
       "pct_change": 0.26,
-      "analysis_time": "2026-08-25 16:51:28",
+      "analysis_time": "2026-08-25 17:09:54",
       "total_score": 39,
       "rating": "偏空",
       "action": "减仓",
@@ -274,190 +274,190 @@
         {
           "code": "000008",
           "name": "神州高铁",
-          "price": 2.51,
-          "pct_change": 2.449,
+          "price": 2.4,
+          "pct_change": 0.4184,
           "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+2.4%（走势稳健）；均线多头排列",
+          "reason": "股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
+          "score": 92
+        },
+        {
+          "code": "000560",
+          "name": "我爱我家",
+          "price": 2.17,
+          "pct_change": 0.463,
+          "strategy": "low_price",
+          "reason": "股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列",
           "score": 92
         },
         {
           "code": "000059",
           "name": "华锦股份",
-          "price": 4.76,
-          "pct_change": 2.1459,
+          "price": 4.6,
+          "pct_change": 0.6565,
           "strategy": "low_price",
-          "reason": "股价4.8元（低价）；今日+2.1%（走势稳健）；均线多头排列",
+          "reason": "股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000065",
           "name": "北方国际",
-          "price": 9.98,
-          "pct_change": 0.0,
+          "price": 9.18,
+          "pct_change": 1.8868,
           "strategy": "low_price",
-          "reason": "股价10.0元（中低价）；今日+0.0%（走势稳健）；均线多头排列；量能放大（量比1.8）",
+          "reason": "股价9.2元（中低价）；今日+1.9%（走势稳健）；均线多头排列；量能放大（量比1.8）",
           "score": 85
         },
         {
           "code": "000068",
           "name": "华控赛格",
-          "price": 3.16,
-          "pct_change": 2.5974,
+          "price": 3.04,
+          "pct_change": 4.1096,
           "strategy": "low_price",
-          "reason": "股价3.2元（低价）；今日+2.6%（走势稳健）；均线多头排列",
+          "reason": "股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000407",
           "name": "胜利股份",
-          "price": 4.14,
-          "pct_change": 1.9704,
+          "price": 4.1,
+          "pct_change": 0.0,
           "strategy": "low_price",
-          "reason": "股价4.1元（低价）；今日+2.0%（走势稳健）；均线多头排列",
+          "reason": "股价4.1元（低价）；今日+0.0%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000415",
           "name": "渤海租赁",
-          "price": 4.46,
-          "pct_change": -0.8889,
+          "price": 4.63,
+          "pct_change": 2.6608,
           "strategy": "low_price",
-          "reason": "股价4.5元（低价）；今日-0.9%（走势稳健）；均线多头排列",
+          "reason": "股价4.6元（低价）；今日+2.7%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000620",
           "name": "盈新发展",
-          "price": 3.47,
-          "pct_change": 0.0,
+          "price": 3.1,
+          "pct_change": 2.3102,
           "strategy": "low_price",
-          "reason": "股价3.5元（低价）；今日+0.0%（走势稳健）；均线多头排列",
+          "reason": "股价3.1元（低价）；今日+2.3%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000031",
           "name": "大悦城",
-          "price": 2.19,
-          "pct_change": 3.3019,
+          "price": 2.17,
+          "pct_change": 0.463,
           "strategy": "low_price",
-          "reason": "股价2.2元（超低价）；今日+3.3%（走势稳健）；量能温和放大（量比1.2）",
+          "reason": "股价2.2元（超低价）；今日+0.5%（走势稳健）；量能温和放大（量比1.2）",
           "score": 84
+        },
+        {
+          "code": "000498",
+          "name": "山东路桥",
+          "price": 4.96,
+          "pct_change": 0.813,
+          "strategy": "low_price",
+          "reason": "股价5.0元（低价）；今日+0.8%（走势稳健）；短期均线向上；量能温和放大（量比1.3）",
+          "score": 82
         },
         {
           "code": "000159",
           "name": "国际实业",
-          "price": 6.0,
-          "pct_change": 2.0408,
+          "price": 5.72,
+          "pct_change": 0.7042,
           "strategy": "low_price",
-          "reason": "股价6.0元（中低价）；今日+2.0%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
+          "reason": "股价5.7元（中低价）；今日+0.7%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
+          "score": 81
+        },
+        {
+          "code": "000558",
+          "name": "天府文旅",
+          "price": 3.51,
+          "pct_change": -0.2841,
+          "strategy": "low_price",
+          "reason": "股价3.5元（低价）；今日-0.3%（走势稳健）；量能放大（量比2.1）",
+          "score": 81
+        },
+        {
+          "code": "000563",
+          "name": "陕国投A",
+          "price": 3.0,
+          "pct_change": 1.0101,
+          "strategy": "low_price",
+          "reason": "股价3.0元（低价）；今日+1.0%（走势稳健）；量能放大（量比1.7）",
           "score": 81
         },
         {
           "code": "000069",
           "name": "华侨城A",
           "price": 1.77,
-          "pct_change": 1.7241,
+          "pct_change": 0.0,
           "strategy": "low_price",
-          "reason": "股价1.8元（超低价）；今日+1.7%（走势稳健）",
+          "reason": "股价1.8元（超低价）；今日+0.0%（走势稳健）",
           "score": 80
         },
         {
           "code": "000402",
           "name": "金融街",
           "price": 2.48,
-          "pct_change": 2.0576,
+          "pct_change": -0.4016,
           "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+2.1%（走势稳健）",
+          "reason": "股价2.5元（超低价）；今日-0.4%（走势稳健）",
           "score": 80
         },
         {
           "code": "000517",
           "name": "荣安地产",
-          "price": 2.31,
-          "pct_change": -0.431,
+          "price": 2.29,
+          "pct_change": 2.2321,
           "strategy": "low_price",
-          "reason": "股价2.3元（超低价）；今日-0.4%（走势稳健）",
+          "reason": "股价2.3元（超低价）；今日+2.2%（走势稳健）",
+          "score": 80
+        },
+        {
+          "code": "000523",
+          "name": "红棉股份",
+          "price": 2.96,
+          "pct_change": 1.3699,
+          "strategy": "low_price",
+          "reason": "股价3.0元（超低价）；今日+1.4%（走势稳健）",
           "score": 80
         },
         {
           "code": "000545",
           "name": "金浦钛业",
-          "price": 2.59,
-          "pct_change": 2.7778,
+          "price": 2.54,
+          "pct_change": 2.008,
           "strategy": "low_price",
-          "reason": "股价2.6元（超低价）；今日+2.8%（走势稳健）",
+          "reason": "股价2.5元（超低价）；今日+2.0%（走势稳健）",
           "score": 80
         },
         {
           "code": "000552",
           "name": "甘肃能化",
-          "price": 2.63,
-          "pct_change": 0.3817,
+          "price": 2.55,
+          "pct_change": 0.0,
           "strategy": "low_price",
-          "reason": "股价2.6元（超低价）；今日+0.4%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "000564",
-          "name": "供销大集",
-          "price": 1.45,
-          "pct_change": 2.1127,
-          "strategy": "low_price",
-          "reason": "股价1.4元（超低价）；今日+2.1%（走势稳健）",
+          "reason": "股价2.5元（超低价）；今日+0.0%（走势稳健）",
           "score": 80
         },
         {
           "code": "000088",
           "name": "盐田港",
-          "price": 4.53,
-          "pct_change": 0.8909,
+          "price": 4.46,
+          "pct_change": 0.0,
           "strategy": "low_price",
-          "reason": "股价4.5元（低价）；今日+0.9%（走势稳健）；短期均线向上",
+          "reason": "股价4.5元（低价）；今日+0.0%（走势稳健）；短期均线向上",
           "score": 78
-        },
-        {
-          "code": "000617",
-          "name": "中油资本",
-          "price": 7.45,
-          "pct_change": 4.1958,
-          "strategy": "low_price",
-          "reason": "股价7.5元（中低价）；今日+4.2%（走势稳健）；短期均线向上；量能放大（量比2.1）",
-          "score": 78
-        },
-        {
-          "code": "000019",
-          "name": "深粮控股",
-          "price": 6.65,
-          "pct_change": 3.5826,
-          "strategy": "low_price",
-          "reason": "股价6.7元（中低价）；今日+3.6%（走势稳健）；均线多头排列",
-          "score": 77
-        },
-        {
-          "code": "000039",
-          "name": "中集集团",
-          "price": 9.1,
-          "pct_change": -1.6216,
-          "strategy": "low_price",
-          "reason": "股价9.1元（中低价）；今日-1.6%（走势稳健）；均线多头排列",
-          "score": 77
-        },
-        {
-          "code": "000055",
-          "name": "方大集团",
-          "price": 3.59,
-          "pct_change": 2.2792,
-          "strategy": "low_price",
-          "reason": "股价3.6元（低价）；今日+2.3%（走势稳健）；量能温和放大（量比1.4）",
-          "score": 77
         }
       ],
       "technical_pattern": [
         {
           "code": "000532",
           "name": "华金资本",
-          "price": 11.34,
-          "pct_change": 1.9784,
+          "price": 11.25,
+          "pct_change": 3.8781,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破",
           "score": 91
@@ -465,8 +465,8 @@
         {
           "code": "000008",
           "name": "神州高铁",
-          "price": 2.51,
-          "pct_change": 2.449,
+          "price": 2.4,
+          "pct_change": 0.4184,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、平台突破",
           "score": 83
@@ -474,8 +474,8 @@
         {
           "code": "000430",
           "name": "张家界",
-          "price": 6.85,
-          "pct_change": 1.9345,
+          "price": 6.61,
+          "pct_change": -1.0479,
           "strategy": "technical_pattern",
           "reason": "技术形态：放量突破（量比1.5）、MACD多头、平台突破",
           "score": 83
@@ -483,8 +483,8 @@
         {
           "code": "000501",
           "name": "武商集团",
-          "price": 7.27,
-          "pct_change": 3.267,
+          "price": 7.24,
+          "pct_change": 1.9718,
           "strategy": "technical_pattern",
           "reason": "技术形态：放量突破（量比1.5）、KDJ金叉、平台突破",
           "score": 83
@@ -492,44 +492,53 @@
         {
           "code": "000530",
           "name": "冰山冷热",
-          "price": 5.17,
-          "pct_change": 3.6072,
+          "price": 5.06,
+          "pct_change": 2.0161,
           "strategy": "technical_pattern",
           "reason": "技术形态：放量突破（量比1.8）、KDJ金叉、平台突破",
           "score": 83
         },
         {
-          "code": "000545",
-          "name": "金浦钛业",
-          "price": 2.59,
-          "pct_change": 2.7778,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：量能放大（量比1.4）、MACD金叉、平台突破",
-          "score": 77
-        },
-        {
           "code": "000423",
           "name": "东阿阿胶",
-          "price": 48.89,
-          "pct_change": 1.8542,
+          "price": 51.5,
+          "pct_change": -0.8089,
           "strategy": "technical_pattern",
           "reason": "技术形态：KDJ超卖金叉、RSI超卖反弹（20）",
           "score": 72
         },
         {
+          "code": "000159",
+          "name": "国际实业",
+          "price": 5.72,
+          "pct_change": 0.7042,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、量能放大（量比1.4）、MACD多头",
+          "score": 71
+        },
+        {
           "code": "000524",
           "name": "岭南控股",
-          "price": 10.2,
-          "pct_change": 3.1345,
+          "price": 9.44,
+          "pct_change": 1.0707,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、量能放大（量比1.5）、MACD多头",
           "score": 71
         },
         {
+          "code": "001914",
+          "name": "招商积余",
+          "price": 8.66,
+          "pct_change": -0.5741,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：短期均线向上、MACD金叉、KDJ金叉",
+          "score": 69
+        },
+        {
           "code": "000001",
           "name": "平安银行",
-          "price": 11.59,
-          "pct_change": 0.2595,
+          "price": 11.1,
+          "pct_change": -0.09,
           "strategy": "technical_pattern",
           "reason": "技术形态：短期均线向上、MACD多头、平台突破",
           "score": 66
@@ -537,8 +546,8 @@
         {
           "code": "000007",
           "name": "全新好",
-          "price": 12.82,
-          "pct_change": 0.6279,
+          "price": 10.63,
+          "pct_change": -0.932,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
@@ -546,17 +555,8 @@
         {
           "code": "000019",
           "name": "深粮控股",
-          "price": 6.65,
-          "pct_change": 3.5826,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000020",
-          "name": "深华发A",
-          "price": 12.69,
-          "pct_change": 3.1707,
+          "price": 6.33,
+          "pct_change": 5.8528,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
@@ -564,8 +564,8 @@
         {
           "code": "000025",
           "name": "特力A",
-          "price": 16.0,
-          "pct_change": 2.1711,
+          "price": 15.15,
+          "pct_change": 1.6779,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
@@ -573,35 +573,17 @@
         {
           "code": "000039",
           "name": "中集集团",
-          "price": 9.1,
-          "pct_change": -1.6216,
+          "price": 9.03,
+          "pct_change": 2.6136,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
         },
         {
-          "code": "000045",
-          "name": "深纺织A",
-          "price": 10.77,
-          "pct_change": 2.0853,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000059",
-          "name": "华锦股份",
-          "price": 4.76,
-          "pct_change": 2.1459,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000421",
-          "name": "南京公用",
-          "price": 5.66,
-          "pct_change": 2.5362,
+          "code": "000301",
+          "name": "东方盛虹",
+          "price": 12.66,
+          "pct_change": 0.3965,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
@@ -609,17 +591,8 @@
         {
           "code": "000426",
           "name": "兴业银锡",
-          "price": 39.5,
-          "pct_change": -6.5973,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000505",
-          "name": "京粮控股",
-          "price": 6.98,
-          "pct_change": 4.8048,
+          "price": 39.48,
+          "pct_change": 4.1964,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
@@ -627,11 +600,38 @@
         {
           "code": "000506",
           "name": "招金黄金",
-          "price": 20.61,
-          "pct_change": -7.744,
+          "price": 17.75,
+          "pct_change": 0.6236,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
+        },
+        {
+          "code": "000517",
+          "name": "荣安地产",
+          "price": 2.29,
+          "pct_change": 2.2321,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 66
+        },
+        {
+          "code": "000523",
+          "name": "红棉股份",
+          "price": 2.96,
+          "pct_change": 1.3699,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头",
+          "score": 66
+        },
+        {
+          "code": "000333",
+          "name": "美的集团",
+          "price": 82.61,
+          "pct_change": -0.5058,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：短期均线向上、MACD金叉",
+          "score": 61
         }
       ],
       "capital_flow": [],
@@ -640,7 +640,7 @@
           "code": "000069",
           "name": "华侨城A",
           "price": 1.77,
-          "pct_change": 1.7241,
+          "pct_change": 0.0,
           "strategy": "fundamental",
           "reason": "ROE=51.4%（优秀）",
           "score": 60
@@ -648,8 +648,8 @@
         {
           "code": "000417",
           "name": "合百集团",
-          "price": 5.67,
-          "pct_change": 3.0909,
+          "price": 5.97,
+          "pct_change": 2.226,
           "strategy": "fundamental",
           "reason": "ROE=29.4%（优秀）",
           "score": 60
@@ -657,8 +657,8 @@
         {
           "code": "000422",
           "name": "湖北宜化",
-          "price": 12.32,
-          "pct_change": 0.3257,
+          "price": 12.79,
+          "pct_change": 0.6294,
           "strategy": "fundamental",
           "reason": "ROE=21.2%（优秀）",
           "score": 60
@@ -670,14 +670,14 @@
       {
         "code": "000008",
         "name": "神州高铁",
-        "price": 2.51,
-        "pct_change": 2.449,
+        "price": 2.4,
+        "pct_change": 0.4184,
         "strategies": [
           "low_price",
           "technical_pattern"
         ],
         "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+2.4%（走势稳健）；均线多头排列",
+          "[low_price] 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
           "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
         ],
         "total_score": 195,
@@ -686,88 +686,70 @@
         "avg_score": 97.5
       },
       {
-        "code": "000545",
-        "name": "金浦钛业",
-        "price": 2.59,
-        "pct_change": 2.7778,
+        "code": "000159",
+        "name": "国际实业",
+        "price": 5.72,
+        "pct_change": 0.7042,
         "strategies": [
           "low_price",
           "technical_pattern"
         ],
         "reasons": [
-          "[low_price] 股价2.6元（超低价）；今日+2.8%（走势稳健）",
-          "[technical_pattern] 技术形态：量能放大（量比1.4）、MACD金叉、平台突破"
+          "[low_price] 股价5.7元（中低价）；今日+0.7%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
+          "[technical_pattern] 技术形态：均线多头排列、量能放大（量比1.4）、MACD多头"
         ],
-        "total_score": 177,
+        "total_score": 172,
         "strategy_count": 2,
         "resonance": false,
-        "avg_score": 88.5
+        "avg_score": 86.0
       },
       {
-        "code": "000059",
-        "name": "华锦股份",
-        "price": 4.76,
-        "pct_change": 2.1459,
+        "code": "000517",
+        "name": "荣安地产",
+        "price": 2.29,
+        "pct_change": 2.2321,
         "strategies": [
           "low_price",
           "technical_pattern"
         ],
         "reasons": [
-          "[low_price] 股价4.8元（低价）；今日+2.1%（走势稳健）；均线多头排列",
+          "[low_price] 股价2.3元（超低价）；今日+2.2%（走势稳健）",
           "[technical_pattern] 技术形态：均线多头排列、MACD多头"
         ],
-        "total_score": 171,
+        "total_score": 166,
         "strategy_count": 2,
         "resonance": false,
-        "avg_score": 85.5
+        "avg_score": 83.0
       },
       {
-        "code": "000019",
-        "name": "深粮控股",
-        "price": 6.65,
-        "pct_change": 3.5826,
+        "code": "000523",
+        "name": "红棉股份",
+        "price": 2.96,
+        "pct_change": 1.3699,
         "strategies": [
           "low_price",
           "technical_pattern"
         ],
         "reasons": [
-          "[low_price] 股价6.7元（中低价）；今日+3.6%（走势稳健）；均线多头排列",
+          "[low_price] 股价3.0元（超低价）；今日+1.4%（走势稳健）",
           "[technical_pattern] 技术形态：均线多头排列、MACD多头"
         ],
-        "total_score": 163,
+        "total_score": 166,
         "strategy_count": 2,
         "resonance": false,
-        "avg_score": 81.5
-      },
-      {
-        "code": "000039",
-        "name": "中集集团",
-        "price": 9.1,
-        "pct_change": -1.6216,
-        "strategies": [
-          "low_price",
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[low_price] 股价9.1元（中低价）；今日-1.6%（走势稳健）；均线多头排列",
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 163,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 81.5
+        "avg_score": 83.0
       },
       {
         "code": "000069",
         "name": "华侨城A",
         "price": 1.77,
-        "pct_change": 1.7241,
+        "pct_change": 0.0,
         "strategies": [
           "low_price",
           "fundamental"
         ],
         "reasons": [
-          "[low_price] 股价1.8元（超低价）；今日+1.7%（走势稳健）",
+          "[low_price] 股价1.8元（超低价）；今日+0.0%（走势稳健）",
           "[fundamental] ROE=51.4%（优秀）"
         ],
         "total_score": 160,
@@ -776,10 +758,26 @@
         "avg_score": 80.0
       },
       {
+        "code": "000560",
+        "name": "我爱我家",
+        "price": 2.17,
+        "pct_change": 0.463,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 92,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 92.0
+      },
+      {
         "code": "000532",
         "name": "华金资本",
-        "price": 11.34,
-        "pct_change": 1.9784,
+        "price": 11.25,
+        "pct_change": 3.8781,
         "strategies": [
           "technical_pattern"
         ],
@@ -792,15 +790,31 @@
         "avg_score": 91.0
       },
       {
-        "code": "000065",
-        "name": "北方国际",
-        "price": 9.98,
-        "pct_change": 0.0,
+        "code": "000059",
+        "name": "华锦股份",
+        "price": 4.6,
+        "pct_change": 0.6565,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价10.0元（中低价）；今日+0.0%（走势稳健）；均线多头排列；量能放大（量比1.8）"
+          "[low_price] 股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0
+      },
+      {
+        "code": "000065",
+        "name": "北方国际",
+        "price": 9.18,
+        "pct_change": 1.8868,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价9.2元（中低价）；今日+1.9%（走势稳健）；均线多头排列；量能放大（量比1.8）"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -810,13 +824,13 @@
       {
         "code": "000068",
         "name": "华控赛格",
-        "price": 3.16,
-        "pct_change": 2.5974,
+        "price": 3.04,
+        "pct_change": 4.1096,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.2元（低价）；今日+2.6%（走势稳健）；均线多头排列"
+          "[low_price] 股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -826,13 +840,13 @@
       {
         "code": "000407",
         "name": "胜利股份",
-        "price": 4.14,
-        "pct_change": 1.9704,
+        "price": 4.1,
+        "pct_change": 0.0,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价4.1元（低价）；今日+2.0%（走势稳健）；均线多头排列"
+          "[low_price] 股价4.1元（低价）；今日+0.0%（走势稳健）；均线多头排列"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -842,13 +856,13 @@
       {
         "code": "000415",
         "name": "渤海租赁",
-        "price": 4.46,
-        "pct_change": -0.8889,
+        "price": 4.63,
+        "pct_change": 2.6608,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价4.5元（低价）；今日-0.9%（走势稳健）；均线多头排列"
+          "[low_price] 股价4.6元（低价）；今日+2.7%（走势稳健）；均线多头排列"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -858,13 +872,13 @@
       {
         "code": "000620",
         "name": "盈新发展",
-        "price": 3.47,
-        "pct_change": 0.0,
+        "price": 3.1,
+        "pct_change": 2.3102,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.5元（低价）；今日+0.0%（走势稳健）；均线多头排列"
+          "[low_price] 股价3.1元（低价）；今日+2.3%（走势稳健）；均线多头排列"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -874,13 +888,13 @@
       {
         "code": "000031",
         "name": "大悦城",
-        "price": 2.19,
-        "pct_change": 3.3019,
+        "price": 2.17,
+        "pct_change": 0.463,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.2元（超低价）；今日+3.3%（走势稳健）；量能温和放大（量比1.2）"
+          "[low_price] 股价2.2元（超低价）；今日+0.5%（走势稳健）；量能温和放大（量比1.2）"
         ],
         "total_score": 84,
         "strategy_count": 1,
@@ -890,8 +904,8 @@
       {
         "code": "000430",
         "name": "张家界",
-        "price": 6.85,
-        "pct_change": 1.9345,
+        "price": 6.61,
+        "pct_change": -1.0479,
         "strategies": [
           "technical_pattern"
         ],
@@ -906,8 +920,8 @@
       {
         "code": "000501",
         "name": "武商集团",
-        "price": 7.27,
-        "pct_change": 3.267,
+        "price": 7.24,
+        "pct_change": 1.9718,
         "strategies": [
           "technical_pattern"
         ],
@@ -922,8 +936,8 @@
       {
         "code": "000530",
         "name": "冰山冷热",
-        "price": 5.17,
-        "pct_change": 3.6072,
+        "price": 5.06,
+        "pct_change": 2.0161,
         "strategies": [
           "technical_pattern"
         ],
@@ -936,15 +950,47 @@
         "avg_score": 83.0
       },
       {
-        "code": "000159",
-        "name": "国际实业",
-        "price": 6.0,
-        "pct_change": 2.0408,
+        "code": "000498",
+        "name": "山东路桥",
+        "price": 4.96,
+        "pct_change": 0.813,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价6.0元（中低价）；今日+2.0%（走势稳健）；均线多头排列；量能温和放大（量比1.4）"
+          "[low_price] 股价5.0元（低价）；今日+0.8%（走势稳健）；短期均线向上；量能温和放大（量比1.3）"
+        ],
+        "total_score": 82,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 82.0
+      },
+      {
+        "code": "000558",
+        "name": "天府文旅",
+        "price": 3.51,
+        "pct_change": -0.2841,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.5元（低价）；今日-0.3%（走势稳健）；量能放大（量比2.1）"
+        ],
+        "total_score": 81,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 81.0
+      },
+      {
+        "code": "000563",
+        "name": "陕国投A",
+        "price": 3.0,
+        "pct_change": 1.0101,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.0元（低价）；今日+1.0%（走势稳健）；量能放大（量比1.7）"
         ],
         "total_score": 81,
         "strategy_count": 1,
@@ -955,12 +1001,12 @@
         "code": "000402",
         "name": "金融街",
         "price": 2.48,
-        "pct_change": 2.0576,
+        "pct_change": -0.4016,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+2.1%（走势稳健）"
+          "[low_price] 股价2.5元（超低价）；今日-0.4%（走势稳健）"
         ],
         "total_score": 80,
         "strategy_count": 1,
@@ -968,15 +1014,15 @@
         "avg_score": 80.0
       },
       {
-        "code": "000517",
-        "name": "荣安地产",
-        "price": 2.31,
-        "pct_change": -0.431,
+        "code": "000545",
+        "name": "金浦钛业",
+        "price": 2.54,
+        "pct_change": 2.008,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.3元（超低价）；今日-0.4%（走势稳健）"
+          "[low_price] 股价2.5元（超低价）；今日+2.0%（走势稳健）"
         ],
         "total_score": 80,
         "strategy_count": 1,
@@ -986,29 +1032,13 @@
       {
         "code": "000552",
         "name": "甘肃能化",
-        "price": 2.63,
-        "pct_change": 0.3817,
+        "price": 2.55,
+        "pct_change": 0.0,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.6元（超低价）；今日+0.4%（走势稳健）"
-        ],
-        "total_score": 80,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 80.0
-      },
-      {
-        "code": "000564",
-        "name": "供销大集",
-        "price": 1.45,
-        "pct_change": 2.1127,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价1.4元（超低价）；今日+2.1%（走势稳健）"
+          "[low_price] 股价2.5元（超低价）；今日+0.0%（走势稳健）"
         ],
         "total_score": 80,
         "strategy_count": 1,
@@ -1018,56 +1048,24 @@
       {
         "code": "000088",
         "name": "盐田港",
-        "price": 4.53,
-        "pct_change": 0.8909,
+        "price": 4.46,
+        "pct_change": 0.0,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价4.5元（低价）；今日+0.9%（走势稳健）；短期均线向上"
+          "[low_price] 股价4.5元（低价）；今日+0.0%（走势稳健）；短期均线向上"
         ],
         "total_score": 78,
         "strategy_count": 1,
         "resonance": false,
         "avg_score": 78.0
-      },
-      {
-        "code": "000617",
-        "name": "中油资本",
-        "price": 7.45,
-        "pct_change": 4.1958,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价7.5元（中低价）；今日+4.2%（走势稳健）；短期均线向上；量能放大（量比2.1）"
-        ],
-        "total_score": 78,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 78.0
-      },
-      {
-        "code": "000055",
-        "name": "方大集团",
-        "price": 3.59,
-        "pct_change": 2.2792,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.6元（低价）；今日+2.3%（走势稳健）；量能温和放大（量比1.4）"
-        ],
-        "total_score": 77,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 77.0
       },
       {
         "code": "000423",
         "name": "东阿阿胶",
-        "price": 48.89,
-        "pct_change": 1.8542,
+        "price": 51.5,
+        "pct_change": -0.8089,
         "strategies": [
           "technical_pattern"
         ],
@@ -1082,8 +1080,8 @@
       {
         "code": "000524",
         "name": "岭南控股",
-        "price": 10.2,
-        "pct_change": 3.1345,
+        "price": 9.44,
+        "pct_change": 1.0707,
         "strategies": [
           "technical_pattern"
         ],
@@ -1096,10 +1094,26 @@
         "avg_score": 71.0
       },
       {
+        "code": "001914",
+        "name": "招商积余",
+        "price": 8.66,
+        "pct_change": -0.5741,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：短期均线向上、MACD金叉、KDJ金叉"
+        ],
+        "total_score": 69,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 69.0
+      },
+      {
         "code": "000001",
         "name": "平安银行",
-        "price": 11.59,
-        "pct_change": 0.2595,
+        "price": 11.1,
+        "pct_change": -0.09,
         "strategies": [
           "technical_pattern"
         ],
@@ -1114,8 +1128,8 @@
       {
         "code": "000007",
         "name": "全新好",
-        "price": 12.82,
-        "pct_change": 0.6279,
+        "price": 10.63,
+        "pct_change": -0.932,
         "strategies": [
           "technical_pattern"
         ],
@@ -1128,10 +1142,10 @@
         "avg_score": 66.0
       },
       {
-        "code": "000020",
-        "name": "深华发A",
-        "price": 12.69,
-        "pct_change": 3.1707,
+        "code": "000019",
+        "name": "深粮控股",
+        "price": 6.33,
+        "pct_change": 5.8528,
         "strategies": [
           "technical_pattern"
         ],
@@ -1146,8 +1160,8 @@
       {
         "code": "000025",
         "name": "特力A",
-        "price": 16.0,
-        "pct_change": 2.1711,
+        "price": 15.15,
+        "pct_change": 1.6779,
         "strategies": [
           "technical_pattern"
         ],
@@ -1160,10 +1174,10 @@
         "avg_score": 66.0
       },
       {
-        "code": "000045",
-        "name": "深纺织A",
-        "price": 10.77,
-        "pct_change": 2.0853,
+        "code": "000039",
+        "name": "中集集团",
+        "price": 9.03,
+        "pct_change": 2.6136,
         "strategies": [
           "technical_pattern"
         ],
@@ -1176,10 +1190,10 @@
         "avg_score": 66.0
       },
       {
-        "code": "000421",
-        "name": "南京公用",
-        "price": 5.66,
-        "pct_change": 2.5362,
+        "code": "000301",
+        "name": "东方盛虹",
+        "price": 12.66,
+        "pct_change": 0.3965,
         "strategies": [
           "technical_pattern"
         ],
@@ -1194,24 +1208,8 @@
       {
         "code": "000426",
         "name": "兴业银锡",
-        "price": 39.5,
-        "pct_change": -6.5973,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000505",
-        "name": "京粮控股",
-        "price": 6.98,
-        "pct_change": 4.8048,
+        "price": 39.48,
+        "pct_change": 4.1964,
         "strategies": [
           "technical_pattern"
         ],
@@ -1226,8 +1224,8 @@
       {
         "code": "000506",
         "name": "招金黄金",
-        "price": 20.61,
-        "pct_change": -7.744,
+        "price": 17.75,
+        "pct_change": 0.6236,
         "strategies": [
           "technical_pattern"
         ],
@@ -1240,10 +1238,26 @@
         "avg_score": 66.0
       },
       {
+        "code": "000333",
+        "name": "美的集团",
+        "price": 82.61,
+        "pct_change": -0.5058,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：短期均线向上、MACD金叉"
+        ],
+        "total_score": 61,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 61.0
+      },
+      {
         "code": "000417",
         "name": "合百集团",
-        "price": 5.67,
-        "pct_change": 3.0909,
+        "price": 5.97,
+        "pct_change": 2.226,
         "strategies": [
           "fundamental"
         ],
@@ -1258,8 +1272,8 @@
       {
         "code": "000422",
         "name": "湖北宜化",
-        "price": 12.32,
-        "pct_change": 0.3257,
+        "price": 12.79,
+        "pct_change": 0.6294,
         "strategies": [
           "fundamental"
         ],
@@ -1273,8 +1287,8 @@
       }
     ],
     "summary": {
-      "run_time": "2026-08-25 16:50:29",
-      "total_stocks": 5342,
+      "run_time": "2026-08-25 17:08:51",
+      "total_stocks": 5332,
       "strategy_counts": {
         "low_price": 20,
         "technical_pattern": 20,
@@ -1282,8 +1296,8 @@
         "fundamental": 3,
         "concept_hotspot": 0
       },
-      "combined_count": 37
+      "combined_count": 38
     }
   },
-  "markdown": "# 📈 股票分析日报 - 2026-08-25\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 贵州茅台(600519) | 1304.0 | -0.05% | 42 | 偏空 | 减仓 |\n| 平安银行(000001) | 11.59 | +0.26% | 39 | 偏空 | 减仓 |\n\n## 详细分析\n\n## 贵州茅台(600519)\n**现价**: 1304.0 | **涨跌幅**: -0.05% | **综合评分**: 42/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 42 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=1296.17, MA20=1322.63）\n- MACD 空头排列\n- RSI=49.4（正常）\n- 布林带位置：32%，带宽8.0%\n- 量能：温和缩量（量比0.64）\n- 支撑位：1271.06，压力位：1322.63\n\n### 基本面\n- ROE=54.3%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率87.8%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 平安银行(000001)\n**现价**: 11.59 | **涨跌幅**: +0.26% | **综合评分**: 39/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 56 |\n| 基本面 | 20 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：偏强震荡（MA5=11.45, MA20=11.34）\n- MACD 多头排列\n- RSI=67.35（正常）\n- 布林带位置：84%，带宽6.4%\n- 量能：量能正常（量比0.88）\n- 支撑位：11.34，压力位：11.66\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 神州高铁(000008) | 2.51 | +2.45% | 92 | 股价2.5元（超低价）；今日+2.4%（走势稳健）；均线多头排列 |\n| 华锦股份(000059) | 4.76 | +2.15% | 85 | 股价4.8元（低价）；今日+2.1%（走势稳健）；均线多头排列 |\n| 北方国际(000065) | 9.98 | +0.00% | 85 | 股价10.0元（中低价）；今日+0.0%（走势稳健）；均线多头排列；量能放大（量比1.8） |\n| 华控赛格(000068) | 3.16 | +2.60% | 85 | 股价3.2元（低价）；今日+2.6%（走势稳健）；均线多头排列 |\n| 胜利股份(000407) | 4.14 | +1.97% | 85 | 股价4.1元（低价）；今日+2.0%（走势稳健）；均线多头排列 |\n\n### 技术形态选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华金资本(000532) | 11.34 | +1.98% | 91 | 技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破 |\n| 神州高铁(000008) | 2.51 | +2.45% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 张家界(000430) | 6.85 | +1.93% | 83 | 技术形态：放量突破（量比1.5）、MACD多头、平台突破 |\n| 武商集团(000501) | 7.27 | +3.27% | 83 | 技术形态：放量突破（量比1.5）、KDJ金叉、平台突破 |\n| 冰山冷热(000530) | 5.17 | +3.61% | 83 | 技术形态：放量突破（量比1.8）、KDJ金叉、平台突破 |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华侨城A(000069) | 1.77 | +1.72% | 60 | ROE=51.4%（优秀） |\n| 合百集团(000417) | 5.67 | +3.09% | 60 | ROE=29.4%（优秀） |\n| 湖北宜化(000422) | 12.32 | +0.33% | 60 | ROE=21.2%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*"
+  "markdown": "# 📈 股票分析日报 - 2026-08-25\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 贵州茅台(600519) | 1304.0 | -0.05% | 42 | 偏空 | 减仓 |\n| 平安银行(000001) | 11.59 | +0.26% | 39 | 偏空 | 减仓 |\n\n## 详细分析\n\n## 贵州茅台(600519)\n**现价**: 1304.0 | **涨跌幅**: -0.05% | **综合评分**: 42/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 42 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=1296.17, MA20=1322.63）\n- MACD 空头排列\n- RSI=49.4（正常）\n- 布林带位置：32%，带宽8.0%\n- 量能：温和缩量（量比0.64）\n- 支撑位：1271.06，压力位：1322.63\n\n### 基本面\n- ROE=54.3%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率87.8%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 平安银行(000001)\n**现价**: 11.59 | **涨跌幅**: +0.26% | **综合评分**: 39/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 56 |\n| 基本面 | 20 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：偏强震荡（MA5=11.45, MA20=11.34）\n- MACD 多头排列\n- RSI=67.35（正常）\n- 布林带位置：84%，带宽6.4%\n- 量能：量能正常（量比0.88）\n- 支撑位：11.34，压力位：11.66\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 神州高铁(000008) | 2.4 | +0.42% | 92 | 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列 |\n| 我爱我家(000560) | 2.17 | +0.46% | 92 | 股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列 |\n| 华锦股份(000059) | 4.6 | +0.66% | 85 | 股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列 |\n| 北方国际(000065) | 9.18 | +1.89% | 85 | 股价9.2元（中低价）；今日+1.9%（走势稳健）；均线多头排列；量能放大（量比1.8） |\n| 华控赛格(000068) | 3.04 | +4.11% | 85 | 股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列 |\n\n### 技术形态选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华金资本(000532) | 11.25 | +3.88% | 91 | 技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破 |\n| 神州高铁(000008) | 2.4 | +0.42% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 张家界(000430) | 6.61 | -1.05% | 83 | 技术形态：放量突破（量比1.5）、MACD多头、平台突破 |\n| 武商集团(000501) | 7.24 | +1.97% | 83 | 技术形态：放量突破（量比1.5）、KDJ金叉、平台突破 |\n| 冰山冷热(000530) | 5.06 | +2.02% | 83 | 技术形态：放量突破（量比1.8）、KDJ金叉、平台突破 |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华侨城A(000069) | 1.77 | +0.00% | 60 | ROE=51.4%（优秀） |\n| 合百集团(000417) | 5.97 | +2.23% | 60 | ROE=29.4%（优秀） |\n| 湖北宜化(000422) | 12.79 | +0.63% | 60 | ROE=21.2%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*"
 }
