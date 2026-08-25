@@ -45,20 +45,7 @@ jobs:
           TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
         run: |
           cd backend
-          python -c "
-import tushare as ts, json, os
-token = os.getenv('TUSHARE_TOKEN', '')
-if token:
-    ts.set_token(token)
-    pro = ts.pro_api()
-    df = pro.stock_basic(exchange='', list_status='L', fields='symbol,name')
-    name_map = dict(zip(df['symbol'], df['name']))
-    with open('data/stock_name_map.json', 'w', encoding='utf-8') as f:
-        json.dump(name_map, f, ensure_ascii=False)
-    print(f'生成股票名称映射表: {len(name_map)} 只')
-else:
-    print('未配置 TUSHARE_TOKEN，跳过映射表生成')
-" || echo "生成映射表失败，使用默认映射表"
+          python scripts/generate_stock_name_map.py || echo "生成映射表失败，使用默认映射表"
 
       - name: Run analysis
         env:
