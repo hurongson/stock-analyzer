@@ -143,9 +143,33 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                     }
                 })
 
-    # 选股推荐
+    # 选股推荐 - 综合TOP 10
     if screener and screener.get("combined"):
         combined = screener["combined"]
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🏆 综合选股 TOP 10（共{len(combined)}只）**"
+            }
+        })
+        top_lines = []
+        for i, c in enumerate(combined[:10]):
+            resonance_tag = "🔥" if c.get("resonance") else "  "
+            top_lines.append(
+                f"{i+1}. {resonance_tag} **{c['name']}**({c['code']}) {c['price']}元 "
+                f"{c['pct_change']:+.1f}% | 命中{c['strategy_count']}策略 | 均分{c['avg_score']}"
+            )
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "\n".join(top_lines)
+            }
+        })
+
+        # 多策略共振选股（重点关注）
         resonance = [c for c in combined if c.get("resonance")]
         if resonance:
             elements.append({"tag": "hr"})
@@ -153,11 +177,11 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 "tag": "div",
                 "text": {
                     "tag": "lark_md",
-                    "content": "**🎯 多策略共振选股（重点关注）**"
+                    "content": f"**🎯 多策略共振选股（{len(resonance)}只，重点关注）**"
                 }
             })
             pick_lines = []
-            for c in resonance[:5]:
+            for c in resonance[:8]:
                 pick_lines.append(
                     f"• **{c['name']}**({c['code']}) {c['price']}元 "
                     f"{c['pct_change']:+.1f}% | 命中{c['strategy_count']}策略 | 均分{c['avg_score']}"
@@ -170,7 +194,7 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 }
             })
 
-    # 各策略精选
+    # 各策略精选（每个策略前3名）
     if screener and screener.get("strategies"):
         strategy_names = {
             "low_price": "低价潜力",
@@ -180,15 +204,26 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             "concept_hotspot": "概念热点",
         }
         elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "**📊 各策略精选（前3名）**"
+            }
+        })
         for sname, sresults in screener["strategies"].items():
             if sresults:
-                top = sresults[0]
+                strategy_lines = []
+                for i, top in enumerate(sresults[:3]):
+                    strategy_lines.append(
+                        f"  {i+1}. {top['name']}({top['code']}) {top['price']}元 "
+                        f"{top['pct_change']:+.1f}% 评分{top['score']}"
+                    )
                 elements.append({
                     "tag": "div",
                     "text": {
                         "tag": "lark_md",
-                        "content": f"**{strategy_names.get(sname, sname)}**: {top['name']}({top['code']}) "
-                                   f"{top['price']}元 {top['pct_change']:+.1f}% 评分{top['score']}"
+                        "content": f"**{strategy_names.get(sname, sname)}**（{len(sresults)}只）\n" + "\n".join(strategy_lines)
                     }
                 })
 
