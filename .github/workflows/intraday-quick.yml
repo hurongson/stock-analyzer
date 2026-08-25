@@ -53,7 +53,7 @@ jobs:
 
       - name: Run quick analysis
         env:
-          STOCK_LIST: ${{ github.event.inputs.stocks || '' }}
+          STOCK_LIST: ${{ secrets.STOCK_LIST || github.event.inputs.stocks || '' }}
           TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
           FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
