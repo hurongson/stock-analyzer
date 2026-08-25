@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   quick-analyze:
-    if: ${{ secrets.ENABLE_CLOUD_MONITOR != 'false' }}
+    if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
