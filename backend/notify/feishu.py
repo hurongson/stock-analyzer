@@ -81,17 +81,30 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
         }
     })
 
-    # 自选股摘要
+    # 自选股摘要 + 交易信号
     valid_analyses = [a for a in analyses if "error" not in a]
     if valid_analyses:
         summary_lines = []
+        buy_list = []
+        sell_list = []
         for a in valid_analyses[:8]:
             emoji = "🟢" if a.get("total_score", 50) >= 60 else ("🔴" if a.get("total_score", 50) < 40 else "🟡")
+            # 交易信号
+            ts = a.get("trading_signal", {})
+            signal = ts.get("action", a.get("action", ""))
+            signal_emoji = "🟩" if "买" in signal else ("🟥" if "卖" in signal else "⬜")
+            conf = ts.get("confidence", 0)
             summary_lines.append(
                 f"{emoji} **{a.get('name','')}**({a.get('code','')}) "
                 f"{a.get('price',0)}元 {a.get('pct_change',0):+.1f}% | "
-                f"评分{a.get('total_score',0)} | {a.get('action','')}"
+                f"评分{a.get('total_score',0)} | {signal_emoji}{signal}"
             )
+            # 收集买卖信号
+            if ts.get("signal") in ("buy", "hold_buy") and conf >= 30:
+                buy_list.append(a)
+            elif ts.get("signal") in ("sell", "hold_sell") and conf >= 30:
+                sell_list.append(a)
+
         elements.append({
             "tag": "div",
             "text": {
@@ -99,6 +112,36 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 "content": "\n".join(summary_lines)
             }
         })
+
+        # 买卖信号汇总
+        if buy_list or sell_list:
+            elements.append({"tag": "hr"})
+            if buy_list:
+                buy_lines = []
+                for a in buy_list[:5]:
+                    ts = a.get("trading_signal", {})
+                    reasons = "、".join(ts.get("buy_signals", [])[:3])
+                    buy_lines.append(f"• **{a['name']}**({a['code']}) {a['price']}元 | 置信度{ts.get('confidence',0)}% | {reasons}")
+                elements.append({
+                    "tag": "div",
+                    "text": {
+                        "tag": "lark_md",
+                        "content": f"**🟩 买入信号（{len(buy_list)}只）**\n" + "\n".join(buy_lines)
+                    }
+                })
+            if sell_list:
+                sell_lines = []
+                for a in sell_list[:5]:
+                    ts = a.get("trading_signal", {})
+                    reasons = "、".join(ts.get("sell_signals", [])[:3])
+                    sell_lines.append(f"• **{a['name']}**({a['code']}) {a['price']}元 | 置信度{ts.get('confidence',0)}% | {reasons}")
+                elements.append({
+                    "tag": "div",
+                    "text": {
+                        "tag": "lark_md",
+                        "content": f"**🟥 卖出信号（{len(sell_list)}只）**\n" + "\n".join(sell_lines)
+                    }
+                })
 
     # 选股推荐
     if screener and screener.get("combined"):

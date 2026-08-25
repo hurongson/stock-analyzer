@@ -2,8 +2,8 @@ name: 每日股票分析
 
 on:
   schedule:
-    # 每个工作日北京时间 18:00 = UTC 10:00
-    - cron: '0 10 * * 1-5'
+    # 每个工作日北京时间 14:45 = UTC 06:45（尾盘分析，给出买卖建议）
+    - cron: '45 6 * * 1-5'
   workflow_dispatch:
     inputs:
       stocks:

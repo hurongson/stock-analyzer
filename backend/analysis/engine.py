@@ -11,6 +11,7 @@ from backend.analysis.fundamental import analyze_fundamental
 from backend.analysis.capital_flow import analyze_capital_flow
 from backend.analysis.concept import analyze_concept
 from backend.analysis.llm_analyzer import llm_deep_analyze
+from backend.analysis.signals import generate_trading_signal
 from backend.utils.helpers import normalize_stock_code, now_str
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,10 @@ def analyze_stock(code: str) -> Dict[str, Any]:
     fundamental = analyze_fundamental(code)
     capital = analyze_capital_flow(code)
     concept = analyze_concept(code)
+
+    # 交易信号（基于K线技术指标，给出明确买卖建议）
+    kline = collector.get_daily_kline(code, days=60)
+    trading_signal = generate_trading_signal(kline, stock_info)
 
     # LLM 深度分析（可选）
     llm_result = llm_deep_analyze(stock_info, technical, fundamental, capital, concept)
@@ -121,6 +126,7 @@ def analyze_stock(code: str) -> Dict[str, Any]:
         "capital": capital,
         "concept": concept,
         "llm_analysis": llm_result,
+        "trading_signal": trading_signal,
         "risks": risks,
     }
 
