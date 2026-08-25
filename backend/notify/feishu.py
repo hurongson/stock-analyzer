@@ -194,7 +194,7 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 }
             })
 
-    # 各策略精选（每个策略前3名）
+    # 各策略精选（每个策略前10名）
     if screener and screener.get("strategies"):
         strategy_names = {
             "low_price": "低价潜力",
@@ -208,13 +208,13 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             "tag": "div",
             "text": {
                 "tag": "lark_md",
-                "content": "**📊 各策略精选（前3名）**"
+                "content": "**📊 各策略精选（前10名）**"
             }
         })
         for sname, sresults in screener["strategies"].items():
             if sresults:
                 strategy_lines = []
-                for i, top in enumerate(sresults[:3]):
+                for i, top in enumerate(sresults[:10]):
                     strategy_lines.append(
                         f"  {i+1}. {top['name']}({top['code']}) {top['price']}元 "
                         f"{top['pct_change']:+.1f}% 评分{top['score']}"
