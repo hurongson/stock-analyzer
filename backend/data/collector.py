@@ -2,6 +2,8 @@
 数据采集层：Tushare 优先 + akshare 备用，统一数据格式，带本地缓存
 所有方法返回标准化的 pandas DataFrame 或 dict
 """
+import os
+import json
 import time
 import logging
 import pandas as pd
