@@ -87,7 +87,7 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
         summary_lines = []
         buy_list = []
         sell_list = []
-        for a in valid_analyses[:8]:
+        for a in valid_analyses:
             emoji = "🟢" if a.get("total_score", 50) >= 60 else ("🔴" if a.get("total_score", 50) < 40 else "🟡")
             # 交易信号
             ts = a.get("trading_signal", {})
@@ -118,7 +118,7 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             elements.append({"tag": "hr"})
             if buy_list:
                 buy_lines = []
-                for a in buy_list[:5]:
+                for a in buy_list:
                     ts = a.get("trading_signal", {})
                     reasons = "、".join(ts.get("buy_signals", [])[:3])
                     buy_lines.append(f"• **{a['name']}**({a['code']}) {a['price']}元 | 置信度{ts.get('confidence',0)}% | {reasons}")
@@ -131,7 +131,7 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 })
             if sell_list:
                 sell_lines = []
-                for a in sell_list[:5]:
+                for a in sell_list:
                     ts = a.get("trading_signal", {})
                     reasons = "、".join(ts.get("sell_signals", [])[:3])
                     sell_lines.append(f"• **{a['name']}**({a['code']}) {a['price']}元 | 置信度{ts.get('confidence',0)}% | {reasons}")
