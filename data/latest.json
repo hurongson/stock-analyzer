@@ -1,19 +1,19 @@
 {
-  "date": "2026-08-25",
-  "generated_at": "2026-08-25T17:09:54.159312",
+  "date": "2026-08-26",
+  "generated_at": "2026-08-26T04:12:44.143098",
   "stock_analyses": [
     {
-      "code": "600519",
-      "name": "贵州茅台",
-      "price": 1304.0,
-      "pct_change": -0.05,
-      "analysis_time": "2026-08-25 17:09:24",
-      "total_score": 42,
+      "code": "000791",
+      "name": "甘肃能源",
+      "price": 7.21,
+      "pct_change": -0.83,
+      "analysis_time": "2026-08-26 04:10:04",
+      "total_score": 36,
       "rating": "偏空",
       "action": "减仓",
       "scores": {
-        "technical": 42,
-        "fundamental": 48,
+        "technical": 49,
+        "fundamental": 17,
         "capital": 50,
         "concept": 50
       },
@@ -21,85 +21,85 @@
         "trend": {
           "trend": "下降趋势",
           "trend_score": 20,
-          "ma5": 1296.17,
-          "ma10": 1311.22,
-          "ma20": 1322.63,
-          "ma60": 1271.06,
+          "ma5": 7.22,
+          "ma10": 7.43,
+          "ma20": 7.64,
+          "ma60": 7.96,
           "bullish_alignment": "False",
           "bearish_alignment": "True"
         },
         "macd": {
-          "dif": 3.3912,
-          "dea": 10.2731,
-          "macd": -13.7638,
+          "dif": -0.164,
+          "dea": -0.1121,
+          "macd": -0.1038,
           "golden_cross": "False",
           "death_cross": "False"
         },
         "rsi": {
-          "value": 49.4,
-          "status": "正常"
+          "value": 24.64,
+          "status": "超卖"
         },
         "kdj": {
-          "k": 30.51,
-          "d": 32.29,
-          "j": 26.96,
+          "k": 11.0,
+          "d": 15.37,
+          "j": 2.27,
           "golden_cross": "False",
           "death_cross": "False",
           "overbought": "False",
-          "oversold": "False"
+          "oversold": "True"
         },
         "bollinger": {
-          "upper": 1375.42,
-          "mid": 1322.63,
-          "lower": 1269.83,
-          "width": 7.98,
-          "position": 32.36
+          "upper": 8.21,
+          "mid": 7.64,
+          "lower": 7.07,
+          "width": 15.01,
+          "position": 12.58
         },
         "support_resistance": {
-          "resistance_1": 1322.63,
-          "resistance_2": 1363.35,
-          "support_1": 1271.06,
-          "support_2": 1151.01,
-          "recent_high": 1363.35,
-          "recent_low": 1151.01
+          "resistance_1": 7.64,
+          "resistance_2": 7.96,
+          "support_1": 7.04,
+          "support_2": null,
+          "recent_high": 10.91,
+          "recent_low": 7.04
         },
         "volume": {
-          "current_volume": 2111118.0,
-          "vol_ma5": 3318045.0,
-          "vol_ma10": 3803208.0,
-          "volume_ratio": 0.64,
-          "volume_status": "温和缩量"
+          "current_volume": 15930151.0,
+          "vol_ma5": 15473015.0,
+          "vol_ma10": 20493932.0,
+          "volume_ratio": 1.03,
+          "volume_status": "量能正常"
         },
-        "technical_score": 42,
+        "technical_score": 49,
         "conclusions": [
-          "趋势：下降趋势（MA5=1296.17, MA20=1322.63）",
+          "趋势：下降趋势（MA5=7.22, MA20=7.64）",
           "MACD 空头排列",
-          "RSI=49.4（正常）",
-          "布林带位置：32%，带宽8.0%",
-          "量能：温和缩量（量比0.64）",
-          "支撑位：1271.06，压力位：1322.63"
+          "RSI=24.64（超卖）",
+          "布林带位置：13%，带宽15.0%",
+          "量能：量能正常（量比1.03）",
+          "支撑位：7.04，压力位：7.64"
         ]
       },
       "fundamental": {
         "data": {
-          "report_date": "1998",
-          "revenue": 628000000.0,
-          "net_profit": 147000000.0,
-          "roe": 54.27,
-          "gross_margin": 87.79,
+          "report_date": "1994",
+          "revenue": 155000000.0,
+          "net_profit": 22870600.0,
+          "roe": 0.0,
+          "gross_margin": 24.09,
           "revenue_yoy": 0.0,
           "profit_yoy": 0.0,
           "pe": null,
           "pb": null,
           "total_mv": 0,
-          "name": "贵州茅台"
+          "name": "甘肃能源"
         },
-        "score": 48,
+        "score": 17,
         "conclusions": [
-          "ROE=54.3%（优秀）",
+          "ROE=0.0%（偏弱）",
           "营收同比0.0%（下滑）",
           "净利润同比0.0%（下滑）",
-          "毛利率87.8%（高毛利）"
+          "毛利率24.1%（偏低）"
         ]
       },
       "capital": {
@@ -119,119 +119,257 @@
       },
       "llm_analysis": null,
       "trading_signal": {
-        "signal": "hold",
-        "action": "持有观望",
-        "confidence": 5,
-        "buy_score": 10,
-        "sell_score": 15,
-        "net_score": -5,
+        "signal": "hold_sell",
+        "action": "持有/可逢高减仓",
+        "confidence": 10,
+        "buy_score": 18,
+        "sell_score": 28,
+        "net_score": -10,
         "buy_signals": [
-          "缩量下跌(可能止跌)"
+          "RSI严重超卖(25)"
         ],
         "sell_signals": [
+          "MACD空头排列",
           "均线空头排列(5<10<20)"
         ],
-        "price": 1304.0
+        "price": 7.21
       },
-      "risks": []
+      "risks": [
+        "基本面偏弱"
+      ]
     },
     {
-      "code": "000001",
-      "name": "平安银行",
-      "price": 11.59,
-      "pct_change": 0.26,
-      "analysis_time": "2026-08-25 17:09:54",
-      "total_score": 39,
+      "code": "002131",
+      "name": "利欧股份",
+      "price": 4.5,
+      "pct_change": 2.27,
+      "analysis_time": "2026-08-26 04:10:36",
+      "total_score": 43,
       "rating": "偏空",
       "action": "减仓",
       "scores": {
-        "technical": 56,
-        "fundamental": 20,
+        "technical": 52,
+        "fundamental": 40,
         "capital": 50,
         "concept": 50
       },
       "technical": {
         "trend": {
-          "trend": "偏强震荡",
-          "trend_score": 60,
-          "ma5": 11.45,
-          "ma10": 11.3,
-          "ma20": 11.34,
-          "ma60": 10.95,
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "ma5": 4.54,
+          "ma10": 4.95,
+          "ma20": 5.02,
+          "ma60": 4.84,
           "bullish_alignment": "False",
-          "bearish_alignment": "False"
+          "bearish_alignment": "True"
         },
         "macd": {
-          "dif": 0.1228,
-          "dea": 0.1082,
-          "macd": 0.0291,
+          "dif": -0.0236,
+          "dea": 0.0825,
+          "macd": -0.2123,
           "golden_cross": "False",
           "death_cross": "False"
         },
         "rsi": {
-          "value": 67.35,
-          "status": "正常"
+          "value": 19.05,
+          "status": "超卖"
         },
         "kdj": {
-          "k": 80.96,
-          "d": 63.74,
-          "j": 115.39,
+          "k": 9.6,
+          "d": 16.89,
+          "j": -4.98,
           "golden_cross": "False",
           "death_cross": "False",
-          "overbought": "True",
-          "oversold": "False"
+          "overbought": "False",
+          "oversold": "True"
         },
         "bollinger": {
-          "upper": 11.71,
-          "mid": 11.34,
-          "lower": 10.98,
-          "width": 6.41,
-          "position": 84.16
+          "upper": 6.02,
+          "mid": 5.02,
+          "lower": 4.02,
+          "width": 39.85,
+          "position": 24.12
         },
         "support_resistance": {
-          "resistance_1": 11.66,
-          "resistance_2": null,
-          "support_1": 11.34,
-          "support_2": 10.95,
-          "recent_high": 11.66,
-          "recent_low": 9.99
+          "resistance_1": 4.84,
+          "resistance_2": 5.02,
+          "support_1": 3.62,
+          "support_2": null,
+          "recent_high": 6.09,
+          "recent_low": 3.62
         },
         "volume": {
-          "current_volume": 99488115.0,
-          "vol_ma5": 113462151.0,
-          "vol_ma10": 96323555.0,
-          "volume_ratio": 0.88,
+          "current_volume": 308316439.0,
+          "vol_ma5": 335645937.0,
+          "vol_ma10": 635974856.0,
+          "volume_ratio": 0.92,
           "volume_status": "量能正常"
         },
-        "technical_score": 56,
+        "technical_score": 52,
         "conclusions": [
-          "趋势：偏强震荡（MA5=11.45, MA20=11.34）",
-          "MACD 多头排列",
-          "RSI=67.35（正常）",
-          "布林带位置：84%，带宽6.4%",
-          "量能：量能正常（量比0.88）",
-          "支撑位：11.34，压力位：11.66"
+          "趋势：下降趋势（MA5=4.54, MA20=5.02）",
+          "MACD 空头排列",
+          "RSI=19.05（超卖）",
+          "布林带位置：24%，带宽39.9%",
+          "量能：量能正常（量比0.92）",
+          "支撑位：3.62，压力位：4.84"
         ]
       },
       "fundamental": {
         "data": {
-          "report_date": "1989",
-          "revenue": 0.0,
-          "net_profit": 43020000.0,
-          "roe": 0.0,
-          "gross_margin": null,
+          "report_date": "2004",
+          "revenue": 243000000.00000003,
+          "net_profit": 15457900.0,
+          "roe": 39.94,
+          "gross_margin": 17.35,
           "revenue_yoy": 0.0,
           "profit_yoy": 0.0,
           "pe": null,
           "pb": null,
           "total_mv": 0,
-          "name": "平安银行"
+          "name": "利欧股份"
         },
-        "score": 20,
+        "score": 40,
         "conclusions": [
-          "ROE=0.0%（偏弱）",
+          "ROE=39.9%（优秀）",
           "营收同比0.0%（下滑）",
-          "净利润同比0.0%（下滑）"
+          "净利润同比0.0%（下滑）",
+          "毛利率17.4%（偏低）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "hold_sell",
+        "action": "持有/可逢高减仓",
+        "confidence": 10,
+        "buy_score": 18,
+        "sell_score": 28,
+        "net_score": -10,
+        "buy_signals": [
+          "RSI严重超卖(19)"
+        ],
+        "sell_signals": [
+          "MACD空头排列",
+          "均线空头排列(5<10<20)"
+        ],
+        "price": 4.5
+      },
+      "risks": []
+    },
+    {
+      "code": "002177",
+      "name": "御银股份",
+      "price": 5.97,
+      "pct_change": 2.75,
+      "analysis_time": "2026-08-26 04:11:09",
+      "total_score": 48,
+      "rating": "中性",
+      "action": "观望",
+      "scores": {
+        "technical": 61,
+        "fundamental": 48,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "横盘震荡",
+          "trend_score": 50,
+          "ma5": 5.68,
+          "ma10": 5.67,
+          "ma20": 5.75,
+          "ma60": 5.75,
+          "bullish_alignment": "False",
+          "bearish_alignment": "False"
+        },
+        "macd": {
+          "dif": 0.0227,
+          "dea": -0.0002,
+          "macd": 0.0459,
+          "golden_cross": "False",
+          "death_cross": "False"
+        },
+        "rsi": {
+          "value": 51.28,
+          "status": "正常"
+        },
+        "kdj": {
+          "k": 64.97,
+          "d": 45.02,
+          "j": 104.88,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False"
+        },
+        "bollinger": {
+          "upper": 6.09,
+          "mid": 5.75,
+          "lower": 5.4,
+          "width": 11.88,
+          "position": 82.88
+        },
+        "support_resistance": {
+          "resistance_1": 6.98,
+          "resistance_2": null,
+          "support_1": 5.75,
+          "support_2": 5.75,
+          "recent_high": 6.98,
+          "recent_low": 4.96
+        },
+        "volume": {
+          "current_volume": 69242336.0,
+          "vol_ma5": 52881551.0,
+          "vol_ma10": 37252494.0,
+          "volume_ratio": 1.31,
+          "volume_status": "量能正常"
+        },
+        "technical_score": 61,
+        "conclusions": [
+          "趋势：横盘震荡（MA5=5.68, MA20=5.75）",
+          "MACD 多头排列",
+          "RSI=51.28（正常）",
+          "布林带位置：83%，带宽11.9%",
+          "量能：量能正常（量比1.31）",
+          "支撑位：5.75，压力位：6.98"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "2004",
+          "revenue": 57097100.0,
+          "net_profit": 12623100.0,
+          "roe": 32.35,
+          "gross_margin": 60.7,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "御银股份"
+        },
+        "score": 48,
+        "conclusions": [
+          "ROE=32.4%（优秀）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率60.7%（高毛利）"
         ]
       },
       "capital": {
@@ -253,1051 +391,422 @@
       "trading_signal": {
         "signal": "hold_buy",
         "action": "持有/可逢低买入",
-        "confidence": 13,
-        "buy_score": 13,
+        "confidence": 25,
+        "buy_score": 25,
         "sell_score": 0,
-        "net_score": 13,
+        "net_score": 25,
         "buy_signals": [
-          "MACD多头排列"
+          "MACD金叉"
         ],
         "sell_signals": [],
-        "price": 11.59
+        "price": 5.97
+      },
+      "risks": []
+    },
+    {
+      "code": "601929",
+      "name": "吉视传媒",
+      "price": 2.33,
+      "pct_change": 3.1,
+      "analysis_time": "2026-08-26 04:11:39",
+      "total_score": 38,
+      "rating": "偏空",
+      "action": "减仓",
+      "scores": {
+        "technical": 42,
+        "fundamental": 30,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "ma5": 2.28,
+          "ma10": 2.36,
+          "ma20": 2.38,
+          "ma60": 2.35,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "macd": {
+          "dif": -0.0089,
+          "dea": 0.0073,
+          "macd": -0.0324,
+          "golden_cross": "False",
+          "death_cross": "False"
+        },
+        "rsi": {
+          "value": 37.5,
+          "status": "正常"
+        },
+        "kdj": {
+          "k": 22.23,
+          "d": 25.35,
+          "j": 15.99,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False"
+        },
+        "bollinger": {
+          "upper": 2.56,
+          "mid": 2.38,
+          "lower": 2.2,
+          "width": 15.31,
+          "position": 36.14
+        },
+        "support_resistance": {
+          "resistance_1": 2.35,
+          "resistance_2": 2.38,
+          "support_1": 2.09,
+          "support_2": null,
+          "recent_high": 2.87,
+          "recent_low": 2.09
+        },
+        "volume": {
+          "current_volume": 75020323.0,
+          "vol_ma5": 62624713.0,
+          "vol_ma10": 73216263.0,
+          "volume_ratio": 1.2,
+          "volume_status": "量能正常"
+        },
+        "technical_score": 42,
+        "conclusions": [
+          "趋势：下降趋势（MA5=2.28, MA20=2.38）",
+          "MACD 空头排列",
+          "RSI=37.5（正常）",
+          "布林带位置：36%，带宽15.3%",
+          "量能：量能正常（量比1.2）",
+          "支撑位：2.09，压力位：2.35"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "2008",
+          "revenue": 550000000.0,
+          "net_profit": 28604100.0,
+          "roe": 5.53,
+          "gross_margin": 38.53,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "吉视传媒"
+        },
+        "score": 30,
+        "conclusions": [
+          "ROE=5.5%（一般）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率38.5%（中等）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "sell",
+        "action": "建议卖出",
+        "confidence": 28,
+        "buy_score": 0,
+        "sell_score": 28,
+        "net_score": -28,
+        "buy_signals": [],
+        "sell_signals": [
+          "MACD空头排列",
+          "均线空头排列(5<10<20)"
+        ],
+        "price": 2.33
+      },
+      "risks": [
+        "基本面偏弱"
+      ]
+    },
+    {
+      "code": "002217",
+      "name": "ST合力泰",
+      "price": 1.46,
+      "pct_change": 0.69,
+      "analysis_time": "2026-08-26 04:12:14",
+      "total_score": 46,
+      "rating": "中性",
+      "action": "观望",
+      "scores": {
+        "technical": 57,
+        "fundamental": 45,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "ma5": 1.45,
+          "ma10": 1.48,
+          "ma20": 1.49,
+          "ma60": 1.81,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "macd": {
+          "dif": -0.0553,
+          "dea": -0.0684,
+          "macd": 0.0262,
+          "golden_cross": "False",
+          "death_cross": "False"
+        },
+        "rsi": {
+          "value": 30.77,
+          "status": "正常"
+        },
+        "kdj": {
+          "k": 18.29,
+          "d": 21.65,
+          "j": 11.56,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "True"
+        },
+        "bollinger": {
+          "upper": 1.58,
+          "mid": 1.49,
+          "lower": 1.4,
+          "width": 11.88,
+          "position": 33.05
+        },
+        "support_resistance": {
+          "resistance_1": 1.49,
+          "resistance_2": 1.81,
+          "support_1": 1.37,
+          "support_2": null,
+          "recent_high": 2.71,
+          "recent_low": 1.37
+        },
+        "volume": {
+          "current_volume": 68342788.0,
+          "vol_ma5": 82616002.0,
+          "vol_ma10": 91325143.0,
+          "volume_ratio": 0.83,
+          "volume_status": "量能正常"
+        },
+        "technical_score": 57,
+        "conclusions": [
+          "趋势：下降趋势（MA5=1.45, MA20=1.49）",
+          "MACD 多头排列",
+          "RSI=30.77（正常）",
+          "布林带位置：33%，带宽11.9%",
+          "量能：量能正常（量比0.83）",
+          "支撑位：1.37，压力位：1.49"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "2004",
+          "revenue": 260000000.0,
+          "net_profit": 29520600.0,
+          "roe": 83.81,
+          "gross_margin": 26.05,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "ST合力泰"
+        },
+        "score": 45,
+        "conclusions": [
+          "ROE=83.8%（优秀）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率26.1%（中等）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "hold_sell",
+        "action": "持有/可逢高减仓",
+        "confidence": 10,
+        "buy_score": 10,
+        "sell_score": 20,
+        "net_score": -10,
+        "buy_signals": [
+          "RSI超卖(31)"
+        ],
+        "sell_signals": [
+          "均线空头排列(5<10<20)"
+        ],
+        "price": 1.46
+      },
+      "risks": []
+    },
+    {
+      "code": "600505",
+      "name": "西昌电力",
+      "price": 10.64,
+      "pct_change": 1.82,
+      "analysis_time": "2026-08-26 04:12:44",
+      "total_score": 43,
+      "rating": "偏空",
+      "action": "减仓",
+      "scores": {
+        "technical": 52,
+        "fundamental": 38,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "ma5": 10.49,
+          "ma10": 10.76,
+          "ma20": 11.03,
+          "ma60": 11.71,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "macd": {
+          "dif": -0.2317,
+          "dea": -0.181,
+          "macd": -0.1014,
+          "golden_cross": "False",
+          "death_cross": "False"
+        },
+        "rsi": {
+          "value": 24.48,
+          "status": "超卖"
+        },
+        "kdj": {
+          "k": 18.39,
+          "d": 18.57,
+          "j": 18.03,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "True"
+        },
+        "bollinger": {
+          "upper": 11.78,
+          "mid": 11.03,
+          "lower": 10.27,
+          "width": 13.77,
+          "position": 24.6
+        },
+        "support_resistance": {
+          "resistance_1": 11.03,
+          "resistance_2": 11.71,
+          "support_1": 10.01,
+          "support_2": null,
+          "recent_high": 15.2,
+          "recent_low": 10.01
+        },
+        "volume": {
+          "current_volume": 5742892.0,
+          "vol_ma5": 5285136.0,
+          "vol_ma10": 6877798.0,
+          "volume_ratio": 1.09,
+          "volume_status": "量能正常"
+        },
+        "technical_score": 52,
+        "conclusions": [
+          "趋势：下降趋势（MA5=10.49, MA20=11.03）",
+          "MACD 空头排列",
+          "RSI=24.48（超卖）",
+          "布林带位置：25%，带宽13.8%",
+          "量能：量能正常（量比1.09）",
+          "支撑位：10.01，压力位：11.03"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "1999",
+          "revenue": 126000000.0,
+          "net_profit": 29191100.0,
+          "roe": 15.37,
+          "gross_margin": 43.84,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "西昌电力"
+        },
+        "score": 38,
+        "conclusions": [
+          "ROE=15.4%（良好）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率43.8%（中等）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "hold_sell",
+        "action": "持有/可逢高减仓",
+        "confidence": 10,
+        "buy_score": 18,
+        "sell_score": 28,
+        "net_score": -10,
+        "buy_signals": [
+          "RSI严重超卖(24)"
+        ],
+        "sell_signals": [
+          "MACD空头排列",
+          "均线空头排列(5<10<20)"
+        ],
+        "price": 10.64
       },
       "risks": [
         "基本面偏弱"
       ]
     }
   ],
-  "screener_result": {
-    "strategies": {
-      "low_price": [
-        {
-          "code": "000008",
-          "name": "神州高铁",
-          "price": 2.4,
-          "pct_change": 0.4184,
-          "strategy": "low_price",
-          "reason": "股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
-          "score": 92
-        },
-        {
-          "code": "000560",
-          "name": "我爱我家",
-          "price": 2.17,
-          "pct_change": 0.463,
-          "strategy": "low_price",
-          "reason": "股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列",
-          "score": 92
-        },
-        {
-          "code": "000059",
-          "name": "华锦股份",
-          "price": 4.6,
-          "pct_change": 0.6565,
-          "strategy": "low_price",
-          "reason": "股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列",
-          "score": 85
-        },
-        {
-          "code": "000065",
-          "name": "北方国际",
-          "price": 9.18,
-          "pct_change": 1.8868,
-          "strategy": "low_price",
-          "reason": "股价9.2元（中低价）；今日+1.9%（走势稳健）；均线多头排列；量能放大（量比1.8）",
-          "score": 85
-        },
-        {
-          "code": "000068",
-          "name": "华控赛格",
-          "price": 3.04,
-          "pct_change": 4.1096,
-          "strategy": "low_price",
-          "reason": "股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列",
-          "score": 85
-        },
-        {
-          "code": "000407",
-          "name": "胜利股份",
-          "price": 4.1,
-          "pct_change": 0.0,
-          "strategy": "low_price",
-          "reason": "股价4.1元（低价）；今日+0.0%（走势稳健）；均线多头排列",
-          "score": 85
-        },
-        {
-          "code": "000415",
-          "name": "渤海租赁",
-          "price": 4.63,
-          "pct_change": 2.6608,
-          "strategy": "low_price",
-          "reason": "股价4.6元（低价）；今日+2.7%（走势稳健）；均线多头排列",
-          "score": 85
-        },
-        {
-          "code": "000620",
-          "name": "盈新发展",
-          "price": 3.1,
-          "pct_change": 2.3102,
-          "strategy": "low_price",
-          "reason": "股价3.1元（低价）；今日+2.3%（走势稳健）；均线多头排列",
-          "score": 85
-        },
-        {
-          "code": "000031",
-          "name": "大悦城",
-          "price": 2.17,
-          "pct_change": 0.463,
-          "strategy": "low_price",
-          "reason": "股价2.2元（超低价）；今日+0.5%（走势稳健）；量能温和放大（量比1.2）",
-          "score": 84
-        },
-        {
-          "code": "000498",
-          "name": "山东路桥",
-          "price": 4.96,
-          "pct_change": 0.813,
-          "strategy": "low_price",
-          "reason": "股价5.0元（低价）；今日+0.8%（走势稳健）；短期均线向上；量能温和放大（量比1.3）",
-          "score": 82
-        },
-        {
-          "code": "000159",
-          "name": "国际实业",
-          "price": 5.72,
-          "pct_change": 0.7042,
-          "strategy": "low_price",
-          "reason": "股价5.7元（中低价）；今日+0.7%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
-          "score": 81
-        },
-        {
-          "code": "000558",
-          "name": "天府文旅",
-          "price": 3.51,
-          "pct_change": -0.2841,
-          "strategy": "low_price",
-          "reason": "股价3.5元（低价）；今日-0.3%（走势稳健）；量能放大（量比2.1）",
-          "score": 81
-        },
-        {
-          "code": "000563",
-          "name": "陕国投A",
-          "price": 3.0,
-          "pct_change": 1.0101,
-          "strategy": "low_price",
-          "reason": "股价3.0元（低价）；今日+1.0%（走势稳健）；量能放大（量比1.7）",
-          "score": 81
-        },
-        {
-          "code": "000069",
-          "name": "华侨城A",
-          "price": 1.77,
-          "pct_change": 0.0,
-          "strategy": "low_price",
-          "reason": "股价1.8元（超低价）；今日+0.0%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "000402",
-          "name": "金融街",
-          "price": 2.48,
-          "pct_change": -0.4016,
-          "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日-0.4%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "000517",
-          "name": "荣安地产",
-          "price": 2.29,
-          "pct_change": 2.2321,
-          "strategy": "low_price",
-          "reason": "股价2.3元（超低价）；今日+2.2%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "000523",
-          "name": "红棉股份",
-          "price": 2.96,
-          "pct_change": 1.3699,
-          "strategy": "low_price",
-          "reason": "股价3.0元（超低价）；今日+1.4%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "000545",
-          "name": "金浦钛业",
-          "price": 2.54,
-          "pct_change": 2.008,
-          "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+2.0%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "000552",
-          "name": "甘肃能化",
-          "price": 2.55,
-          "pct_change": 0.0,
-          "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+0.0%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "000088",
-          "name": "盐田港",
-          "price": 4.46,
-          "pct_change": 0.0,
-          "strategy": "low_price",
-          "reason": "股价4.5元（低价）；今日+0.0%（走势稳健）；短期均线向上",
-          "score": 78
-        }
-      ],
-      "technical_pattern": [
-        {
-          "code": "000532",
-          "name": "华金资本",
-          "price": 11.25,
-          "pct_change": 3.8781,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破",
-          "score": 91
-        },
-        {
-          "code": "000008",
-          "name": "神州高铁",
-          "price": 2.4,
-          "pct_change": 0.4184,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头、平台突破",
-          "score": 83
-        },
-        {
-          "code": "000430",
-          "name": "张家界",
-          "price": 6.61,
-          "pct_change": -1.0479,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：放量突破（量比1.5）、MACD多头、平台突破",
-          "score": 83
-        },
-        {
-          "code": "000501",
-          "name": "武商集团",
-          "price": 7.24,
-          "pct_change": 1.9718,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：放量突破（量比1.5）、KDJ金叉、平台突破",
-          "score": 83
-        },
-        {
-          "code": "000530",
-          "name": "冰山冷热",
-          "price": 5.06,
-          "pct_change": 2.0161,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：放量突破（量比1.8）、KDJ金叉、平台突破",
-          "score": 83
-        },
-        {
-          "code": "000423",
-          "name": "东阿阿胶",
-          "price": 51.5,
-          "pct_change": -0.8089,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：KDJ超卖金叉、RSI超卖反弹（20）",
-          "score": 72
-        },
-        {
-          "code": "000159",
-          "name": "国际实业",
-          "price": 5.72,
-          "pct_change": 0.7042,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、量能放大（量比1.4）、MACD多头",
-          "score": 71
-        },
-        {
-          "code": "000524",
-          "name": "岭南控股",
-          "price": 9.44,
-          "pct_change": 1.0707,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、量能放大（量比1.5）、MACD多头",
-          "score": 71
-        },
-        {
-          "code": "001914",
-          "name": "招商积余",
-          "price": 8.66,
-          "pct_change": -0.5741,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：短期均线向上、MACD金叉、KDJ金叉",
-          "score": 69
-        },
-        {
-          "code": "000001",
-          "name": "平安银行",
-          "price": 11.1,
-          "pct_change": -0.09,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：短期均线向上、MACD多头、平台突破",
-          "score": 66
-        },
-        {
-          "code": "000007",
-          "name": "全新好",
-          "price": 10.63,
-          "pct_change": -0.932,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000019",
-          "name": "深粮控股",
-          "price": 6.33,
-          "pct_change": 5.8528,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000025",
-          "name": "特力A",
-          "price": 15.15,
-          "pct_change": 1.6779,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000039",
-          "name": "中集集团",
-          "price": 9.03,
-          "pct_change": 2.6136,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000301",
-          "name": "东方盛虹",
-          "price": 12.66,
-          "pct_change": 0.3965,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000426",
-          "name": "兴业银锡",
-          "price": 39.48,
-          "pct_change": 4.1964,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000506",
-          "name": "招金黄金",
-          "price": 17.75,
-          "pct_change": 0.6236,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000517",
-          "name": "荣安地产",
-          "price": 2.29,
-          "pct_change": 2.2321,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000523",
-          "name": "红棉股份",
-          "price": 2.96,
-          "pct_change": 1.3699,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000333",
-          "name": "美的集团",
-          "price": 82.61,
-          "pct_change": -0.5058,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：短期均线向上、MACD金叉",
-          "score": 61
-        }
-      ],
-      "capital_flow": [],
-      "fundamental": [
-        {
-          "code": "000069",
-          "name": "华侨城A",
-          "price": 1.77,
-          "pct_change": 0.0,
-          "strategy": "fundamental",
-          "reason": "ROE=51.4%（优秀）",
-          "score": 60
-        },
-        {
-          "code": "000417",
-          "name": "合百集团",
-          "price": 5.97,
-          "pct_change": 2.226,
-          "strategy": "fundamental",
-          "reason": "ROE=29.4%（优秀）",
-          "score": 60
-        },
-        {
-          "code": "000422",
-          "name": "湖北宜化",
-          "price": 12.79,
-          "pct_change": 0.6294,
-          "strategy": "fundamental",
-          "reason": "ROE=21.2%（优秀）",
-          "score": 60
-        }
-      ],
-      "concept_hotspot": []
-    },
-    "combined": [
-      {
-        "code": "000008",
-        "name": "神州高铁",
-        "price": 2.4,
-        "pct_change": 0.4184,
-        "strategies": [
-          "low_price",
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[low_price] 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
-        ],
-        "total_score": 195,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 97.5
-      },
-      {
-        "code": "000159",
-        "name": "国际实业",
-        "price": 5.72,
-        "pct_change": 0.7042,
-        "strategies": [
-          "low_price",
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[low_price] 股价5.7元（中低价）；今日+0.7%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
-          "[technical_pattern] 技术形态：均线多头排列、量能放大（量比1.4）、MACD多头"
-        ],
-        "total_score": 172,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 86.0
-      },
-      {
-        "code": "000517",
-        "name": "荣安地产",
-        "price": 2.29,
-        "pct_change": 2.2321,
-        "strategies": [
-          "low_price",
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[low_price] 股价2.3元（超低价）；今日+2.2%（走势稳健）",
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 166,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 83.0
-      },
-      {
-        "code": "000523",
-        "name": "红棉股份",
-        "price": 2.96,
-        "pct_change": 1.3699,
-        "strategies": [
-          "low_price",
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[low_price] 股价3.0元（超低价）；今日+1.4%（走势稳健）",
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 166,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 83.0
-      },
-      {
-        "code": "000069",
-        "name": "华侨城A",
-        "price": 1.77,
-        "pct_change": 0.0,
-        "strategies": [
-          "low_price",
-          "fundamental"
-        ],
-        "reasons": [
-          "[low_price] 股价1.8元（超低价）；今日+0.0%（走势稳健）",
-          "[fundamental] ROE=51.4%（优秀）"
-        ],
-        "total_score": 160,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 80.0
-      },
-      {
-        "code": "000560",
-        "name": "我爱我家",
-        "price": 2.17,
-        "pct_change": 0.463,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 92,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 92.0
-      },
-      {
-        "code": "000532",
-        "name": "华金资本",
-        "price": 11.25,
-        "pct_change": 3.8781,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破"
-        ],
-        "total_score": 91,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 91.0
-      },
-      {
-        "code": "000059",
-        "name": "华锦股份",
-        "price": 4.6,
-        "pct_change": 0.6565,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0
-      },
-      {
-        "code": "000065",
-        "name": "北方国际",
-        "price": 9.18,
-        "pct_change": 1.8868,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价9.2元（中低价）；今日+1.9%（走势稳健）；均线多头排列；量能放大（量比1.8）"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0
-      },
-      {
-        "code": "000068",
-        "name": "华控赛格",
-        "price": 3.04,
-        "pct_change": 4.1096,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0
-      },
-      {
-        "code": "000407",
-        "name": "胜利股份",
-        "price": 4.1,
-        "pct_change": 0.0,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价4.1元（低价）；今日+0.0%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0
-      },
-      {
-        "code": "000415",
-        "name": "渤海租赁",
-        "price": 4.63,
-        "pct_change": 2.6608,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价4.6元（低价）；今日+2.7%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0
-      },
-      {
-        "code": "000620",
-        "name": "盈新发展",
-        "price": 3.1,
-        "pct_change": 2.3102,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.1元（低价）；今日+2.3%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0
-      },
-      {
-        "code": "000031",
-        "name": "大悦城",
-        "price": 2.17,
-        "pct_change": 0.463,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.2元（超低价）；今日+0.5%（走势稳健）；量能温和放大（量比1.2）"
-        ],
-        "total_score": 84,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 84.0
-      },
-      {
-        "code": "000430",
-        "name": "张家界",
-        "price": 6.61,
-        "pct_change": -1.0479,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：放量突破（量比1.5）、MACD多头、平台突破"
-        ],
-        "total_score": 83,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 83.0
-      },
-      {
-        "code": "000501",
-        "name": "武商集团",
-        "price": 7.24,
-        "pct_change": 1.9718,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：放量突破（量比1.5）、KDJ金叉、平台突破"
-        ],
-        "total_score": 83,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 83.0
-      },
-      {
-        "code": "000530",
-        "name": "冰山冷热",
-        "price": 5.06,
-        "pct_change": 2.0161,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：放量突破（量比1.8）、KDJ金叉、平台突破"
-        ],
-        "total_score": 83,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 83.0
-      },
-      {
-        "code": "000498",
-        "name": "山东路桥",
-        "price": 4.96,
-        "pct_change": 0.813,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价5.0元（低价）；今日+0.8%（走势稳健）；短期均线向上；量能温和放大（量比1.3）"
-        ],
-        "total_score": 82,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 82.0
-      },
-      {
-        "code": "000558",
-        "name": "天府文旅",
-        "price": 3.51,
-        "pct_change": -0.2841,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.5元（低价）；今日-0.3%（走势稳健）；量能放大（量比2.1）"
-        ],
-        "total_score": 81,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 81.0
-      },
-      {
-        "code": "000563",
-        "name": "陕国投A",
-        "price": 3.0,
-        "pct_change": 1.0101,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.0元（低价）；今日+1.0%（走势稳健）；量能放大（量比1.7）"
-        ],
-        "total_score": 81,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 81.0
-      },
-      {
-        "code": "000402",
-        "name": "金融街",
-        "price": 2.48,
-        "pct_change": -0.4016,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日-0.4%（走势稳健）"
-        ],
-        "total_score": 80,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 80.0
-      },
-      {
-        "code": "000545",
-        "name": "金浦钛业",
-        "price": 2.54,
-        "pct_change": 2.008,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+2.0%（走势稳健）"
-        ],
-        "total_score": 80,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 80.0
-      },
-      {
-        "code": "000552",
-        "name": "甘肃能化",
-        "price": 2.55,
-        "pct_change": 0.0,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+0.0%（走势稳健）"
-        ],
-        "total_score": 80,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 80.0
-      },
-      {
-        "code": "000088",
-        "name": "盐田港",
-        "price": 4.46,
-        "pct_change": 0.0,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价4.5元（低价）；今日+0.0%（走势稳健）；短期均线向上"
-        ],
-        "total_score": 78,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 78.0
-      },
-      {
-        "code": "000423",
-        "name": "东阿阿胶",
-        "price": 51.5,
-        "pct_change": -0.8089,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：KDJ超卖金叉、RSI超卖反弹（20）"
-        ],
-        "total_score": 72,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 72.0
-      },
-      {
-        "code": "000524",
-        "name": "岭南控股",
-        "price": 9.44,
-        "pct_change": 1.0707,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、量能放大（量比1.5）、MACD多头"
-        ],
-        "total_score": 71,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 71.0
-      },
-      {
-        "code": "001914",
-        "name": "招商积余",
-        "price": 8.66,
-        "pct_change": -0.5741,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：短期均线向上、MACD金叉、KDJ金叉"
-        ],
-        "total_score": 69,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 69.0
-      },
-      {
-        "code": "000001",
-        "name": "平安银行",
-        "price": 11.1,
-        "pct_change": -0.09,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：短期均线向上、MACD多头、平台突破"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000007",
-        "name": "全新好",
-        "price": 10.63,
-        "pct_change": -0.932,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000019",
-        "name": "深粮控股",
-        "price": 6.33,
-        "pct_change": 5.8528,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000025",
-        "name": "特力A",
-        "price": 15.15,
-        "pct_change": 1.6779,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000039",
-        "name": "中集集团",
-        "price": 9.03,
-        "pct_change": 2.6136,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000301",
-        "name": "东方盛虹",
-        "price": 12.66,
-        "pct_change": 0.3965,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000426",
-        "name": "兴业银锡",
-        "price": 39.48,
-        "pct_change": 4.1964,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000506",
-        "name": "招金黄金",
-        "price": 17.75,
-        "pct_change": 0.6236,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0
-      },
-      {
-        "code": "000333",
-        "name": "美的集团",
-        "price": 82.61,
-        "pct_change": -0.5058,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：短期均线向上、MACD金叉"
-        ],
-        "total_score": 61,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 61.0
-      },
-      {
-        "code": "000417",
-        "name": "合百集团",
-        "price": 5.97,
-        "pct_change": 2.226,
-        "strategies": [
-          "fundamental"
-        ],
-        "reasons": [
-          "[fundamental] ROE=29.4%（优秀）"
-        ],
-        "total_score": 60,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 60.0
-      },
-      {
-        "code": "000422",
-        "name": "湖北宜化",
-        "price": 12.79,
-        "pct_change": 0.6294,
-        "strategies": [
-          "fundamental"
-        ],
-        "reasons": [
-          "[fundamental] ROE=21.2%（优秀）"
-        ],
-        "total_score": 60,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 60.0
-      }
-    ],
-    "summary": {
-      "run_time": "2026-08-25 17:08:51",
-      "total_stocks": 5332,
-      "strategy_counts": {
-        "low_price": 20,
-        "technical_pattern": 20,
-        "capital_flow": 0,
-        "fundamental": 3,
-        "concept_hotspot": 0
-      },
-      "combined_count": 38
-    }
-  },
-  "markdown": "# 📈 股票分析日报 - 2026-08-25\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 贵州茅台(600519) | 1304.0 | -0.05% | 42 | 偏空 | 减仓 |\n| 平安银行(000001) | 11.59 | +0.26% | 39 | 偏空 | 减仓 |\n\n## 详细分析\n\n## 贵州茅台(600519)\n**现价**: 1304.0 | **涨跌幅**: -0.05% | **综合评分**: 42/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 42 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=1296.17, MA20=1322.63）\n- MACD 空头排列\n- RSI=49.4（正常）\n- 布林带位置：32%，带宽8.0%\n- 量能：温和缩量（量比0.64）\n- 支撑位：1271.06，压力位：1322.63\n\n### 基本面\n- ROE=54.3%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率87.8%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 平安银行(000001)\n**现价**: 11.59 | **涨跌幅**: +0.26% | **综合评分**: 39/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 56 |\n| 基本面 | 20 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：偏强震荡（MA5=11.45, MA20=11.34）\n- MACD 多头排列\n- RSI=67.35（正常）\n- 布林带位置：84%，带宽6.4%\n- 量能：量能正常（量比0.88）\n- 支撑位：11.34，压力位：11.66\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 神州高铁(000008) | 2.4 | +0.42% | 92 | 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列 |\n| 我爱我家(000560) | 2.17 | +0.46% | 92 | 股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列 |\n| 华锦股份(000059) | 4.6 | +0.66% | 85 | 股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列 |\n| 北方国际(000065) | 9.18 | +1.89% | 85 | 股价9.2元（中低价）；今日+1.9%（走势稳健）；均线多头排列；量能放大（量比1.8） |\n| 华控赛格(000068) | 3.04 | +4.11% | 85 | 股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列 |\n\n### 技术形态选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华金资本(000532) | 11.25 | +3.88% | 91 | 技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破 |\n| 神州高铁(000008) | 2.4 | +0.42% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 张家界(000430) | 6.61 | -1.05% | 83 | 技术形态：放量突破（量比1.5）、MACD多头、平台突破 |\n| 武商集团(000501) | 7.24 | +1.97% | 83 | 技术形态：放量突破（量比1.5）、KDJ金叉、平台突破 |\n| 冰山冷热(000530) | 5.06 | +2.02% | 83 | 技术形态：放量突破（量比1.8）、KDJ金叉、平台突破 |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华侨城A(000069) | 1.77 | +0.00% | 60 | ROE=51.4%（优秀） |\n| 合百集团(000417) | 5.97 | +2.23% | 60 | ROE=29.4%（优秀） |\n| 湖北宜化(000422) | 12.79 | +0.63% | 60 | ROE=21.2%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*"
+  "screener_result": null,
+  "markdown": "# 📈 股票分析日报 - 2026-08-26\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 甘肃能源(000791) | 7.21 | -0.83% | 36 | 偏空 | 减仓 |\n| 利欧股份(002131) | 4.5 | +2.27% | 43 | 偏空 | 减仓 |\n| 御银股份(002177) | 5.97 | +2.75% | 48 | 中性 | 观望 |\n| 吉视传媒(601929) | 2.33 | +3.10% | 38 | 偏空 | 减仓 |\n| ST合力泰(002217) | 1.46 | +0.69% | 46 | 中性 | 观望 |\n| 西昌电力(600505) | 10.64 | +1.82% | 43 | 偏空 | 减仓 |\n\n## 详细分析\n\n## 甘肃能源(000791)\n**现价**: 7.21 | **涨跌幅**: -0.83% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 49 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=7.22, MA20=7.64）\n- MACD 空头排列\n- RSI=24.64（超卖）\n- 布林带位置：13%，带宽15.0%\n- 量能：量能正常（量比1.03）\n- 支撑位：7.04，压力位：7.64\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 利欧股份(002131)\n**现价**: 4.5 | **涨跌幅**: +2.27% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 52 |\n| 基本面 | 40 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=4.54, MA20=5.02）\n- MACD 空头排列\n- RSI=19.05（超卖）\n- 布林带位置：24%，带宽39.9%\n- 量能：量能正常（量比0.92）\n- 支撑位：3.62，压力位：4.84\n\n### 基本面\n- ROE=39.9%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.4%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 御银股份(002177)\n**现价**: 5.97 | **涨跌幅**: +2.75% | **综合评分**: 48/100 | **评级**: 中性\n**操作建议**: 观望\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 61 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：横盘震荡（MA5=5.68, MA20=5.75）\n- MACD 多头排列\n- RSI=51.28（正常）\n- 布林带位置：83%，带宽11.9%\n- 量能：量能正常（量比1.31）\n- 支撑位：5.75，压力位：6.98\n\n### 基本面\n- ROE=32.4%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率60.7%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 吉视传媒(601929)\n**现价**: 2.33 | **涨跌幅**: +3.10% | **综合评分**: 38/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 42 |\n| 基本面 | 30 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=2.28, MA20=2.38）\n- MACD 空头排列\n- RSI=37.5（正常）\n- 布林带位置：36%，带宽15.3%\n- 量能：量能正常（量比1.2）\n- 支撑位：2.09，压力位：2.35\n\n### 基本面\n- ROE=5.5%（一般）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率38.5%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## ST合力泰(002217)\n**现价**: 1.46 | **涨跌幅**: +0.69% | **综合评分**: 46/100 | **评级**: 中性\n**操作建议**: 观望\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 57 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=1.45, MA20=1.49）\n- MACD 多头排列\n- RSI=30.77（正常）\n- 布林带位置：33%，带宽11.9%\n- 量能：量能正常（量比0.83）\n- 支撑位：1.37，压力位：1.49\n\n### 基本面\n- ROE=83.8%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率26.1%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 西昌电力(600505)\n**现价**: 10.64 | **涨跌幅**: +1.82% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 52 |\n| 基本面 | 38 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=10.49, MA20=11.03）\n- MACD 空头排列\n- RSI=24.48（超卖）\n- 布林带位置：25%，带宽13.8%\n- 量能：量能正常（量比1.09）\n- 支撑位：10.01，压力位：11.03\n\n### 基本面\n- ROE=15.4%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率43.8%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*"
 }
