@@ -59,6 +59,9 @@ class ScreenerEngine:
         # 合并去重 + 综合排序
         combined, special_picks = self._merge_results(all_results)
 
+        # 涨停预测
+        limit_up_picks = self._predict_limit_up(combined)
+
         # 统计
         summary = {
             "run_time": now_str(),
@@ -66,14 +69,16 @@ class ScreenerEngine:
             "strategy_counts": {k: len(v) for k, v in all_results.items()},
             "combined_count": len(combined),
             "special_picks_count": len(special_picks),
+            "limit_up_picks_count": len(limit_up_picks),
         }
 
-        logger.info(f"选股完成，合并后共 {len(combined)} 只股票，特别推荐 {len(special_picks)} 只")
+        logger.info(f"选股完成，合并后共 {len(combined)} 只股票，特别推荐 {len(special_picks)} 只，涨停预测 {len(limit_up_picks)} 只")
 
         return {
             "strategies": all_results,
             "combined": combined,
             "special_picks": special_picks,
+            "limit_up_picks": limit_up_picks,
             "summary": summary,
         }
 
@@ -246,6 +251,89 @@ class ScreenerEngine:
         # 按特别推荐评分排序，取前5只
         scored.sort(key=lambda x: x["special_score"], reverse=True)
         return scored[:5]
+
+    def _predict_limit_up(self, combined: List[Dict]) -> List[Dict]:
+        """
+        涨停预测：从选股结果中筛选未来1-3天最可能涨停的股票
+        评分维度：技术突破、强势度、低价效应、成交量、均线多头
+        """
+        if not combined:
+            return []
+
+        predicted = []
+        for item in combined:
+            ts = item.get("trading_signal") or {}
+            kline = None
+            try:
+                kline = collector.get_daily_kline(item["code"], days=60)
+            except Exception:
+                pass
+
+            limit_up_score = 0
+            reasons = []
+
+            # 1. 低价效应（10元以下更容易涨停）
+            price = item.get("price", 0)
+            if price < 3:
+                limit_up_score += 25
+                reasons.append(f"超低价{price}元（易涨停）")
+            elif price < 5:
+                limit_up_score += 18
+                reasons.append(f"低价{price}元")
+            elif price < 10:
+                limit_up_score += 10
+                reasons.append(f"中低价{price}元")
+
+            # 2. 强势度（近期上涨、成交量放大）
+            strength_score = item.get("strength_score", 0)
+            if strength_score >= 30:
+                limit_up_score += 20
+                reasons.extend(item.get("strength_reasons", [])[:2])
+            elif strength_score >= 15:
+                limit_up_score += 12
+                reasons.extend(item.get("strength_reasons", [])[:1])
+
+            # 3. 技术形态（突破、均线多头、MACD金叉）
+            if kline is not None and len(kline) >= 20:
+                close = kline["close"]
+                # 突破近20日高点
+                high_20 = close.tail(20).max()
+                if close.iloc[-1] >= high_20 * 0.98:
+                    limit_up_score += 15
+                    reasons.append("逼近20日高点（突破在即）")
+
+                # 均线多头排列
+                if len(close) >= 10:
+                    ma5 = close.tail(5).mean()
+                    ma10 = close.tail(10).mean()
+                    if ma5 > ma10 and close.iloc[-1] > ma5:
+                        limit_up_score += 10
+                        reasons.append("均线多头排列")
+
+            # 4. 交易信号（买入信号）
+            signal = ts.get("signal", "")
+            if signal in ("buy", "hold_buy"):
+                limit_up_score += 10
+                reasons.append(f"技术信号: {ts.get('action', '买入')}")
+
+            # 5. 多策略共振
+            if item.get("resonance"):
+                limit_up_score += 10
+                reasons.append(f"{item['strategy_count']}策略共振")
+
+            # 6. 综合评分高
+            if item.get("avg_score", 0) >= 85:
+                limit_up_score += 8
+                reasons.append(f"综合评分{item['avg_score']}")
+
+            item["limit_up_score"] = limit_up_score
+            item["limit_up_reasons"] = reasons
+            item["limit_up_probability"] = min(95, round(limit_up_score * 0.8, 0))  # 转换为概率百分比
+            predicted.append(item)
+
+        # 按涨停概率排序，取前5只
+        predicted.sort(key=lambda x: x["limit_up_score"], reverse=True)
+        return predicted[:5]
 
     def run_single(self, strategy_name: str, stock_df: Optional[pd.DataFrame] = None) -> List[Dict]:
         """运行单个策略"""

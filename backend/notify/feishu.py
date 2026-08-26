@@ -209,6 +209,46 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             }
         })
 
+    # 选股推荐 - 涨停预测
+    if screener and screener.get("limit_up_picks"):
+        limit_up_picks = screener["limit_up_picks"]
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🔥 涨停预测（{len(limit_up_picks)}只，未来1-3天关注）**"
+            }
+        })
+        limit_up_lines = []
+        for i, c in enumerate(limit_up_picks):
+            ts = c.get("trading_signal") or {}
+            prob = c.get("limit_up_probability", 0)
+            buy_p = ts.get("buy_price")
+            sell_p = ts.get("sell_price")
+            stop_p = ts.get("stop_loss")
+            point_info = []
+            if buy_p:
+                point_info.append(f"买{buy_p}")
+            if sell_p:
+                point_info.append(f"卖{sell_p}")
+            if stop_p:
+                point_info.append(f"止损{stop_p}")
+            point_str = f" | {'/'.join(point_info)}" if point_info else ""
+            reasons = "、".join(c.get("limit_up_reasons", [])[:3])
+            limit_up_lines.append(
+                f"{i+1}. 🔥 **{c['name']}**({c['code']}) {c['price']}元 "
+                f"{c['pct_change']:+.1f}% | 涨停概率{prob:.0f}%{point_str}\n"
+                f"   理由: {reasons}"
+            )
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "\n".join(limit_up_lines)
+            }
+        })
+
     # 选股推荐 - 综合TOP 10
     if screener and screener.get("combined"):
         combined = screener["combined"]
@@ -329,6 +369,53 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                         "content": f"**{strategy_names.get(sname, sname)}**（{len(sresults)}只）\n" + "\n".join(strategy_lines)
                     }
                 })
+
+    # 我的关注股票（自选股详细分析）
+    if valid_analyses:
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**👁️ 我的关注股票（{len(valid_analyses)}只）**"
+            }
+        })
+        watch_lines = []
+        for a in valid_analyses:
+            ts = a.get("trading_signal", {})
+            signal = ts.get("action", a.get("action", "持有观望"))
+            conf = ts.get("confidence", 0)
+            buy_p = ts.get("buy_price")
+            sell_p = ts.get("sell_price")
+            stop_p = ts.get("stop_loss")
+            target_p = ts.get("target_price")
+            rr = ts.get("risk_reward_ratio")
+            point_info = []
+            if buy_p:
+                note = ts.get("buy_price_note", "")
+                point_info.append(f"买{buy_p}{note}")
+            if sell_p:
+                note = ts.get("sell_price_note", "")
+                point_info.append(f"卖{sell_p}{note}")
+            if stop_p:
+                point_info.append(f"止损{stop_p}")
+            if target_p:
+                point_info.append(f"目标{target_p}")
+            if rr:
+                point_info.append(f"盈亏比{rr}")
+            point_str = f" | {'/'.join(point_info)}" if point_info else ""
+            watch_lines.append(
+                f"• **{a.get('name','')}**({a.get('code','')}) {a.get('price',0)}元 "
+                f"{a.get('pct_change',0):+.1f}% | 评分{a.get('total_score',0)} | "
+                f"{signal}({conf}%){point_str}"
+            )
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "\n".join(watch_lines)
+            }
+        })
 
     # 底部
     elements.append({"tag": "hr"})
