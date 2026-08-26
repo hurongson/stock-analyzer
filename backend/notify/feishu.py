@@ -181,9 +181,21 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
         top_lines = []
         for i, c in enumerate(combined[:10]):
             resonance_tag = "🔥" if c.get("resonance") else "  "
+            ts = c.get("trading_signal") or {}
+            buy_p = ts.get("buy_price")
+            sell_p = ts.get("sell_price")
+            stop_p = ts.get("stop_loss")
+            point_info = []
+            if buy_p:
+                point_info.append(f"买{buy_p}")
+            if sell_p:
+                point_info.append(f"卖{sell_p}")
+            if stop_p:
+                point_info.append(f"止损{stop_p}")
+            point_str = f" | {'/'.join(point_info)}" if point_info else ""
             top_lines.append(
                 f"{i+1}. {resonance_tag} **{c['name']}**({c['code']}) {c['price']}元 "
-                f"{c['pct_change']:+.1f}% | 命中{c['strategy_count']}策略 | 均分{c['avg_score']}"
+                f"{c['pct_change']:+.1f}%{point_str}"
             )
         elements.append({
             "tag": "div",
@@ -206,9 +218,18 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             })
             pick_lines = []
             for c in resonance[:8]:
+                ts = c.get("trading_signal") or {}
+                buy_p = ts.get("buy_price")
+                sell_p = ts.get("sell_price")
+                point_info = []
+                if buy_p:
+                    point_info.append(f"买{buy_p}")
+                if sell_p:
+                    point_info.append(f"卖{sell_p}")
+                point_str = f" | {'/'.join(point_info)}" if point_info else ""
                 pick_lines.append(
                     f"• **{c['name']}**({c['code']}) {c['price']}元 "
-                    f"{c['pct_change']:+.1f}% | 命中{c['strategy_count']}策略 | 均分{c['avg_score']}"
+                    f"{c['pct_change']:+.1f}% | 命中{c['strategy_count']}策略{point_str}"
                 )
             elements.append({
                 "tag": "div",
@@ -227,6 +248,13 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             "fundamental": "基本面优",
             "concept_hotspot": "概念热点",
         }
+        # 建立 code -> trading_signal 映射（从综合选股结果中）
+        signal_map = {}
+        if screener.get("combined"):
+            for c in screener["combined"]:
+                if c.get("trading_signal"):
+                    signal_map[c["code"]] = c["trading_signal"]
+
         elements.append({"tag": "hr"})
         elements.append({
             "tag": "div",
@@ -239,9 +267,18 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             if sresults:
                 strategy_lines = []
                 for i, top in enumerate(sresults[:10]):
+                    ts = signal_map.get(top["code"]) or {}
+                    buy_p = ts.get("buy_price")
+                    sell_p = ts.get("sell_price")
+                    point_info = []
+                    if buy_p:
+                        point_info.append(f"买{buy_p}")
+                    if sell_p:
+                        point_info.append(f"卖{sell_p}")
+                    point_str = f" | {'/'.join(point_info)}" if point_info else ""
                     strategy_lines.append(
                         f"  {i+1}. {top['name']}({top['code']}) {top['price']}元 "
-                        f"{top['pct_change']:+.1f}% 评分{top['score']}"
+                        f"{top['pct_change']:+.1f}%{point_str}"
                     )
                 elements.append({
                     "tag": "div",

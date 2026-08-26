@@ -11,6 +11,7 @@ from backend.screener.strategies.technical_pattern import TechnicalPatternStrate
 from backend.screener.strategies.capital_flow import CapitalFlowStrategy
 from backend.screener.strategies.fundamental import FundamentalStrategy
 from backend.screener.strategies.concept_hotspot import ConceptHotspotStrategy
+from backend.analysis.signals import generate_trading_signal
 from backend.utils.helpers import now_str
 
 logger = logging.getLogger(__name__)
@@ -111,7 +112,21 @@ class ScreenerEngine:
             item["avg_score"] = round(item["total_score"] / item["strategy_count"], 1)
 
         combined.sort(key=lambda x: (x["strategy_count"], x["total_score"]), reverse=True)
-        return combined[:Config.SCREENER_MAX_RESULTS]
+        combined = combined[:Config.SCREENER_MAX_RESULTS]
+
+        # 为综合选股结果生成交易信号（买卖点位）
+        logger.info(f"为 {len(combined)} 只选股生成交易信号...")
+        for item in combined:
+            try:
+                kline = collector.get_daily_kline(item["code"], days=60)
+                quote = {"price": item["price"], "pct_change": item["pct_change"]}
+                signal = generate_trading_signal(kline, quote)
+                item["trading_signal"] = signal
+            except Exception as e:
+                logger.debug(f"生成 {item['code']} 交易信号失败: {e}")
+                item["trading_signal"] = None
+
+        return combined
 
     def run_single(self, strategy_name: str, stock_df: Optional[pd.DataFrame] = None) -> List[Dict]:
         """运行单个策略"""
