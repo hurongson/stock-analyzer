@@ -167,6 +167,48 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                     }
                 })
 
+    # 选股推荐 - 特别推荐（重点关注）
+    if screener and screener.get("special_picks"):
+        special_picks = screener["special_picks"]
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**⭐ 特别推荐（{len(special_picks)}只，重点关注）**"
+            }
+        })
+        special_lines = []
+        for i, c in enumerate(special_picks):
+            ts = c.get("trading_signal") or {}
+            buy_p = ts.get("buy_price")
+            sell_p = ts.get("sell_price")
+            stop_p = ts.get("stop_loss")
+            target_p = ts.get("target_price")
+            point_info = []
+            if buy_p:
+                point_info.append(f"买{buy_p}")
+            if sell_p:
+                point_info.append(f"卖{sell_p}")
+            if stop_p:
+                point_info.append(f"止损{stop_p}")
+            if target_p:
+                point_info.append(f"目标{target_p}")
+            point_str = f" | {'/'.join(point_info)}" if point_info else ""
+            reasons = "、".join(c.get("special_reasons", [])[:3])
+            special_lines.append(
+                f"{i+1}. ⭐ **{c['name']}**({c['code']}) {c['price']}元 "
+                f"{c['pct_change']:+.1f}% | 评分{c.get('avg_score',0)}{point_str}\n"
+                f"   原因: {reasons}"
+            )
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "\n".join(special_lines)
+            }
+        })
+
     # 选股推荐 - 综合TOP 10
     if screener and screener.get("combined"):
         combined = screener["combined"]

@@ -57,7 +57,7 @@ class ScreenerEngine:
                 all_results[name] = []
 
         # 合并去重 + 综合排序
-        combined = self._merge_results(all_results)
+        combined, special_picks = self._merge_results(all_results)
 
         # 统计
         summary = {
@@ -65,13 +65,15 @@ class ScreenerEngine:
             "total_stocks": len(stock_df),
             "strategy_counts": {k: len(v) for k, v in all_results.items()},
             "combined_count": len(combined),
+            "special_picks_count": len(special_picks),
         }
 
-        logger.info(f"选股完成，合并后共 {len(combined)} 只股票")
+        logger.info(f"选股完成，合并后共 {len(combined)} 只股票，特别推荐 {len(special_picks)} 只")
 
         return {
             "strategies": all_results,
             "combined": combined,
+            "special_picks": special_picks,
             "summary": summary,
         }
 
@@ -114,19 +116,136 @@ class ScreenerEngine:
         combined.sort(key=lambda x: (x["strategy_count"], x["total_score"]), reverse=True)
         combined = combined[:Config.SCREENER_MAX_RESULTS]
 
-        # 为综合选股结果生成交易信号（买卖点位）
-        logger.info(f"为 {len(combined)} 只选股生成交易信号...")
+        # 为综合选股结果生成交易信号（买卖点位）+ 强势度评估
+        logger.info(f"为 {len(combined)} 只选股生成交易信号和强势度评估...")
         for item in combined:
             try:
                 kline = collector.get_daily_kline(item["code"], days=60)
                 quote = {"price": item["price"], "pct_change": item["pct_change"]}
                 signal = generate_trading_signal(kline, quote)
                 item["trading_signal"] = signal
+
+                # 强势度评估：近期涨幅、成交量放大、连续上涨、涨停
+                strength_score = 0
+                strength_reasons = []
+                if kline is not None and len(kline) >= 5:
+                    close = kline["close"]
+                    volume = kline["volume"]
+                    # 近3天涨幅
+                    if len(close) >= 4:
+                        pct_3d = (close.iloc[-1] - close.iloc[-4]) / close.iloc[-4] * 100
+                        if pct_3d > 15:
+                            strength_score += 25
+                            strength_reasons.append(f"近3日大涨{pct_3d:.0f}%")
+                        elif pct_3d > 8:
+                            strength_score += 15
+                            strength_reasons.append(f"近3日上涨{pct_3d:.0f}%")
+                        elif pct_3d > 3:
+                            strength_score += 5
+                            strength_reasons.append(f"近3日温和上涨{pct_3d:.0f}%")
+                    # 近5天是否有涨停
+                    if len(kline) >= 5 and "pct_change" in kline.columns:
+                        recent_5 = kline.tail(5)
+                        if any(recent_5["pct_change"] > 9.5):
+                            strength_score += 20
+                            strength_reasons.append("近5日有涨停")
+                    # 成交量放大
+                    if len(volume) >= 6:
+                        vol_ma5 = volume.tail(6).head(5).mean()
+                        vol_today = volume.iloc[-1]
+                        if vol_ma5 > 0:
+                            vol_ratio = vol_today / vol_ma5
+                            if vol_ratio > 2:
+                                strength_score += 15
+                                strength_reasons.append(f"成交量放大{vol_ratio:.1f}倍")
+                            elif vol_ratio > 1.5:
+                                strength_score += 8
+                                strength_reasons.append(f"成交量温和放大{vol_ratio:.1f}倍")
+                    # 连续上涨天数
+                    if len(close) >= 4:
+                        up_days = 0
+                        for i in range(1, min(4, len(close))):
+                            if close.iloc[-i] > close.iloc[-i-1]:
+                                up_days += 1
+                            else:
+                                break
+                        if up_days >= 3:
+                            strength_score += 10
+                            strength_reasons.append(f"连续{up_days}日上涨")
+                item["strength_score"] = strength_score
+                item["strength_reasons"] = strength_reasons
             except Exception as e:
                 logger.debug(f"生成 {item['code']} 交易信号失败: {e}")
                 item["trading_signal"] = None
+                item["strength_score"] = 0
+                item["strength_reasons"] = []
 
-        return combined
+        # 特别推荐：综合评分 + 强势度 + 共振，精选3-5只
+        special_picks = self._select_special_picks(combined)
+
+        return combined, special_picks
+
+    def _select_special_picks(self, combined: List[Dict]) -> List[Dict]:
+        """
+        特别推荐筛选：综合评分 + 强势度 + 共振 + 买入点位合理，精选3-5只
+        """
+        if not combined:
+            return []
+
+        scored = []
+        for item in combined:
+            # 综合评分（0-100）
+            total_score = item.get("total_score", 0)
+            # 强势度评分（0-100）
+            strength_score = item.get("strength_score", 0)
+            # 共振加分
+            resonance_bonus = 30 if item.get("resonance") else 0
+            # 策略数量加分
+            strategy_bonus = item.get("strategy_count", 0) * 5
+
+            # 买入点位合理性：当前价不要比买入价高太多（避免追高）
+            ts = item.get("trading_signal") or {}
+            buy_price = ts.get("buy_price")
+            current_price = item.get("price", 0)
+            position_score = 50
+            if buy_price and current_price > 0:
+                gap = (current_price - buy_price) / buy_price * 100
+                if gap < 2:
+                    position_score = 80  # 接近买入价，好
+                elif gap < 5:
+                    position_score = 60
+                elif gap < 10:
+                    position_score = 40
+                else:
+                    position_score = 20  # 已经涨太多，不适合追
+
+            # 综合特别推荐评分
+            special_score = (
+                total_score * 0.3 +
+                strength_score * 0.3 +
+                resonance_bonus +
+                strategy_bonus +
+                position_score * 0.2
+            )
+
+            # 生成选中原因
+            reasons = []
+            if item.get("resonance"):
+                reasons.append(f"{item['strategy_count']}策略共振")
+            if strength_score >= 20:
+                reasons.extend(item.get("strength_reasons", [])[:2])
+            if total_score >= 70:
+                reasons.append(f"综合评分{total_score:.0f}")
+            if buy_price:
+                reasons.append(f"买入参考{buy_price}元")
+
+            item["special_score"] = round(special_score, 1)
+            item["special_reasons"] = reasons
+            scored.append(item)
+
+        # 按特别推荐评分排序，取前5只
+        scored.sort(key=lambda x: x["special_score"], reverse=True)
+        return scored[:5]
 
     def run_single(self, strategy_name: str, stock_df: Optional[pd.DataFrame] = None) -> List[Dict]:
         """运行单个策略"""
