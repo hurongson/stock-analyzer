@@ -6,7 +6,7 @@ import pandas as pd
 from typing import Dict, List, Optional
 from backend.analysis.indicators import (
     calc_sma, calc_ema, calc_macd, calc_kdj, calc_rsi,
-    calc_bollinger, calc_volume_analysis
+    calc_bollinger, calc_volume_analysis, calc_support_resistance
 )
 
 
@@ -145,16 +145,40 @@ def generate_trading_signal(kline: pd.DataFrame, quote: Dict = None) -> Dict:
         pass
 
     # ========== 6. 布林带信号 ==========
+    boll_upper = None
+    boll_lower = None
+    boll_mid = None
     try:
         boll = calc_bollinger(close, 20, 2)
-        upper = boll.get("upper", pd.Series([current_price * 1.1]))
-        lower = boll.get("lower", pd.Series([current_price * 0.9]))
-        if current_price <= lower.iloc[-1]:
+        boll_upper = boll.get("upper")
+        boll_lower = boll.get("lower")
+        boll_mid = boll.get("mid")
+        if isinstance(boll_upper, pd.Series):
+            boll_upper = boll_upper.iloc[-1]
+        if isinstance(boll_lower, pd.Series):
+            boll_lower = boll_lower.iloc[-1]
+        if isinstance(boll_mid, pd.Series):
+            boll_mid = boll_mid.iloc[-1]
+        if current_price <= boll_lower:
             buy_signals.append("触及布林带下轨(超卖)")
             buy_score += 10
-        elif current_price >= upper.iloc[-1]:
+        elif current_price >= boll_upper:
             sell_signals.append("触及布林带上轨(超买)")
             sell_score += 10
+    except Exception:
+        pass
+
+    # ========== 7. 支撑压力位 ==========
+    support_1 = None
+    support_2 = None
+    resistance_1 = None
+    resistance_2 = None
+    try:
+        sr = calc_support_resistance(high, low, close, 60)
+        support_1 = sr.get("support_1")
+        support_2 = sr.get("support_2")
+        resistance_1 = sr.get("resistance_1")
+        resistance_2 = sr.get("resistance_2")
     except Exception:
         pass
 
@@ -178,6 +202,58 @@ def generate_trading_signal(kline: pd.DataFrame, quote: Dict = None) -> Dict:
         signal = "hold"
         action = "持有观望"
 
+    # ========== 买卖点位计算 ==========
+    # 买入参考价：第一支撑位 或 布林带下轨（取较高者，更接近现价）
+    buy_candidates = [s for s in [support_1, boll_lower] if s and s > 0]
+    buy_price = max(buy_candidates) if buy_candidates else None
+    # 如果当前价已经接近买入参考价（差距<2%），建议现价买入
+    if buy_price and current_price > 0:
+        gap = (buy_price - current_price) / current_price * 100
+        if abs(gap) < 2:
+            buy_price = current_price
+            buy_price_note = "现价附近"
+        elif gap > 0:
+            buy_price_note = f"回调{gap:.1f}%"
+        else:
+            buy_price_note = "已跌破支撑"
+    else:
+        buy_price_note = ""
+
+    # 卖出参考价：第一压力位 或 布林带上轨（取较低者，更接近现价）
+    sell_candidates = [r for r in [resistance_1, boll_upper] if r and r > 0]
+    sell_price = min(sell_candidates) if sell_candidates else None
+    # 如果当前价已经接近卖出参考价（差距<2%），建议现价卖出
+    if sell_price and current_price > 0:
+        gap = (sell_price - current_price) / current_price * 100
+        if abs(gap) < 2:
+            sell_price = current_price
+            sell_price_note = "现价附近"
+        elif gap > 0:
+            sell_price_note = f"反弹{gap:.1f}%"
+        else:
+            sell_price_note = "已突破压力"
+    else:
+        sell_price_note = ""
+
+    # 止损价：第二支撑位 或 第一支撑位下方3%
+    stop_candidates = [s for s in [support_2, support_1 * 0.97 if support_1 else None] if s and s > 0]
+    stop_loss = min(stop_candidates) if stop_candidates else None
+
+    # 目标价：第二压力位 或 第一压力位
+    target_candidates = [r for r in [resistance_2, resistance_1] if r and r > 0]
+    target_price = max(target_candidates) if target_candidates else None
+    # 如果没有压力位，目标价设为当前价上方8%
+    if not target_price and current_price > 0:
+        target_price = current_price * 1.08
+
+    # 盈亏比
+    risk_reward_ratio = None
+    if buy_price and target_price and stop_loss and buy_price > stop_loss:
+        potential_gain = target_price - buy_price
+        potential_loss = buy_price - stop_loss
+        if potential_loss > 0:
+            risk_reward_ratio = round(potential_gain / potential_loss, 2)
+
     return {
         "signal": signal,
         "action": action,
@@ -188,6 +264,18 @@ def generate_trading_signal(kline: pd.DataFrame, quote: Dict = None) -> Dict:
         "buy_signals": buy_signals,
         "sell_signals": sell_signals,
         "price": current_price,
+        # 买卖点位
+        "buy_price": round(buy_price, 2) if buy_price else None,
+        "buy_price_note": buy_price_note,
+        "sell_price": round(sell_price, 2) if sell_price else None,
+        "sell_price_note": sell_price_note,
+        "stop_loss": round(stop_loss, 2) if stop_loss else None,
+        "target_price": round(target_price, 2) if target_price else None,
+        "risk_reward_ratio": risk_reward_ratio,
+        "support_1": round(support_1, 2) if support_1 else None,
+        "support_2": round(support_2, 2) if support_2 else None,
+        "resistance_1": round(resistance_1, 2) if resistance_1 else None,
+        "resistance_2": round(resistance_2, 2) if resistance_2 else None,
     }
 
 

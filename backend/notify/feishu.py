@@ -113,15 +113,30 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             }
         })
 
-        # 买卖信号汇总
+        # 买卖信号汇总（含具体点位）
         if buy_list or sell_list:
             elements.append({"tag": "hr"})
             if buy_list:
                 buy_lines = []
                 for a in buy_list:
                     ts = a.get("trading_signal", {})
-                    reasons = "、".join(ts.get("buy_signals", [])[:3])
-                    buy_lines.append(f"• **{a['name']}**({a['code']}) {a['price']}元 | 置信度{ts.get('confidence',0)}% | {reasons}")
+                    reasons = "、".join(ts.get("buy_signals", [])[:2])
+                    buy_price = ts.get("buy_price")
+                    stop_loss = ts.get("stop_loss")
+                    target = ts.get("target_price")
+                    rr = ts.get("risk_reward_ratio")
+                    price_info = []
+                    if buy_price:
+                        note = ts.get("buy_price_note", "")
+                        price_info.append(f"买入{buy_price}元{note}")
+                    if stop_loss:
+                        price_info.append(f"止损{stop_loss}元")
+                    if target:
+                        price_info.append(f"目标{target}元")
+                    if rr:
+                        price_info.append(f"盈亏比{rr}")
+                    price_str = " | ".join(price_info) if price_info else ""
+                    buy_lines.append(f"• **{a['name']}**({a['code']}) 现价{a['price']}元 | 置信度{ts.get('confidence',0)}%\n  {price_str}\n  理由: {reasons}")
                 elements.append({
                     "tag": "div",
                     "text": {
@@ -133,8 +148,17 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 sell_lines = []
                 for a in sell_list:
                     ts = a.get("trading_signal", {})
-                    reasons = "、".join(ts.get("sell_signals", [])[:3])
-                    sell_lines.append(f"• **{a['name']}**({a['code']}) {a['price']}元 | 置信度{ts.get('confidence',0)}% | {reasons}")
+                    reasons = "、".join(ts.get("sell_signals", [])[:2])
+                    sell_price = ts.get("sell_price")
+                    stop_loss = ts.get("stop_loss")
+                    price_info = []
+                    if sell_price:
+                        note = ts.get("sell_price_note", "")
+                        price_info.append(f"卖出{sell_price}元{note}")
+                    if stop_loss:
+                        price_info.append(f"止损{stop_loss}元")
+                    price_str = " | ".join(price_info) if price_info else ""
+                    sell_lines.append(f"• **{a['name']}**({a['code']}) 现价{a['price']}元 | 置信度{ts.get('confidence',0)}%\n  {price_str}\n  理由: {reasons}")
                 elements.append({
                     "tag": "div",
                     "text": {
