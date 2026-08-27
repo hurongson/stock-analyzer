@@ -42,7 +42,7 @@ def build_user_prompt(stock_info: Dict, technical: Dict, fundamental: Dict,
 趋势：{technical.get('trend', {}).get('trend', '未知')}
 技术评分：{technical.get('technical_score', 50)}/100
 MACD：DIF={technical.get('macd', {}).get('dif', 0):.4f}, DEA={technical.get('macd', {}).get('dea', 0):.4f}
-RSI：{technical.get('rsi', {}).get('value', 0)}
+RSI：{technical.get('rsi', {}).get('rsi6', technical.get('rsi', {}).get('value', 0))}
 KDJ：K={technical.get('kdj', {}).get('k', 0):.1f}, D={technical.get('kdj', {}).get('d', 0):.1f}
 支撑位：{technical.get('support_resistance', {}).get('support_1', 'N/A')}
 压力位：{technical.get('support_resistance', {}).get('resistance_1', 'N/A')}

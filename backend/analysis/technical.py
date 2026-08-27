@@ -40,7 +40,8 @@ def analyze_technical(code: str) -> Dict[str, Any]:
     else:
         conclusions.append("MACD 空头排列")
 
-    conclusions.append(f"RSI={rsi['value']}（{rsi['status']}）")
+    rsi6 = rsi.get('rsi6', rsi.get('value', 50))
+    conclusions.append(f"RSI6={rsi6}（{rsi['status']}）")
 
     if kdj.get("golden_cross"):
         conclusions.append("KDJ 金叉")
