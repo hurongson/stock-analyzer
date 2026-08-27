@@ -1,0 +1,68 @@
+name: 尾盘选股推荐
+
+on:
+  schedule:
+    # 每个交易日北京时间 14:30 = UTC 06:30（尾盘选股，当日买入次日卖出）
+    - cron: '30 6 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      no_push:
+        description: '禁用飞书推送（true/false）'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  late-day-screener:
+    if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate stock name map
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+        run: |
+          cd backend
+          python scripts/generate_stock_name_map.py || echo "生成映射表失败，使用默认映射表"
+
+      - name: Run late day screener
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          STOCK_LIST: ${{ vars.STOCK_LIST }}
+        run: |
+          cd backend
+          echo "=== 尾盘选股开始 ==="
+          python main.py --late-day --force
+          echo "=== 尾盘选股完成 ==="
+
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add backend/data/ || true
+          git commit -m "尾盘选股结果 $(date +'%Y-%m-%d %H:%M')" || echo "无新数据提交"
+          git push || echo "推送失败，可能无新数据"

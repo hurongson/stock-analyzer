@@ -22,8 +22,9 @@ from backend.utils.helpers import is_trading_day, today_str
 from backend.analysis.engine import analyze_stock, analyze_batch
 from backend.analysis.market_timing import market_timing_instance
 from backend.screener.engine import screener
+from backend.screener.late_day import late_day_screener
 from backend.report.generator import generate_daily_report, save_report
-from backend.notify.feishu import push_daily_report, send_feishu_text
+from backend.notify.feishu import push_daily_report, send_feishu_text, push_late_day_picks
 
 logging.basicConfig(
     level=logging.INFO,
@@ -182,6 +183,70 @@ def run_screener_only():
     return result
 
 
+def run_late_day_screener(enable_push: bool = True):
+    """尾盘选股（14:30运行，推荐当日买入次日卖出的股票）"""
+    Config.ensure_dirs()
+    Config.ENABLE_LLM = False  # 尾盘选股禁用LLM，速度优先
+    logger.info("===== 尾盘选股（14:30）=====")
+
+    # 市场择时
+    try:
+        market_timing_result = market_timing_instance.analyze()
+        logger.info(f"市场情绪: {market_timing_result.get('sentiment')}({market_timing_result.get('sentiment_score')}分)")
+    except Exception as e:
+        logger.error(f"市场择时失败: {e}")
+        market_timing_result = None
+
+    # 尾盘选股
+    try:
+        result = late_day_screener.screen()
+    except Exception as e:
+        logger.error(f"尾盘选股失败: {e}")
+        result = {"picks": [], "error": str(e)}
+
+    picks = result.get("picks", [])
+    logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
+
+    # 保存结果
+    from backend.utils.helpers import save_json
+    path = os.path.join(Config.DATA_DIR, f"late_day_{today_str()}.json")
+    save_result = {
+        "date": today_str(),
+        "time": "14:30",
+        "market_timing": market_timing_result,
+        "picks": picks,
+        "summary": result.get("summary", {}),
+    }
+    save_json(save_result, path)
+    logger.info(f"尾盘选股结果已保存: {path}")
+
+    # 推送飞书
+    if enable_push and Config.FEISHU_WEBHOOK_URL and picks:
+        logger.info("--- 推送飞书尾盘选股 ---")
+        push_late_day_picks(save_result)
+    else:
+        logger.info("跳过飞书推送（未配置 Webhook 或无推荐股票）")
+
+    # 控制台输出
+    print("\n" + "="*60)
+    print(f"🎯 尾盘选股推荐 - {today_str()} 14:30")
+    if market_timing_result:
+        print(f"🌐 市场情绪: {market_timing_result.get('sentiment')}({market_timing_result.get('sentiment_score')}分) | 建议仓位: {market_timing_result.get('position')}")
+    print("="*60)
+    for i, p in enumerate(picks):
+        print(f"\n{i+1}. 🎯 {p['name']}({p['code']}) {p['price']}元 {p['pct_change']:+.1f}% | 评分{p['score']}")
+        print(f"   买入: {p['buy_price']}元 ({p.get('buy_price_note','')})")
+        print(f"   卖出: {p['sell_price']}元 ({p.get('sell_price_note','')})")
+        print(f"   止损: {p['stop_loss']}元 | 目标: {p['target_price']}元 | 盈亏比: {p.get('risk_reward_ratio','-')}")
+        if p.get('analysis', {}).get('reasons'):
+            print(f"   理由: {'、'.join(p['analysis']['reasons'][:3])}")
+        if p.get('analysis', {}).get('risks'):
+            print(f"   风险: {'、'.join(p['analysis']['risks'][:2])}")
+    print("\n" + "="*60)
+    logger.info("===== 尾盘选股完成 =====")
+    return save_result
+
+
 def run_analyze_only(codes: list):
     """仅分析指定股票"""
     Config.ensure_dirs()
@@ -210,6 +275,7 @@ def main():
     parser.add_argument("--analyze", type=str, help="分析指定股票，逗号分隔")
     parser.add_argument("--screener", action="store_true", help="仅运行选股")
     parser.add_argument("--quick", action="store_true", help="快速盘中分析（只分析自选股，不选股，重点买卖信号）")
+    parser.add_argument("--late-day", action="store_true", help="尾盘选股（14:30运行，推荐当日买入次日卖出）")
     parser.add_argument("--no-push", action="store_true", help="禁用飞书推送")
     parser.add_argument("--no-llm", action="store_true", help="禁用 LLM 分析")
     parser.add_argument("--dry-run", action="store_true", help="试运行（不保存不推送）")
@@ -229,6 +295,9 @@ def main():
     elif args.quick:
         push = not args.no_push and not args.dry_run
         run_quick_analysis(enable_push=push)
+    elif args.late_day:
+        push = not args.no_push and not args.dry_run
+        run_late_day_screener(enable_push=push)
     else:
         push = not args.no_push and not args.dry_run
         llm = not args.no_llm

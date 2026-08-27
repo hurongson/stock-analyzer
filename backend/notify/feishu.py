@@ -490,3 +490,153 @@ def push_daily_report(report_data: Dict) -> bool:
             summary = md[:2000] + "\n\n...(内容过长，完整报告请查看前端页面)"
             success = send_feishu_text(summary)
     return success
+
+
+def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
+    """
+    推送尾盘选股结果（14:30）
+    late_day_data: {date, time, market_timing, picks: [...], summary}
+    """
+    url = webhook_url or Config.FEISHU_WEBHOOK_URL
+    if not url:
+        logger.warning("飞书 Webhook 未配置，跳过推送")
+        return False
+
+    date = late_day_data.get("date", "")
+    picks = late_day_data.get("picks", [])
+    market_timing = late_day_data.get("market_timing", {})
+
+    if not picks:
+        logger.info("无尾盘选股推荐，跳过推送")
+        return False
+
+    elements = []
+
+    # 标题
+    elements.append({
+        "tag": "div",
+        "text": {
+            "tag": "lark_md",
+            "content": f"**🎯 尾盘选股推荐 - {date} 14:30**\n"
+                       f"当日买入，次日冲高卖出（T+1短线）"
+        }
+    })
+
+    # 市场择时
+    if market_timing and market_timing.get("sentiment"):
+        sentiment = market_timing.get("sentiment", "")
+        sentiment_score = market_timing.get("sentiment_score", 50)
+        position = market_timing.get("position", "50%")
+        reasons = market_timing.get("reasons", [])
+        sentiment_emoji = "🟢" if sentiment_score >= 60 else ("🔴" if sentiment_score <= 40 else "🟡")
+        reasons_str = "、".join(reasons[:2]) if reasons else ""
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🌐 市场环境** {sentiment_emoji}{sentiment}({sentiment_score}分) | 建议仓位:{position}\n"
+                           f"   {reasons_str}"
+            }
+        })
+        elements.append({"tag": "hr"})
+
+    # 推荐股票列表
+    for i, p in enumerate(picks):
+        buy_price = p.get("buy_price")
+        sell_price = p.get("sell_price")
+        stop_loss = p.get("stop_loss")
+        target_price = p.get("target_price")
+        rr = p.get("risk_reward_ratio")
+        score = p.get("score", 0)
+
+        # 买卖点位
+        point_info = []
+        if buy_price:
+            point_info.append(f"买入{buy_price}元")
+        if sell_price:
+            point_info.append(f"卖出{sell_price}元")
+        if stop_loss:
+            point_info.append(f"止损{stop_loss}元")
+        if target_price:
+            point_info.append(f"目标{target_price}元")
+        if rr:
+            point_info.append(f"盈亏比{rr}")
+        point_str = " | ".join(point_info)
+
+        # 分析理由
+        reasons = p.get("analysis", {}).get("reasons", [])
+        risks = p.get("analysis", {}).get("risks", [])
+        reasons_str = "、".join(reasons[:3]) if reasons else ""
+        risks_str = "、".join(risks[:2]) if risks else ""
+
+        content = (
+            f"**{i+1}. 🎯 {p['name']}({p['code']})** {p['price']}元 {p['pct_change']:+.1f}% | 评分{score}\n"
+            f"   {point_str}\n"
+            f"   ✅ 理由: {reasons_str}"
+        )
+        if risks_str:
+            content += f"\n   ⚠️ 风险: {risks_str}"
+
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": content
+            }
+        })
+
+    # 操作提示
+    elements.append({"tag": "hr"})
+    elements.append({
+        "tag": "div",
+        "text": {
+            "tag": "lark_md",
+            "content": "**📌 操作提示**\n"
+                       "• 买入时机：今日14:30-15:00尾盘买入\n"
+                       "• 卖出时机：次日冲高至目标价卖出，不贪心\n"
+                       "• 止损纪律：跌破止损价立即止损，不扛单\n"
+                       "• 仓位控制：单只股票不超过总仓位20%"
+        }
+    })
+
+    # 底部
+    elements.append({"tag": "hr"})
+    elements.append({
+        "tag": "note",
+        "elements": [{
+            "tag": "plain_text",
+            "content": "⚠️ 尾盘选股为短线策略，仅供参考，不构成投资建议。股市有风险，投资需谨慎。"
+        }]
+    })
+
+    payload = {
+        "msg_type": "interactive",
+        "card": {
+            "header": {
+                "title": {
+                    "tag": "plain_text",
+                    "content": f"🎯 尾盘选股推荐 {date} 14:30"
+                },
+                "template": "orange"
+            },
+            "elements": elements
+        }
+    }
+
+    if Config.FEISHU_SECRET:
+        timestamp = int(time.time())
+        payload["timestamp"] = str(timestamp)
+        payload["sign"] = gen_sign(Config.FEISHU_SECRET, timestamp)
+
+    try:
+        resp = requests.post(url, json=payload, timeout=15)
+        result = resp.json()
+        if result.get("code") == 0 or result.get("StatusCode") == 0:
+            logger.info(f"尾盘选股飞书推送成功，共{len(picks)}只")
+            return True
+        else:
+            logger.error(f"尾盘选股飞书推送失败: {result}")
+            return False
+    except Exception as e:
+        logger.error(f"尾盘选股飞书推送异常: {e}")
+        return False
