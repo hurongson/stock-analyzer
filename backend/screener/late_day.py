@@ -1,12 +1,12 @@
 """
-尾盘选股模块
+尾盘选股模块（优化版）
 每天14:30根据实时数据，推荐当天可买入、次日可卖出的股票
 策略：尾盘买入法（T+1短线）
-- 当天涨幅适中（2%-8%，未涨停）
-- 成交量放大（资金入场确认）
-- 技术形态好（均线多头、MACD金叉、突破等）
-- 资金净流入
-- 低价优先（更容易次日冲高）
+参照公开尾盘选股策略优化：
+- 买入价 = 尾盘现价（直接买入，不等回调）
+- 卖出价 = 次日冲高3%-5%（止盈目标）
+- 止损价 = 买入价下方2%-3%（固定比例止损）
+- 选股条件：涨幅2%-6%、量比>1、股价在20日均线之上、非ST
 """
 import logging
 import pandas as pd
@@ -14,11 +14,9 @@ import numpy as np
 from typing import Dict, List, Optional
 from backend.data.collector import collector
 from backend.analysis.indicators import (
-    calc_trend, calc_macd, calc_kdj, calc_rsi,
-    calc_bollinger, calc_volume_analysis, calc_support_resistance,
-    calc_atr, calc_ma_system, calc_momentum
+    calc_sma, calc_trend, calc_macd, calc_kdj, calc_rsi,
+    calc_bollinger, calc_volume_analysis, calc_ma_system, calc_momentum
 )
-from backend.analysis.signals import generate_trading_signal
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +42,7 @@ class LateDayScreener:
 
         logger.info(f"股票池数量: {len(stock_df)}")
 
-        # 第一步：初筛（基于基本面数据快速过滤）
+        # 第一步：初筛（基于实时行情数据快速过滤）
         candidates = self._initial_filter(stock_df)
         logger.info(f"初筛后剩余: {len(candidates)} 只")
 
@@ -68,10 +66,11 @@ class LateDayScreener:
         """
         初筛：基于实时行情数据快速过滤
         条件：
-        - 涨幅 2%-8%（未涨停，有上涨动能）
+        - 涨幅 2%-6%（有上涨动能但未涨停，不过高）
         - 价格 2-30元（低价优先，容易次日冲高）
         - 成交量 > 500万（有流动性）
         - 非ST、非退市
+        - 非北交所、非科创板
         """
         candidates = []
         for _, row in stock_df.iterrows():
@@ -85,8 +84,8 @@ class LateDayScreener:
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
-                # 涨幅 2%-8%（有上涨动能但未涨停）
-                if pct_change < 2 or pct_change > 8:
+                # 涨幅 2%-6%（优化：降低上限，避免追高）
+                if pct_change < 2 or pct_change > 6:
                     continue
                 # 价格 2-30元
                 if price < 2 or price > 30:
@@ -113,6 +112,11 @@ class LateDayScreener:
     def _deep_analyze(self, candidates: List[Dict]) -> List[Dict]:
         """
         深度分析：获取K线数据，计算技术指标，评分排序
+        买卖点位逻辑（参照公开尾盘买入法）：
+        - 买入价 = 尾盘现价（14:30-15:00直接买入）
+        - 卖出价 = 次日冲高3%（止盈目标，保守）
+        - 目标价 = 次日冲高5%（激进目标）
+        - 止损价 = 买入价下方2%（固定比例止损）
         """
         results = []
 
@@ -124,14 +128,40 @@ class LateDayScreener:
                 if kline is None or len(kline) < 20:
                     continue
 
+                close = kline["close"]
+                current_price = stock["price"]
+
+                # 关键过滤：股价必须在20日均线之上（趋势向上）
+                ma20 = calc_sma(close, 20).iloc[-1]
+                if current_price < ma20:
+                    continue
+
                 # 计算技术指标
                 score, analysis = self._calc_late_day_score(kline, stock)
 
                 # 只保留评分>=60的
                 if score >= 60:
-                    # 生成交易信号（买卖点位）
-                    quote = {"price": stock["price"], "pct_change": stock["pct_change"]}
-                    signal = generate_trading_signal(kline, quote)
+                    # === 买卖点位计算（参照公开尾盘买入法）===
+                    # 买入价 = 尾盘现价（直接买入，不等回调）
+                    buy_price = round(current_price, 2)
+                    buy_price_note = "尾盘现价买入"
+
+                    # 卖出价 = 次日冲高3%（保守止盈）
+                    target_3pct = round(current_price * 1.03, 2)
+                    target_5pct = round(current_price * 1.05, 2)
+                    sell_price = target_3pct
+                    sell_price_note = "次日冲高3%止盈"
+                    target_price = target_5pct
+
+                    # 止损价 = 买入价下方2%（固定比例止损）
+                    stop_loss = round(current_price * 0.98, 2)
+                    stop_loss_note = "跌破2%止损"
+
+                    # 盈亏比 = (目标价-买入价)/(买入价-止损价)
+                    risk_reward_ratio = round((target_price - buy_price) / (buy_price - stop_loss), 2) if buy_price > stop_loss else None
+
+                    # 次日卖出策略
+                    sell_strategy = self._get_sell_strategy(buy_price, target_3pct, target_5pct, stop_loss)
 
                     result = {
                         "code": code,
@@ -140,15 +170,16 @@ class LateDayScreener:
                         "pct_change": stock["pct_change"],
                         "score": score,
                         "analysis": analysis,
-                        "buy_price": signal.get("buy_price") or stock["price"],
-                        "buy_price_note": signal.get("buy_price_note", "尾盘现价"),
-                        "sell_price": signal.get("target_price") or round(stock["price"] * 1.05, 2),
-                        "sell_price_note": "次日冲高卖出",
-                        "stop_loss": signal.get("stop_loss") or round(stock["price"] * 0.97, 2),
-                        "target_price": signal.get("target_price") or round(stock["price"] * 1.05, 2),
-                        "risk_reward_ratio": signal.get("risk_reward_ratio"),
-                        "atr": signal.get("atr"),
-                        "signals": signal,
+                        "buy_price": buy_price,
+                        "buy_price_note": buy_price_note,
+                        "sell_price": sell_price,
+                        "sell_price_note": sell_price_note,
+                        "stop_loss": stop_loss,
+                        "stop_loss_note": stop_loss_note,
+                        "target_price": target_price,
+                        "risk_reward_ratio": risk_reward_ratio,
+                        "sell_strategy": sell_strategy,
+                        "ma20": round(ma20, 2),
                     }
                     results.append(result)
 
@@ -160,10 +191,25 @@ class LateDayScreener:
         results.sort(key=lambda x: x["score"], reverse=True)
         return results[:self.max_results]
 
+    def _get_sell_strategy(self, buy_price: float, target_3pct: float, target_5pct: float, stop_loss: float) -> Dict:
+        """
+        次日卖出策略（参照公开尾盘买入法）
+        """
+        return {
+            "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+            "take_profit_1": f"高开3%以上：开盘5分钟不涨停直接卖出（{target_3pct}元）",
+            "take_profit_2": f"平开/小幅高开：冲高3%-5%分批卖出（{target_3pct}-{target_5pct}元）",
+            "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+            "stop_loss_1": f"低开：开盘15分钟内无法翻红，果断止损（{stop_loss}元）",
+            "stop_loss_2": f"跌破昨日收盘价：立即卖出（{buy_price}元）",
+            "stop_loss_3": f"亏损达到2%：无条件止损（{stop_loss}元）",
+            "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓",
+        }
+
     def _calc_late_day_score(self, kline: pd.DataFrame, stock: Dict) -> tuple:
         """
         计算尾盘选股评分（0-100）
-        维度：涨幅、成交量、技术形态、趋势、资金、价格
+        维度：涨幅、成交量、趋势、MACD、KDJ、价格、动量、20日均线
         """
         close = kline["close"]
         high = kline["high"]
@@ -175,17 +221,19 @@ class LateDayScreener:
         score = 50  # 基准分
         reasons = []
         risks = []
+        vol_ratio = 0
+        trend_name = "未知"
 
         # 1. 涨幅评分（15%）
-        if 3 <= pct_change <= 6:
+        if 3 <= pct_change <= 5:
             score += 12
             reasons.append(f"涨幅适中({pct_change:.1f}%)，有上涨动能")
         elif 2 <= pct_change < 3:
             score += 6
             reasons.append(f"温和上涨({pct_change:.1f}%)")
-        elif 6 < pct_change <= 8:
+        elif 5 < pct_change <= 6:
             score += 4
-            reasons.append(f"涨幅较大({pct_change:.1f}%)，注意追高风险")
+            reasons.append(f"涨幅偏大({pct_change:.1f}%)，注意追高风险")
             risks.append("涨幅偏大，次日可能回调")
 
         # 2. 成交量评分（20%）
@@ -202,8 +250,8 @@ class LateDayScreener:
             elif vol_ratio > 1.2:
                 score += 5
                 reasons.append(f"成交量温和放大(量比{vol_ratio:.1f})")
-            else:
-                score -= 3
+            elif vol_ratio < 0.8:
+                score -= 5
                 risks.append("成交量不足，动能可能不够")
         except Exception:
             pass
@@ -212,6 +260,7 @@ class LateDayScreener:
         try:
             trend = calc_trend(close)
             trend_score = trend["trend_score"]
+            trend_name = trend["trend"]
             if trend_score >= 75:
                 score += 15
                 reasons.append(f"{trend['trend']}，趋势向好")
@@ -282,8 +331,8 @@ class LateDayScreener:
         analysis = {
             "reasons": reasons,
             "risks": risks,
-            "trend": trend.get("trend", "未知") if 'trend' in dir() else "未知",
-            "volume_ratio": vol_ratio if 'vol_ratio' in dir() else 0,
+            "trend": trend_name,
+            "volume_ratio": vol_ratio,
         }
 
         return score, analysis
