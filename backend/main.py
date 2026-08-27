@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.config import Config
 from backend.utils.helpers import is_trading_day, today_str
 from backend.analysis.engine import analyze_stock, analyze_batch
+from backend.analysis.market_timing import market_timing_instance
 from backend.screener.engine import screener
 from backend.report.generator import generate_daily_report, save_report
 from backend.notify.feishu import push_daily_report, send_feishu_text
@@ -103,6 +104,15 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
     logger.info(f"自选股: {stock_list}")
     logger.info(f"LLM 分析: {'开启' if Config.ENABLE_LLM else '关闭'}")
 
+    # 0. 市场择时
+    logger.info("--- 步骤0: 市场择时分析 ---")
+    try:
+        market_timing_result = market_timing_instance.analyze()
+        logger.info(f"市场情绪: {market_timing_result.get('sentiment')}({market_timing_result.get('sentiment_score')}分), 建议仓位{market_timing_result.get('position')}")
+    except Exception as e:
+        logger.error(f"市场择时失败: {e}")
+        market_timing_result = None
+
     # 1. 选股
     logger.info("--- 步骤1: 运行选股引擎 ---")
     try:
@@ -124,6 +134,9 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
     # 3. 生成报告
     logger.info("--- 步骤3: 生成报告 ---")
     report = generate_daily_report(stock_analyses, screener_result)
+    # 添加市场择时结果
+    if market_timing_result:
+        report["json"]["market_timing"] = market_timing_result
 
     # 4. 保存报告
     report_path = save_report(report)

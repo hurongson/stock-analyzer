@@ -68,6 +68,7 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
     date = report_data.get("date", "")
     analyses = report_data.get("stock_analyses", [])
     screener = report_data.get("screener_result", {})
+    market_timing = report_data.get("market_timing", {})
 
     # 构建卡片内容
     elements = []
@@ -80,6 +81,24 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             "content": f"**📈 股票分析日报 - {date}**"
         }
     })
+
+    # 市场择时
+    if market_timing and market_timing.get("sentiment"):
+        sentiment = market_timing.get("sentiment", "")
+        sentiment_score = market_timing.get("sentiment_score", 50)
+        position = market_timing.get("position", "50%")
+        reasons = market_timing.get("reasons", [])
+        sentiment_emoji = "🟢" if sentiment_score >= 60 else ("🔴" if sentiment_score <= 40 else "🟡")
+        reasons_str = "、".join(reasons[:3]) if reasons else ""
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🌐 市场择时** {sentiment_emoji}{sentiment}({sentiment_score}分) | 建议仓位:{position}\n"
+                           f"   {reasons_str}"
+            }
+        })
+        elements.append({"tag": "hr"})
 
     # 自选股摘要 + 交易信号
     valid_analyses = [a for a in analyses if "error" not in a]
