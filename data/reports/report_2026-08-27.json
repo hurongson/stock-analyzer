@@ -1,222 +1,1557 @@
 {
   "date": "2026-08-27",
-  "generated_at": "2026-08-27T14:50:36.721206",
+  "generated_at": "2026-08-27T15:09:15.239315",
   "stock_analyses": [
     {
       "code": "000791",
-      "error": "'value'"
+      "name": "甘肃能源",
+      "price": 7.31,
+      "pct_change": 0.41,
+      "analysis_time": "2026-08-27 15:06:23",
+      "total_score": 35,
+      "rating": "偏空",
+      "action": "减仓",
+      "scores": {
+        "technical": 44,
+        "fundamental": 17,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "trend_strength": 31.4,
+          "ma5": 7.25,
+          "ma10": 7.32,
+          "ma20": 7.59,
+          "ma60": 7.86,
+          "ma120": 8.22,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "ma_system": {
+          "ma5": 7.25,
+          "ma10": 7.32,
+          "ma20": 7.59,
+          "ma60": 7.86,
+          "ma120": 8.22,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True",
+          "price_above_ma20": "False",
+          "price_above_ma60": "False"
+        },
+        "macd": {
+          "dif": -0.1588,
+          "dea": -0.1297,
+          "macd": -0.0582,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 73.08,
+          "rsi12": 24.55,
+          "rsi24": 45.97,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 21.71,
+          "d": 17.01,
+          "j": 31.1,
+          "golden_cross": "True",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 8.19,
+          "mid": 7.59,
+          "lower": 6.99,
+          "width": 15.76,
+          "position": 26.67,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "True"
+        },
+        "atr": {
+          "atr": 0.18,
+          "atr_ratio": 2.46,
+          "volatility_level": "中波动"
+        },
+        "obv": {
+          "obv": -97917476.0,
+          "obv_ma10": -108351594.0,
+          "trend_up": "True",
+          "divergence_bullish": "False"
+        },
+        "williams": {
+          "wr": -80.46,
+          "oversold": "True",
+          "overbought": "False",
+          "status": "超卖"
+        },
+        "momentum": {
+          "mom5": 0.11,
+          "mom10": -0.27,
+          "mom20": -0.49,
+          "roc5": 1.53,
+          "roc10": -3.56,
+          "roc20": -6.28,
+          "momentum_up": "True"
+        },
+        "volatility": {
+          "vol5": 12.22,
+          "vol10": 25.92,
+          "vol20": 22.5,
+          "volatility_increasing": "False"
+        },
+        "support_resistance": {
+          "resistance_1": 7.59,
+          "resistance_2": 7.86,
+          "support_1": 7.04,
+          "support_2": 6.11,
+          "pivot": 8.24,
+          "recent_high": 10.36,
+          "recent_low": 7.04
+        },
+        "volume": {
+          "current_volume": 14418200.0,
+          "vol_ma5": 14348011.0,
+          "vol_ma10": 18589872.0,
+          "vol_ma20": 21450200.0,
+          "volume_ratio": 1.0,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "technical_score": 44,
+        "signals": [
+          {
+            "type": "KDJ金叉",
+            "direction": "bullish",
+            "strength": 70
+          },
+          {
+            "type": "均线空头排列",
+            "direction": "bearish",
+            "strength": 75
+          },
+          {
+            "type": "OBV底背离（看涨）",
+            "direction": "bullish",
+            "strength": 75
+          },
+          {
+            "type": "Williams超卖（反弹机会）",
+            "direction": "bullish",
+            "strength": 55
+          }
+        ],
+        "conclusions": [
+          "趋势：下降趋势（MA5=7.25, MA20=7.59）",
+          "MACD 空头排列",
+          "RSI6=73.08（正常）",
+          "KDJ 金叉",
+          "布林带位置：27%，带宽15.8%",
+          "量能：量能正常（量比1.0）",
+          "支撑位：7.04，压力位：7.59"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "1994",
+          "revenue": 155000000.0,
+          "net_profit": 22870600.0,
+          "roe": 0.0,
+          "gross_margin": 24.09,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "甘肃能源"
+        },
+        "score": 17,
+        "conclusions": [
+          "ROE=0.0%（偏弱）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率24.1%（偏低）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "hold_sell",
+        "action": "持有/可逢高减仓",
+        "confidence": 14,
+        "buy_score": 23,
+        "sell_score": 37,
+        "net_score": -14,
+        "buy_signals": [
+          "KDJ超卖金叉(K=22)",
+          "Williams超卖"
+        ],
+        "sell_signals": [
+          "下降趋势",
+          "MACD空头",
+          "均线空头排列"
+        ],
+        "price": 7.31,
+        "market_adjustment": 0,
+        "buy_price": 7.04,
+        "buy_price_note": "已跌破支撑",
+        "sell_price": 7.59,
+        "sell_price_note": "反弹3.8%",
+        "stop_loss": 6.11,
+        "target_price": 7.86,
+        "risk_reward_ratio": 0.88,
+        "atr": 0.18,
+        "support_1": 7.04,
+        "support_2": 6.11,
+        "resistance_1": 7.59,
+        "resistance_2": 7.86
+      },
+      "risks": [
+        "基本面偏弱"
+      ]
     },
     {
       "code": "002131",
-      "error": "'value'"
+      "name": "利欧股份",
+      "price": 4.59,
+      "pct_change": 2.0,
+      "analysis_time": "2026-08-27 15:06:56",
+      "total_score": 41,
+      "rating": "偏空",
+      "action": "减仓",
+      "scores": {
+        "technical": 46,
+        "fundamental": 40,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "trend_strength": 7.5,
+          "ma5": 4.51,
+          "ma10": 4.75,
+          "ma20": 5.06,
+          "ma60": 4.79,
+          "ma120": 6.05,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "ma_system": {
+          "ma5": 4.51,
+          "ma10": 4.75,
+          "ma20": 5.06,
+          "ma60": 4.79,
+          "ma120": 6.05,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True",
+          "price_above_ma20": "False",
+          "price_above_ma60": "False"
+        },
+        "macd": {
+          "dif": -0.0576,
+          "dea": 0.0338,
+          "macd": -0.1827,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 45.24,
+          "rsi12": 27.95,
+          "rsi24": 59.74,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 15.67,
+          "d": 15.09,
+          "j": 16.82,
+          "golden_cross": "True",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "True",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 5.94,
+          "mid": 5.06,
+          "lower": 4.17,
+          "width": 34.94,
+          "position": 23.65,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "False"
+        },
+        "atr": {
+          "atr": 0.28,
+          "atr_ratio": 6.02,
+          "volatility_level": "高波动"
+        },
+        "obv": {
+          "obv": -2878301511.0,
+          "obv_ma10": -2606272619.0,
+          "trend_up": "False",
+          "divergence_bullish": "False"
+        },
+        "williams": {
+          "wr": -85.06,
+          "oversold": "True",
+          "overbought": "False",
+          "status": "超卖"
+        },
+        "momentum": {
+          "mom5": 0.02,
+          "mom10": -0.74,
+          "mom20": -0.07,
+          "roc5": 0.44,
+          "roc10": -13.88,
+          "roc20": -1.5,
+          "momentum_up": "True"
+        },
+        "volatility": {
+          "vol5": 38.42,
+          "vol10": 53.71,
+          "vol20": 74.58,
+          "volatility_increasing": "False"
+        },
+        "support_resistance": {
+          "resistance_1": 4.79,
+          "resistance_2": 5.06,
+          "support_1": 3.62,
+          "support_2": 3.45,
+          "pivot": 4.76,
+          "recent_high": 6.07,
+          "recent_low": 3.62
+        },
+        "volume": {
+          "current_volume": 286636124.0,
+          "vol_ma5": 275052924.0,
+          "vol_ma10": 441994733.0,
+          "vol_ma20": 729122189.0,
+          "volume_ratio": 1.04,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "technical_score": 46,
+        "signals": [
+          {
+            "type": "KDJ金叉",
+            "direction": "bullish",
+            "strength": 70
+          },
+          {
+            "type": "KDJ超卖（反弹机会）",
+            "direction": "bullish",
+            "strength": 60
+          },
+          {
+            "type": "均线空头排列",
+            "direction": "bearish",
+            "strength": 75
+          },
+          {
+            "type": "Williams超卖（反弹机会）",
+            "direction": "bullish",
+            "strength": 55
+          }
+        ],
+        "conclusions": [
+          "趋势：下降趋势（MA5=4.51, MA20=5.06）",
+          "MACD 空头排列",
+          "RSI6=45.24（正常）",
+          "KDJ 金叉",
+          "布林带位置：24%，带宽34.9%",
+          "量能：量能正常（量比1.04）",
+          "支撑位：3.62，压力位：4.79"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "2004",
+          "revenue": 243000000.00000003,
+          "net_profit": 15457900.0,
+          "roe": 39.94,
+          "gross_margin": 17.35,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "利欧股份"
+        },
+        "score": 40,
+        "conclusions": [
+          "ROE=39.9%（优秀）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率17.4%（偏低）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "hold_sell",
+        "action": "持有/可逢高减仓",
+        "confidence": 24,
+        "buy_score": 23,
+        "sell_score": 47,
+        "net_score": -24,
+        "buy_signals": [
+          "KDJ超卖金叉(K=16)",
+          "Williams超卖"
+        ],
+        "sell_signals": [
+          "下降趋势",
+          "MACD空头",
+          "均线空头排列",
+          "OBV顶背离"
+        ],
+        "price": 4.59,
+        "market_adjustment": 0,
+        "buy_price": 4.17,
+        "buy_price_note": "已跌破支撑",
+        "sell_price": 4.79,
+        "sell_price_note": "反弹4.5%",
+        "stop_loss": 3.45,
+        "target_price": 5.06,
+        "risk_reward_ratio": 1.22,
+        "atr": 0.28,
+        "support_1": 3.62,
+        "support_2": 3.45,
+        "resistance_1": 4.79,
+        "resistance_2": 5.06
+      },
+      "risks": []
     },
     {
       "code": "002177",
-      "error": "'value'"
+      "name": "御银股份",
+      "price": 6.16,
+      "pct_change": 1.65,
+      "analysis_time": "2026-08-27 15:07:35",
+      "total_score": 45,
+      "rating": "中性",
+      "action": "观望",
+      "scores": {
+        "technical": 52,
+        "fundamental": 48,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "偏强震荡",
+          "trend_score": 60,
+          "trend_strength": 37.5,
+          "ma5": 5.95,
+          "ma10": 5.74,
+          "ma20": 5.79,
+          "ma60": 5.73,
+          "ma120": 6.77,
+          "bullish_alignment": "False",
+          "bearish_alignment": "False"
+        },
+        "ma_system": {
+          "ma5": 5.95,
+          "ma10": 5.74,
+          "ma20": 5.79,
+          "ma60": 5.73,
+          "ma120": 6.77,
+          "bullish_alignment": "False",
+          "bearish_alignment": "False",
+          "price_above_ma20": "True",
+          "price_above_ma60": "True"
+        },
+        "macd": {
+          "dif": 0.0768,
+          "dea": 0.0231,
+          "macd": 0.1074,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "True"
+        },
+        "rsi": {
+          "rsi6": 100.0,
+          "rsi12": 64.23,
+          "rsi24": 69.92,
+          "status": "超买",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 81.78,
+          "d": 63.92,
+          "j": 117.49,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "True",
+          "oversold": "False",
+          "j_overbought": "True",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 6.19,
+          "mid": 5.79,
+          "lower": 5.39,
+          "width": 13.82,
+          "position": 96.11,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "True"
+        },
+        "atr": {
+          "atr": 0.23,
+          "atr_ratio": 3.73,
+          "volatility_level": "中波动"
+        },
+        "obv": {
+          "obv": 530295435.0,
+          "obv_ma10": 308751861.0,
+          "trend_up": "True",
+          "divergence_bullish": "False"
+        },
+        "williams": {
+          "wr": -4.55,
+          "oversold": "False",
+          "overbought": "True",
+          "status": "超买"
+        },
+        "momentum": {
+          "mom5": 0.39,
+          "mom10": 0.52,
+          "mom20": 0.43,
+          "roc5": 6.76,
+          "roc10": 9.22,
+          "roc20": 7.5,
+          "momentum_up": "True"
+        },
+        "volatility": {
+          "vol5": 24.7,
+          "vol10": 42.06,
+          "vol20": 35.43,
+          "volatility_increasing": "False"
+        },
+        "support_resistance": {
+          "resistance_1": 6.74,
+          "resistance_2": 6.95,
+          "support_1": 5.79,
+          "support_2": 5.73,
+          "pivot": 5.95,
+          "recent_high": 6.74,
+          "recent_low": 4.96
+        },
+        "volume": {
+          "current_volume": 51543656.0,
+          "vol_ma5": 63111103.0,
+          "vol_ma10": 43572289.0,
+          "vol_ma20": 40434178.0,
+          "volume_ratio": 0.82,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "technical_score": 52,
+        "signals": [
+          {
+            "type": "KDJ超买（回调风险）",
+            "direction": "bearish",
+            "strength": 60
+          },
+          {
+            "type": "RSI超买（回调风险）",
+            "direction": "bearish",
+            "strength": 65
+          },
+          {
+            "type": "短期动量强劲",
+            "direction": "bullish",
+            "strength": 65
+          }
+        ],
+        "conclusions": [
+          "趋势：偏强震荡（MA5=5.95, MA20=5.79）",
+          "MACD 多头排列",
+          "RSI6=100.0（超买）",
+          "布林带位置：96%，带宽13.8%",
+          "量能：量能正常（量比0.82）",
+          "支撑位：5.79，压力位：6.74"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "2004",
+          "revenue": 57097100.0,
+          "net_profit": 12623100.0,
+          "roe": 32.35,
+          "gross_margin": 60.7,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "御银股份"
+        },
+        "score": 48,
+        "conclusions": [
+          "ROE=32.4%（优秀）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率60.7%（高毛利）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "hold",
+        "action": "持有观望",
+        "confidence": 9,
+        "buy_score": 29,
+        "sell_score": 20,
+        "net_score": 9,
+        "buy_signals": [
+          "MACD多头",
+          "短期动量强劲(+6.8%)"
+        ],
+        "sell_signals": [
+          "RSI6严重超买(100)",
+          "Williams超买"
+        ],
+        "price": 6.16,
+        "market_adjustment": 0,
+        "buy_price": 5.79,
+        "buy_price_note": "已跌破支撑",
+        "sell_price": 6.16,
+        "sell_price_note": "现价附近",
+        "stop_loss": 5.62,
+        "target_price": 6.95,
+        "risk_reward_ratio": 6.65,
+        "atr": 0.23,
+        "support_1": 5.79,
+        "support_2": 5.73,
+        "resistance_1": 6.74,
+        "resistance_2": 6.95
+      },
+      "risks": []
     },
     {
       "code": "601929",
-      "error": "'value'"
+      "name": "吉视传媒",
+      "price": 2.33,
+      "pct_change": 0.0,
+      "analysis_time": "2026-08-27 15:08:08",
+      "total_score": 34,
+      "rating": "偏空",
+      "action": "减仓",
+      "scores": {
+        "technical": 30,
+        "fundamental": 30,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "trend_strength": 2.1,
+          "ma5": 2.31,
+          "ma10": 2.32,
+          "ma20": 2.39,
+          "ma60": 2.33,
+          "ma120": 2.67,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "ma_system": {
+          "ma5": 2.31,
+          "ma10": 2.32,
+          "ma20": 2.39,
+          "ma60": 2.33,
+          "ma120": 2.67,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True",
+          "price_above_ma20": "False",
+          "price_above_ma60": "False"
+        },
+        "macd": {
+          "dif": -0.0089,
+          "dea": 0.0014,
+          "macd": -0.0206,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 81.25,
+          "rsi12": 35.29,
+          "rsi24": 57.02,
+          "status": "超买",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 37.27,
+          "d": 30.0,
+          "j": 51.8,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 2.56,
+          "mid": 2.39,
+          "lower": 2.21,
+          "width": 14.46,
+          "position": 33.91,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "False"
+        },
+        "atr": {
+          "atr": 0.09,
+          "atr_ratio": 3.89,
+          "volatility_level": "中波动"
+        },
+        "obv": {
+          "obv": 557861355.0,
+          "obv_ma10": 541780495.0,
+          "trend_up": "True",
+          "divergence_bullish": "False"
+        },
+        "williams": {
+          "wr": -69.44,
+          "oversold": "False",
+          "overbought": "False",
+          "status": "正常"
+        },
+        "momentum": {
+          "mom5": 0.04,
+          "mom10": -0.08,
+          "mom20": -0.01,
+          "roc5": 1.75,
+          "roc10": -3.32,
+          "roc20": -0.43,
+          "momentum_up": "True"
+        },
+        "volatility": {
+          "vol5": 25.93,
+          "vol10": 39.34,
+          "vol20": 39.49,
+          "volatility_increasing": "False"
+        },
+        "support_resistance": {
+          "resistance_1": 2.33,
+          "resistance_2": 2.39,
+          "support_1": 2.09,
+          "support_2": 2.04,
+          "pivot": 2.38,
+          "recent_high": 2.71,
+          "recent_low": 2.09
+        },
+        "volume": {
+          "current_volume": 45495487.0,
+          "vol_ma5": 51994556.0,
+          "vol_ma10": 61452983.0,
+          "vol_ma20": 80198319.0,
+          "volume_ratio": 0.88,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "technical_score": 30,
+        "signals": [
+          {
+            "type": "RSI超买（回调风险）",
+            "direction": "bearish",
+            "strength": 65
+          },
+          {
+            "type": "均线空头排列",
+            "direction": "bearish",
+            "strength": 75
+          },
+          {
+            "type": "OBV底背离（看涨）",
+            "direction": "bullish",
+            "strength": 75
+          }
+        ],
+        "conclusions": [
+          "趋势：下降趋势（MA5=2.31, MA20=2.39）",
+          "MACD 空头排列",
+          "RSI6=81.25（超买）",
+          "布林带位置：34%，带宽14.5%",
+          "量能：量能正常（量比0.88）",
+          "支撑位：2.09，压力位：2.33"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "2008",
+          "revenue": 550000000.0,
+          "net_profit": 28604100.0,
+          "roe": 5.53,
+          "gross_margin": 38.53,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "吉视传媒"
+        },
+        "score": 30,
+        "conclusions": [
+          "ROE=5.5%（一般）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率38.5%（中等）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "sell",
+        "action": "建议卖出",
+        "confidence": 45,
+        "buy_score": 0,
+        "sell_score": 45,
+        "net_score": -45,
+        "buy_signals": [],
+        "sell_signals": [
+          "下降趋势",
+          "MACD空头",
+          "RSI6超买(81)",
+          "均线空头排列"
+        ],
+        "price": 2.33,
+        "market_adjustment": 0,
+        "buy_price": 2.21,
+        "buy_price_note": "已跌破支撑",
+        "sell_price": 2.33,
+        "sell_price_note": "现价附近",
+        "stop_loss": 2.03,
+        "target_price": 2.39,
+        "risk_reward_ratio": 0.93,
+        "atr": 0.09,
+        "support_1": 2.09,
+        "support_2": 2.04,
+        "resistance_1": 2.33,
+        "resistance_2": 2.39
+      },
+      "risks": [
+        "技术面走弱",
+        "基本面偏弱"
+      ]
     },
     {
       "code": "002217",
-      "error": "'value'"
+      "name": "ST合力泰",
+      "price": 1.48,
+      "pct_change": -0.67,
+      "analysis_time": "2026-08-27 15:08:40",
+      "total_score": 43,
+      "rating": "偏空",
+      "action": "减仓",
+      "scores": {
+        "technical": 48,
+        "fundamental": 45,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "偏弱震荡",
+          "trend_score": 35,
+          "trend_strength": 6.8,
+          "ma5": 1.47,
+          "ma10": 1.47,
+          "ma20": 1.5,
+          "ma60": 1.77,
+          "ma120": 2.25,
+          "bullish_alignment": "False",
+          "bearish_alignment": "False"
+        },
+        "ma_system": {
+          "ma5": 1.47,
+          "ma10": 1.47,
+          "ma20": 1.5,
+          "ma60": 1.77,
+          "ma120": 2.25,
+          "bullish_alignment": "False",
+          "bearish_alignment": "False",
+          "price_above_ma20": "False",
+          "price_above_ma60": "False"
+        },
+        "macd": {
+          "dif": -0.0464,
+          "dea": -0.0611,
+          "macd": 0.0295,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 83.33,
+          "rsi12": 38.89,
+          "rsi24": 59.62,
+          "status": "超买",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 36.9,
+          "d": 28.05,
+          "j": 54.61,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 1.57,
+          "mid": 1.5,
+          "lower": 1.42,
+          "width": 9.97,
+          "position": 38.95,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "False"
+        },
+        "atr": {
+          "atr": 0.04,
+          "atr_ratio": 2.7,
+          "volatility_level": "中波动"
+        },
+        "obv": {
+          "obv": -924888739.0,
+          "obv_ma10": -962764062.0,
+          "trend_up": "True",
+          "divergence_bullish": "False"
+        },
+        "williams": {
+          "wr": -64.29,
+          "oversold": "False",
+          "overbought": "False",
+          "status": "正常"
+        },
+        "momentum": {
+          "mom5": 0.03,
+          "mom10": -0.04,
+          "mom20": 0.02,
+          "roc5": 2.07,
+          "roc10": -2.63,
+          "roc20": 1.37,
+          "momentum_up": "True"
+        },
+        "volatility": {
+          "vol5": 16.44,
+          "vol10": 23.22,
+          "vol20": 31.45,
+          "volatility_increasing": "False"
+        },
+        "support_resistance": {
+          "resistance_1": 1.5,
+          "resistance_2": 1.77,
+          "support_1": 1.37,
+          "support_2": 1.0,
+          "pivot": 1.85,
+          "recent_high": 2.71,
+          "recent_low": 1.37
+        },
+        "volume": {
+          "current_volume": 83679880.0,
+          "vol_ma5": 86011830.0,
+          "vol_ma10": 92660109.0,
+          "vol_ma20": 119629919.0,
+          "volume_ratio": 0.97,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "technical_score": 48,
+        "signals": [
+          {
+            "type": "RSI超买（回调风险）",
+            "direction": "bearish",
+            "strength": 65
+          },
+          {
+            "type": "OBV底背离（看涨）",
+            "direction": "bullish",
+            "strength": 75
+          }
+        ],
+        "conclusions": [
+          "趋势：偏弱震荡（MA5=1.47, MA20=1.5）",
+          "MACD 多头排列",
+          "RSI6=83.33（超买）",
+          "布林带位置：39%，带宽10.0%",
+          "量能：量能正常（量比0.97）",
+          "支撑位：1.37，压力位：1.5"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "2004",
+          "revenue": 260000000.0,
+          "net_profit": 29520600.0,
+          "roe": 83.81,
+          "gross_margin": 26.05,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "ST合力泰"
+        },
+        "score": 45,
+        "conclusions": [
+          "ROE=83.8%（优秀）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率26.1%（中等）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "sell",
+        "action": "建议卖出",
+        "confidence": 27,
+        "buy_score": 0,
+        "sell_score": 27,
+        "net_score": -27,
+        "buy_signals": [],
+        "sell_signals": [
+          "偏弱震荡",
+          "RSI6超买(83)"
+        ],
+        "price": 1.48,
+        "market_adjustment": 0,
+        "buy_price": 1.42,
+        "buy_price_note": "已跌破支撑",
+        "sell_price": 1.48,
+        "sell_price_note": "现价附近",
+        "stop_loss": 1.0,
+        "target_price": 1.77,
+        "risk_reward_ratio": 0.83,
+        "atr": 0.04,
+        "support_1": 1.37,
+        "support_2": 1.0,
+        "resistance_1": 1.5,
+        "resistance_2": 1.77
+      },
+      "risks": []
     },
     {
       "code": "600505",
-      "error": "'value'"
+      "name": "西昌电力",
+      "price": 10.59,
+      "pct_change": -0.38,
+      "analysis_time": "2026-08-27 15:09:15",
+      "total_score": 37,
+      "rating": "偏空",
+      "action": "减仓",
+      "scores": {
+        "technical": 34,
+        "fundamental": 38,
+        "capital": 50,
+        "concept": 50
+      },
+      "technical": {
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "trend_strength": 24.3,
+          "ma5": 10.55,
+          "ma10": 10.63,
+          "ma20": 10.99,
+          "ma60": 11.61,
+          "ma120": 12.64,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "ma_system": {
+          "ma5": 10.55,
+          "ma10": 10.63,
+          "ma20": 10.99,
+          "ma60": 11.61,
+          "ma120": 12.64,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True",
+          "price_above_ma20": "False",
+          "price_above_ma60": "False"
+        },
+        "macd": {
+          "dif": -0.2213,
+          "dea": -0.1962,
+          "macd": -0.0501,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 63.64,
+          "rsi12": 20.47,
+          "rsi24": 51.24,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 30.04,
+          "d": 23.67,
+          "j": 42.77,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 11.79,
+          "mid": 10.99,
+          "lower": 10.19,
+          "width": 14.54,
+          "position": 25.18,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "True"
+        },
+        "atr": {
+          "atr": 0.26,
+          "atr_ratio": 2.45,
+          "volatility_level": "中波动"
+        },
+        "obv": {
+          "obv": -154747208.0,
+          "obv_ma10": -145809539.0,
+          "trend_up": "False",
+          "divergence_bullish": "False"
+        },
+        "williams": {
+          "wr": -75.54,
+          "oversold": "False",
+          "overbought": "False",
+          "status": "正常"
+        },
+        "momentum": {
+          "mom5": 0.16,
+          "mom10": -0.34,
+          "mom20": -0.54,
+          "roc5": 1.53,
+          "roc10": -3.11,
+          "roc20": -4.85,
+          "momentum_up": "True"
+        },
+        "volatility": {
+          "vol5": 13.94,
+          "vol10": 22.76,
+          "vol20": 25.74,
+          "volatility_increasing": "False"
+        },
+        "support_resistance": {
+          "resistance_1": 10.99,
+          "resistance_2": 11.61,
+          "support_1": 10.01,
+          "support_2": 8.67,
+          "pivot": 11.93,
+          "recent_high": 15.2,
+          "recent_low": 10.01
+        },
+        "volume": {
+          "current_volume": 4538403.0,
+          "vol_ma5": 4823281.0,
+          "vol_ma10": 5955627.0,
+          "vol_ma20": 7901392.0,
+          "volume_ratio": 0.94,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "technical_score": 34,
+        "signals": [
+          {
+            "type": "均线空头排列",
+            "direction": "bearish",
+            "strength": 75
+          }
+        ],
+        "conclusions": [
+          "趋势：下降趋势（MA5=10.55, MA20=10.99）",
+          "MACD 空头排列",
+          "RSI6=63.64（正常）",
+          "布林带位置：25%，带宽14.5%",
+          "量能：量能正常（量比0.94）",
+          "支撑位：10.01，压力位：10.99"
+        ]
+      },
+      "fundamental": {
+        "data": {
+          "report_date": "1999",
+          "revenue": 126000000.0,
+          "net_profit": 29191100.0,
+          "roe": 15.37,
+          "gross_margin": 43.84,
+          "revenue_yoy": 0.0,
+          "profit_yoy": 0.0,
+          "pe": null,
+          "pb": null,
+          "total_mv": 0,
+          "name": "西昌电力"
+        },
+        "score": 38,
+        "conclusions": [
+          "ROE=15.4%（良好）",
+          "营收同比0.0%（下滑）",
+          "净利润同比0.0%（下滑）",
+          "毛利率43.8%（中等）"
+        ]
+      },
+      "capital": {
+        "error": "无法获取资金流向数据",
+        "score": 50,
+        "conclusions": [
+          "资金流向数据暂不可用"
+        ]
+      },
+      "concept": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 50,
+        "conclusions": [
+          "暂无明确概念标签"
+        ]
+      },
+      "llm_analysis": null,
+      "trading_signal": {
+        "signal": "sell",
+        "action": "建议卖出",
+        "confidence": 47,
+        "buy_score": 0,
+        "sell_score": 47,
+        "net_score": -47,
+        "buy_signals": [],
+        "sell_signals": [
+          "下降趋势",
+          "MACD空头",
+          "均线空头排列",
+          "OBV顶背离"
+        ],
+        "price": 10.59,
+        "market_adjustment": 0,
+        "buy_price": 10.19,
+        "buy_price_note": "已跌破支撑",
+        "sell_price": 10.99,
+        "sell_price_note": "反弹3.7%",
+        "stop_loss": 8.67,
+        "target_price": 11.61,
+        "risk_reward_ratio": 0.94,
+        "atr": 0.26,
+        "support_1": 10.01,
+        "support_2": 8.67,
+        "resistance_1": 10.99,
+        "resistance_2": 11.61
+      },
+      "risks": [
+        "技术面走弱",
+        "基本面偏弱"
+      ]
     }
   ],
   "screener_result": {
     "strategies": {
       "low_price": [
         {
+          "code": "000428",
+          "name": "华天酒店",
+          "price": 4.61,
+          "pct_change": -2.9474,
+          "strategy": "low_price",
+          "reason": "股价4.6元（低价）；今日-2.9%（走势稳健）；均线多头排列；量能放大（量比2.3）",
+          "score": 93
+        },
+        {
           "code": "000008",
           "name": "神州高铁",
-          "price": 2.4,
-          "pct_change": 0.4184,
+          "price": 2.49,
+          "pct_change": -0.4,
           "strategy": "low_price",
-          "reason": "股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
-          "score": 92
-        },
-        {
-          "code": "000552",
-          "name": "甘肃能化",
-          "price": 2.55,
-          "pct_change": 0.0,
-          "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+0.0%（走势稳健）；均线多头排列",
-          "score": 92
-        },
-        {
-          "code": "000560",
-          "name": "我爱我家",
-          "price": 2.17,
-          "pct_change": 0.463,
-          "strategy": "low_price",
-          "reason": "股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列",
+          "reason": "股价2.5元（超低价）；今日-0.4%（走势稳健）；均线多头排列",
           "score": 92
         },
         {
           "code": "000031",
           "name": "大悦城",
-          "price": 2.17,
-          "pct_change": 0.463,
+          "price": 2.21,
+          "pct_change": -0.4505,
           "strategy": "low_price",
-          "reason": "股价2.2元（超低价）；今日+0.5%（走势稳健）；短期均线向上",
+          "reason": "股价2.2元（超低价）；今日-0.5%（走势稳健）；短期均线向上",
           "score": 85
         },
         {
           "code": "000055",
           "name": "方大集团",
-          "price": 3.56,
-          "pct_change": 0.8499,
+          "price": 3.58,
+          "pct_change": -0.831,
           "strategy": "low_price",
-          "reason": "股价3.6元（低价）；今日+0.8%（走势稳健）；均线多头排列",
-          "score": 85
-        },
-        {
-          "code": "000059",
-          "name": "华锦股份",
-          "price": 4.6,
-          "pct_change": 0.6565,
-          "strategy": "low_price",
-          "reason": "股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列",
+          "reason": "股价3.6元（低价）；今日-0.8%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000068",
           "name": "华控赛格",
-          "price": 3.04,
-          "pct_change": 4.1096,
+          "price": 3.18,
+          "pct_change": -0.625,
           "strategy": "low_price",
-          "reason": "股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列",
+          "reason": "股价3.2元（低价）；今日-0.6%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000069",
           "name": "华侨城A",
-          "price": 1.77,
-          "pct_change": 0.0,
+          "price": 1.79,
+          "pct_change": -0.5556,
           "strategy": "low_price",
-          "reason": "股价1.8元（超低价）；今日+0.0%（走势稳健）；短期均线向上",
+          "reason": "股价1.8元（超低价）；今日-0.6%（走势稳健）；短期均线向上",
           "score": 85
         },
         {
           "code": "000088",
           "name": "盐田港",
-          "price": 4.46,
-          "pct_change": 0.0,
+          "price": 4.54,
+          "pct_change": -0.8734,
           "strategy": "low_price",
-          "reason": "股价4.5元（低价）；今日+0.0%（走势稳健）；均线多头排列",
+          "reason": "股价4.5元（低价）；今日-0.9%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000090",
           "name": "天健集团",
-          "price": 3.47,
-          "pct_change": -0.2874,
+          "price": 3.52,
+          "pct_change": 0.5714,
           "strategy": "low_price",
-          "reason": "股价3.5元（低价）；今日-0.3%（走势稳健）；均线多头排列",
+          "reason": "股价3.5元（低价）；今日+0.6%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000402",
           "name": "金融街",
-          "price": 2.48,
-          "pct_change": -0.4016,
+          "price": 2.5,
+          "pct_change": -0.7937,
           "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日-0.4%（走势稳健）；短期均线向上",
-          "score": 85
-        },
-        {
-          "code": "000545",
-          "name": "金浦钛业",
-          "price": 2.54,
-          "pct_change": 2.008,
-          "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+2.0%（走势稳健）；短期均线向上",
-          "score": 85
-        },
-        {
-          "code": "000546",
-          "name": "金圆股份",
-          "price": 4.81,
-          "pct_change": 1.6913,
-          "strategy": "low_price",
-          "reason": "股价4.8元（低价）；今日+1.7%（走势稳健）；均线多头排列",
+          "reason": "股价2.5元（超低价）；今日-0.8%（走势稳健）；短期均线向上",
           "score": 85
         },
         {
           "code": "000573",
           "name": "粤宏远A",
-          "price": 3.71,
-          "pct_change": 0.2703,
+          "price": 3.73,
+          "pct_change": -0.5333,
           "strategy": "low_price",
-          "reason": "股价3.7元（低价）；今日+0.3%（走势稳健）；均线多头排列",
-          "score": 85
-        },
-        {
-          "code": "000576",
-          "name": "甘化科工",
-          "price": 7.36,
-          "pct_change": 2.9371,
-          "strategy": "low_price",
-          "reason": "股价7.4元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比2.9）",
+          "reason": "股价3.7元（低价）；今日-0.5%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000607",
           "name": "华媒控股",
-          "price": 3.72,
-          "pct_change": 1.087,
+          "price": 3.67,
+          "pct_change": -1.6086,
           "strategy": "low_price",
-          "reason": "股价3.7元（低价）；今日+1.1%（走势稳健）；均线多头排列",
+          "reason": "股价3.7元（低价）；今日-1.6%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000620",
           "name": "盈新发展",
-          "price": 3.1,
-          "pct_change": 2.3102,
+          "price": 3.45,
+          "pct_change": 2.6786,
           "strategy": "low_price",
-          "reason": "股价3.1元（低价）；今日+2.3%（走势稳健）；均线多头排列",
+          "reason": "股价3.5元（低价）；今日+2.7%（走势稳健）；均线多头排列",
           "score": 85
         },
         {
           "code": "000166",
           "name": "申万宏源",
-          "price": 4.55,
-          "pct_change": 0.4415,
+          "price": 4.57,
+          "pct_change": 0.2193,
           "strategy": "low_price",
-          "reason": "股价4.5元（低价）；今日+0.4%（走势稳健）；短期均线向上；量能温和放大（量比1.3）",
+          "reason": "股价4.6元（低价）；今日+0.2%（走势稳健）；短期均线向上；量能温和放大（量比1.3）",
           "score": 82
         },
         {
           "code": "000420",
           "name": "吉林化纤",
-          "price": 3.81,
-          "pct_change": 1.061,
+          "price": 3.68,
+          "pct_change": -2.1277,
           "strategy": "low_price",
-          "reason": "股价3.8元（低价）；今日+1.1%（走势稳健）；量能放大（量比1.6）",
+          "reason": "股价3.7元（低价）；今日-2.1%（走势稳健）；量能放大（量比1.6）",
           "score": 81
         },
         {
           "code": "000517",
           "name": "荣安地产",
-          "price": 2.29,
-          "pct_change": 2.2321,
+          "price": 2.28,
+          "pct_change": -0.4367,
           "strategy": "low_price",
-          "reason": "股价2.3元（超低价）；今日+2.2%（走势稳健）",
+          "reason": "股价2.3元（超低价）；今日-0.4%（走势稳健）",
           "score": 80
+        },
+        {
+          "code": "000545",
+          "name": "金浦钛业",
+          "price": 2.64,
+          "pct_change": 0.0,
+          "strategy": "low_price",
+          "reason": "股价2.6元（超低价）；今日+0.0%（走势稳健）",
+          "score": 80
+        },
+        {
+          "code": "000552",
+          "name": "甘肃能化",
+          "price": 2.65,
+          "pct_change": 0.7605,
+          "strategy": "low_price",
+          "reason": "股价2.6元（超低价）；今日+0.8%（走势稳健）",
+          "score": 80
+        },
+        {
+          "code": "000560",
+          "name": "我爱我家",
+          "price": 2.4,
+          "pct_change": 0.0,
+          "strategy": "low_price",
+          "reason": "股价2.4元（超低价）；今日+0.0%（走势稳健）",
+          "score": 80
+        },
+        {
+          "code": "000564",
+          "name": "供销大集",
+          "price": 1.52,
+          "pct_change": 3.4014,
+          "strategy": "low_price",
+          "reason": "股价1.5元（超低价）；今日+3.4%（走势稳健）",
+          "score": 80
+        },
+        {
+          "code": "000036",
+          "name": "华联控股",
+          "price": 4.13,
+          "pct_change": 1.4742,
+          "strategy": "low_price",
+          "reason": "股价4.1元（低价）；今日+1.5%（走势稳健）；短期均线向上",
+          "score": 78
         }
       ],
       "technical_pattern": [
         {
+          "code": "000059",
+          "name": "华锦股份",
+          "price": 5.06,
+          "pct_change": 5.4167,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破",
+          "score": 91
+        },
+        {
+          "code": "000014",
+          "name": "沙河股份",
+          "price": 10.97,
+          "pct_change": 2.1415,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、量能放大（量比1.4）、MACD多头、平台突破",
+          "score": 88
+        },
+        {
           "code": "000001",
           "name": "平安银行",
-          "price": 11.1,
-          "pct_change": -0.09,
+          "price": 11.59,
+          "pct_change": -1.1935,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、平台突破",
           "score": 83
@@ -224,26 +1559,26 @@
         {
           "code": "000008",
           "name": "神州高铁",
-          "price": 2.4,
-          "pct_change": 0.4184,
+          "price": 2.49,
+          "pct_change": -0.4,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、平台突破",
           "score": 83
         },
         {
-          "code": "000428",
-          "name": "华天酒店",
-          "price": 4.27,
-          "pct_change": 0.4706,
+          "code": "000060",
+          "name": "中金岭南",
+          "price": 6.84,
+          "pct_change": 1.7857,
           "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、量能放大（量比2.3）、MACD金叉",
+          "reason": "技术形态：均线多头排列、MACD多头、平台突破",
           "score": 83
         },
         {
           "code": "000430",
           "name": "张家界",
-          "price": 6.61,
-          "pct_change": -1.0479,
+          "price": 6.89,
+          "pct_change": 0.0,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、平台突破",
           "score": 83
@@ -251,8 +1586,8 @@
         {
           "code": "000530",
           "name": "冰山冷热",
-          "price": 5.06,
-          "pct_change": 2.0161,
+          "price": 5.14,
+          "pct_change": 0.0,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、平台突破",
           "score": 83
@@ -260,8 +1595,17 @@
         {
           "code": "000532",
           "name": "华金资本",
-          "price": 11.25,
-          "pct_change": 3.8781,
+          "price": 11.36,
+          "pct_change": -0.8726,
+          "strategy": "technical_pattern",
+          "reason": "技术形态：均线多头排列、MACD多头、平台突破",
+          "score": 83
+        },
+        {
+          "code": "000552",
+          "name": "甘肃能化",
+          "price": 2.65,
+          "pct_change": 0.7605,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、平台突破",
           "score": 83
@@ -269,26 +1613,26 @@
         {
           "code": "000506",
           "name": "招金黄金",
-          "price": 17.75,
-          "pct_change": 0.6236,
+          "price": 22.08,
+          "pct_change": 9.2528,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、量能放大（量比1.4）、MACD多头、KDJ金叉",
           "score": 79
         },
         {
-          "code": "000501",
-          "name": "武商集团",
-          "price": 7.24,
-          "pct_change": 1.9718,
+          "code": "000020",
+          "name": "深华发A",
+          "price": 13.14,
+          "pct_change": 3.3832,
           "strategy": "technical_pattern",
-          "reason": "技术形态：短期均线向上、MACD金叉、平台突破",
-          "score": 78
+          "reason": "技术形态：均线多头排列、MACD多头、KDJ金叉",
+          "score": 74
         },
         {
-          "code": "000301",
-          "name": "东方盛虹",
-          "price": 12.66,
-          "pct_change": 0.3965,
+          "code": "000039",
+          "name": "中集集团",
+          "price": 9.3,
+          "pct_change": 1.6393,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、KDJ金叉",
           "score": 74
@@ -296,8 +1640,8 @@
         {
           "code": "000523",
           "name": "红棉股份",
-          "price": 2.96,
-          "pct_change": 1.3699,
+          "price": 3.42,
+          "pct_change": 4.2683,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头、KDJ金叉",
           "score": 74
@@ -305,8 +1649,8 @@
         {
           "code": "000025",
           "name": "特力A",
-          "price": 15.15,
-          "pct_change": 1.6779,
+          "price": 16.66,
+          "pct_change": 4.386,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、量能放大（量比1.5）、MACD多头",
           "score": 71
@@ -314,8 +1658,8 @@
         {
           "code": "000007",
           "name": "全新好",
-          "price": 10.63,
-          "pct_change": -0.932,
+          "price": 12.75,
+          "pct_change": 1.1905,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
@@ -323,35 +1667,35 @@
         {
           "code": "000019",
           "name": "深粮控股",
-          "price": 6.33,
-          "pct_change": 5.8528,
+          "price": 7.17,
+          "pct_change": 4.6715,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
         },
         {
-          "code": "000159",
-          "name": "国际实业",
-          "price": 5.72,
-          "pct_change": 0.7042,
+          "code": "000045",
+          "name": "深纺织A",
+          "price": 10.75,
+          "pct_change": 0.5613,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
         },
         {
-          "code": "000333",
-          "name": "美的集团",
-          "price": 82.61,
-          "pct_change": -0.5058,
+          "code": "000061",
+          "name": "农产品",
+          "price": 6.28,
+          "pct_change": 2.9508,
           "strategy": "technical_pattern",
           "reason": "技术形态：短期均线向上、MACD多头、平台突破",
           "score": 66
         },
         {
-          "code": "000426",
-          "name": "兴业银锡",
-          "price": 39.48,
-          "pct_change": 4.1964,
+          "code": "000505",
+          "name": "京粮控股",
+          "price": 7.21,
+          "pct_change": 2.7066,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
@@ -359,66 +1703,20 @@
         {
           "code": "000509",
           "name": "华塑控股",
-          "price": 3.36,
-          "pct_change": 2.1277,
+          "price": 3.52,
+          "pct_change": 2.3256,
           "strategy": "technical_pattern",
           "reason": "技术形态：均线多头排列、MACD多头",
           "score": 66
-        },
-        {
-          "code": "000510",
-          "name": "新金路",
-          "price": 17.58,
-          "pct_change": 3.351,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、KDJ金叉",
-          "score": 66
-        },
-        {
-          "code": "000524",
-          "name": "岭南控股",
-          "price": 9.44,
-          "pct_change": 1.0707,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：均线多头排列、MACD多头",
-          "score": 66
-        },
-        {
-          "code": "000006",
-          "name": "深振业A",
-          "price": 7.33,
-          "pct_change": -2.5266,
-          "strategy": "technical_pattern",
-          "reason": "技术形态：量能放大（量比1.4）、MACD多头、KDJ金叉",
-          "score": 61
         }
       ],
-      "capital_flow": [
-        {
-          "code": "000422",
-          "name": "湖北宜化",
-          "price": 12.79,
-          "pct_change": 0.6294,
-          "strategy": "capital_flow",
-          "reason": "主力小幅净流入；超大单净流入90万",
-          "score": 53
-        },
-        {
-          "code": "000423",
-          "name": "东阿阿胶",
-          "price": 51.5,
-          "pct_change": -0.8089,
-          "strategy": "capital_flow",
-          "reason": "主力小幅净流入",
-          "score": 43
-        }
-      ],
+      "capital_flow": [],
       "fundamental": [
         {
           "code": "000069",
           "name": "华侨城A",
-          "price": 1.77,
-          "pct_change": 0.0,
+          "price": 1.79,
+          "pct_change": -0.5556,
           "strategy": "fundamental",
           "reason": "ROE=51.4%（优秀）",
           "score": 60
@@ -426,8 +1724,8 @@
         {
           "code": "000417",
           "name": "合百集团",
-          "price": 5.97,
-          "pct_change": 2.226,
+          "price": 5.73,
+          "pct_change": 1.0582,
           "strategy": "fundamental",
           "reason": "ROE=29.4%（优秀）",
           "score": 60
@@ -435,8 +1733,8 @@
         {
           "code": "000422",
           "name": "湖北宜化",
-          "price": 12.79,
-          "pct_change": 0.6294,
+          "price": 12.57,
+          "pct_change": 1.1263,
           "strategy": "fundamental",
           "reason": "ROE=21.2%（优秀）",
           "score": 60
@@ -448,14 +1746,14 @@
       {
         "code": "000008",
         "name": "神州高铁",
-        "price": 2.4,
-        "pct_change": 0.4184,
+        "price": 2.49,
+        "pct_change": -0.4,
         "strategies": [
           "low_price",
           "technical_pattern"
         ],
         "reasons": [
-          "[low_price] 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
+          "[low_price] 股价2.5元（超低价）；今日-0.4%（走势稳健）；均线多头排列",
           "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
         ],
         "total_score": 195,
@@ -463,28 +1761,29 @@
         "resonance": false,
         "avg_score": 97.5,
         "trading_signal": {
-          "signal": "hold_buy",
-          "action": "持有/可逢低买入",
-          "confidence": 12,
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 2,
           "buy_score": 20,
-          "sell_score": 8,
-          "net_score": 12,
+          "sell_score": 18,
+          "net_score": 2,
           "buy_signals": [
             "MACD多头",
             "缩量下跌(抛压减轻)"
           ],
           "sell_signals": [
-            "RSI6超买(82)"
+            "RSI6超买(82)",
+            "OBV顶背离"
           ],
-          "price": 2.4,
+          "price": 2.49,
           "market_adjustment": 0,
-          "buy_price": 2.4,
-          "buy_price_note": "现价附近",
-          "sell_price": 2.51,
-          "sell_price_note": "反弹4.6%",
-          "stop_loss": 2.28,
+          "buy_price": 2.44,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.49,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.36,
           "target_price": 2.86,
-          "risk_reward_ratio": 3.83,
+          "risk_reward_ratio": 5.8,
           "atr": 0.06,
           "support_1": 2.44,
           "support_2": 2.43,
@@ -493,32 +1792,96 @@
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 84.5,
+        "special_score": 80.5,
         "special_reasons": [
           "综合评分195",
-          "买入参考2.4元"
+          "买入参考2.44元"
+        ],
+        "limit_up_score": 58,
+        "limit_up_reasons": [
+          "超低价2.49元（易涨停）",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "综合评分97.5"
+        ],
+        "limit_up_probability": 46.0
+      },
+      {
+        "code": "000552",
+        "name": "甘肃能化",
+        "price": 2.65,
+        "pct_change": 0.7605,
+        "strategies": [
+          "low_price",
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[low_price] 股价2.6元（超低价）；今日+0.8%（走势稳健）",
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
+        ],
+        "total_score": 183,
+        "strategy_count": 2,
+        "resonance": false,
+        "avg_score": 91.5,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 25,
+          "buy_score": 45,
+          "sell_score": 20,
+          "net_score": 25,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [
+            "RSI6严重超买(100)",
+            "Williams超买"
+          ],
+          "price": 2.65,
+          "market_adjustment": 0,
+          "buy_price": 2.58,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.65,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.5,
+          "target_price": 3.0,
+          "risk_reward_ratio": 5.5,
+          "atr": 0.06,
+          "support_1": 2.58,
+          "support_2": 2.53,
+          "resistance_1": 2.97,
+          "resistance_2": 3.0
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 76.9,
+        "special_reasons": [
+          "综合评分183",
+          "买入参考2.58元"
         ],
         "limit_up_score": 68,
         "limit_up_reasons": [
-          "超低价2.4元（易涨停）",
+          "超低价2.65元（易涨停）",
           "逼近20日高点（突破在即）",
           "均线多头排列",
-          "技术信号: 持有/可逢低买入",
-          "综合评分97.5"
+          "技术信号: 建议买入",
+          "综合评分91.5"
         ],
         "limit_up_probability": 54.0
       },
       {
         "code": "000069",
         "name": "华侨城A",
-        "price": 1.77,
-        "pct_change": 0.0,
+        "price": 1.79,
+        "pct_change": -0.5556,
         "strategies": [
           "low_price",
           "fundamental"
         ],
         "reasons": [
-          "[low_price] 股价1.8元（超低价）；今日+0.0%（走势稳健）；短期均线向上",
+          "[low_price] 股价1.8元（超低价）；今日-0.6%（走势稳健）；短期均线向上",
           "[fundamental] ROE=51.4%（优秀）"
         ],
         "total_score": 165,
@@ -528,25 +1891,26 @@
         "trading_signal": {
           "signal": "hold",
           "action": "持有观望",
-          "confidence": 1,
+          "confidence": 9,
           "buy_score": 16,
-          "sell_score": 15,
-          "net_score": 1,
+          "sell_score": 25,
+          "net_score": -9,
           "buy_signals": [
             "MA5上穿MA10"
           ],
           "sell_signals": [
-            "偏弱震荡"
+            "偏弱震荡",
+            "OBV顶背离"
           ],
-          "price": 1.77,
+          "price": 1.79,
           "market_adjustment": 0,
-          "buy_price": 1.77,
-          "buy_price_note": "现价附近",
-          "sell_price": 1.77,
+          "buy_price": 1.75,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 1.79,
           "sell_price_note": "现价附近",
           "stop_loss": 1.58,
           "target_price": 1.99,
-          "risk_reward_ratio": 1.14,
+          "risk_reward_ratio": 1.37,
           "atr": 0.05,
           "support_1": 1.75,
           "support_2": 1.58,
@@ -555,1105 +1919,33 @@
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 75.5,
+        "special_score": 71.5,
         "special_reasons": [
           "综合评分165",
-          "买入参考1.77元"
+          "买入参考1.75元"
         ],
         "limit_up_score": 35,
         "limit_up_reasons": [
-          "超低价1.77元（易涨停）",
+          "超低价1.79元（易涨停）",
           "均线多头排列"
-        ],
-        "limit_up_probability": 28.0
-      },
-      {
-        "code": "000422",
-        "name": "湖北宜化",
-        "price": 12.79,
-        "pct_change": 0.6294,
-        "strategies": [
-          "capital_flow",
-          "fundamental"
-        ],
-        "reasons": [
-          "[capital_flow] 主力小幅净流入；超大单净流入90万",
-          "[fundamental] ROE=21.2%（优秀）"
-        ],
-        "total_score": 133,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 66.5,
-        "trading_signal": {
-          "signal": "sell",
-          "action": "建议卖出",
-          "confidence": 37,
-          "buy_score": 0,
-          "sell_score": 37,
-          "net_score": -37,
-          "buy_signals": [],
-          "sell_signals": [
-            "下降趋势",
-            "MACD空头",
-            "均线空头排列"
-          ],
-          "price": 12.79,
-          "market_adjustment": 0,
-          "buy_price": 12.14,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 12.79,
-          "sell_price_note": "现价附近",
-          "stop_loss": 11.33,
-          "target_price": 13.23,
-          "risk_reward_ratio": 1.34,
-          "atr": 0.34,
-          "support_1": 12.14,
-          "support_2": 11.33,
-          "resistance_1": 12.89,
-          "resistance_2": 13.23
-        },
-        "strength_score": 10,
-        "strength_reasons": [
-          "连续3日上涨"
-        ],
-        "special_score": 60.9,
-        "special_reasons": [
-          "综合评分133",
-          "买入参考12.14元"
-        ],
-        "limit_up_score": 0,
-        "limit_up_reasons": [],
-        "limit_up_probability": 0.0
-      },
-      {
-        "code": "000552",
-        "name": "甘肃能化",
-        "price": 2.55,
-        "pct_change": 0.0,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+0.0%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 92,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 92.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 31,
-          "buy_score": 51,
-          "sell_score": 20,
-          "net_score": 31,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列",
-            "OBV底背离"
-          ],
-          "sell_signals": [
-            "RSI6严重超买(100)",
-            "Williams超买"
-          ],
-          "price": 2.55,
-          "market_adjustment": 0,
-          "buy_price": 2.55,
-          "buy_price_note": "现价附近",
-          "sell_price": 2.65,
-          "sell_price_note": "反弹3.9%",
-          "stop_loss": 2.43,
-          "target_price": 3.0,
-          "risk_reward_ratio": 3.78,
-          "atr": 0.06,
-          "support_1": 2.58,
-          "support_2": 2.53,
-          "resistance_1": 2.97,
-          "resistance_2": 3.0
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 48.6,
-        "special_reasons": [
-          "综合评分92",
-          "买入参考2.55元"
-        ],
-        "limit_up_score": 68,
-        "limit_up_reasons": [
-          "超低价2.55元（易涨停）",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分92.0"
-        ],
-        "limit_up_probability": 54.0
-      },
-      {
-        "code": "000560",
-        "name": "我爱我家",
-        "price": 2.17,
-        "pct_change": 0.463,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 92,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 92.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 57,
-          "buy_score": 57,
-          "sell_score": 0,
-          "net_score": 57,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列",
-            "OBV底背离",
-            "短期动量强劲(+7.6%)"
-          ],
-          "sell_signals": [],
-          "price": 2.17,
-          "market_adjustment": 0,
-          "buy_price": 2.26,
-          "buy_price_note": "回调4.1%",
-          "sell_price": 2.43,
-          "sell_price_note": "反弹11.8%",
-          "stop_loss": 1.91,
-          "target_price": 2.75,
-          "risk_reward_ratio": 1.4,
-          "atr": 0.13,
-          "support_1": 2.26,
-          "support_2": 2.21,
-          "resistance_1": 2.7,
-          "resistance_2": 2.75
-        },
-        "strength_score": 35,
-        "strength_reasons": [
-          "近3日上涨11%",
-          "近5日有涨停"
-        ],
-        "special_score": 59.1,
-        "special_reasons": [
-          "近3日上涨11%",
-          "近5日有涨停",
-          "综合评分92",
-          "买入参考2.26元"
-        ],
-        "limit_up_score": 88,
-        "limit_up_reasons": [
-          "超低价2.17元（易涨停）",
-          "近3日上涨11%",
-          "近5日有涨停",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分92.0"
-        ],
-        "limit_up_probability": 70.0
-      },
-      {
-        "code": "000031",
-        "name": "大悦城",
-        "price": 2.17,
-        "pct_change": 0.463,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.2元（超低价）；今日+0.5%（走势稳健）；短期均线向上"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "hold",
-          "action": "持有观望",
-          "confidence": 4,
-          "buy_score": 23,
-          "sell_score": 19,
-          "net_score": 4,
-          "buy_signals": [
-            "MACD金叉",
-            "缩量下跌(抛压减轻)"
-          ],
-          "sell_signals": [
-            "偏弱震荡"
-          ],
-          "price": 2.17,
-          "market_adjustment": 0,
-          "buy_price": 2.17,
-          "buy_price_note": "现价附近",
-          "sell_price": 2.23,
-          "sell_price_note": "反弹3.0%",
-          "stop_loss": 2.01,
-          "target_price": 2.68,
-          "risk_reward_ratio": 3.17,
-          "atr": 0.08,
-          "support_1": 2.21,
-          "support_2": 2.03,
-          "resistance_1": 2.23,
-          "resistance_2": 2.68
-        },
-        "strength_score": 5,
-        "strength_reasons": [
-          "近3日温和上涨4%"
-        ],
-        "special_score": 48.0,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考2.17元"
-        ],
-        "limit_up_score": 43,
-        "limit_up_reasons": [
-          "超低价2.17元（易涨停）",
-          "均线多头排列",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 34.0
-      },
-      {
-        "code": "000055",
-        "name": "方大集团",
-        "price": 3.56,
-        "pct_change": 0.8499,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.6元（低价）；今日+0.8%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 37,
-          "buy_score": 37,
-          "sell_score": 0,
-          "net_score": 37,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列"
-          ],
-          "sell_signals": [],
-          "price": 3.56,
-          "market_adjustment": 0,
-          "buy_price": 3.56,
-          "buy_price_note": "现价附近",
-          "sell_price": 3.63,
-          "sell_price_note": "反弹2.1%",
-          "stop_loss": 3.4,
-          "target_price": 3.98,
-          "risk_reward_ratio": 2.6,
-          "atr": 0.08,
-          "support_1": 3.51,
-          "support_2": 3.46,
-          "resistance_1": 3.95,
-          "resistance_2": 3.98
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 46.5,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考3.56元"
-        ],
-        "limit_up_score": 61,
-        "limit_up_reasons": [
-          "低价3.56元",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 49.0
-      },
-      {
-        "code": "000059",
-        "name": "华锦股份",
-        "price": 4.6,
-        "pct_change": 0.6565,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 62,
-          "buy_score": 67,
-          "sell_score": 5,
-          "net_score": 62,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "KDJ金叉",
-            "均线多头排列",
-            "OBV底背离",
-            "短期动量强劲(+7.4%)"
-          ],
-          "sell_signals": [
-            "Williams超买"
-          ],
-          "price": 4.6,
-          "market_adjustment": 0,
-          "buy_price": 4.6,
-          "buy_price_note": "现价附近",
-          "sell_price": 5.0,
-          "sell_price_note": "反弹8.6%",
-          "stop_loss": 4.22,
-          "target_price": 5.56,
-          "risk_reward_ratio": 2.52,
-          "atr": 0.19,
-          "support_1": 4.69,
-          "support_2": 4.41,
-          "resistance_1": 5.12,
-          "resistance_2": 5.56
-        },
-        "strength_score": 25,
-        "strength_reasons": [
-          "近3日上涨9%",
-          "连续3日上涨"
-        ],
-        "special_score": 54.0,
-        "special_reasons": [
-          "近3日上涨9%",
-          "连续3日上涨",
-          "综合评分85",
-          "买入参考4.6元"
-        ],
-        "limit_up_score": 73,
-        "limit_up_reasons": [
-          "低价4.6元",
-          "近3日上涨9%",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 58.0
-      },
-      {
-        "code": "000068",
-        "name": "华控赛格",
-        "price": 3.04,
-        "pct_change": 4.1096,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.0元（低价）；今日+4.1%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 27,
-          "buy_score": 47,
-          "sell_score": 20,
-          "net_score": 27,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列",
-            "OBV底背离"
-          ],
-          "sell_signals": [
-            "RSI6严重超买(90)",
-            "Williams超买"
-          ],
-          "price": 3.04,
-          "market_adjustment": 0,
-          "buy_price": 3.04,
-          "buy_price_note": "现价附近",
-          "sell_price": 3.22,
-          "sell_price_note": "反弹6.1%",
-          "stop_loss": 2.84,
-          "target_price": 4.22,
-          "risk_reward_ratio": 5.9,
-          "atr": 0.1,
-          "support_1": 2.99,
-          "support_2": 2.99,
-          "resistance_1": 4.11,
-          "resistance_2": 4.22
-        },
-        "strength_score": 5,
-        "strength_reasons": [
-          "近3日温和上涨3%"
-        ],
-        "special_score": 48.0,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考3.04元"
-        ],
-        "limit_up_score": 61,
-        "limit_up_reasons": [
-          "低价3.04元",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 49.0
-      },
-      {
-        "code": "000088",
-        "name": "盐田港",
-        "price": 4.46,
-        "pct_change": 0.0,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价4.5元（低价）；今日+0.0%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 41,
-          "buy_score": 41,
-          "sell_score": 0,
-          "net_score": 41,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列"
-          ],
-          "sell_signals": [],
-          "price": 4.46,
-          "market_adjustment": 0,
-          "buy_price": 4.46,
-          "buy_price_note": "现价附近",
-          "sell_price": 4.59,
-          "sell_price_note": "反弹2.9%",
-          "stop_loss": 4.3,
-          "target_price": 4.81,
-          "risk_reward_ratio": 2.21,
-          "atr": 0.08,
-          "support_1": 4.48,
-          "support_2": 4.34,
-          "resistance_1": 4.67,
-          "resistance_2": 4.81
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 46.5,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考4.46元"
-        ],
-        "limit_up_score": 61,
-        "limit_up_reasons": [
-          "低价4.46元",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 49.0
-      },
-      {
-        "code": "000090",
-        "name": "天健集团",
-        "price": 3.47,
-        "pct_change": -0.2874,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.5元（低价）；今日-0.3%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 43,
-          "buy_score": 43,
-          "sell_score": 0,
-          "net_score": 43,
-          "buy_signals": [
-            "强势上升",
-            "均线多头排列",
-            "MA5上穿MA10"
-          ],
-          "sell_signals": [],
-          "price": 3.47,
-          "market_adjustment": 0,
-          "buy_price": 3.47,
-          "buy_price_note": "现价附近",
-          "sell_price": 3.59,
-          "sell_price_note": "反弹3.4%",
-          "stop_loss": 3.25,
-          "target_price": 3.91,
-          "risk_reward_ratio": 1.98,
-          "atr": 0.11,
-          "support_1": 3.46,
-          "support_2": 3.34,
-          "resistance_1": 3.83,
-          "resistance_2": 3.91
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 46.5,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考3.47元"
-        ],
-        "limit_up_score": 61,
-        "limit_up_reasons": [
-          "低价3.47元",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 49.0
-      },
-      {
-        "code": "000402",
-        "name": "金融街",
-        "price": 2.48,
-        "pct_change": -0.4016,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日-0.4%（走势稳健）；短期均线向上"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "hold",
-          "action": "持有观望",
-          "confidence": 11,
-          "buy_score": 8,
-          "sell_score": 19,
-          "net_score": -11,
-          "buy_signals": [
-            "MA5上穿MA10"
-          ],
-          "sell_signals": [
-            "偏弱震荡"
-          ],
-          "price": 2.48,
-          "market_adjustment": 0,
-          "buy_price": 2.4,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 2.54,
-          "sell_price_note": "反弹2.3%",
-          "stop_loss": 2.21,
-          "target_price": 2.93,
-          "risk_reward_ratio": 2.8,
-          "atr": 0.09,
-          "support_1": 2.35,
-          "support_2": 2.21,
-          "resistance_1": 2.54,
-          "resistance_2": 2.93
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 42.5,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考2.4元"
-        ],
-        "limit_up_score": 43,
-        "limit_up_reasons": [
-          "超低价2.48元（易涨停）",
-          "均线多头排列",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 34.0
-      },
-      {
-        "code": "000545",
-        "name": "金浦钛业",
-        "price": 2.54,
-        "pct_change": 2.008,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+2.0%（走势稳健）；短期均线向上"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "hold",
-          "action": "持有观望",
-          "confidence": 1,
-          "buy_score": 19,
-          "sell_score": 20,
-          "net_score": -1,
-          "buy_signals": [
-            "MACD多头"
-          ],
-          "sell_signals": [
-            "RSI6严重超买(95)",
-            "Williams超买"
-          ],
-          "price": 2.54,
-          "market_adjustment": 0,
-          "buy_price": 2.54,
-          "buy_price_note": "现价附近",
-          "sell_price": 2.65,
-          "sell_price_note": "反弹4.4%",
-          "stop_loss": 2.36,
-          "target_price": 2.94,
-          "risk_reward_ratio": 2.24,
-          "atr": 0.09,
-          "support_1": 2.55,
-          "support_2": 2.52,
-          "resistance_1": 2.91,
-          "resistance_2": 2.94
-        },
-        "strength_score": 5,
-        "strength_reasons": [
-          "近3日温和上涨5%"
-        ],
-        "special_score": 48.0,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考2.54元"
-        ],
-        "limit_up_score": 58,
-        "limit_up_reasons": [
-          "超低价2.54元（易涨停）",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 46.0
-      },
-      {
-        "code": "000546",
-        "name": "金圆股份",
-        "price": 4.81,
-        "pct_change": 1.6913,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价4.8元（低价）；今日+1.7%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "hold_buy",
-          "action": "持有/可逢低买入",
-          "confidence": 22,
-          "buy_score": 37,
-          "sell_score": 15,
-          "net_score": 22,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列"
-          ],
-          "sell_signals": [
-            "RSI6严重超买(96)"
-          ],
-          "price": 4.81,
-          "market_adjustment": 0,
-          "buy_price": 4.81,
-          "buy_price_note": "现价附近",
-          "sell_price": 4.98,
-          "sell_price_note": "反弹3.4%",
-          "stop_loss": 4.51,
-          "target_price": 5.73,
-          "risk_reward_ratio": 3.08,
-          "atr": 0.15,
-          "support_1": 4.75,
-          "support_2": 4.71,
-          "resistance_1": 5.69,
-          "resistance_2": 5.73
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 46.5,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考4.81元"
-        ],
-        "limit_up_score": 61,
-        "limit_up_reasons": [
-          "低价4.81元",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 持有/可逢低买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 49.0
-      },
-      {
-        "code": "000573",
-        "name": "粤宏远A",
-        "price": 3.71,
-        "pct_change": 0.2703,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.7元（低价）；今日+0.3%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "hold",
-          "action": "持有观望",
-          "confidence": 11,
-          "buy_score": 19,
-          "sell_score": 8,
-          "net_score": 11,
-          "buy_signals": [
-            "MACD多头"
-          ],
-          "sell_signals": [
-            "RSI6超买(76)"
-          ],
-          "price": 3.71,
-          "market_adjustment": 0,
-          "buy_price": 3.71,
-          "buy_price_note": "现价附近",
-          "sell_price": 3.8,
-          "sell_price_note": "反弹2.5%",
-          "stop_loss": 3.47,
-          "target_price": 4.43,
-          "risk_reward_ratio": 3.0,
-          "atr": 0.12,
-          "support_1": 3.72,
-          "support_2": 3.68,
-          "resistance_1": 4.35,
-          "resistance_2": 4.43
-        },
-        "strength_score": 5,
-        "strength_reasons": [
-          "近3日温和上涨3%"
-        ],
-        "special_score": 48.0,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考3.71元"
-        ],
-        "limit_up_score": 51,
-        "limit_up_reasons": [
-          "低价3.71元",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 41.0
-      },
-      {
-        "code": "000576",
-        "name": "甘化科工",
-        "price": 7.36,
-        "pct_change": 2.9371,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价7.4元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比2.9）"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 63,
-          "buy_score": 83,
-          "sell_score": 20,
-          "net_score": 63,
-          "buy_signals": [
-            "强势上升",
-            "MACD金叉",
-            "均线多头排列",
-            "MA5上穿MA10",
-            "放量上涨(量比2.9)",
-            "短期动量强劲(+12.2%)"
-          ],
-          "sell_signals": [
-            "RSI6严重超买(98)",
-            "Williams超买"
-          ],
-          "price": 7.36,
-          "market_adjustment": 0,
-          "buy_price": 7.2,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 7.69,
-          "sell_price_note": "反弹4.5%",
-          "stop_loss": 6.88,
-          "target_price": 8.79,
-          "risk_reward_ratio": 4.98,
-          "atr": 0.24,
-          "support_1": 7.2,
-          "support_2": 7.0,
-          "resistance_1": 8.14,
-          "resistance_2": 8.79
-        },
-        "strength_score": 60,
-        "strength_reasons": [
-          "近3日上涨13%",
-          "近5日有涨停",
-          "成交量放大5.3倍",
-          "连续3日上涨"
-        ],
-        "special_score": 60.5,
-        "special_reasons": [
-          "近3日上涨13%",
-          "近5日有涨停",
-          "综合评分85",
-          "买入参考7.2元"
-        ],
-        "limit_up_score": 73,
-        "limit_up_reasons": [
-          "中低价7.36元",
-          "近3日上涨13%",
-          "近5日有涨停",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 58.0
-      },
-      {
-        "code": "000607",
-        "name": "华媒控股",
-        "price": 3.72,
-        "pct_change": 1.087,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.7元（低价）；今日+1.1%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "hold_buy",
-          "action": "持有/可逢低买入",
-          "confidence": 21,
-          "buy_score": 31,
-          "sell_score": 10,
-          "net_score": 21,
-          "buy_signals": [
-            "强势上升",
-            "均线多头排列"
-          ],
-          "sell_signals": [
-            "OBV顶背离"
-          ],
-          "price": 3.72,
-          "market_adjustment": 0,
-          "buy_price": 3.72,
-          "buy_price_note": "现价附近",
-          "sell_price": 3.72,
-          "sell_price_note": "现价附近",
-          "stop_loss": 3.41,
-          "target_price": 4.02,
-          "risk_reward_ratio": 0.97,
-          "atr": 0.11,
-          "support_1": 3.66,
-          "support_2": 3.41,
-          "resistance_1": 3.84,
-          "resistance_2": 4.02
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 46.5,
-        "special_reasons": [
-          "综合评分85",
-          "买入参考3.72元"
-        ],
-        "limit_up_score": 36,
-        "limit_up_reasons": [
-          "低价3.72元",
-          "技术信号: 持有/可逢低买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 29.0
-      },
-      {
-        "code": "000620",
-        "name": "盈新发展",
-        "price": 3.1,
-        "pct_change": 2.3102,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.1元（低价）；今日+2.3%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 53,
-          "buy_score": 53,
-          "sell_score": 0,
-          "net_score": 53,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列",
-            "OBV底背离",
-            "短期动量强劲(+9.5%)"
-          ],
-          "sell_signals": [],
-          "price": 3.1,
-          "market_adjustment": 0,
-          "buy_price": 3.1,
-          "buy_price_note": "现价附近",
-          "sell_price": 3.68,
-          "sell_price_note": "反弹18.7%",
-          "stop_loss": 2.6,
-          "target_price": 4.1,
-          "risk_reward_ratio": 1.99,
-          "atr": 0.25,
-          "support_1": 3.06,
-          "support_2": 3.04,
-          "resistance_1": 3.96,
-          "resistance_2": 4.1
-        },
-        "strength_score": 20,
-        "strength_reasons": [
-          "近5日有涨停"
-        ],
-        "special_score": 52.5,
-        "special_reasons": [
-          "近5日有涨停",
-          "综合评分85",
-          "买入参考3.1元"
-        ],
-        "limit_up_score": 58,
-        "limit_up_reasons": [
-          "低价3.1元",
-          "近5日有涨停",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 46.0
-      },
-      {
-        "code": "000001",
-        "name": "平安银行",
-        "price": 11.1,
-        "pct_change": -0.09,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
-        ],
-        "total_score": 83,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 83.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 39,
-          "buy_score": 47,
-          "sell_score": 8,
-          "net_score": 39,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列",
-            "OBV底背离"
-          ],
-          "sell_signals": [
-            "RSI6超买(77)"
-          ],
-          "price": 11.1,
-          "market_adjustment": 0,
-          "buy_price": 11.36,
-          "buy_price_note": "回调2.4%",
-          "sell_price": 11.75,
-          "sell_price_note": "反弹5.9%",
-          "stop_loss": 10.76,
-          "target_price": 12.23,
-          "risk_reward_ratio": 1.44,
-          "atr": 0.17,
-          "support_1": 11.36,
-          "support_2": 10.97,
-          "resistance_1": 11.75,
-          "resistance_2": 12.23
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 45.9,
-        "special_reasons": [
-          "综合评分83",
-          "买入参考11.36元"
-        ],
-        "limit_up_score": 35,
-        "limit_up_reasons": [
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入"
         ],
         "limit_up_probability": 28.0
       },
       {
         "code": "000428",
         "name": "华天酒店",
-        "price": 4.27,
-        "pct_change": 0.4706,
+        "price": 4.61,
+        "pct_change": -2.9474,
         "strategies": [
-          "technical_pattern"
+          "low_price"
         ],
         "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、量能放大（量比2.3）、MACD金叉"
+          "[low_price] 股价4.6元（低价）；今日-2.9%（走势稳健）；均线多头排列；量能放大（量比2.3）"
         ],
-        "total_score": 83,
+        "total_score": 93,
         "strategy_count": 1,
         "resonance": false,
-        "avg_score": 83.0,
+        "avg_score": 93.0,
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
@@ -1674,15 +1966,15 @@
             "OBV顶背离",
             "Williams超买"
           ],
-          "price": 4.27,
+          "price": 4.61,
           "market_adjustment": 0,
-          "buy_price": 4.27,
-          "buy_price_note": "现价附近",
+          "buy_price": 4.21,
+          "buy_price_note": "已跌破支撑",
           "sell_price": 4.71,
-          "sell_price_note": "反弹10.4%",
+          "sell_price_note": "反弹2.2%",
           "stop_loss": 3.56,
           "target_price": 5.25,
-          "risk_reward_ratio": 1.38,
+          "risk_reward_ratio": 1.6,
           "atr": 0.32,
           "support_1": 4.21,
           "support_2": 3.56,
@@ -1695,28 +1987,841 @@
           "近5日有涨停",
           "成交量放大3.2倍"
         ],
-        "special_score": 63.9,
+        "special_score": 58.9,
         "special_reasons": [
           "近3日大涨17%",
           "近5日有涨停",
-          "综合评分83",
-          "买入参考4.27元"
+          "综合评分93",
+          "买入参考4.21元"
         ],
-        "limit_up_score": 58,
+        "limit_up_score": 66,
         "limit_up_reasons": [
-          "低价4.27元",
+          "低价4.61元",
           "近3日大涨17%",
           "近5日有涨停",
           "均线多头排列",
-          "技术信号: 建议买入"
+          "技术信号: 建议买入",
+          "综合评分93.0"
+        ],
+        "limit_up_probability": 53.0
+      },
+      {
+        "code": "000059",
+        "name": "华锦股份",
+        "price": 5.06,
+        "pct_change": 5.4167,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破"
+        ],
+        "total_score": 91,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 91.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 46,
+          "buy_score": 61,
+          "sell_score": 15,
+          "net_score": 46,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "KDJ金叉",
+            "均线多头排列",
+            "短期动量强劲(+7.4%)"
+          ],
+          "sell_signals": [
+            "触及布林上轨(超买)",
+            "Williams超买"
+          ],
+          "price": 5.06,
+          "market_adjustment": 0,
+          "buy_price": 4.69,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 5.06,
+          "sell_price_note": "现价附近",
+          "stop_loss": 4.41,
+          "target_price": 5.56,
+          "risk_reward_ratio": 3.09,
+          "atr": 0.19,
+          "support_1": 4.69,
+          "support_2": 4.41,
+          "resistance_1": 5.12,
+          "resistance_2": 5.56
+        },
+        "strength_score": 25,
+        "strength_reasons": [
+          "近3日上涨9%",
+          "连续3日上涨"
+        ],
+        "special_score": 47.8,
+        "special_reasons": [
+          "近3日上涨9%",
+          "连续3日上涨",
+          "综合评分91",
+          "买入参考4.69元"
+        ],
+        "limit_up_score": 65,
+        "limit_up_reasons": [
+          "中低价5.06元",
+          "近3日上涨9%",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入",
+          "综合评分91.0"
+        ],
+        "limit_up_probability": 52.0
+      },
+      {
+        "code": "000014",
+        "name": "沙河股份",
+        "price": 10.97,
+        "pct_change": 2.1415,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、量能放大（量比1.4）、MACD多头、平台突破"
+        ],
+        "total_score": 88,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 88.0,
+        "trading_signal": {
+          "signal": "hold_buy",
+          "action": "持有/可逢低买入",
+          "confidence": 21,
+          "buy_score": 51,
+          "sell_score": 30,
+          "net_score": 21,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列",
+            "短期动量强劲(+8.7%)"
+          ],
+          "sell_signals": [
+            "RSI6严重超买(88)",
+            "触及布林上轨(超买)",
+            "Williams超买"
+          ],
+          "price": 10.97,
+          "market_adjustment": 0,
+          "buy_price": 10.22,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 10.97,
+          "sell_price_note": "现价附近",
+          "stop_loss": 9.78,
+          "target_price": 12.0,
+          "risk_reward_ratio": 4.08,
+          "atr": 0.41,
+          "support_1": 10.22,
+          "support_2": 9.78,
+          "resistance_1": 11.18,
+          "resistance_2": 12.0
+        },
+        "strength_score": 33,
+        "strength_reasons": [
+          "近3日上涨10%",
+          "成交量温和放大1.6倍",
+          "连续3日上涨"
+        ],
+        "special_score": 49.3,
+        "special_reasons": [
+          "近3日上涨10%",
+          "成交量温和放大1.6倍",
+          "综合评分88",
+          "买入参考10.22元"
+        ],
+        "limit_up_score": 63,
+        "limit_up_reasons": [
+          "近3日上涨10%",
+          "成交量温和放大1.6倍",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 持有/可逢低买入",
+          "综合评分88.0"
+        ],
+        "limit_up_probability": 50.0
+      },
+      {
+        "code": "000031",
+        "name": "大悦城",
+        "price": 2.21,
+        "pct_change": -0.4505,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.2元（超低价）；今日-0.5%（走势稳健）；短期均线向上"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 4,
+          "buy_score": 23,
+          "sell_score": 19,
+          "net_score": 4,
+          "buy_signals": [
+            "MACD金叉",
+            "缩量下跌(抛压减轻)"
+          ],
+          "sell_signals": [
+            "偏弱震荡"
+          ],
+          "price": 2.21,
+          "market_adjustment": 0,
+          "buy_price": 2.21,
+          "buy_price_note": "现价附近",
+          "sell_price": 2.21,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.03,
+          "target_price": 2.68,
+          "risk_reward_ratio": 2.59,
+          "atr": 0.08,
+          "support_1": 2.21,
+          "support_2": 2.03,
+          "resistance_1": 2.23,
+          "resistance_2": 2.68
+        },
+        "strength_score": 5,
+        "strength_reasons": [
+          "近3日温和上涨4%"
+        ],
+        "special_score": 48.0,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考2.21元"
+        ],
+        "limit_up_score": 43,
+        "limit_up_reasons": [
+          "超低价2.21元（易涨停）",
+          "均线多头排列",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 34.0
+      },
+      {
+        "code": "000055",
+        "name": "方大集团",
+        "price": 3.58,
+        "pct_change": -0.831,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.6元（低价）；今日-0.8%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 37,
+          "buy_score": 37,
+          "sell_score": 0,
+          "net_score": 37,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [],
+          "price": 3.58,
+          "market_adjustment": 0,
+          "buy_price": 3.58,
+          "buy_price_note": "现价附近",
+          "sell_price": 3.58,
+          "sell_price_note": "现价附近",
+          "stop_loss": 3.41,
+          "target_price": 3.98,
+          "risk_reward_ratio": 2.29,
+          "atr": 0.08,
+          "support_1": 3.51,
+          "support_2": 3.46,
+          "resistance_1": 3.95,
+          "resistance_2": 3.98
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 46.5,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考3.58元"
+        ],
+        "limit_up_score": 61,
+        "limit_up_reasons": [
+          "低价3.58元",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 49.0
+      },
+      {
+        "code": "000068",
+        "name": "华控赛格",
+        "price": 3.18,
+        "pct_change": -0.625,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.2元（低价）；今日-0.6%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "hold_buy",
+          "action": "持有/可逢低买入",
+          "confidence": 17,
+          "buy_score": 37,
+          "sell_score": 20,
+          "net_score": 17,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [
+            "RSI6严重超买(90)",
+            "Williams超买"
+          ],
+          "price": 3.18,
+          "market_adjustment": 0,
+          "buy_price": 2.99,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 3.18,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.9,
+          "target_price": 4.22,
+          "risk_reward_ratio": 13.68,
+          "atr": 0.1,
+          "support_1": 2.99,
+          "support_2": 2.99,
+          "resistance_1": 4.11,
+          "resistance_2": 4.22
+        },
+        "strength_score": 5,
+        "strength_reasons": [
+          "近3日温和上涨3%"
+        ],
+        "special_score": 40.0,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考2.99元"
+        ],
+        "limit_up_score": 61,
+        "limit_up_reasons": [
+          "低价3.18元",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 持有/可逢低买入",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 49.0
+      },
+      {
+        "code": "000088",
+        "name": "盐田港",
+        "price": 4.54,
+        "pct_change": -0.8734,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价4.5元（低价）；今日-0.9%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 45,
+          "buy_score": 45,
+          "sell_score": 0,
+          "net_score": 45,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [],
+          "price": 4.54,
+          "market_adjustment": 0,
+          "buy_price": 4.54,
+          "buy_price_note": "现价附近",
+          "sell_price": 4.54,
+          "sell_price_note": "现价附近",
+          "stop_loss": 4.34,
+          "target_price": 4.81,
+          "risk_reward_ratio": 1.37,
+          "atr": 0.08,
+          "support_1": 4.48,
+          "support_2": 4.34,
+          "resistance_1": 4.67,
+          "resistance_2": 4.81
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 46.5,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考4.54元"
+        ],
+        "limit_up_score": 61,
+        "limit_up_reasons": [
+          "低价4.54元",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 49.0
+      },
+      {
+        "code": "000090",
+        "name": "天健集团",
+        "price": 3.52,
+        "pct_change": 0.5714,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.5元（低价）；今日+0.6%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 43,
+          "buy_score": 43,
+          "sell_score": 0,
+          "net_score": 43,
+          "buy_signals": [
+            "强势上升",
+            "均线多头排列",
+            "MA5上穿MA10"
+          ],
+          "sell_signals": [],
+          "price": 3.52,
+          "market_adjustment": 0,
+          "buy_price": 3.52,
+          "buy_price_note": "现价附近",
+          "sell_price": 3.52,
+          "sell_price_note": "现价附近",
+          "stop_loss": 3.3,
+          "target_price": 3.91,
+          "risk_reward_ratio": 1.76,
+          "atr": 0.11,
+          "support_1": 3.46,
+          "support_2": 3.34,
+          "resistance_1": 3.83,
+          "resistance_2": 3.91
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 46.5,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考3.52元"
+        ],
+        "limit_up_score": 61,
+        "limit_up_reasons": [
+          "低价3.52元",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 49.0
+      },
+      {
+        "code": "000402",
+        "name": "金融街",
+        "price": 2.5,
+        "pct_change": -0.7937,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.5元（超低价）；今日-0.8%（走势稳健）；短期均线向上"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 11,
+          "buy_score": 8,
+          "sell_score": 19,
+          "net_score": -11,
+          "buy_signals": [
+            "MA5上穿MA10"
+          ],
+          "sell_signals": [
+            "偏弱震荡"
+          ],
+          "price": 2.5,
+          "market_adjustment": 0,
+          "buy_price": 2.4,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.5,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.21,
+          "target_price": 2.93,
+          "risk_reward_ratio": 2.8,
+          "atr": 0.09,
+          "support_1": 2.35,
+          "support_2": 2.21,
+          "resistance_1": 2.54,
+          "resistance_2": 2.93
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 42.5,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考2.4元"
+        ],
+        "limit_up_score": 43,
+        "limit_up_reasons": [
+          "超低价2.5元（易涨停）",
+          "均线多头排列",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 34.0
+      },
+      {
+        "code": "000573",
+        "name": "粤宏远A",
+        "price": 3.73,
+        "pct_change": -0.5333,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.7元（低价）；今日-0.5%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 11,
+          "buy_score": 19,
+          "sell_score": 8,
+          "net_score": 11,
+          "buy_signals": [
+            "MACD多头"
+          ],
+          "sell_signals": [
+            "RSI6超买(76)"
+          ],
+          "price": 3.73,
+          "market_adjustment": 0,
+          "buy_price": 3.73,
+          "buy_price_note": "现价附近",
+          "sell_price": 3.73,
+          "sell_price_note": "现价附近",
+          "stop_loss": 3.49,
+          "target_price": 4.43,
+          "risk_reward_ratio": 2.92,
+          "atr": 0.12,
+          "support_1": 3.72,
+          "support_2": 3.68,
+          "resistance_1": 4.35,
+          "resistance_2": 4.43
+        },
+        "strength_score": 5,
+        "strength_reasons": [
+          "近3日温和上涨3%"
+        ],
+        "special_score": 48.0,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考3.73元"
+        ],
+        "limit_up_score": 51,
+        "limit_up_reasons": [
+          "低价3.73元",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 41.0
+      },
+      {
+        "code": "000607",
+        "name": "华媒控股",
+        "price": 3.67,
+        "pct_change": -1.6086,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.7元（低价）；今日-1.6%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "hold_buy",
+          "action": "持有/可逢低买入",
+          "confidence": 21,
+          "buy_score": 31,
+          "sell_score": 10,
+          "net_score": 21,
+          "buy_signals": [
+            "强势上升",
+            "均线多头排列"
+          ],
+          "sell_signals": [
+            "OBV顶背离"
+          ],
+          "price": 3.67,
+          "market_adjustment": 0,
+          "buy_price": 3.67,
+          "buy_price_note": "现价附近",
+          "sell_price": 3.78,
+          "sell_price_note": "反弹3.0%",
+          "stop_loss": 3.41,
+          "target_price": 4.02,
+          "risk_reward_ratio": 1.35,
+          "atr": 0.11,
+          "support_1": 3.66,
+          "support_2": 3.41,
+          "resistance_1": 3.84,
+          "resistance_2": 4.02
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 46.5,
+        "special_reasons": [
+          "综合评分85",
+          "买入参考3.67元"
+        ],
+        "limit_up_score": 36,
+        "limit_up_reasons": [
+          "低价3.67元",
+          "技术信号: 持有/可逢低买入",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 29.0
+      },
+      {
+        "code": "000620",
+        "name": "盈新发展",
+        "price": 3.45,
+        "pct_change": 2.6786,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.5元（低价）；今日+2.7%（走势稳健）；均线多头排列"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 43,
+          "buy_score": 43,
+          "sell_score": 0,
+          "net_score": 43,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列",
+            "短期动量强劲(+9.5%)"
+          ],
+          "sell_signals": [],
+          "price": 3.45,
+          "market_adjustment": 0,
+          "buy_price": 3.06,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 3.68,
+          "sell_price_note": "反弹6.7%",
+          "stop_loss": 2.95,
+          "target_price": 4.1,
+          "risk_reward_ratio": 9.07,
+          "atr": 0.25,
+          "support_1": 3.06,
+          "support_2": 3.04,
+          "resistance_1": 3.96,
+          "resistance_2": 4.1
+        },
+        "strength_score": 20,
+        "strength_reasons": [
+          "近5日有涨停"
+        ],
+        "special_score": 40.5,
+        "special_reasons": [
+          "近5日有涨停",
+          "综合评分85",
+          "买入参考3.06元"
+        ],
+        "limit_up_score": 58,
+        "limit_up_reasons": [
+          "低价3.45元",
+          "近5日有涨停",
+          "均线多头排列",
+          "技术信号: 建议买入",
+          "综合评分85.0"
         ],
         "limit_up_probability": 46.0
       },
       {
+        "code": "000001",
+        "name": "平安银行",
+        "price": 11.59,
+        "pct_change": -1.1935,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
+        ],
+        "total_score": 83,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 83.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 29,
+          "buy_score": 37,
+          "sell_score": 8,
+          "net_score": 29,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [
+            "RSI6超买(77)"
+          ],
+          "price": 11.59,
+          "market_adjustment": 0,
+          "buy_price": 11.59,
+          "buy_price_note": "现价附近",
+          "sell_price": 11.59,
+          "sell_price_note": "现价附近",
+          "stop_loss": 10.97,
+          "target_price": 12.23,
+          "risk_reward_ratio": 1.03,
+          "atr": 0.17,
+          "support_1": 11.36,
+          "support_2": 10.97,
+          "resistance_1": 11.75,
+          "resistance_2": 12.23
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 45.9,
+        "special_reasons": [
+          "综合评分83",
+          "买入参考11.59元"
+        ],
+        "limit_up_score": 35,
+        "limit_up_reasons": [
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入"
+        ],
+        "limit_up_probability": 28.0
+      },
+      {
+        "code": "000060",
+        "name": "中金岭南",
+        "price": 6.84,
+        "pct_change": 1.7857,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
+        ],
+        "total_score": 83,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 83.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 25,
+          "buy_score": 37,
+          "sell_score": 12,
+          "net_score": 25,
+          "buy_signals": [
+            "上升趋势",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [
+            "RSI6超买(82)"
+          ],
+          "price": 6.84,
+          "market_adjustment": 0,
+          "buy_price": 6.62,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 6.84,
+          "sell_price_note": "现价附近",
+          "stop_loss": 5.88,
+          "target_price": 8.54,
+          "risk_reward_ratio": 2.59,
+          "atr": 0.23,
+          "support_1": 6.62,
+          "support_2": 5.88,
+          "resistance_1": 6.91,
+          "resistance_2": 8.54
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 41.9,
+        "special_reasons": [
+          "综合评分83",
+          "买入参考6.62元"
+        ],
+        "limit_up_score": 45,
+        "limit_up_reasons": [
+          "中低价6.84元",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入"
+        ],
+        "limit_up_probability": 36.0
+      },
+      {
         "code": "000430",
         "name": "张家界",
-        "price": 6.61,
-        "pct_change": -1.0479,
+        "price": 6.89,
+        "pct_change": 0.0,
         "strategies": [
           "technical_pattern"
         ],
@@ -1743,15 +2848,15 @@
             "RSI6严重超买(96)",
             "Williams超买"
           ],
-          "price": 6.61,
+          "price": 6.89,
           "market_adjustment": 0,
-          "buy_price": 6.61,
-          "buy_price_note": "现价附近",
-          "sell_price": 6.9,
-          "sell_price_note": "反弹4.3%",
+          "buy_price": 6.62,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 6.89,
+          "sell_price_note": "现价附近",
           "stop_loss": 5.71,
           "target_price": 8.52,
-          "risk_reward_ratio": 2.13,
+          "risk_reward_ratio": 2.08,
           "atr": 0.19,
           "support_1": 6.62,
           "support_2": 5.71,
@@ -1760,14 +2865,14 @@
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 45.9,
+        "special_score": 41.9,
         "special_reasons": [
           "综合评分83",
-          "买入参考6.61元"
+          "买入参考6.62元"
         ],
         "limit_up_score": 45,
         "limit_up_reasons": [
-          "中低价6.61元",
+          "中低价6.89元",
           "逼近20日高点（突破在即）",
           "均线多头排列",
           "技术信号: 持有/可逢低买入"
@@ -1777,8 +2882,8 @@
       {
         "code": "000530",
         "name": "冰山冷热",
-        "price": 5.06,
-        "pct_change": 2.0161,
+        "price": 5.14,
+        "pct_change": 0.0,
         "strategies": [
           "technical_pattern"
         ],
@@ -1804,15 +2909,15 @@
           "sell_signals": [
             "RSI6严重超买(92)"
           ],
-          "price": 5.06,
+          "price": 5.14,
           "market_adjustment": 0,
-          "buy_price": 5.06,
-          "buy_price_note": "现价附近",
-          "sell_price": 5.18,
-          "sell_price_note": "反弹2.4%",
+          "buy_price": 5.0,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 5.14,
+          "sell_price_note": "现价附近",
           "stop_loss": 4.47,
           "target_price": 6.5,
-          "risk_reward_ratio": 2.45,
+          "risk_reward_ratio": 2.83,
           "atr": 0.14,
           "support_1": 5.0,
           "support_2": 4.47,
@@ -1823,14 +2928,14 @@
         "strength_reasons": [
           "近3日温和上涨3%"
         ],
-        "special_score": 47.4,
+        "special_score": 43.4,
         "special_reasons": [
           "综合评分83",
-          "买入参考5.06元"
+          "买入参考5.0元"
         ],
         "limit_up_score": 45,
         "limit_up_reasons": [
-          "中低价5.06元",
+          "中低价5.14元",
           "逼近20日高点（突破在即）",
           "均线多头排列",
           "技术信号: 持有/可逢低买入"
@@ -1840,8 +2945,8 @@
       {
         "code": "000532",
         "name": "华金资本",
-        "price": 11.25,
-        "pct_change": 3.8781,
+        "price": 11.36,
+        "pct_change": -0.8726,
         "strategies": [
           "technical_pattern"
         ],
@@ -1868,15 +2973,15 @@
             "RSI6超买(83)",
             "Williams超买"
           ],
-          "price": 11.25,
+          "price": 11.36,
           "market_adjustment": 0,
           "buy_price": 10.99,
           "buy_price_note": "已跌破支撑",
-          "sell_price": 11.25,
+          "sell_price": 11.36,
           "sell_price_note": "现价附近",
-          "stop_loss": 10.61,
+          "stop_loss": 10.66,
           "target_price": 13.4,
-          "risk_reward_ratio": 6.44,
+          "risk_reward_ratio": 7.33,
           "atr": 0.32,
           "support_1": 10.99,
           "support_2": 10.96,
@@ -1901,13 +3006,13 @@
       {
         "code": "000166",
         "name": "申万宏源",
-        "price": 4.55,
-        "pct_change": 0.4415,
+        "price": 4.57,
+        "pct_change": 0.2193,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价4.5元（低价）；今日+0.4%（走势稳健）；短期均线向上；量能温和放大（量比1.3）"
+          "[low_price] 股价4.6元（低价）；今日+0.2%（走势稳健）；短期均线向上；量能温和放大（量比1.3）"
         ],
         "total_score": 82,
         "strategy_count": 1,
@@ -1928,15 +3033,15 @@
             "RSI6严重超买(90)",
             "Williams超买"
           ],
-          "price": 4.55,
+          "price": 4.57,
           "market_adjustment": 0,
-          "buy_price": 4.55,
+          "buy_price": 4.57,
           "buy_price_note": "现价附近",
           "sell_price": 4.71,
-          "sell_price_note": "反弹3.5%",
+          "sell_price_note": "反弹3.1%",
           "stop_loss": 4.41,
           "target_price": 4.82,
-          "risk_reward_ratio": 1.94,
+          "risk_reward_ratio": 1.57,
           "atr": 0.06,
           "support_1": 4.55,
           "support_2": 4.54,
@@ -1950,11 +3055,11 @@
         "special_score": 48.6,
         "special_reasons": [
           "综合评分82",
-          "买入参考4.55元"
+          "买入参考4.57元"
         ],
         "limit_up_score": 28,
         "limit_up_reasons": [
-          "低价4.55元",
+          "低价4.57元",
           "均线多头排列"
         ],
         "limit_up_probability": 22.0
@@ -1962,13 +3067,13 @@
       {
         "code": "000420",
         "name": "吉林化纤",
-        "price": 3.81,
-        "pct_change": 1.061,
+        "price": 3.68,
+        "pct_change": -2.1277,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.8元（低价）；今日+1.1%（走势稳健）；量能放大（量比1.6）"
+          "[low_price] 股价3.7元（低价）；今日-2.1%（走势稳健）；量能放大（量比1.6）"
         ],
         "total_score": 81,
         "strategy_count": 1,
@@ -1977,10 +3082,10 @@
         "trading_signal": {
           "signal": "sell",
           "action": "建议卖出",
-          "confidence": 49,
-          "buy_score": 4,
+          "confidence": 53,
+          "buy_score": 0,
           "sell_score": 53,
-          "net_score": -49,
+          "net_score": -53,
           "buy_signals": [],
           "sell_signals": [
             "下降趋势",
@@ -1988,15 +3093,15 @@
             "放量下跌(量比1.6)",
             "OBV顶背离"
           ],
-          "price": 3.81,
+          "price": 3.68,
           "market_adjustment": 0,
-          "buy_price": 3.61,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 3.81,
+          "buy_price": 3.68,
+          "buy_price_note": "现价附近",
+          "sell_price": 3.68,
           "sell_price_note": "现价附近",
           "stop_loss": 3.25,
           "target_price": 3.9,
-          "risk_reward_ratio": 0.82,
+          "risk_reward_ratio": 0.52,
           "atr": 0.09,
           "support_1": 3.49,
           "support_2": 3.25,
@@ -2007,14 +3112,14 @@
         "strength_reasons": [
           "成交量放大2.0倍"
         ],
-        "special_score": 41.8,
+        "special_score": 49.8,
         "special_reasons": [
           "综合评分81",
-          "买入参考3.61元"
+          "买入参考3.68元"
         ],
         "limit_up_score": 30,
         "limit_up_reasons": [
-          "低价3.81元",
+          "低价3.68元",
           "成交量放大2.0倍"
         ],
         "limit_up_probability": 24.0
@@ -2022,13 +3127,13 @@
       {
         "code": "000517",
         "name": "荣安地产",
-        "price": 2.29,
-        "pct_change": 2.2321,
+        "price": 2.28,
+        "pct_change": -0.4367,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.3元（超低价）；今日+2.2%（走势稳健）"
+          "[low_price] 股价2.3元（超低价）；今日-0.4%（走势稳健）"
         ],
         "total_score": 80,
         "strategy_count": 1,
@@ -2043,12 +3148,12 @@
           "net_score": 9,
           "buy_signals": [],
           "sell_signals": [],
-          "price": 2.29,
+          "price": 2.28,
           "market_adjustment": 0,
           "buy_price": 2.23,
           "buy_price_note": "已跌破支撑",
           "sell_price": 2.48,
-          "sell_price_note": "反弹8.3%",
+          "sell_price_note": "反弹8.8%",
           "stop_loss": 1.94,
           "target_price": 2.66,
           "risk_reward_ratio": 1.45,
@@ -2067,15 +3172,205 @@
         ],
         "limit_up_score": 25,
         "limit_up_reasons": [
-          "超低价2.29元（易涨停）"
+          "超低价2.28元（易涨停）"
         ],
         "limit_up_probability": 20.0
       },
       {
+        "code": "000545",
+        "name": "金浦钛业",
+        "price": 2.64,
+        "pct_change": 0.0,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.6元（超低价）；今日+0.0%（走势稳健）"
+        ],
+        "total_score": 80,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 80.0,
+        "trading_signal": {
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 3,
+          "buy_score": 23,
+          "sell_score": 20,
+          "net_score": 3,
+          "buy_signals": [
+            "MACD多头"
+          ],
+          "sell_signals": [
+            "RSI6严重超买(95)",
+            "Williams超买"
+          ],
+          "price": 2.64,
+          "market_adjustment": 0,
+          "buy_price": 2.55,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.64,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.46,
+          "target_price": 2.94,
+          "risk_reward_ratio": 4.52,
+          "atr": 0.09,
+          "support_1": 2.55,
+          "support_2": 2.52,
+          "resistance_1": 2.91,
+          "resistance_2": 2.94
+        },
+        "strength_score": 5,
+        "strength_reasons": [
+          "近3日温和上涨5%"
+        ],
+        "special_score": 42.5,
+        "special_reasons": [
+          "综合评分80",
+          "买入参考2.55元"
+        ],
+        "limit_up_score": 50,
+        "limit_up_reasons": [
+          "超低价2.64元（易涨停）",
+          "逼近20日高点（突破在即）",
+          "均线多头排列"
+        ],
+        "limit_up_probability": 40.0
+      },
+      {
+        "code": "000560",
+        "name": "我爱我家",
+        "price": 2.4,
+        "pct_change": 0.0,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价2.4元（超低价）；今日+0.0%（走势稳健）"
+        ],
+        "total_score": 80,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 80.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 51,
+          "buy_score": 51,
+          "sell_score": 0,
+          "net_score": 51,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列",
+            "短期动量强劲(+7.6%)"
+          ],
+          "sell_signals": [],
+          "price": 2.4,
+          "market_adjustment": 0,
+          "buy_price": 2.26,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.4,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.14,
+          "target_price": 2.75,
+          "risk_reward_ratio": 4.08,
+          "atr": 0.13,
+          "support_1": 2.26,
+          "support_2": 2.21,
+          "resistance_1": 2.7,
+          "resistance_2": 2.75
+        },
+        "strength_score": 35,
+        "strength_reasons": [
+          "近3日上涨11%",
+          "近5日有涨停"
+        ],
+        "special_score": 47.5,
+        "special_reasons": [
+          "近3日上涨11%",
+          "近5日有涨停",
+          "综合评分80",
+          "买入参考2.26元"
+        ],
+        "limit_up_score": 80,
+        "limit_up_reasons": [
+          "超低价2.4元（易涨停）",
+          "近3日上涨11%",
+          "近5日有涨停",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入"
+        ],
+        "limit_up_probability": 64.0
+      },
+      {
+        "code": "000564",
+        "name": "供销大集",
+        "price": 1.52,
+        "pct_change": 3.4014,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价1.5元（超低价）；今日+3.4%（走势稳健）"
+        ],
+        "total_score": 80,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 80.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 51,
+          "buy_score": 51,
+          "sell_score": 0,
+          "net_score": 51,
+          "buy_signals": [
+            "MACD金叉",
+            "KDJ金叉",
+            "短期动量强劲(+6.3%)"
+          ],
+          "sell_signals": [],
+          "price": 1.52,
+          "market_adjustment": 0,
+          "buy_price": 1.45,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 1.52,
+          "sell_price_note": "现价附近",
+          "stop_loss": 1.38,
+          "target_price": 1.71,
+          "risk_reward_ratio": 3.44,
+          "atr": 0.07,
+          "support_1": 1.45,
+          "support_2": 1.42,
+          "resistance_1": 1.69,
+          "resistance_2": 1.71
+        },
+        "strength_score": 15,
+        "strength_reasons": [
+          "近3日温和上涨7%",
+          "连续3日上涨"
+        ],
+        "special_score": 45.5,
+        "special_reasons": [
+          "综合评分80",
+          "买入参考1.45元"
+        ],
+        "limit_up_score": 62,
+        "limit_up_reasons": [
+          "超低价1.52元（易涨停）",
+          "近3日温和上涨7%",
+          "逼近20日高点（突破在即）",
+          "技术信号: 建议买入"
+        ],
+        "limit_up_probability": 50.0
+      },
+      {
         "code": "000506",
         "name": "招金黄金",
-        "price": 17.75,
-        "pct_change": 0.6236,
+        "price": 22.08,
+        "pct_change": 9.2528,
         "strategies": [
           "technical_pattern"
         ],
@@ -2089,30 +3384,29 @@
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
-          "confidence": 62,
-          "buy_score": 67,
+          "confidence": 52,
+          "buy_score": 57,
           "sell_score": 5,
-          "net_score": 62,
+          "net_score": 52,
           "buy_signals": [
             "强势上升",
             "MACD多头",
             "KDJ金叉",
             "均线多头排列",
-            "OBV底背离",
             "短期动量强劲(+6.3%)"
           ],
           "sell_signals": [
             "Williams超买"
           ],
-          "price": 17.75,
+          "price": 22.08,
           "market_adjustment": 0,
           "buy_price": 18.37,
-          "buy_price_note": "回调3.5%",
+          "buy_price_note": "已跌破支撑",
           "sell_price": 22.55,
-          "sell_price_note": "反弹27.0%",
-          "stop_loss": 14.17,
+          "sell_price_note": "反弹2.1%",
+          "stop_loss": 14.85,
           "target_price": 26.15,
-          "risk_reward_ratio": 1.85,
+          "risk_reward_ratio": 2.21,
           "atr": 1.79,
           "support_1": 18.37,
           "support_2": 14.85,
@@ -2121,7 +3415,7 @@
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 44.7,
+        "special_score": 32.7,
         "special_reasons": [
           "综合评分79",
           "买入参考18.37元"
@@ -2135,73 +3429,134 @@
         "limit_up_probability": 28.0
       },
       {
-        "code": "000501",
-        "name": "武商集团",
-        "price": 7.24,
-        "pct_change": 1.9718,
+        "code": "000036",
+        "name": "华联控股",
+        "price": 4.13,
+        "pct_change": 1.4742,
         "strategies": [
-          "technical_pattern"
+          "low_price"
         ],
         "reasons": [
-          "[technical_pattern] 技术形态：短期均线向上、MACD金叉、平台突破"
+          "[low_price] 股价4.1元（低价）；今日+1.5%（走势稳健）；短期均线向上"
         ],
         "total_score": 78,
         "strategy_count": 1,
         "resonance": false,
         "avg_score": 78.0,
         "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 25,
-          "buy_score": 38,
-          "sell_score": 13,
-          "net_score": 25,
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 11,
+          "buy_score": 8,
+          "sell_score": 19,
+          "net_score": -11,
           "buy_signals": [
-            "MACD金叉",
             "MA5上穿MA10"
           ],
           "sell_signals": [
-            "RSI6超买(77)",
-            "Williams超买"
+            "RSI6严重超买(87)"
           ],
-          "price": 7.24,
+          "price": 4.13,
           "market_adjustment": 0,
-          "buy_price": 7.24,
+          "buy_price": 4.13,
           "buy_price_note": "现价附近",
-          "sell_price": 7.24,
-          "sell_price_note": "现价附近",
-          "stop_loss": 6.9,
-          "target_price": 7.78,
-          "risk_reward_ratio": 1.59,
-          "atr": 0.17,
-          "support_1": 7.19,
-          "support_2": 7.06,
-          "resistance_1": 7.57,
-          "resistance_2": 7.78
+          "sell_price": 4.34,
+          "sell_price_note": "反弹5.0%",
+          "stop_loss": 3.73,
+          "target_price": 5.04,
+          "risk_reward_ratio": 2.27,
+          "atr": 0.15,
+          "support_1": 4.11,
+          "support_2": 3.73,
+          "resistance_1": 4.38,
+          "resistance_2": 5.04
         },
-        "strength_score": 5,
+        "strength_score": 15,
         "strength_reasons": [
-          "近3日温和上涨4%"
+          "近3日温和上涨3%",
+          "连续3日上涨"
         ],
-        "special_score": 45.9,
+        "special_score": 48.9,
         "special_reasons": [
           "综合评分78",
-          "买入参考7.24元"
+          "买入参考4.13元"
         ],
-        "limit_up_score": 45,
+        "limit_up_score": 40,
         "limit_up_reasons": [
-          "中低价7.24元",
-          "逼近20日高点（突破在即）",
+          "低价4.13元",
+          "近3日温和上涨3%",
+          "均线多头排列"
+        ],
+        "limit_up_probability": 32.0
+      },
+      {
+        "code": "000020",
+        "name": "深华发A",
+        "price": 13.14,
+        "pct_change": 3.3832,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、KDJ金叉"
+        ],
+        "total_score": 74,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 74.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 61,
+          "buy_score": 61,
+          "sell_score": 0,
+          "net_score": 61,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "KDJ金叉",
+            "均线多头排列",
+            "短期动量强劲(+11.9%)"
+          ],
+          "sell_signals": [],
+          "price": 13.14,
+          "market_adjustment": 0,
+          "buy_price": 11.68,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 13.49,
+          "sell_price_note": "反弹2.7%",
+          "stop_loss": 11.18,
+          "target_price": 14.87,
+          "risk_reward_ratio": 6.38,
+          "atr": 0.73,
+          "support_1": 11.68,
+          "support_2": 11.18,
+          "resistance_1": 13.74,
+          "resistance_2": 14.87
+        },
+        "strength_score": 15,
+        "strength_reasons": [
+          "近3日温和上涨7%",
+          "连续3日上涨"
+        ],
+        "special_score": 35.7,
+        "special_reasons": [
+          "综合评分74",
+          "买入参考11.68元"
+        ],
+        "limit_up_score": 32,
+        "limit_up_reasons": [
+          "近3日温和上涨7%",
           "均线多头排列",
           "技术信号: 建议买入"
         ],
-        "limit_up_probability": 36.0
+        "limit_up_probability": 26.0
       },
       {
-        "code": "000301",
-        "name": "东方盛虹",
-        "price": 12.66,
-        "pct_change": 0.3965,
+        "code": "000039",
+        "name": "中集集团",
+        "price": 9.3,
+        "pct_change": 1.6393,
         "strategies": [
           "technical_pattern"
         ],
@@ -2227,41 +3582,41 @@
             "OBV底背离"
           ],
           "sell_signals": [],
-          "price": 12.66,
+          "price": 9.3,
           "market_adjustment": 0,
-          "buy_price": 12.93,
-          "buy_price_note": "回调2.2%",
-          "sell_price": 13.96,
-          "sell_price_note": "反弹10.3%",
-          "stop_loss": 11.58,
-          "target_price": 14.79,
-          "risk_reward_ratio": 1.37,
-          "atr": 0.54,
-          "support_1": 12.93,
-          "support_2": 12.27,
-          "resistance_1": 13.96,
-          "resistance_2": 14.79
+          "buy_price": 8.97,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 9.57,
+          "sell_price_note": "反弹2.9%",
+          "stop_loss": 8.48,
+          "target_price": 10.84,
+          "risk_reward_ratio": 3.8,
+          "atr": 0.41,
+          "support_1": 8.97,
+          "support_2": 8.65,
+          "resistance_1": 10.64,
+          "resistance_2": 10.84
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 43.2,
+        "special_score": 39.2,
         "special_reasons": [
           "综合评分74",
-          "买入参考12.93元"
+          "买入参考8.97元"
         ],
-        "limit_up_score": 35,
+        "limit_up_score": 30,
         "limit_up_reasons": [
-          "逼近20日高点（突破在即）",
+          "中低价9.3元",
           "均线多头排列",
           "技术信号: 建议买入"
         ],
-        "limit_up_probability": 28.0
+        "limit_up_probability": 24.0
       },
       {
         "code": "000523",
         "name": "红棉股份",
-        "price": 2.96,
-        "pct_change": 1.3699,
+        "price": 3.42,
+        "pct_change": 4.2683,
         "strategies": [
           "technical_pattern"
         ],
@@ -2275,30 +3630,29 @@
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
-          "confidence": 62,
-          "buy_score": 67,
+          "confidence": 56,
+          "buy_score": 61,
           "sell_score": 5,
-          "net_score": 62,
+          "net_score": 56,
           "buy_signals": [
             "强势上升",
             "MACD多头",
             "KDJ金叉",
             "均线多头排列",
-            "OBV底背离",
             "短期动量强劲(+7.5%)"
           ],
           "sell_signals": [
             "Williams超买"
           ],
-          "price": 2.96,
+          "price": 3.42,
           "market_adjustment": 0,
           "buy_price": 3.05,
-          "buy_price_note": "回调3.2%",
-          "sell_price": 3.44,
-          "sell_price_note": "反弹16.2%",
-          "stop_loss": 2.56,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 3.42,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.86,
           "target_price": 3.8,
-          "risk_reward_ratio": 1.51,
+          "risk_reward_ratio": 3.89,
           "atr": 0.2,
           "support_1": 3.05,
           "support_2": 2.86,
@@ -2310,27 +3664,27 @@
           "近3日上涨11%",
           "连续3日上涨"
         ],
-        "special_score": 50.7,
+        "special_score": 38.7,
         "special_reasons": [
           "近3日上涨11%",
           "连续3日上涨",
           "综合评分74",
           "买入参考3.05元"
         ],
-        "limit_up_score": 57,
+        "limit_up_score": 50,
         "limit_up_reasons": [
-          "超低价2.96元（易涨停）",
+          "低价3.42元",
           "近3日上涨11%",
           "均线多头排列",
           "技术信号: 建议买入"
         ],
-        "limit_up_probability": 46.0
+        "limit_up_probability": 40.0
       },
       {
         "code": "000025",
         "name": "特力A",
-        "price": 15.15,
-        "pct_change": 1.6779,
+        "price": 16.66,
+        "pct_change": 4.386,
         "strategies": [
           "technical_pattern"
         ],
@@ -2344,29 +3698,29 @@
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
-          "confidence": 49,
-          "buy_score": 57,
-          "sell_score": 8,
-          "net_score": 49,
+          "confidence": 33,
+          "buy_score": 51,
+          "sell_score": 18,
+          "net_score": 33,
           "buy_signals": [
             "强势上升",
             "MACD多头",
             "均线多头排列",
-            "OBV底背离",
             "短期动量强劲(+8.6%)"
           ],
           "sell_signals": [
-            "RSI6超买(78)"
+            "RSI6超买(78)",
+            "触及布林上轨(超买)"
           ],
-          "price": 15.15,
+          "price": 16.66,
           "market_adjustment": 0,
-          "buy_price": 15.15,
-          "buy_price_note": "现价附近",
+          "buy_price": 15.41,
+          "buy_price_note": "已跌破支撑",
           "sell_price": 16.28,
-          "sell_price_note": "反弹7.4%",
-          "stop_loss": 13.73,
+          "sell_price_note": "已突破压力",
+          "stop_loss": 14.7,
           "target_price": 18.49,
-          "risk_reward_ratio": 2.35,
+          "risk_reward_ratio": 4.32,
           "atr": 0.71,
           "support_1": 15.41,
           "support_2": 14.7,
@@ -2378,10 +3732,10 @@
           "近3日温和上涨6%",
           "成交量温和放大1.6倍"
         ],
-        "special_score": 46.2,
+        "special_score": 38.2,
         "special_reasons": [
           "综合评分71",
-          "买入参考15.15元"
+          "买入参考15.41元"
         ],
         "limit_up_score": 35,
         "limit_up_reasons": [
@@ -2394,8 +3748,8 @@
       {
         "code": "000007",
         "name": "全新好",
-        "price": 10.63,
-        "pct_change": -0.932,
+        "price": 12.75,
+        "pct_change": 1.1905,
         "strategies": [
           "technical_pattern"
         ],
@@ -2407,31 +3761,30 @@
         "resonance": false,
         "avg_score": 66.0,
         "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 27,
-          "buy_score": 47,
+          "signal": "hold_buy",
+          "action": "持有/可逢低买入",
+          "confidence": 17,
+          "buy_score": 37,
           "sell_score": 20,
-          "net_score": 27,
+          "net_score": 17,
           "buy_signals": [
             "强势上升",
             "MACD多头",
-            "均线多头排列",
-            "OBV底背离"
+            "均线多头排列"
           ],
           "sell_signals": [
             "RSI6严重超买(90)",
             "Williams超买"
           ],
-          "price": 10.63,
+          "price": 12.75,
           "market_adjustment": 0,
           "buy_price": 11.38,
-          "buy_price_note": "回调7.1%",
+          "buy_price_note": "已跌破支撑",
           "sell_price": 13.52,
-          "sell_price_note": "反弹27.2%",
-          "stop_loss": 9.33,
+          "sell_price_note": "反弹6.0%",
+          "stop_loss": 10.95,
           "target_price": 15.47,
-          "risk_reward_ratio": 1.99,
+          "risk_reward_ratio": 9.53,
           "atr": 0.65,
           "support_1": 11.38,
           "support_2": 10.95,
@@ -2440,7 +3793,7 @@
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 40.8,
+        "special_score": 28.8,
         "special_reasons": [
           "买入参考11.38元"
         ],
@@ -2448,15 +3801,15 @@
         "limit_up_reasons": [
           "逼近20日高点（突破在即）",
           "均线多头排列",
-          "技术信号: 建议买入"
+          "技术信号: 持有/可逢低买入"
         ],
         "limit_up_probability": 28.0
       },
       {
         "code": "000019",
         "name": "深粮控股",
-        "price": 6.33,
-        "pct_change": 5.8528,
+        "price": 7.17,
+        "pct_change": 4.6715,
         "strategies": [
           "technical_pattern"
         ],
@@ -2470,29 +3823,29 @@
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
-          "confidence": 52,
-          "buy_score": 57,
-          "sell_score": 5,
-          "net_score": 52,
+          "confidence": 36,
+          "buy_score": 51,
+          "sell_score": 15,
+          "net_score": 36,
           "buy_signals": [
             "强势上升",
             "MACD多头",
             "均线多头排列",
-            "OBV底背离",
             "短期动量强劲(+12.7%)"
           ],
           "sell_signals": [
+            "触及布林上轨(超买)",
             "Williams超买"
           ],
-          "price": 6.33,
+          "price": 7.17,
           "market_adjustment": 0,
-          "buy_price": 6.33,
-          "buy_price_note": "现价附近",
-          "sell_price": 7.1,
-          "sell_price_note": "反弹12.1%",
-          "stop_loss": 5.61,
+          "buy_price": 6.4,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 7.17,
+          "sell_price_note": "现价附近",
+          "stop_loss": 6.17,
           "target_price": 7.86,
-          "risk_reward_ratio": 2.12,
+          "risk_reward_ratio": 6.52,
           "atr": 0.36,
           "support_1": 6.4,
           "support_2": 6.17,
@@ -2504,15 +3857,15 @@
           "近3日上涨12%",
           "连续3日上涨"
         ],
-        "special_score": 48.3,
+        "special_score": 36.3,
         "special_reasons": [
           "近3日上涨12%",
           "连续3日上涨",
-          "买入参考6.33元"
+          "买入参考6.4元"
         ],
         "limit_up_score": 57,
         "limit_up_reasons": [
-          "中低价6.33元",
+          "中低价7.17元",
           "近3日上涨12%",
           "逼近20日高点（突破在即）",
           "均线多头排列",
@@ -2521,10 +3874,10 @@
         "limit_up_probability": 46.0
       },
       {
-        "code": "000159",
-        "name": "国际实业",
-        "price": 5.72,
-        "pct_change": 0.7042,
+        "code": "000045",
+        "name": "深纺织A",
+        "price": 10.75,
+        "pct_change": 0.5613,
         "strategies": [
           "technical_pattern"
         ],
@@ -2536,57 +3889,54 @@
         "resonance": false,
         "avg_score": 66.0,
         "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 31,
-          "buy_score": 51,
-          "sell_score": 20,
-          "net_score": 31,
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 8,
+          "buy_score": 41,
+          "sell_score": 33,
+          "net_score": 8,
           "buy_signals": [
             "强势上升",
             "MACD多头",
-            "均线多头排列",
-            "OBV底背离"
+            "均线多头排列"
           ],
           "sell_signals": [
-            "RSI6严重超买(95)",
-            "Williams超买"
+            "KDJ超买死叉(K=76)",
+            "RSI6严重超买(91)"
           ],
-          "price": 5.72,
+          "price": 10.75,
           "market_adjustment": 0,
-          "buy_price": 5.72,
-          "buy_price_note": "现价附近",
-          "sell_price": 6.1,
-          "sell_price_note": "反弹6.7%",
-          "stop_loss": 5.34,
-          "target_price": 7.11,
-          "risk_reward_ratio": 3.67,
-          "atr": 0.19,
-          "support_1": 5.78,
-          "support_2": 5.68,
-          "resistance_1": 7.07,
-          "resistance_2": 7.11
+          "buy_price": 10.16,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 10.75,
+          "sell_price_note": "现价附近",
+          "stop_loss": 9.85,
+          "target_price": 12.2,
+          "risk_reward_ratio": 6.69,
+          "atr": 0.27,
+          "support_1": 10.16,
+          "support_2": 10.05,
+          "resistance_1": 11.79,
+          "resistance_2": 12.2
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 40.8,
+        "special_score": 32.8,
         "special_reasons": [
-          "买入参考5.72元"
+          "买入参考10.16元"
         ],
-        "limit_up_score": 45,
+        "limit_up_score": 25,
         "limit_up_reasons": [
-          "中低价5.72元",
           "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入"
+          "均线多头排列"
         ],
-        "limit_up_probability": 36.0
+        "limit_up_probability": 20.0
       },
       {
-        "code": "000333",
-        "name": "美的集团",
-        "price": 82.61,
-        "pct_change": -0.5058,
+        "code": "000061",
+        "name": "农产品",
+        "price": 6.28,
+        "pct_change": 2.9508,
         "strategies": [
           "technical_pattern"
         ],
@@ -2598,51 +3948,61 @@
         "resonance": false,
         "avg_score": 66.0,
         "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 29,
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 6,
           "buy_score": 29,
-          "sell_score": 0,
-          "net_score": 29,
+          "sell_score": 23,
+          "net_score": 6,
           "buy_signals": [
             "MACD多头",
-            "OBV底背离"
+            "短期动量强劲(+10.4%)"
           ],
-          "sell_signals": [],
-          "price": 82.61,
+          "sell_signals": [
+            "RSI6超买(85)",
+            "触及布林上轨(超买)",
+            "Williams超买"
+          ],
+          "price": 6.28,
           "market_adjustment": 0,
-          "buy_price": 85.06,
-          "buy_price_note": "回调3.0%",
-          "sell_price": 87.62,
-          "sell_price_note": "反弹6.1%",
-          "stop_loss": 79.63,
-          "target_price": 92.58,
-          "risk_reward_ratio": 1.38,
-          "atr": 1.49,
-          "support_1": 85.06,
-          "support_2": 82.45,
-          "resistance_1": 89.5,
-          "resistance_2": 92.58
+          "buy_price": 5.91,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 6.28,
+          "sell_price_note": "现价附近",
+          "stop_loss": 5.73,
+          "target_price": 6.71,
+          "risk_reward_ratio": 4.52,
+          "atr": 0.22,
+          "support_1": 5.91,
+          "support_2": 5.81,
+          "resistance_1": 6.37,
+          "resistance_2": 6.71
         },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 40.8,
+        "strength_score": 25,
+        "strength_reasons": [
+          "近3日上涨10%",
+          "连续3日上涨"
+        ],
+        "special_score": 40.3,
         "special_reasons": [
-          "买入参考85.06元"
+          "近3日上涨10%",
+          "连续3日上涨",
+          "买入参考5.91元"
         ],
-        "limit_up_score": 35,
+        "limit_up_score": 47,
         "limit_up_reasons": [
+          "中低价6.28元",
+          "近3日上涨10%",
           "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入"
+          "均线多头排列"
         ],
-        "limit_up_probability": 28.0
+        "limit_up_probability": 38.0
       },
       {
-        "code": "000426",
-        "name": "兴业银锡",
-        "price": 39.48,
-        "pct_change": 4.1964,
+        "code": "000505",
+        "name": "京粮控股",
+        "price": 7.21,
+        "pct_change": 2.7066,
         "strategies": [
           "technical_pattern"
         ],
@@ -2664,41 +4024,49 @@
             "强势上升",
             "MACD多头",
             "均线多头排列",
-            "OBV底背离"
+            "短期动量强劲(+7.0%)"
           ],
           "sell_signals": [],
-          "price": 39.48,
+          "price": 7.21,
           "market_adjustment": 0,
-          "buy_price": 38.07,
+          "buy_price": 6.26,
           "buy_price_note": "已跌破支撑",
-          "sell_price": 43.05,
-          "sell_price_note": "反弹9.0%",
-          "stop_loss": 34.52,
-          "target_price": 47.06,
-          "risk_reward_ratio": 2.53,
-          "atr": 2.48,
-          "support_1": 38.07,
-          "support_2": 35.62,
-          "resistance_1": 43.05,
-          "resistance_2": 47.06
+          "sell_price": 7.65,
+          "sell_price_note": "反弹6.1%",
+          "stop_loss": 5.67,
+          "target_price": 8.57,
+          "risk_reward_ratio": 3.89,
+          "atr": 0.51,
+          "support_1": 6.26,
+          "support_2": 5.67,
+          "resistance_1": 8.1,
+          "resistance_2": 8.57
         },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 36.8,
-        "special_reasons": [
-          "买入参考38.07元"
+        "strength_score": 25,
+        "strength_reasons": [
+          "近3日上涨8%",
+          "连续3日上涨"
         ],
-        "limit_up_score": 10,
+        "special_score": 36.3,
+        "special_reasons": [
+          "近3日上涨8%",
+          "连续3日上涨",
+          "买入参考6.26元"
+        ],
+        "limit_up_score": 42,
         "limit_up_reasons": [
+          "中低价7.21元",
+          "近3日上涨8%",
+          "均线多头排列",
           "技术信号: 建议买入"
         ],
-        "limit_up_probability": 8.0
+        "limit_up_probability": 34.0
       },
       {
         "code": "000509",
         "name": "华塑控股",
-        "price": 3.36,
-        "pct_change": 2.1277,
+        "price": 3.52,
+        "pct_change": 2.3256,
         "strategies": [
           "technical_pattern"
         ],
@@ -2726,15 +4094,15 @@
             "RSI6严重超买(94)",
             "Williams超买"
           ],
-          "price": 3.36,
+          "price": 3.52,
           "market_adjustment": 0,
-          "buy_price": 3.45,
-          "buy_price_note": "回调2.8%",
-          "sell_price": 3.58,
-          "sell_price_note": "反弹6.5%",
-          "stop_loss": 3.1,
+          "buy_price": 3.52,
+          "buy_price_note": "现价附近",
+          "sell_price": 3.52,
+          "sell_price_note": "现价附近",
+          "stop_loss": 3.26,
           "target_price": 5.2,
-          "risk_reward_ratio": 4.92,
+          "risk_reward_ratio": 6.46,
           "atr": 0.13,
           "support_1": 3.45,
           "support_2": 3.28,
@@ -2747,11 +4115,11 @@
         ],
         "special_score": 42.3,
         "special_reasons": [
-          "买入参考3.45元"
+          "买入参考3.52元"
         ],
         "limit_up_score": 53,
         "limit_up_reasons": [
-          "低价3.36元",
+          "低价3.52元",
           "逼近20日高点（突破在即）",
           "均线多头排列",
           "技术信号: 建议买入"
@@ -2759,189 +4127,10 @@
         "limit_up_probability": 42.0
       },
       {
-        "code": "000510",
-        "name": "新金路",
-        "price": 17.58,
-        "pct_change": 3.351,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、KDJ金叉"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0,
-        "trading_signal": {
-          "signal": "hold",
-          "action": "持有观望",
-          "confidence": 11,
-          "buy_score": 45,
-          "sell_score": 34,
-          "net_score": 11,
-          "buy_signals": [
-            "上升趋势",
-            "KDJ金叉",
-            "均线多头排列",
-            "MA5上穿MA10"
-          ],
-          "sell_signals": [
-            "RSI6严重超买(88)",
-            "OBV顶背离",
-            "Williams超买"
-          ],
-          "price": 17.58,
-          "market_adjustment": 0,
-          "buy_price": 16.22,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 18.31,
-          "sell_price_note": "反弹4.1%",
-          "stop_loss": 12.7,
-          "target_price": 25.94,
-          "risk_reward_ratio": 2.76,
-          "atr": 1.1,
-          "support_1": 16.22,
-          "support_2": 12.7,
-          "resistance_1": 18.31,
-          "resistance_2": 25.94
-        },
-        "strength_score": 5,
-        "strength_reasons": [
-          "近3日温和上涨5%"
-        ],
-        "special_score": 34.3,
-        "special_reasons": [
-          "买入参考16.22元"
-        ],
-        "limit_up_score": 25,
-        "limit_up_reasons": [
-          "逼近20日高点（突破在即）",
-          "均线多头排列"
-        ],
-        "limit_up_probability": 20.0
-      },
-      {
-        "code": "000524",
-        "name": "岭南控股",
-        "price": 9.44,
-        "pct_change": 1.0707,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头"
-        ],
-        "total_score": 66,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 66.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 29,
-          "buy_score": 47,
-          "sell_score": 18,
-          "net_score": 29,
-          "buy_signals": [
-            "强势上升",
-            "MACD多头",
-            "均线多头排列",
-            "OBV底背离"
-          ],
-          "sell_signals": [
-            "KDJ超买死叉(K=78)"
-          ],
-          "price": 9.44,
-          "market_adjustment": 0,
-          "buy_price": 9.44,
-          "buy_price_note": "现价附近",
-          "sell_price": 10.1,
-          "sell_price_note": "反弹7.0%",
-          "stop_loss": 8.96,
-          "target_price": 11.13,
-          "risk_reward_ratio": 3.53,
-          "atr": 0.24,
-          "support_1": 9.56,
-          "support_2": 9.17,
-          "resistance_1": 10.84,
-          "resistance_2": 11.13
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 40.8,
-        "special_reasons": [
-          "买入参考9.44元"
-        ],
-        "limit_up_score": 20,
-        "limit_up_reasons": [
-          "中低价9.44元",
-          "技术信号: 建议买入"
-        ],
-        "limit_up_probability": 16.0
-      },
-      {
-        "code": "000006",
-        "name": "深振业A",
-        "price": 7.33,
-        "pct_change": -2.5266,
-        "strategies": [
-          "technical_pattern"
-        ],
-        "reasons": [
-          "[technical_pattern] 技术形态：量能放大（量比1.4）、MACD多头、KDJ金叉"
-        ],
-        "total_score": 61,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 61.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 29,
-          "buy_score": 29,
-          "sell_score": 0,
-          "net_score": 29,
-          "buy_signals": [
-            "MACD多头",
-            "KDJ金叉"
-          ],
-          "sell_signals": [],
-          "price": 7.33,
-          "market_adjustment": 0,
-          "buy_price": 7.1,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 7.64,
-          "sell_price_note": "反弹4.2%",
-          "stop_loss": 6.63,
-          "target_price": 8.83,
-          "risk_reward_ratio": 3.72,
-          "atr": 0.35,
-          "support_1": 7.1,
-          "support_2": 7.01,
-          "resistance_1": 8.69,
-          "resistance_2": 8.83
-        },
-        "strength_score": 5,
-        "strength_reasons": [
-          "近3日温和上涨7%"
-        ],
-        "special_score": 36.8,
-        "special_reasons": [
-          "买入参考7.1元"
-        ],
-        "limit_up_score": 20,
-        "limit_up_reasons": [
-          "中低价7.33元",
-          "技术信号: 建议买入"
-        ],
-        "limit_up_probability": 16.0
-      },
-      {
         "code": "000417",
         "name": "合百集团",
-        "price": 5.97,
-        "pct_change": 2.226,
+        "price": 5.73,
+        "pct_change": 1.0582,
         "strategies": [
           "fundamental"
         ],
@@ -2966,12 +4155,12 @@
             "下降趋势",
             "均线空头排列"
           ],
-          "price": 5.97,
+          "price": 5.73,
           "market_adjustment": 0,
           "buy_price": 5.46,
           "buy_price_note": "已跌破支撑",
-          "sell_price": 5.83,
-          "sell_price_note": "已突破压力",
+          "sell_price": 5.73,
+          "sell_price_note": "现价附近",
           "stop_loss": 4.13,
           "target_price": 6.75,
           "risk_reward_ratio": 0.97,
@@ -2985,67 +4174,66 @@
         "strength_reasons": [
           "近3日温和上涨4%"
         ],
-        "special_score": 32.5,
+        "special_score": 36.5,
         "special_reasons": [
           "买入参考5.46元"
         ],
         "limit_up_score": 10,
         "limit_up_reasons": [
-          "中低价5.97元"
+          "中低价5.73元"
         ],
         "limit_up_probability": 8.0
       },
       {
-        "code": "000423",
-        "name": "东阿阿胶",
-        "price": 51.5,
-        "pct_change": -0.8089,
+        "code": "000422",
+        "name": "湖北宜化",
+        "price": 12.57,
+        "pct_change": 1.1263,
         "strategies": [
-          "capital_flow"
+          "fundamental"
         ],
         "reasons": [
-          "[capital_flow] 主力小幅净流入"
+          "[fundamental] ROE=21.2%（优秀）"
         ],
-        "total_score": 43,
+        "total_score": 60,
         "strategy_count": 1,
         "resonance": false,
-        "avg_score": 43.0,
+        "avg_score": 60.0,
         "trading_signal": {
           "signal": "sell",
           "action": "建议卖出",
-          "confidence": 39,
-          "buy_score": 8,
-          "sell_score": 47,
-          "net_score": -39,
-          "buy_signals": [
-            "RSI6超卖(22)"
-          ],
+          "confidence": 37,
+          "buy_score": 0,
+          "sell_score": 37,
+          "net_score": -37,
+          "buy_signals": [],
           "sell_signals": [
             "下降趋势",
             "MACD空头",
-            "均线空头排列",
-            "OBV顶背离"
+            "均线空头排列"
           ],
-          "price": 51.5,
+          "price": 12.57,
           "market_adjustment": 0,
-          "buy_price": 47.38,
+          "buy_price": 12.14,
           "buy_price_note": "已跌破支撑",
-          "sell_price": 49.73,
-          "sell_price_note": "已突破压力",
-          "stop_loss": 41.59,
-          "target_price": 52.04,
-          "risk_reward_ratio": 0.8,
-          "atr": 1.3,
-          "support_1": 42.88,
-          "support_2": 42.48,
-          "resistance_1": 49.73,
-          "resistance_2": 52.04
+          "sell_price": 12.89,
+          "sell_price_note": "反弹2.5%",
+          "stop_loss": 11.33,
+          "target_price": 13.23,
+          "risk_reward_ratio": 1.34,
+          "atr": 0.34,
+          "support_1": 12.14,
+          "support_2": 11.33,
+          "resistance_1": 12.89,
+          "resistance_2": 13.23
         },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 25.9,
+        "strength_score": 10,
+        "strength_reasons": [
+          "连续3日上涨"
+        ],
+        "special_score": 38.0,
         "special_reasons": [
-          "买入参考47.38元"
+          "买入参考12.14元"
         ],
         "limit_up_score": 0,
         "limit_up_reasons": [],
@@ -3056,14 +4244,14 @@
       {
         "code": "000008",
         "name": "神州高铁",
-        "price": 2.4,
-        "pct_change": 0.4184,
+        "price": 2.49,
+        "pct_change": -0.4,
         "strategies": [
           "low_price",
           "technical_pattern"
         ],
         "reasons": [
-          "[low_price] 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
+          "[low_price] 股价2.5元（超低价）；今日-0.4%（走势稳健）；均线多头排列",
           "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
         ],
         "total_score": 195,
@@ -3071,28 +4259,29 @@
         "resonance": false,
         "avg_score": 97.5,
         "trading_signal": {
-          "signal": "hold_buy",
-          "action": "持有/可逢低买入",
-          "confidence": 12,
+          "signal": "hold",
+          "action": "持有观望",
+          "confidence": 2,
           "buy_score": 20,
-          "sell_score": 8,
-          "net_score": 12,
+          "sell_score": 18,
+          "net_score": 2,
           "buy_signals": [
             "MACD多头",
             "缩量下跌(抛压减轻)"
           ],
           "sell_signals": [
-            "RSI6超买(82)"
+            "RSI6超买(82)",
+            "OBV顶背离"
           ],
-          "price": 2.4,
+          "price": 2.49,
           "market_adjustment": 0,
-          "buy_price": 2.4,
-          "buy_price_note": "现价附近",
-          "sell_price": 2.51,
-          "sell_price_note": "反弹4.6%",
-          "stop_loss": 2.28,
+          "buy_price": 2.44,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.49,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.36,
           "target_price": 2.86,
-          "risk_reward_ratio": 3.83,
+          "risk_reward_ratio": 5.8,
           "atr": 0.06,
           "support_1": 2.44,
           "support_2": 2.43,
@@ -3101,32 +4290,96 @@
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 84.5,
+        "special_score": 80.5,
         "special_reasons": [
           "综合评分195",
-          "买入参考2.4元"
+          "买入参考2.44元"
+        ],
+        "limit_up_score": 58,
+        "limit_up_reasons": [
+          "超低价2.49元（易涨停）",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "综合评分97.5"
+        ],
+        "limit_up_probability": 46.0
+      },
+      {
+        "code": "000552",
+        "name": "甘肃能化",
+        "price": 2.65,
+        "pct_change": 0.7605,
+        "strategies": [
+          "low_price",
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[low_price] 股价2.6元（超低价）；今日+0.8%（走势稳健）",
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
+        ],
+        "total_score": 183,
+        "strategy_count": 2,
+        "resonance": false,
+        "avg_score": 91.5,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 25,
+          "buy_score": 45,
+          "sell_score": 20,
+          "net_score": 25,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [
+            "RSI6严重超买(100)",
+            "Williams超买"
+          ],
+          "price": 2.65,
+          "market_adjustment": 0,
+          "buy_price": 2.58,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.65,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.5,
+          "target_price": 3.0,
+          "risk_reward_ratio": 5.5,
+          "atr": 0.06,
+          "support_1": 2.58,
+          "support_2": 2.53,
+          "resistance_1": 2.97,
+          "resistance_2": 3.0
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 76.9,
+        "special_reasons": [
+          "综合评分183",
+          "买入参考2.58元"
         ],
         "limit_up_score": 68,
         "limit_up_reasons": [
-          "超低价2.4元（易涨停）",
+          "超低价2.65元（易涨停）",
           "逼近20日高点（突破在即）",
           "均线多头排列",
-          "技术信号: 持有/可逢低买入",
-          "综合评分97.5"
+          "技术信号: 建议买入",
+          "综合评分91.5"
         ],
         "limit_up_probability": 54.0
       },
       {
         "code": "000069",
         "name": "华侨城A",
-        "price": 1.77,
-        "pct_change": 0.0,
+        "price": 1.79,
+        "pct_change": -0.5556,
         "strategies": [
           "low_price",
           "fundamental"
         ],
         "reasons": [
-          "[low_price] 股价1.8元（超低价）；今日+0.0%（走势稳健）；短期均线向上",
+          "[low_price] 股价1.8元（超低价）；今日-0.6%（走势稳健）；短期均线向上",
           "[fundamental] ROE=51.4%（优秀）"
         ],
         "total_score": 165,
@@ -3136,25 +4389,26 @@
         "trading_signal": {
           "signal": "hold",
           "action": "持有观望",
-          "confidence": 1,
+          "confidence": 9,
           "buy_score": 16,
-          "sell_score": 15,
-          "net_score": 1,
+          "sell_score": 25,
+          "net_score": -9,
           "buy_signals": [
             "MA5上穿MA10"
           ],
           "sell_signals": [
-            "偏弱震荡"
+            "偏弱震荡",
+            "OBV顶背离"
           ],
-          "price": 1.77,
+          "price": 1.79,
           "market_adjustment": 0,
-          "buy_price": 1.77,
-          "buy_price_note": "现价附近",
-          "sell_price": 1.77,
+          "buy_price": 1.75,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 1.79,
           "sell_price_note": "现价附近",
           "stop_loss": 1.58,
           "target_price": 1.99,
-          "risk_reward_ratio": 1.14,
+          "risk_reward_ratio": 1.37,
           "atr": 0.05,
           "support_1": 1.75,
           "support_2": 1.58,
@@ -3163,14 +4417,14 @@
         },
         "strength_score": 0,
         "strength_reasons": [],
-        "special_score": 75.5,
+        "special_score": 71.5,
         "special_reasons": [
           "综合评分165",
-          "买入参考1.77元"
+          "买入参考1.75元"
         ],
         "limit_up_score": 35,
         "limit_up_reasons": [
-          "超低价1.77元（易涨停）",
+          "超低价1.79元（易涨停）",
           "均线多头排列"
         ],
         "limit_up_probability": 28.0
@@ -3178,18 +4432,18 @@
       {
         "code": "000428",
         "name": "华天酒店",
-        "price": 4.27,
-        "pct_change": 0.4706,
+        "price": 4.61,
+        "pct_change": -2.9474,
         "strategies": [
-          "technical_pattern"
+          "low_price"
         ],
         "reasons": [
-          "[technical_pattern] 技术形态：均线多头排列、量能放大（量比2.3）、MACD金叉"
+          "[low_price] 股价4.6元（低价）；今日-2.9%（走势稳健）；均线多头排列；量能放大（量比2.3）"
         ],
-        "total_score": 83,
+        "total_score": 93,
         "strategy_count": 1,
         "resonance": false,
-        "avg_score": 83.0,
+        "avg_score": 93.0,
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
@@ -3210,15 +4464,15 @@
             "OBV顶背离",
             "Williams超买"
           ],
-          "price": 4.27,
+          "price": 4.61,
           "market_adjustment": 0,
-          "buy_price": 4.27,
-          "buy_price_note": "现价附近",
+          "buy_price": 4.21,
+          "buy_price_note": "已跌破支撑",
           "sell_price": 4.71,
-          "sell_price_note": "反弹10.4%",
+          "sell_price_note": "反弹2.2%",
           "stop_loss": 3.56,
           "target_price": 5.25,
-          "risk_reward_ratio": 1.38,
+          "risk_reward_ratio": 1.6,
           "atr": 0.32,
           "support_1": 4.21,
           "support_2": 3.56,
@@ -3231,197 +4485,124 @@
           "近5日有涨停",
           "成交量放大3.2倍"
         ],
-        "special_score": 63.9,
+        "special_score": 58.9,
         "special_reasons": [
           "近3日大涨17%",
           "近5日有涨停",
-          "综合评分83",
-          "买入参考4.27元"
+          "综合评分93",
+          "买入参考4.21元"
         ],
-        "limit_up_score": 58,
+        "limit_up_score": 66,
         "limit_up_reasons": [
-          "低价4.27元",
+          "低价4.61元",
           "近3日大涨17%",
           "近5日有涨停",
           "均线多头排列",
-          "技术信号: 建议买入"
+          "技术信号: 建议买入",
+          "综合评分93.0"
         ],
-        "limit_up_probability": 46.0
+        "limit_up_probability": 53.0
       },
       {
-        "code": "000422",
-        "name": "湖北宜化",
-        "price": 12.79,
-        "pct_change": 0.6294,
-        "strategies": [
-          "capital_flow",
-          "fundamental"
-        ],
-        "reasons": [
-          "[capital_flow] 主力小幅净流入；超大单净流入90万",
-          "[fundamental] ROE=21.2%（优秀）"
-        ],
-        "total_score": 133,
-        "strategy_count": 2,
-        "resonance": false,
-        "avg_score": 66.5,
-        "trading_signal": {
-          "signal": "sell",
-          "action": "建议卖出",
-          "confidence": 37,
-          "buy_score": 0,
-          "sell_score": 37,
-          "net_score": -37,
-          "buy_signals": [],
-          "sell_signals": [
-            "下降趋势",
-            "MACD空头",
-            "均线空头排列"
-          ],
-          "price": 12.79,
-          "market_adjustment": 0,
-          "buy_price": 12.14,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 12.79,
-          "sell_price_note": "现价附近",
-          "stop_loss": 11.33,
-          "target_price": 13.23,
-          "risk_reward_ratio": 1.34,
-          "atr": 0.34,
-          "support_1": 12.14,
-          "support_2": 11.33,
-          "resistance_1": 12.89,
-          "resistance_2": 13.23
-        },
-        "strength_score": 10,
-        "strength_reasons": [
-          "连续3日上涨"
-        ],
-        "special_score": 60.9,
-        "special_reasons": [
-          "综合评分133",
-          "买入参考12.14元"
-        ],
-        "limit_up_score": 0,
-        "limit_up_reasons": [],
-        "limit_up_probability": 0.0
-      },
-      {
-        "code": "000576",
-        "name": "甘化科工",
-        "price": 7.36,
-        "pct_change": 2.9371,
+        "code": "000420",
+        "name": "吉林化纤",
+        "price": 3.68,
+        "pct_change": -2.1277,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价7.4元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比2.9）"
+          "[low_price] 股价3.7元（低价）；今日-2.1%（走势稳健）；量能放大（量比1.6）"
         ],
-        "total_score": 85,
+        "total_score": 81,
         "strategy_count": 1,
         "resonance": false,
-        "avg_score": 85.0,
+        "avg_score": 81.0,
         "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 63,
-          "buy_score": 83,
-          "sell_score": 20,
-          "net_score": 63,
-          "buy_signals": [
-            "强势上升",
-            "MACD金叉",
-            "均线多头排列",
-            "MA5上穿MA10",
-            "放量上涨(量比2.9)",
-            "短期动量强劲(+12.2%)"
-          ],
+          "signal": "sell",
+          "action": "建议卖出",
+          "confidence": 53,
+          "buy_score": 0,
+          "sell_score": 53,
+          "net_score": -53,
+          "buy_signals": [],
           "sell_signals": [
-            "RSI6严重超买(98)",
-            "Williams超买"
+            "下降趋势",
+            "均线空头排列",
+            "放量下跌(量比1.6)",
+            "OBV顶背离"
           ],
-          "price": 7.36,
+          "price": 3.68,
           "market_adjustment": 0,
-          "buy_price": 7.2,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 7.69,
-          "sell_price_note": "反弹4.5%",
-          "stop_loss": 6.88,
-          "target_price": 8.79,
-          "risk_reward_ratio": 4.98,
-          "atr": 0.24,
-          "support_1": 7.2,
-          "support_2": 7.0,
-          "resistance_1": 8.14,
-          "resistance_2": 8.79
+          "buy_price": 3.68,
+          "buy_price_note": "现价附近",
+          "sell_price": 3.68,
+          "sell_price_note": "现价附近",
+          "stop_loss": 3.25,
+          "target_price": 3.9,
+          "risk_reward_ratio": 0.52,
+          "atr": 0.09,
+          "support_1": 3.49,
+          "support_2": 3.25,
+          "resistance_1": 3.75,
+          "resistance_2": 3.9
         },
-        "strength_score": 60,
+        "strength_score": 15,
         "strength_reasons": [
-          "近3日上涨13%",
-          "近5日有涨停",
-          "成交量放大5.3倍",
-          "连续3日上涨"
+          "成交量放大2.0倍"
         ],
-        "special_score": 60.5,
+        "special_score": 49.8,
         "special_reasons": [
-          "近3日上涨13%",
-          "近5日有涨停",
-          "综合评分85",
-          "买入参考7.2元"
+          "综合评分81",
+          "买入参考3.68元"
         ],
-        "limit_up_score": 73,
+        "limit_up_score": 30,
         "limit_up_reasons": [
-          "中低价7.36元",
-          "近3日上涨13%",
-          "近5日有涨停",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
+          "低价3.68元",
+          "成交量放大2.0倍"
         ],
-        "limit_up_probability": 58.0
+        "limit_up_probability": 24.0
       }
     ],
     "limit_up_picks": [
       {
         "code": "000560",
         "name": "我爱我家",
-        "price": 2.17,
-        "pct_change": 0.463,
+        "price": 2.4,
+        "pct_change": 0.0,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列"
+          "[low_price] 股价2.4元（超低价）；今日+0.0%（走势稳健）"
         ],
-        "total_score": 92,
+        "total_score": 80,
         "strategy_count": 1,
         "resonance": false,
-        "avg_score": 92.0,
+        "avg_score": 80.0,
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
-          "confidence": 57,
-          "buy_score": 57,
+          "confidence": 51,
+          "buy_score": 51,
           "sell_score": 0,
-          "net_score": 57,
+          "net_score": 51,
           "buy_signals": [
             "强势上升",
             "MACD多头",
             "均线多头排列",
-            "OBV底背离",
             "短期动量强劲(+7.6%)"
           ],
           "sell_signals": [],
-          "price": 2.17,
+          "price": 2.4,
           "market_adjustment": 0,
           "buy_price": 2.26,
-          "buy_price_note": "回调4.1%",
-          "sell_price": 2.43,
-          "sell_price_note": "反弹11.8%",
-          "stop_loss": 1.91,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.4,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.14,
           "target_price": 2.75,
-          "risk_reward_ratio": 1.4,
+          "risk_reward_ratio": 4.08,
           "atr": 0.13,
           "support_1": 2.26,
           "support_2": 2.21,
@@ -3433,67 +4614,205 @@
           "近3日上涨11%",
           "近5日有涨停"
         ],
-        "special_score": 59.1,
+        "special_score": 47.5,
         "special_reasons": [
           "近3日上涨11%",
           "近5日有涨停",
-          "综合评分92",
+          "综合评分80",
           "买入参考2.26元"
         ],
-        "limit_up_score": 88,
+        "limit_up_score": 80,
         "limit_up_reasons": [
-          "超低价2.17元（易涨停）",
+          "超低价2.4元（易涨停）",
           "近3日上涨11%",
           "近5日有涨停",
           "逼近20日高点（突破在即）",
           "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分92.0"
+          "技术信号: 建议买入"
         ],
-        "limit_up_probability": 70.0
+        "limit_up_probability": 64.0
       },
       {
-        "code": "000059",
-        "name": "华锦股份",
-        "price": 4.6,
-        "pct_change": 0.6565,
+        "code": "000552",
+        "name": "甘肃能化",
+        "price": 2.65,
+        "pct_change": 0.7605,
+        "strategies": [
+          "low_price",
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[low_price] 股价2.6元（超低价）；今日+0.8%（走势稳健）",
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
+        ],
+        "total_score": 183,
+        "strategy_count": 2,
+        "resonance": false,
+        "avg_score": 91.5,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 25,
+          "buy_score": 45,
+          "sell_score": 20,
+          "net_score": 25,
+          "buy_signals": [
+            "强势上升",
+            "MACD多头",
+            "均线多头排列"
+          ],
+          "sell_signals": [
+            "RSI6严重超买(100)",
+            "Williams超买"
+          ],
+          "price": 2.65,
+          "market_adjustment": 0,
+          "buy_price": 2.58,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 2.65,
+          "sell_price_note": "现价附近",
+          "stop_loss": 2.5,
+          "target_price": 3.0,
+          "risk_reward_ratio": 5.5,
+          "atr": 0.06,
+          "support_1": 2.58,
+          "support_2": 2.53,
+          "resistance_1": 2.97,
+          "resistance_2": 3.0
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "special_score": 76.9,
+        "special_reasons": [
+          "综合评分183",
+          "买入参考2.58元"
+        ],
+        "limit_up_score": 68,
+        "limit_up_reasons": [
+          "超低价2.65元（易涨停）",
+          "逼近20日高点（突破在即）",
+          "均线多头排列",
+          "技术信号: 建议买入",
+          "综合评分91.5"
+        ],
+        "limit_up_probability": 54.0
+      },
+      {
+        "code": "000428",
+        "name": "华天酒店",
+        "price": 4.61,
+        "pct_change": -2.9474,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价4.6元（低价）；今日+0.7%（走势稳健）；均线多头排列"
+          "[low_price] 股价4.6元（低价）；今日-2.9%（走势稳健）；均线多头排列；量能放大（量比2.3）"
         ],
-        "total_score": 85,
+        "total_score": 93,
         "strategy_count": 1,
         "resonance": false,
-        "avg_score": 85.0,
+        "avg_score": 93.0,
         "trading_signal": {
           "signal": "buy",
           "action": "建议买入",
-          "confidence": 62,
-          "buy_score": 67,
-          "sell_score": 5,
-          "net_score": 62,
+          "confidence": 36,
+          "buy_score": 71,
+          "sell_score": 35,
+          "net_score": 36,
+          "buy_signals": [
+            "强势上升",
+            "MACD金叉",
+            "均线多头排列",
+            "MA5上穿MA10",
+            "短期动量强劲(+15.8%)"
+          ],
+          "sell_signals": [
+            "RSI6超买(79)",
+            "放量下跌(量比2.3)",
+            "OBV顶背离",
+            "Williams超买"
+          ],
+          "price": 4.61,
+          "market_adjustment": 0,
+          "buy_price": 4.21,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 4.71,
+          "sell_price_note": "反弹2.2%",
+          "stop_loss": 3.56,
+          "target_price": 5.25,
+          "risk_reward_ratio": 1.6,
+          "atr": 0.32,
+          "support_1": 4.21,
+          "support_2": 3.56,
+          "resistance_1": 4.75,
+          "resistance_2": 5.25
+        },
+        "strength_score": 60,
+        "strength_reasons": [
+          "近3日大涨17%",
+          "近5日有涨停",
+          "成交量放大3.2倍"
+        ],
+        "special_score": 58.9,
+        "special_reasons": [
+          "近3日大涨17%",
+          "近5日有涨停",
+          "综合评分93",
+          "买入参考4.21元"
+        ],
+        "limit_up_score": 66,
+        "limit_up_reasons": [
+          "低价4.61元",
+          "近3日大涨17%",
+          "近5日有涨停",
+          "均线多头排列",
+          "技术信号: 建议买入",
+          "综合评分93.0"
+        ],
+        "limit_up_probability": 53.0
+      },
+      {
+        "code": "000059",
+        "name": "华锦股份",
+        "price": 5.06,
+        "pct_change": 5.4167,
+        "strategies": [
+          "technical_pattern"
+        ],
+        "reasons": [
+          "[technical_pattern] 技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破"
+        ],
+        "total_score": 91,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 91.0,
+        "trading_signal": {
+          "signal": "buy",
+          "action": "建议买入",
+          "confidence": 46,
+          "buy_score": 61,
+          "sell_score": 15,
+          "net_score": 46,
           "buy_signals": [
             "强势上升",
             "MACD多头",
             "KDJ金叉",
             "均线多头排列",
-            "OBV底背离",
             "短期动量强劲(+7.4%)"
           ],
           "sell_signals": [
+            "触及布林上轨(超买)",
             "Williams超买"
           ],
-          "price": 4.6,
+          "price": 5.06,
           "market_adjustment": 0,
-          "buy_price": 4.6,
-          "buy_price_note": "现价附近",
-          "sell_price": 5.0,
-          "sell_price_note": "反弹8.6%",
-          "stop_loss": 4.22,
+          "buy_price": 4.69,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 5.06,
+          "sell_price_note": "现价附近",
+          "stop_loss": 4.41,
           "target_price": 5.56,
-          "risk_reward_ratio": 2.52,
+          "risk_reward_ratio": 3.09,
           "atr": 0.19,
           "support_1": 4.69,
           "support_2": 4.41,
@@ -3505,243 +4824,113 @@
           "近3日上涨9%",
           "连续3日上涨"
         ],
-        "special_score": 54.0,
+        "special_score": 47.8,
         "special_reasons": [
           "近3日上涨9%",
           "连续3日上涨",
-          "综合评分85",
-          "买入参考4.6元"
+          "综合评分91",
+          "买入参考4.69元"
         ],
-        "limit_up_score": 73,
+        "limit_up_score": 65,
         "limit_up_reasons": [
-          "低价4.6元",
+          "中低价5.06元",
           "近3日上涨9%",
           "逼近20日高点（突破在即）",
           "均线多头排列",
           "技术信号: 建议买入",
-          "综合评分85.0"
+          "综合评分91.0"
         ],
-        "limit_up_probability": 58.0
+        "limit_up_probability": 52.0
       },
       {
-        "code": "000576",
-        "name": "甘化科工",
-        "price": 7.36,
-        "pct_change": 2.9371,
+        "code": "000014",
+        "name": "沙河股份",
+        "price": 10.97,
+        "pct_change": 2.1415,
         "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价7.4元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比2.9）"
-        ],
-        "total_score": 85,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 85.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 63,
-          "buy_score": 83,
-          "sell_score": 20,
-          "net_score": 63,
-          "buy_signals": [
-            "强势上升",
-            "MACD金叉",
-            "均线多头排列",
-            "MA5上穿MA10",
-            "放量上涨(量比2.9)",
-            "短期动量强劲(+12.2%)"
-          ],
-          "sell_signals": [
-            "RSI6严重超买(98)",
-            "Williams超买"
-          ],
-          "price": 7.36,
-          "market_adjustment": 0,
-          "buy_price": 7.2,
-          "buy_price_note": "已跌破支撑",
-          "sell_price": 7.69,
-          "sell_price_note": "反弹4.5%",
-          "stop_loss": 6.88,
-          "target_price": 8.79,
-          "risk_reward_ratio": 4.98,
-          "atr": 0.24,
-          "support_1": 7.2,
-          "support_2": 7.0,
-          "resistance_1": 8.14,
-          "resistance_2": 8.79
-        },
-        "strength_score": 60,
-        "strength_reasons": [
-          "近3日上涨13%",
-          "近5日有涨停",
-          "成交量放大5.3倍",
-          "连续3日上涨"
-        ],
-        "special_score": 60.5,
-        "special_reasons": [
-          "近3日上涨13%",
-          "近5日有涨停",
-          "综合评分85",
-          "买入参考7.2元"
-        ],
-        "limit_up_score": 73,
-        "limit_up_reasons": [
-          "中低价7.36元",
-          "近3日上涨13%",
-          "近5日有涨停",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分85.0"
-        ],
-        "limit_up_probability": 58.0
-      },
-      {
-        "code": "000008",
-        "name": "神州高铁",
-        "price": 2.4,
-        "pct_change": 0.4184,
-        "strategies": [
-          "low_price",
           "technical_pattern"
         ],
         "reasons": [
-          "[low_price] 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列",
-          "[technical_pattern] 技术形态：均线多头排列、MACD多头、平台突破"
+          "[technical_pattern] 技术形态：均线多头排列、量能放大（量比1.4）、MACD多头、平台突破"
         ],
-        "total_score": 195,
-        "strategy_count": 2,
+        "total_score": 88,
+        "strategy_count": 1,
         "resonance": false,
-        "avg_score": 97.5,
+        "avg_score": 88.0,
         "trading_signal": {
           "signal": "hold_buy",
           "action": "持有/可逢低买入",
-          "confidence": 12,
-          "buy_score": 20,
-          "sell_score": 8,
-          "net_score": 12,
-          "buy_signals": [
-            "MACD多头",
-            "缩量下跌(抛压减轻)"
-          ],
-          "sell_signals": [
-            "RSI6超买(82)"
-          ],
-          "price": 2.4,
-          "market_adjustment": 0,
-          "buy_price": 2.4,
-          "buy_price_note": "现价附近",
-          "sell_price": 2.51,
-          "sell_price_note": "反弹4.6%",
-          "stop_loss": 2.28,
-          "target_price": 2.86,
-          "risk_reward_ratio": 3.83,
-          "atr": 0.06,
-          "support_1": 2.44,
-          "support_2": 2.43,
-          "resistance_1": 2.84,
-          "resistance_2": 2.86
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 84.5,
-        "special_reasons": [
-          "综合评分195",
-          "买入参考2.4元"
-        ],
-        "limit_up_score": 68,
-        "limit_up_reasons": [
-          "超低价2.4元（易涨停）",
-          "逼近20日高点（突破在即）",
-          "均线多头排列",
-          "技术信号: 持有/可逢低买入",
-          "综合评分97.5"
-        ],
-        "limit_up_probability": 54.0
-      },
-      {
-        "code": "000552",
-        "name": "甘肃能化",
-        "price": 2.55,
-        "pct_change": 0.0,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+0.0%（走势稳健）；均线多头排列"
-        ],
-        "total_score": 92,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 92.0,
-        "trading_signal": {
-          "signal": "buy",
-          "action": "建议买入",
-          "confidence": 31,
+          "confidence": 21,
           "buy_score": 51,
-          "sell_score": 20,
-          "net_score": 31,
+          "sell_score": 30,
+          "net_score": 21,
           "buy_signals": [
             "强势上升",
             "MACD多头",
             "均线多头排列",
-            "OBV底背离"
+            "短期动量强劲(+8.7%)"
           ],
           "sell_signals": [
-            "RSI6严重超买(100)",
+            "RSI6严重超买(88)",
+            "触及布林上轨(超买)",
             "Williams超买"
           ],
-          "price": 2.55,
+          "price": 10.97,
           "market_adjustment": 0,
-          "buy_price": 2.55,
-          "buy_price_note": "现价附近",
-          "sell_price": 2.65,
-          "sell_price_note": "反弹3.9%",
-          "stop_loss": 2.43,
-          "target_price": 3.0,
-          "risk_reward_ratio": 3.78,
-          "atr": 0.06,
-          "support_1": 2.58,
-          "support_2": 2.53,
-          "resistance_1": 2.97,
-          "resistance_2": 3.0
+          "buy_price": 10.22,
+          "buy_price_note": "已跌破支撑",
+          "sell_price": 10.97,
+          "sell_price_note": "现价附近",
+          "stop_loss": 9.78,
+          "target_price": 12.0,
+          "risk_reward_ratio": 4.08,
+          "atr": 0.41,
+          "support_1": 10.22,
+          "support_2": 9.78,
+          "resistance_1": 11.18,
+          "resistance_2": 12.0
         },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "special_score": 48.6,
-        "special_reasons": [
-          "综合评分92",
-          "买入参考2.55元"
+        "strength_score": 33,
+        "strength_reasons": [
+          "近3日上涨10%",
+          "成交量温和放大1.6倍",
+          "连续3日上涨"
         ],
-        "limit_up_score": 68,
+        "special_score": 49.3,
+        "special_reasons": [
+          "近3日上涨10%",
+          "成交量温和放大1.6倍",
+          "综合评分88",
+          "买入参考10.22元"
+        ],
+        "limit_up_score": 63,
         "limit_up_reasons": [
-          "超低价2.55元（易涨停）",
+          "近3日上涨10%",
+          "成交量温和放大1.6倍",
           "逼近20日高点（突破在即）",
           "均线多头排列",
-          "技术信号: 建议买入",
-          "综合评分92.0"
+          "技术信号: 持有/可逢低买入",
+          "综合评分88.0"
         ],
-        "limit_up_probability": 54.0
+        "limit_up_probability": 50.0
       }
     ],
     "summary": {
-      "run_time": "2026-08-27 14:50:30",
-      "total_stocks": 5332,
+      "run_time": "2026-08-27 15:05:49",
+      "total_stocks": 5342,
       "strategy_counts": {
         "low_price": 20,
         "technical_pattern": 20,
-        "capital_flow": 2,
+        "capital_flow": 0,
         "fundamental": 3,
         "concept_hotspot": 0
       },
-      "combined_count": 42,
+      "combined_count": 40,
       "special_picks_count": 5,
       "limit_up_picks_count": 5
     }
   },
-  "markdown": "# 📈 股票分析日报 - 2026-08-27\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n\n## 详细分析\n\n### 000791 分析失败: 'value'\n### 002131 分析失败: 'value'\n### 002177 分析失败: 'value'\n### 601929 分析失败: 'value'\n### 002217 分析失败: 'value'\n### 600505 分析失败: 'value'\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 神州高铁(000008) | 2.4 | +0.42% | 92 | 股价2.4元（超低价）；今日+0.4%（走势稳健）；均线多头排列 |\n| 甘肃能化(000552) | 2.55 | +0.00% | 92 | 股价2.5元（超低价）；今日+0.0%（走势稳健）；均线多头排列 |\n| 我爱我家(000560) | 2.17 | +0.46% | 92 | 股价2.2元（超低价）；今日+0.5%（走势稳健）；均线多头排列 |\n| 大悦城(000031) | 2.17 | +0.46% | 85 | 股价2.2元（超低价）；今日+0.5%（走势稳健）；短期均线向上 |\n| 方大集团(000055) | 3.56 | +0.85% | 85 | 股价3.6元（低价）；今日+0.8%（走势稳健）；均线多头排列 |\n\n### 技术形态选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 平安银行(000001) | 11.1 | -0.09% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 神州高铁(000008) | 2.4 | +0.42% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 华天酒店(000428) | 4.27 | +0.47% | 83 | 技术形态：均线多头排列、量能放大（量比2.3）、MACD金叉 |\n| 张家界(000430) | 6.61 | -1.05% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 冰山冷热(000530) | 5.06 | +2.02% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n\n### 资金面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 湖北宜化(000422) | 12.79 | +0.63% | 53 | 主力小幅净流入；超大单净流入90万 |\n| 东阿阿胶(000423) | 51.5 | -0.81% | 43 | 主力小幅净流入 |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华侨城A(000069) | 1.77 | +0.00% | 60 | ROE=51.4%（优秀） |\n| 合百集团(000417) | 5.97 | +2.23% | 60 | ROE=29.4%（优秀） |\n| 湖北宜化(000422) | 12.79 | +0.63% | 60 | ROE=21.2%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*",
+  "markdown": "# 📈 股票分析日报 - 2026-08-27\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 甘肃能源(000791) | 7.31 | +0.41% | 35 | 偏空 | 减仓 |\n| 利欧股份(002131) | 4.59 | +2.00% | 41 | 偏空 | 减仓 |\n| 御银股份(002177) | 6.16 | +1.65% | 45 | 中性 | 观望 |\n| 吉视传媒(601929) | 2.33 | +0.00% | 34 | 偏空 | 减仓 |\n| ST合力泰(002217) | 1.48 | -0.67% | 43 | 偏空 | 减仓 |\n| 西昌电力(600505) | 10.59 | -0.38% | 37 | 偏空 | 减仓 |\n\n## 详细分析\n\n## 甘肃能源(000791)\n**现价**: 7.31 | **涨跌幅**: +0.41% | **综合评分**: 35/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 44 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=7.25, MA20=7.59）\n- MACD 空头排列\n- RSI6=73.08（正常）\n- KDJ 金叉\n- 布林带位置：27%，带宽15.8%\n- 量能：量能正常（量比1.0）\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 利欧股份(002131)\n**现价**: 4.59 | **涨跌幅**: +2.00% | **综合评分**: 41/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 46 |\n| 基本面 | 40 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=4.51, MA20=5.06）\n- MACD 空头排列\n- RSI6=45.24（正常）\n- KDJ 金叉\n- 布林带位置：24%，带宽34.9%\n- 量能：量能正常（量比1.04）\n\n### 基本面\n- ROE=39.9%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.4%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 御银股份(002177)\n**现价**: 6.16 | **涨跌幅**: +1.65% | **综合评分**: 45/100 | **评级**: 中性\n**操作建议**: 观望\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 52 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：偏强震荡（MA5=5.95, MA20=5.79）\n- MACD 多头排列\n- RSI6=100.0（超买）\n- 布林带位置：96%，带宽13.8%\n- 量能：量能正常（量比0.82）\n- 支撑位：5.79，压力位：6.74\n\n### 基本面\n- ROE=32.4%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率60.7%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 吉视传媒(601929)\n**现价**: 2.33 | **涨跌幅**: +0.00% | **综合评分**: 34/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 30 |\n| 基本面 | 30 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=2.31, MA20=2.39）\n- MACD 空头排列\n- RSI6=81.25（超买）\n- 布林带位置：34%，带宽14.5%\n- 量能：量能正常（量比0.88）\n- 支撑位：2.09，压力位：2.33\n\n### 基本面\n- ROE=5.5%（一般）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率38.5%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 技术面走弱\n- 基本面偏弱\n\n---\n## ST合力泰(002217)\n**现价**: 1.48 | **涨跌幅**: -0.67% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 48 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：偏弱震荡（MA5=1.47, MA20=1.5）\n- MACD 多头排列\n- RSI6=83.33（超买）\n- 布林带位置：39%，带宽10.0%\n- 量能：量能正常（量比0.97）\n- 支撑位：1.37，压力位：1.5\n\n### 基本面\n- ROE=83.8%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率26.1%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n---\n## 西昌电力(600505)\n**现价**: 10.59 | **涨跌幅**: -0.38% | **综合评分**: 37/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 34 |\n| 基本面 | 38 |\n| 资金面 | 50 |\n| 概念热点 | 50 |\n\n### 技术面\n- 趋势：下降趋势（MA5=10.55, MA20=10.99）\n- MACD 空头排列\n- RSI6=63.64（正常）\n- 布林带位置：25%，带宽14.5%\n- 量能：量能正常（量比0.94）\n- 支撑位：10.01，压力位：10.99\n\n### 基本面\n- ROE=15.4%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率43.8%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n\n### ⚠️ 风险提示\n- 技术面走弱\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华天酒店(000428) | 4.61 | -2.95% | 93 | 股价4.6元（低价）；今日-2.9%（走势稳健）；均线多头排列；量能放大（量比2.3） |\n| 神州高铁(000008) | 2.49 | -0.40% | 92 | 股价2.5元（超低价）；今日-0.4%（走势稳健）；均线多头排列 |\n| 大悦城(000031) | 2.21 | -0.45% | 85 | 股价2.2元（超低价）；今日-0.5%（走势稳健）；短期均线向上 |\n| 方大集团(000055) | 3.58 | -0.83% | 85 | 股价3.6元（低价）；今日-0.8%（走势稳健）；均线多头排列 |\n| 华控赛格(000068) | 3.18 | -0.62% | 85 | 股价3.2元（低价）；今日-0.6%（走势稳健）；均线多头排列 |\n\n### 技术形态选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华锦股份(000059) | 5.06 | +5.42% | 91 | 技术形态：均线多头排列、MACD多头、KDJ金叉、平台突破 |\n| 沙河股份(000014) | 10.97 | +2.14% | 88 | 技术形态：均线多头排列、量能放大（量比1.4）、MACD多头、平台突破 |\n| 平安银行(000001) | 11.59 | -1.19% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 神州高铁(000008) | 2.49 | -0.40% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n| 中金岭南(000060) | 6.84 | +1.79% | 83 | 技术形态：均线多头排列、MACD多头、平台突破 |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 华侨城A(000069) | 1.79 | -0.56% | 60 | ROE=51.4%（优秀） |\n| 合百集团(000417) | 5.73 | +1.06% | 60 | ROE=29.4%（优秀） |\n| 湖北宜化(000422) | 12.57 | +1.13% | 60 | ROE=21.2%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*",
   "market_timing": {
     "indices": {
       "sh": {
