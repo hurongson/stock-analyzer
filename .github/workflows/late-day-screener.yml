@@ -63,6 +63,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add backend/data/ || true
+          git add data/ || true
           git commit -m "尾盘选股结果 $(date +'%Y-%m-%d %H:%M')" || echo "无新数据提交"
           git push || echo "推送失败，可能无新数据"
