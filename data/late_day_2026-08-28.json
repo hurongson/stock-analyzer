@@ -1,0 +1,91 @@
+{
+  "date": "2026-08-28",
+  "time": "14:30",
+  "market_timing": {
+    "indices": {
+      "sh": {
+        "code": "000001",
+        "name": "上证指数",
+        "price": 11.59,
+        "pct_change": -1.19,
+        "trend": {
+          "trend": "强势上升",
+          "trend_score": 90,
+          "trend_strength": 1.7,
+          "ma5": 11.58,
+          "ma10": 11.38,
+          "ma20": 11.36,
+          "ma60": 10.97,
+          "ma120": 10.99,
+          "bullish_alignment": "True",
+          "bearish_alignment": "False"
+        },
+        "macd": {
+          "dif": 0.1479,
+          "dea": 0.1219,
+          "macd": 0.0521,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "False",
+          "zero_axis_above": "True"
+        },
+        "rsi": {
+          "rsi6": 76.67,
+          "rsi12": 66.02,
+          "rsi24": 61.29,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 83.51,
+          "d": 75.36,
+          "j": 99.81,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "True",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 11.76,
+          "mid": 11.36,
+          "lower": 10.96,
+          "width": 7.02,
+          "position": 78.45,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "False"
+        },
+        "volume": {
+          "current_volume": 97570170.0,
+          "vol_ma5": 104120484.0,
+          "vol_ma10": 103864150.0,
+          "vol_ma20": 105377779.0,
+          "volume_ratio": 0.94,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "atr": {
+          "atr": 0.17,
+          "atr_ratio": 1.43,
+          "volatility_level": "低波动"
+        },
+        "obv": {
+          "obv": 1029586935.0,
+          "obv_ma10": 774308459.0,
+          "trend_up": "True",
+          "divergence_bullish": "False"
+        }
+      }
+    },
+    "sentiment": "偏乐观",
+    "sentiment_score": 67,
+    "position": "60-70%",
+    "reasons": [
+      "大盘强势上升"
+    ]
+  },
+  "picks": [],
+  "summary": {}
+}
