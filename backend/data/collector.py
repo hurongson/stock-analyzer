@@ -505,12 +505,27 @@ class DataCollector:
         # 优先 Tushare：用 daily(trade_date) 获取全量股票日线，不依赖频率受限的 stock_basic
         if TUSHARE_AVAILABLE:
             try:
-                trade_date = self.latest_trade_date
-                daily_df = pro.daily(trade_date=trade_date,
-                    fields='ts_code,open,high,low,close,pre_close,change,pct_chg,vol,amount')
+                # 尝试最近5个交易日（交易时段当日数据可能未更新）
+                daily_df = None
+                used_date = None
+                for days_back in range(5):
+                    try:
+                        check_date = (pd.Timestamp.now() - pd.Timedelta(days=days_back)).strftime("%Y%m%d")
+                        # 跳过周末
+                        if pd.Timestamp(check_date).weekday() >= 5:
+                            continue
+                        daily_df = pro.daily(trade_date=check_date,
+                            fields='ts_code,open,high,low,close,pre_close,change,pct_chg,vol,amount')
+                        if daily_df is not None and not daily_df.empty:
+                            used_date = check_date
+                            logger.info(f"Tushare 使用 {used_date} 数据，共 {len(daily_df)} 只股票")
+                            break
+                    except Exception as e:
+                        logger.debug(f"Tushare daily {check_date} 失败: {e}")
+                        continue
 
                 if daily_df is None or daily_df.empty:
-                    raise ValueError("daily 返回空")
+                    raise ValueError("最近5个交易日 daily 均返回空")
 
                 df = daily_df.copy()
                 df["code"] = df["ts_code"].apply(from_ts_code)
@@ -533,28 +548,33 @@ class DataCollector:
             except Exception as e:
                 logger.error(f"Tushare 获取股票列表失败: {e}")
 
-        # fallback akshare
+        # fallback akshare（带重试）
         if AKSHARE_AVAILABLE:
-            try:
-                df = ak.stock_zh_a_spot_em()
-                if df is None or df.empty:
-                    return None
-                df = df.rename(columns={
-                    "序号": "idx", "代码": "code", "名称": "name",
-                    "最新价": "price", "涨跌幅": "pct_change", "涨跌额": "change",
-                    "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
-                    "最高": "high", "最低": "low", "今开": "open", "昨收": "prev_close",
-                    "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
-                    "总市值": "total_mv", "流通市值": "circ_mv"
-                })
-                df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
-                cache.set_dataframe("stock_list", key, df)
-                return df
-            except Exception as e:
-                logger.error(f"akshare 获取股票列表失败: {e}")
+            df = None
+            for retry in range(3):
+                try:
+                    df = ak.stock_zh_a_spot_em()
+                    if df is not None and not df.empty:
+                        break
+                except Exception as e:
+                    logger.warning(f"akshare 获取股票列表第{retry+1}次失败: {e}")
+                    time.sleep(2)
+            if df is None or df.empty:
+                logger.error("akshare 获取股票列表失败（3次重试均失败）")
+                return None
+            df = df.rename(columns={
+                "序号": "idx", "代码": "code", "名称": "name",
+                "最新价": "price", "涨跌幅": "pct_change", "涨跌额": "change",
+                "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
+                "最高": "high", "最低": "low", "今开": "open", "昨收": "prev_close",
+                "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
+                "总市值": "total_mv", "流通市值": "circ_mv"
+            })
+            df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
+            cache.set_dataframe("stock_list", key, df)
+            return df
         return None
 
-    # ============ 股票名称 ============
     def get_stock_name(self, code: str) -> str:
         code = normalize_stock_code(code)
         quote = self.get_realtime_quote(code)
