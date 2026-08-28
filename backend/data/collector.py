@@ -143,7 +143,7 @@ class DataCollector:
                     cache.set_dataframe("kline", key, df)
                     return df
             except Exception as e:
-                logger.debug(f"Tushare 获取K线失败 {code}: {e}")
+                logger.warning(f"Tushare 获取K线失败 {code}: {e}")
 
         # fallback akshare
         if AKSHARE_AVAILABLE:
@@ -185,6 +185,9 @@ class DataCollector:
 
     def __init__(self):
         self._latest_trade_date = None
+        ts_status = "可用" if TUSHARE_AVAILABLE else "未配置"
+        ak_status = "可用" if AKSHARE_AVAILABLE else "未安装"
+        logger.info(f"数据源状态: Tushare={ts_status}, akshare={ak_status}")
         # 加载外部股票名称映射表（如果存在）
         self.STOCK_NAME_MAP = dict(self.DEFAULT_STOCK_NAME_MAP)
         map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "stock_name_map.json")
