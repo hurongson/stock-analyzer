@@ -113,10 +113,23 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             signal = ts.get("action", a.get("action", ""))
             signal_emoji = "🟩" if "买" in signal else ("🟥" if "卖" in signal else "⬜")
             conf = ts.get("confidence", 0)
+            # 三把锁状态
+            tl = a.get("three_locks", {})
+            if tl:
+                t_locked = "🔒" if tl.get("trend_lock", {}).get("locked") else "🔓"
+                a_locked = "🔒" if tl.get("activity_lock", {}).get("locked") else "🔓"
+                c_locked = "🔒" if tl.get("capital_lock", {}).get("locked") else "🔓"
+                locks_str = f"{t_locked}{a_locked}{c_locked}"
+                tl_signal = tl.get("signal", "")
+            else:
+                locks_str = ""
+                tl_signal = ""
+
             summary_lines.append(
                 f"{emoji} **{a.get('name','')}**({a.get('code','')}) "
                 f"{a.get('price',0)}元 {a.get('pct_change',0):+.1f}% | "
                 f"评分{a.get('total_score',0)} | {signal_emoji}{signal}"
+                + (f" | 三锁{locks_str} {tl_signal}" if locks_str else "")
             )
             # 收集买卖信号
             if ts.get("signal") in ("buy", "hold_buy") and conf >= 30:
@@ -155,7 +168,18 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                     if rr:
                         price_info.append(f"盈亏比{rr}")
                     price_str = " | ".join(price_info) if price_info else ""
-                    buy_lines.append(f"• **{a['name']}**({a['code']}) 现价{a['price']}元 | 置信度{ts.get('confidence',0)}%\n  {price_str}\n  理由: {reasons}")
+                    # 三把锁信息
+                    tl = a.get("three_locks", {})
+                    tl_info = ""
+                    if tl:
+                        t_score = tl.get("trend_lock", {}).get("score", 0)
+                        a_score = tl.get("activity_lock", {}).get("score", 0)
+                        c_score = tl.get("capital_lock", {}).get("score", 0)
+                        total_locked = tl.get("total_locked", 0)
+                        tl_info = f"\n  🔒三把锁: {total_locked}/3点亮 | 趋势{t_score}分 股性{a_score}分 资金{c_score}分"
+                        if tl.get("signal"):
+                            tl_info += f" | {tl['signal']}"
+                    buy_lines.append(f"• **{a['name']}**({a['code']}) 现价{a['price']}元 | 置信度{ts.get('confidence',0)}%\n  {price_str}\n  理由: {reasons}{tl_info}")
                 elements.append({
                     "tag": "div",
                     "text": {
@@ -177,7 +201,13 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                     if stop_loss:
                         price_info.append(f"止损{stop_loss}元")
                     price_str = " | ".join(price_info) if price_info else ""
-                    sell_lines.append(f"• **{a['name']}**({a['code']}) 现价{a['price']}元 | 置信度{ts.get('confidence',0)}%\n  {price_str}\n  理由: {reasons}")
+                    # 三把锁信息
+                    tl = a.get("three_locks", {})
+                    tl_info = ""
+                    if tl:
+                        total_locked = tl.get("total_locked", 0)
+                        tl_info = f"\n  🔒三把锁: {total_locked}/3点亮 | {tl.get('signal', '')}"
+                    sell_lines.append(f"• **{a['name']}**({a['code']}) 现价{a['price']}元 | 置信度{ts.get('confidence',0)}%\n  {price_str}\n  理由: {reasons}{tl_info}")
                 elements.append({
                     "tag": "div",
                     "text": {
@@ -569,9 +599,21 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         reasons_str = "、".join(reasons[:3]) if reasons else ""
         risks_str = "、".join(risks[:2]) if risks else ""
 
+        # 三把锁状态
+        tl = p.get("three_locks", {})
+        tl_str = ""
+        if tl:
+            t_locked = "🔒" if tl.get("trend_lock", {}).get("locked") else "🔓"
+            a_locked = "🔒" if tl.get("activity_lock", {}).get("locked") else "🔓"
+            c_locked = "🔒" if tl.get("capital_lock", {}).get("locked") else "🔓"
+            total_locked = tl.get("total_locked", 0)
+            tl_signal = tl.get("signal", "")
+            tl_str = f"\n   🔒三把锁: {total_locked}/3 {t_locked}趋势 {a_locked}股性 {c_locked}资金 | {tl_signal}"
+
         content = (
             f"**{i+1}. 🎯 {p['name']}({p['code']})** {p['price']}元 {p['pct_change']:+.1f}% | 评分{score}\n"
-            f"   {point_str}\n"
+            f"   {point_str}"
+            f"{tl_str}\n"
             f"   ✅ 理由: {reasons_str}"
         )
         if risks_str:

@@ -45,6 +45,88 @@
         <div ref="radarChart" style="width: 100%; height: 350px;"></div>
       </div>
 
+      <!-- 三把锁分析 -->
+      <div class="card" v-if="stockData.three_locks">
+        <div class="card-title">🔒 三把锁分析 <span class="signal-badge" :class="getLockSignalClass(stockData.three_locks.signal)">{{ stockData.three_locks.signal }}</span></div>
+        <div class="locks-container">
+          <div class="lock-item" :class="{locked: stockData.three_locks.trend_lock?.locked}">
+            <div class="lock-icon">{{ stockData.three_locks.trend_lock?.locked ? '🔒' : '🔓' }}</div>
+            <div class="lock-name">趋势锁</div>
+            <div class="lock-score">{{ stockData.three_locks.trend_lock?.score || 0 }}分</div>
+            <div class="lock-status">{{ stockData.three_locks.trend_lock?.locked ? '已点亮' : '未点亮' }}</div>
+          </div>
+          <div class="lock-item" :class="{locked: stockData.three_locks.activity_lock?.locked}">
+            <div class="lock-icon">{{ stockData.three_locks.activity_lock?.locked ? '🔒' : '🔓' }}</div>
+            <div class="lock-name">股性锁</div>
+            <div class="lock-score">{{ stockData.three_locks.activity_lock?.score || 0 }}分</div>
+            <div class="lock-status">{{ stockData.three_locks.activity_lock?.locked ? '已点亮' : '未点亮' }}</div>
+          </div>
+          <div class="lock-item" :class="{locked: stockData.three_locks.capital_lock?.locked}">
+            <div class="lock-icon">{{ stockData.three_locks.capital_lock?.locked ? '🔒' : '🔓' }}</div>
+            <div class="lock-name">资金锁</div>
+            <div class="lock-score">{{ stockData.three_locks.capital_lock?.score || 0 }}分</div>
+            <div class="lock-status">{{ stockData.three_locks.capital_lock?.locked ? '已点亮' : '未点亮' }}</div>
+          </div>
+        </div>
+        <div class="locks-summary">
+          <div>点亮数量：<strong>{{ stockData.three_locks.total_locked }}/3</strong></div>
+          <div>信号强度：<strong>{{ stockData.three_locks.signal_strength || 0 }}%</strong></div>
+        </div>
+        <div class="locks-reasons" v-if="stockData.three_locks.trend_lock?.reasons?.length">
+          <div class="reason-title">📈 趋势锁依据：</div>
+          <ul><li v-for="(r, i) in stockData.three_locks.trend_lock.reasons.slice(0, 3)" :key="i">{{ r }}</li></ul>
+        </div>
+        <div class="locks-reasons" v-if="stockData.three_locks.activity_lock?.reasons?.length">
+          <div class="reason-title">⚡ 股性锁依据：</div>
+          <ul><li v-for="(r, i) in stockData.three_locks.activity_lock.reasons.slice(0, 3)" :key="i">{{ r }}</li></ul>
+        </div>
+        <div class="locks-reasons" v-if="stockData.three_locks.capital_lock?.reasons?.length">
+          <div class="reason-title">💰 资金锁依据：</div>
+          <ul><li v-for="(r, i) in stockData.three_locks.capital_lock.reasons.slice(0, 3)" :key="i">{{ r }}</li></ul>
+        </div>
+      </div>
+
+      <!-- 走势分析 -->
+      <div class="card" v-if="stockData.trend_analysis">
+        <div class="card-title">📊 走势分析 <span class="score-badge" :class="getScoreClass(stockData.trend_analysis.overall_score)">{{ stockData.trend_analysis.overall_score }}分</span></div>
+        <div class="trend-overview">
+          <div class="trend-item">
+            <div class="trend-label">趋势方向</div>
+            <div class="trend-value">{{ stockData.trend_analysis.trend?.direction || '-' }}</div>
+          </div>
+          <div class="trend-item">
+            <div class="trend-label">趋势强度</div>
+            <div class="trend-value">{{ stockData.trend_analysis.trend?.strength || '-' }}</div>
+          </div>
+          <div class="trend-item">
+            <div class="trend-label">均线排列</div>
+            <div class="trend-value">{{ stockData.trend_analysis.ma_analysis?.alignment || '-' }}</div>
+          </div>
+          <div class="trend-item">
+            <div class="trend-label">量价关系</div>
+            <div class="trend-value">{{ stockData.trend_analysis.volume_price?.relation || '-' }}</div>
+          </div>
+        </div>
+        <div class="trend-description">{{ stockData.trend_analysis.trend?.description || '' }}</div>
+        <div class="key-points" v-if="stockData.trend_analysis.key_points?.length">
+          <div class="reason-title">📍 关键点位：</div>
+          <ul><li v-for="(p, i) in stockData.trend_analysis.key_points" :key="i">{{ p }}</li></ul>
+        </div>
+        <div class="patterns" v-if="stockData.trend_analysis.patterns?.length">
+          <div class="reason-title">🔍 走势形态：</div>
+          <div class="pattern-tags">
+            <span v-for="(p, i) in stockData.trend_analysis.patterns" :key="i" 
+                  class="pattern-tag" :class="'pattern-' + p.type">
+              {{ p.name }} ({{ p.confidence }}%)
+            </span>
+          </div>
+        </div>
+        <div class="operation-suggestion">
+          <div class="reason-title">💡 操作建议：</div>
+          <div>{{ stockData.trend_analysis.operation_suggestion || '' }}</div>
+        </div>
+      </div>
+
       <!-- 技术面 -->
       <div class="card">
         <div class="card-title">📈 技术面分析</div>

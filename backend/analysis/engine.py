@@ -12,6 +12,8 @@ from backend.analysis.capital_flow import analyze_capital_flow
 from backend.analysis.concept import analyze_concept
 from backend.analysis.llm_analyzer import llm_deep_analyze
 from backend.analysis.signals import generate_trading_signal
+from backend.analysis.three_locks import three_locks_analyzer
+from backend.analysis.trend_analysis import trend_analyzer
 from backend.utils.helpers import normalize_stock_code, now_str
 
 logger = logging.getLogger(__name__)
@@ -46,6 +48,20 @@ def analyze_stock(code: str) -> Dict[str, Any]:
     # 交易信号（基于K线技术指标，给出明确买卖建议）
     kline = collector.get_daily_kline(code, days=60)
     trading_signal = generate_trading_signal(kline, stock_info)
+
+    # 三把锁分析（趋势锁+股性锁+资金锁）
+    try:
+        three_locks = three_locks_analyzer.analyze(kline, stock_info, capital)
+    except Exception as e:
+        logger.debug(f"三把锁分析失败 {code}: {e}")
+        three_locks = None
+
+    # 走势分析（趋势/支撑压力/形态/量价）
+    try:
+        trend_analysis = trend_analyzer.analyze(kline, stock_info)
+    except Exception as e:
+        logger.debug(f"走势分析失败 {code}: {e}")
+        trend_analysis = None
 
     # LLM 深度分析（可选）
     llm_result = llm_deep_analyze(stock_info, technical, fundamental, capital, concept)
@@ -127,6 +143,8 @@ def analyze_stock(code: str) -> Dict[str, Any]:
         "concept": concept,
         "llm_analysis": llm_result,
         "trading_signal": trading_signal,
+        "three_locks": three_locks,
+        "trend_analysis": trend_analysis,
         "risks": risks,
     }
 

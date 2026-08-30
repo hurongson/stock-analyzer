@@ -13,6 +13,8 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List, Optional
 from backend.data.collector import collector
+from backend.analysis.three_locks import three_locks_analyzer
+from backend.analysis.trend_analysis import trend_analyzer
 from backend.analysis.indicators import (
     calc_sma, calc_trend, calc_macd, calc_kdj, calc_rsi,
     calc_bollinger, calc_volume_analysis, calc_ma_system, calc_momentum
@@ -163,6 +165,19 @@ class LateDayScreener:
                     # 次日卖出策略
                     sell_strategy = self._get_sell_strategy(buy_price, target_3pct, target_5pct, stop_loss)
 
+                    # 三把锁分析
+                    try:
+                        quote = {"price": stock["price"], "pct_change": stock["pct_change"]}
+                        three_locks = three_locks_analyzer.analyze(kline, quote)
+                    except Exception:
+                        three_locks = None
+
+                    # 走势分析
+                    try:
+                        trend_analysis = trend_analyzer.analyze(kline, quote)
+                    except Exception:
+                        trend_analysis = None
+
                     result = {
                         "code": code,
                         "name": stock["name"],
@@ -180,6 +195,8 @@ class LateDayScreener:
                         "risk_reward_ratio": risk_reward_ratio,
                         "sell_strategy": sell_strategy,
                         "ma20": round(ma20, 2),
+                        "three_locks": three_locks,
+                        "trend_analysis": trend_analysis,
                     }
                     results.append(result)
 
