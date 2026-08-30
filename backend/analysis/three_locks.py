@@ -194,7 +194,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"趋势锁-布林带计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 60
+        locked = score >= 55  # 趋势锁门槛55分
 
         return {
             "locked": locked,
@@ -338,7 +338,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"股性锁-RSI计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 60
+        locked = score >= 50  # 股性锁门槛50分（尾盘选股股票本身股性活跃）
 
         return {
             "locked": locked,
@@ -462,7 +462,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"资金锁-动量计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 50  # 资金锁门槛稍低，因为资金数据可能不全
+        locked = score >= 40  # 资金锁门槛40分（缺少资金流向数据时，量价配合已能说明问题）
 
         return {
             "locked": locked,

@@ -178,12 +178,27 @@ class LateDayScreener:
                     except Exception:
                         trend_analysis = None
 
+                    # 将三把锁得分融入总评分（统一评分标准）
+                    tl_score = 0
+                    if three_locks:
+                        total_locked = three_locks.get("total_locked", 0)
+                        tl_avg = (three_locks.get("trend_lock",{}).get("score",0) + 
+                                  three_locks.get("activity_lock",{}).get("score",0) + 
+                                  three_locks.get("capital_lock",{}).get("score",0)) / 3
+                        # 三把锁权重：全亮+20分，两亮+10分，一亮0分，零亮-10分
+                        tl_bonus = {3: 20, 2: 10, 1: 0, 0: -10}.get(total_locked, 0)
+                        tl_score = int(tl_avg * 0.3 + tl_bonus)  # 三把锁占30%权重
+                    
+                    final_score = min(100, int(score * 0.7 + tl_score))  # 原评分占70%，三把锁占30%
+
                     result = {
                         "code": code,
                         "name": stock["name"],
                         "price": stock["price"],
                         "pct_change": stock["pct_change"],
-                        "score": score,
+                        "score": final_score,
+                        "base_score": score,
+                        "three_locks_score": tl_score,
                         "analysis": analysis,
                         "buy_price": buy_price,
                         "buy_price_note": buy_price_note,
@@ -204,8 +219,12 @@ class LateDayScreener:
                 logger.debug(f"分析 {stock.get('code')} 失败: {e}")
                 continue
 
-        # 按评分排序，取前N只
-        results.sort(key=lambda x: x["score"], reverse=True)
+        # 排序：优先按三把锁点亮数，再按综合评分（确保推荐股票与三把锁一致）
+        def sort_key(x):
+            tl = x.get("three_locks", {})
+            locked = tl.get("total_locked", 0) if tl else 0
+            return (locked, x["score"])
+        results.sort(key=sort_key, reverse=True)
         return results[:self.max_results]
 
     def _get_sell_strategy(self, buy_price: float, target_3pct: float, target_5pct: float, stop_loss: float) -> Dict:
