@@ -56,6 +56,23 @@ def send_feishu_text(content: str, webhook_url: str = None) -> bool:
         return False
 
 
+
+def _format_three_locks(stock_data: Dict) -> str:
+    """格式化三把锁状态字符串"""
+    tl = stock_data.get("three_locks")
+    if not tl:
+        return ""
+    total = tl.get("total_locked", 0)
+    signal = tl.get("signal", "")
+    t = tl.get("trend_lock", {})
+    a = tl.get("activity_lock", {})
+    c = tl.get("capital_lock", {})
+    t_icon = "🔒" if t.get("locked") else "🔓"
+    a_icon = "🔒" if a.get("locked") else "🔓"
+    c_icon = "🔒" if c.get("locked") else "🔓"
+    return f" | 三锁{t_icon}{a_icon}{c_icon}({total}/3){signal}"
+
+
 def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
     """
     发送飞书卡片消息（分析日报摘要）
