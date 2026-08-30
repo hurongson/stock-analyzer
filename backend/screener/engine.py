@@ -203,10 +203,20 @@ class ScreenerEngine:
                 item["strength_score"] = 0
                 item["strength_reasons"] = []
 
-        # 特别推荐：综合评分 + 强势度 + 共振，精选3-5只
-        special_picks = self._select_special_picks(combined)
+        # 按三把锁信号过滤：只保留买入/强烈买入信号的股票作为推荐
+        buy_signals = ["强烈买入", "买入", "谨慎买入"]
+        buy_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") in buy_signals]
+        watch_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") not in buy_signals]
+        
+        logger.info(f"三把锁过滤: 买入信号{len(buy_combined)}只, 观望/卖出{len(watch_combined)}只")
+        
+        # 推荐列表只包含买入信号股票，观望股票单独保存供参考
+        recommended_combined = buy_combined if buy_combined else combined[:10]
 
-        return combined, special_picks
+        # 特别推荐：综合评分 + 强势度 + 共振 + 三把锁全亮，精选3-5只
+        special_picks = self._select_special_picks(recommended_combined)
+
+        return recommended_combined, special_picks
 
     def _select_special_picks(self, combined: List[Dict]) -> List[Dict]:
         """
@@ -242,13 +252,24 @@ class ScreenerEngine:
                 else:
                     position_score = 20  # 已经涨太多，不适合追
 
+            # 三把锁全亮加分（特别推荐必须优先三把锁全亮的股票）
+            tl = item.get("three_locks", {})
+            tl_locked = tl.get("total_locked", 0)
+            tl_signal = tl.get("signal", "")
+            tl_bonus = 40 if tl_locked == 3 else (20 if tl_locked == 2 else 0)
+            
+            # 非买入信号的股票不进入特别推荐
+            if tl_signal not in ["强烈买入", "买入", "谨慎买入"]:
+                continue
+
             # 综合特别推荐评分
             special_score = (
-                total_score * 0.3 +
-                strength_score * 0.3 +
+                total_score * 0.2 +
+                strength_score * 0.2 +
                 resonance_bonus +
                 strategy_bonus +
-                position_score * 0.2
+                position_score * 0.2 +
+                tl_bonus
             )
 
             # 生成选中原因

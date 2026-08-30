@@ -578,8 +578,10 @@ class ThreeLocksAnalyzer:
         total_risks = len(trend_lock["risks"]) + len(activity_lock["risks"]) + len(capital_lock["risks"])
         if total_risks >= 4:
             strength = max(20, strength - 15)
-            if "买入" in signal:
-                signal = signal.replace("买入", "谨慎")
+            if signal == "强烈买入":
+                signal = "谨慎买入"
+            elif signal == "买入":
+                signal = "观望"
 
         strength = max(0, min(100, strength))
         return signal, strength
