@@ -210,132 +210,168 @@ class ThreeLocksAnalyzer:
                              volume: pd.Series, current_price: float,
                              quote: Optional[Dict] = None) -> Dict:
         """
-        第二把锁：股性锁（信号锁）
+        第二把锁：股性锁（指南针官方规则：要活不要死）
+        核心：股性活跃，有波动空间，不是KDJ/MACD金叉
         条件：
-        - KDJ金叉或多头排列（K>D，且未超买）
-        - MACD金叉或多头排列（DIF>DEA，DIF>0）
-        - 成交量放大（量比 > 1.2）
-        - 振幅适中（2%-8%）
-        - 换手率适中（3%-15%）
+        - 振幅适中（3%-8%为最佳活跃区间）
+        - 量比活跃（1.5-3倍为交投活跃）
+        - 近期有大涨/涨停记录（20日内有大涨=股性活跃）
+        - 量能趋势放大（5日均量>10日均量）
         """
         score = 0
         reasons = []
         risks = []
         details = {}
 
-        # 1. KDJ（25分）
+        # 1. 振幅分析（30分）- 波动空间是股性活跃的核心
         try:
-            kdj = calc_kdj(high, low, close)
-            k_val = kdj.get("k", 50)
-            d_val = kdj.get("d", 50)
-            j_val = kdj.get("j", 50)
-            details["kdj_k"] = round(k_val, 1)
-            details["kdj_d"] = round(d_val, 1)
-            details["kdj_j"] = round(j_val, 1)
-
-            if kdj.get("golden_cross"):
-                score += 20
-                reasons.append("KDJ金叉，短期动能转强")
-            elif k_val > d_val and k_val < 80:
-                score += 12
-                reasons.append(f"KDJ多头排列（K={k_val:.1f}>D={d_val:.1f}）")
-            elif k_val > 85:
-                risks.append(f"KDJ超买（K={k_val:.1f}），短期可能回调")
-            elif kdj.get("death_cross"):
-                risks.append("KDJ死叉，短期动能转弱")
-        except Exception as e:
-            logger.debug(f"股性锁-KDJ计算失败: {e}")
-
-        # 2. MACD（25分）
-        try:
-            macd = calc_macd(close)
-            dif = macd.get("dif", 0)
-            dea = macd.get("dea", 0)
-            macd_hist = macd.get("macd", 0)
-            details["macd_dif"] = round(dif, 3)
-            details["macd_dea"] = round(dea, 3)
-            details["macd_hist"] = round(macd_hist, 3)
-
-            if macd.get("golden_cross"):
-                score += 20
-                reasons.append("MACD金叉，中期动能转强")
-            elif dif > dea and dif > 0:
-                score += 15
-                reasons.append("MACD多头排列（DIF>DEA>0）")
-            elif dif > dea:
-                score += 8
-                reasons.append("MACD金叉状态（DIF>DEA）")
-            elif macd.get("death_cross"):
-                risks.append("MACD死叉，中期动能转弱")
-        except Exception as e:
-            logger.debug(f"股性锁-MACD计算失败: {e}")
-
-        # 3. 成交量（25分）
-        try:
-            vol = calc_volume_analysis(volume, close)
-            vol_ratio = vol.get("volume_ratio", 1)
-            vp = vol.get("volume_price", "")
-            details["volume_ratio"] = round(vol_ratio, 2)
-            details["volume_price"] = vp
-
-            if "放量上涨" in vp:
-                score += 20
-                reasons.append(f"放量上涨（量比{vol_ratio:.1f}），资金入场")
-            elif vol_ratio > 1.5:
-                score += 12
-                reasons.append(f"成交量放大（量比{vol_ratio:.1f}）")
-            elif vol_ratio > 1.2:
-                score += 6
-                reasons.append(f"成交量温和放大（量比{vol_ratio:.1f}）")
-            elif vol_ratio < 0.7:
-                risks.append(f"成交量萎缩（量比{vol_ratio:.1f}），股性不活跃")
-        except Exception as e:
-            logger.debug(f"股性锁-成交量计算失败: {e}")
-
-        # 4. 振幅和换手率（15分）
-        try:
-            if len(high) >= 1 and len(low) >= 1:
-                today_high = high.iloc[-1]
-                today_low = low.iloc[-1]
-                if current_price > 0:
-                    amplitude = (today_high - today_low) / current_price * 100
-                    details["amplitude"] = round(amplitude, 2)
-
-                    if 2 <= amplitude <= 8:
-                        score += 8
-                        reasons.append(f"振幅适中（{amplitude:.1f}%），股性活跃")
-                    elif amplitude > 10:
-                        risks.append(f"振幅过大（{amplitude:.1f}%），风险较高")
-                    elif amplitude < 1:
-                        risks.append(f"振幅过小（{amplitude:.1f}%），股性呆滞")
+            if len(high) >= 10 and len(low) >= 10:
+                # 10日平均振幅
+                amplitudes_10d = []
+                for i in range(-10, 0):
+                    if low.iloc[i] > 0:
+                        amp = (high.iloc[i] - low.iloc[i]) / low.iloc[i] * 100
+                        amplitudes_10d.append(amp)
+                
+                # 5日平均振幅
+                amplitudes_5d = amplitudes_10d[-5:] if len(amplitudes_10d) >= 5 else amplitudes_10d
+                
+                if amplitudes_5d:
+                    avg_amp_5d = sum(amplitudes_5d) / len(amplitudes_5d)
+                    avg_amp_10d = sum(amplitudes_10d) / len(amplitudes_10d)
+                    details["avg_amplitude_5d"] = round(avg_amp_5d, 2)
+                    details["avg_amplitude_10d"] = round(avg_amp_10d, 2)
+                    
+                    # 5日振幅：3%-8%为最佳活跃区间
+                    if 3 <= avg_amp_5d <= 8:
+                        score += 25
+                        reasons.append(f"5日振幅{avg_amp_5d:.1f}%，波动空间适中，股性活跃")
+                    elif 2 <= avg_amp_5d < 3:
+                        score += 15
+                        reasons.append(f"5日振幅{avg_amp_5d:.1f}%，波动空间一般")
+                    elif avg_amp_5d > 8:
+                        score += 12
+                        reasons.append(f"5日振幅{avg_amp_5d:.1f}%，波动剧烈")
+                        risks.append("振幅过大，短线风险较高")
+                    else:
+                        risks.append(f"5日振幅{avg_amp_5d:.1f}%，股性不活跃，差价空间小")
+                    
+                    # 振幅递增（活跃度提升）
+                    if avg_amp_5d > avg_amp_10d * 1.1:
+                        score += 5
+                        reasons.append("近期振幅放大，股性趋于活跃")
         except Exception as e:
             logger.debug(f"股性锁-振幅计算失败: {e}")
 
-        # 换手率（如果有数据）
-        if quote and quote.get("turnover"):
-            turnover = float(quote.get("turnover", 0))
-            details["turnover"] = turnover
-            if 3 <= turnover <= 15:
-                score += 7
-                reasons.append(f"换手率适中（{turnover:.1f}%）")
-            elif turnover > 20:
-                risks.append(f"换手率过高（{turnover:.1f}%），可能出货")
-
-        # 5. RSI（10分）
+        # 2. 近期大涨/涨停记录（25分）- 股性活跃的重要标志
         try:
-            rsi = calc_rsi(close)
-            rsi6 = rsi.get("rsi6", 50)
-            details["rsi6"] = round(rsi6, 1)
-
-            if 40 <= rsi6 <= 70:
-                score += 8
-                reasons.append(f"RSI健康（{rsi6:.1f}）")
-            elif rsi6 > 80:
-                risks.append(f"RSI超买（{rsi6:.1f}）")
-            elif rsi6 < 20:
-                reasons.append(f"RSI超卖（{rsi6:.1f}），可能反弹")
+            if len(close) >= 20:
+                # 计算20日内涨跌幅
+                pct_changes_20d = []
+                for i in range(-20, 0):
+                    if i-1 >= -len(close):
+                        pct = (close.iloc[i] - close.iloc[i-1]) / close.iloc[i-1] * 100
+                        pct_changes_20d.append(pct)
+                
+                if pct_changes_20d:
+                    big_yang_count = sum(1 for c in pct_changes_20d if c >= 5)
+                    zhangting_count = sum(1 for c in pct_changes_20d if c >= 9.5)
+                    details["big_yang_count_20d"] = big_yang_count
+                    details["zhangting_count_20d"] = zhangting_count
+                    
+                    if zhangting_count >= 2:
+                        score += 25
+                        reasons.append(f"20日内{zhangting_count}次涨停，股性极其活跃")
+                    elif zhangting_count == 1:
+                        score += 18
+                        reasons.append("20日内有1次涨停，股性活跃")
+                    elif big_yang_count >= 3:
+                        score += 15
+                        reasons.append(f"20日内{big_yang_count}次大涨(>5%)，股性较活跃")
+                    elif big_yang_count >= 1:
+                        score += 8
+                        reasons.append("20日内有大涨记录，股性一般")
+                    else:
+                        risks.append("20日内无大涨记录，股性呆滞")
         except Exception as e:
-            logger.debug(f"股性锁-RSI计算失败: {e}")
+            logger.debug(f"股性锁-大涨记录计算失败: {e}")
+
+        # 3. 量比活跃度（25分）- 交投活跃程度
+        try:
+            vol = calc_volume_analysis(volume, close)
+            vol_ratio = vol.get("volume_ratio", 1)
+            details["volume_ratio"] = round(vol_ratio, 2)
+            
+            # 量比：1.5-3倍为活跃
+            if 1.5 <= vol_ratio <= 3:
+                score += 20
+                reasons.append(f"量比{vol_ratio:.1f}，交投活跃")
+            elif 1.2 <= vol_ratio < 1.5:
+                score += 12
+                reasons.append(f"量比{vol_ratio:.1f}，交投趋于活跃")
+            elif vol_ratio > 3:
+                score += 10
+                reasons.append(f"量比{vol_ratio:.1f}，极度活跃")
+                risks.append("量比过大，可能是短期情绪炒作")
+            elif vol_ratio < 0.7:
+                risks.append(f"量比{vol_ratio:.1f}，交投不活跃")
+        except Exception as e:
+            logger.debug(f"股性锁-量比计算失败: {e}")
+
+        # 4. 量能趋势（20分）- 量能持续放大=股性趋于活跃
+        try:
+            if len(volume) >= 10:
+                vol_ma5 = volume.iloc[-5:].mean()
+                vol_ma10 = volume.iloc[-10:].mean()
+                details["vol_ma5"] = round(vol_ma5, 0)
+                details["vol_ma10"] = round(vol_ma10, 0)
+                
+                if vol_ma5 > vol_ma10 * 1.2:
+                    score += 15
+                    reasons.append("5日均量大于10日均量，量能持续放大")
+                elif vol_ma5 > vol_ma10:
+                    score += 8
+                    reasons.append("5日均量略大于10日均量")
+                else:
+                    risks.append("量能萎缩，股性可能转弱")
+                
+                # 连续放量天数
+                continuous_vol_up = 0
+                for i in range(-1, -6, -1):
+                    if abs(i) < len(volume) and volume.iloc[i] > volume.iloc[i-1]:
+                        continuous_vol_up += 1
+                    else:
+                        break
+                details["continuous_vol_up"] = continuous_vol_up
+                if continuous_vol_up >= 3:
+                    score += 5
+                    reasons.append(f"连续{continuous_vol_up}日放量")
+        except Exception as e:
+            logger.debug(f"股性锁-量能趋势计算失败: {e}")
+
+        # 换手率（如果有数据，作为活跃度参考）
+        if quote and quote.get("turnover"):
+            try:
+                turnover = float(quote.get("turnover", 0))
+                details["turnover"] = turnover
+                if 3 <= turnover <= 15:
+                    score += 5
+                    reasons.append(f"换手率{turnover:.1f}%，交投活跃")
+                elif turnover > 20:
+                    risks.append(f"换手率过高（{turnover:.1f}%），可能出货")
+            except:
+                pass
+
+        # 5. 当日振幅参考（活跃度补充）
+        try:
+            if len(high) >= 1 and len(low) >= 1 and current_price > 0:
+                today_amp = (high.iloc[-1] - low.iloc[-1]) / current_price * 100
+                details["today_amplitude"] = round(today_amp, 2)
+                if today_amp >= 3:
+                    score += 5
+                    reasons.append(f"当日振幅{today_amp:.1f}%，短线活跃")
+        except Exception as e:
+            logger.debug(f"股性锁-当日振幅计算失败: {e}")
 
         score = max(0, min(100, round(score)))
         locked = score >= 50  # 股性锁门槛50分（尾盘选股股票本身股性活跃）
@@ -353,73 +389,85 @@ class ThreeLocksAnalyzer:
     def _calc_capital_lock(self, close: pd.Series, volume: pd.Series,
                             capital_flow: Optional[Dict] = None) -> Dict:
         """
-        第三把锁：资金锁
+        第三把锁：资金锁（指南针官方规则：要红不要绿）
+        核心：连续3日多空资金翻红（净流入）
         条件：
-        - 主力资金净流入
-        - 近3日资金持续流入
-        - 大单净流入占比高
-        - 量价配合（价涨量增）
-        - OBV上升
+        - 连续3日量价齐升（价涨量增=资金翻红，无资金数据时的替代）
+        - 近5日资金翻红天数
+        - OBV能量潮持续上升
+        - 量价配合健康
         """
         score = 0
         reasons = []
         risks = []
         details = {}
 
-        # 1. 资金流向数据（40分）
+        # 1. 连续3日多空资金翻红（40分）- 核心条件
+        # 有资金流向数据时用真实资金数据，没有时用连续3日量价齐升代替
         if capital_flow:
             try:
-                # 当日主力净流入
                 main_net_inflow = capital_flow.get("main_net_inflow", 0)
                 details["main_net_inflow"] = main_net_inflow
-
                 if main_net_inflow > 0:
-                    score += 20
-                    reasons.append(f"主力资金净流入（{main_net_inflow/10000:.0f}万）")
+                    score += 10
+                    reasons.append(f"当日主力资金净流入（{main_net_inflow/10000:.0f}万）")
                 elif main_net_inflow < 0:
-                    risks.append(f"主力资金净流出（{abs(main_net_inflow)/10000:.0f}万）")
-
-                # 近3日资金趋势
-                recent_flow = capital_flow.get("recent_3d_net_inflow", 0)
-                details["recent_3d_net_inflow"] = recent_flow
-                if recent_flow > 0:
-                    score += 15
-                    reasons.append("近3日资金持续流入")
-                elif recent_flow < 0:
-                    risks.append("近3日资金持续流出")
-
-                # 大单占比
-                large_order_ratio = capital_flow.get("large_order_ratio", 0)
-                details["large_order_ratio"] = large_order_ratio
-                if large_order_ratio > 0.3:
-                    score += 5
-                    reasons.append(f"大单占比高（{large_order_ratio*100:.0f}%）")
+                    risks.append(f"当日主力资金净流出（{abs(main_net_inflow)/10000:.0f}万）")
             except Exception as e:
                 logger.debug(f"资金锁-资金流向计算失败: {e}")
-
-        # 2. 量价配合（30分）
+        
+        # 用连续3日量价齐升判断"多空资金翻红"（无资金数据时的核心替代方案）
         try:
-            if len(close) >= 5 and len(volume) >= 5:
-                # 近5日价涨量增
-                price_change = (close.iloc[-1] - close.iloc[-5]) / close.iloc[-5] * 100
-                vol_change = (volume.iloc[-5:].mean() - volume.iloc[-10:-5].mean()) / volume.iloc[-10:-5].mean() * 100 if len(volume) >= 10 else 0
-
-                details["5d_price_change"] = round(price_change, 2)
-                details["5d_vol_change"] = round(vol_change, 2)
-
-                if price_change > 0 and vol_change > 0:
-                    score += 20
-                    reasons.append("量价配合（价涨量增）")
-                elif price_change > 0 and vol_change < 0:
-                    score += 8
-                    reasons.append("价涨量缩，上涨动能可能不足")
-                    risks.append("价涨量缩，需警惕")
-                elif price_change < 0 and vol_change > 0:
-                    risks.append("价跌量增，可能出货")
+            if len(close) >= 4 and len(volume) >= 4:
+                continuous_red_days = 0
+                for i in range(-3, 0):
+                    price_up = close.iloc[i] > close.iloc[i-1]
+                    vol_up = volume.iloc[i] > volume.iloc[i-1]
+                    # 翻红 = 股价上涨 + 成交量放大（量价齐升=资金流入）
+                    if price_up and vol_up:
+                        continuous_red_days += 1
+                
+                details["continuous_red_days"] = continuous_red_days
+                
+                if continuous_red_days >= 3:
+                    score += 35
+                    reasons.append(f"连续{continuous_red_days}日量价齐升，多空资金翻红")
+                elif continuous_red_days == 2:
+                    score += 22
+                    reasons.append(f"连续{continuous_red_days}日量价齐升，资金趋于翻红")
+                elif continuous_red_days == 1:
+                    score += 10
+                    reasons.append("近1日量价齐升")
+                else:
+                    risks.append("近3日无量价齐升，资金未翻红")
         except Exception as e:
-            logger.debug(f"资金锁-量价配合计算失败: {e}")
+            logger.debug(f"资金锁-连续翻红计算失败: {e}")
 
-        # 3. OBV能量潮（20分）
+        # 2. 近5日资金翻红天数（25分）
+        try:
+            if len(close) >= 6 and len(volume) >= 6:
+                red_days_5d = 0
+                for i in range(-5, 0):
+                    if close.iloc[i] > close.iloc[i-1] and volume.iloc[i] > volume.iloc[i-1]:
+                        red_days_5d += 1
+                
+                details["red_days_5d"] = red_days_5d
+                
+                if red_days_5d >= 4:
+                    score += 22
+                    reasons.append(f"5日内{red_days_5d}日资金翻红，资金持续流入")
+                elif red_days_5d >= 3:
+                    score += 15
+                    reasons.append(f"5日内{red_days_5d}日资金翻红")
+                elif red_days_5d >= 2:
+                    score += 8
+                    reasons.append(f"5日内{red_days_5d}日资金翻红")
+                else:
+                    risks.append("5日内资金翻红天数不足")
+        except Exception as e:
+            logger.debug(f"资金锁-5日翻红计算失败: {e}")
+
+        # 3. OBV能量潮趋势（20分）- OBV连续上升=资金持续流入
         try:
             obv = [0]
             for i in range(1, len(close)):
@@ -431,35 +479,53 @@ class ThreeLocksAnalyzer:
                     obv.append(obv[-1])
 
             obv_series = pd.Series(obv)
-            obv_ma5 = obv_series.rolling(5).mean()
-
-            if len(obv_series) >= 10 and not pd.isna(obv_ma5.iloc[-1]):
-                obv_trend = (obv_series.iloc[-1] - obv_ma5.iloc[-1]) / abs(obv_ma5.iloc[-1]) * 100 if obv_ma5.iloc[-1] != 0 else 0
-                details["obv_trend"] = round(obv_trend, 2)
-
-                if obv_trend > 5:
+            
+            if len(obv_series) >= 6:
+                # OBV连续上升天数
+                obv_continuous_up = 0
+                for i in range(-1, -6, -1):
+                    if abs(i) < len(obv_series) and obv_series.iloc[i] > obv_series.iloc[i-1]:
+                        obv_continuous_up += 1
+                    else:
+                        break
+                details["obv_continuous_up"] = obv_continuous_up
+                
+                # OBV 5日趋势
+                obv_trend_5d = (obv_series.iloc[-1] - obv_series.iloc[-6]) / abs(obv_series.iloc[-6]) * 100 if obv_series.iloc[-6] != 0 else 0
+                details["obv_trend_5d"] = round(obv_trend_5d, 2)
+                
+                if obv_continuous_up >= 3:
                     score += 15
-                    reasons.append("OBV能量潮上升，资金持续流入")
-                elif obv_trend < -5:
-                    risks.append("OBV能量潮下降，资金持续流出")
+                    reasons.append(f"OBV连续{obv_continuous_up}日上升，资金持续流入")
+                elif obv_trend_5d > 5:
+                    score += 12
+                    reasons.append("OBV 5日显著上升，资金流入")
+                elif obv_trend_5d > 0:
+                    score += 8
+                    reasons.append("OBV 5日上升")
                 else:
-                    score += 5
+                    risks.append("OBV下降，资金可能流出")
         except Exception as e:
             logger.debug(f"资金锁-OBV计算失败: {e}")
 
-        # 4. 资金动量（10分）
+        # 4. 量价配合质量（15分）
         try:
-            mom = calc_momentum(close)
-            roc5 = mom.get("roc5", 0)
-            details["roc5"] = round(roc5, 2) if roc5 else 0
-
-            if roc5 and roc5 > 0:
-                score += 8
-                reasons.append(f"5日动量为正（+{roc5:.1f}%）")
-            elif roc5 and roc5 < -5:
-                risks.append(f"5日动量为负（{roc5:.1f}%）")
+            if len(close) >= 5 and len(volume) >= 5:
+                price_up_5d = close.iloc[-1] > close.iloc[-5]
+                vol_up_5d = volume.iloc[-5:].mean() > volume.iloc[-10:-5].mean() if len(volume) >= 10 else volume.iloc[-1] > volume.iloc[-5]
+                details["price_up_5d"] = price_up_5d
+                details["vol_up_5d"] = vol_up_5d
+                
+                if price_up_5d and vol_up_5d:
+                    score += 12
+                    reasons.append("5日量价齐升，资金面健康")
+                elif price_up_5d and not vol_up_5d:
+                    score += 4
+                    risks.append("5日价涨量缩，资金跟进不足")
+                else:
+                    risks.append("5日量价配合不佳")
         except Exception as e:
-            logger.debug(f"资金锁-动量计算失败: {e}")
+            logger.debug(f"资金锁-量价质量计算失败: {e}")
 
         score = max(0, min(100, round(score)))
         locked = score >= 40  # 资金锁门槛40分（缺少资金流向数据时，量价配合已能说明问题）
