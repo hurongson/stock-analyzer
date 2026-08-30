@@ -245,9 +245,10 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 point_info.append(f"目标{target_p}")
             point_str = f" | {'/'.join(point_info)}" if point_info else ""
             reasons = "、".join(c.get("special_reasons", [])[:3])
+            tl_str = _format_three_locks(c)
             special_lines.append(
                 f"{i+1}. ⭐ **{c['name']}**({c['code']}) {c['price']}元 "
-                f"{c['pct_change']:+.1f}% | 评分{c.get('avg_score',0)}{point_str}\n"
+                f"{c['pct_change']:+.1f}% | 评分{c.get('avg_score',0)}{point_str}{tl_str}\n"
                 f"   原因: {reasons}"
             )
         elements.append({
@@ -285,9 +286,10 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 point_info.append(f"止损{stop_p}")
             point_str = f" | {'/'.join(point_info)}" if point_info else ""
             reasons = "、".join(c.get("limit_up_reasons", [])[:3])
+            tl_str = _format_three_locks(c)
             limit_up_lines.append(
                 f"{i+1}. 🔥 **{c['name']}**({c['code']}) {c['price']}元 "
-                f"{c['pct_change']:+.1f}% | 涨停概率{prob:.0f}%{point_str}\n"
+                f"{c['pct_change']:+.1f}% | 涨停概率{prob:.0f}%{point_str}{tl_str}\n"
                 f"   理由: {reasons}"
             )
         elements.append({
@@ -324,9 +326,10 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             if stop_p:
                 point_info.append(f"止损{stop_p}")
             point_str = f" | {'/'.join(point_info)}" if point_info else ""
+            tl_str = _format_three_locks(c)
             top_lines.append(
                 f"{i+1}. {resonance_tag} **{c['name']}**({c['code']}) {c['price']}元 "
-                f"{c['pct_change']:+.1f}%{point_str}"
+                f"{c['pct_change']:+.1f}%{point_str}{tl_str}"
             )
         elements.append({
             "tag": "div",
@@ -358,9 +361,10 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 if sell_p:
                     point_info.append(f"卖{sell_p}")
                 point_str = f" | {'/'.join(point_info)}" if point_info else ""
+                tl_str = _format_three_locks(c)
                 pick_lines.append(
                     f"• **{c['name']}**({c['code']}) {c['price']}元 "
-                    f"{c['pct_change']:+.1f}% | 命中{c['strategy_count']}策略{point_str}"
+                    f"{c['pct_change']:+.1f}% | 命中{c['strategy_count']}策略{point_str}{tl_str}"
                 )
             elements.append({
                 "tag": "div",
@@ -407,9 +411,16 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                     if sell_p:
                         point_info.append(f"卖{sell_p}")
                     point_str = f" | {'/'.join(point_info)}" if point_info else ""
+                    # 从combined中查找三把锁数据
+                    tl_data = None
+                    for comb in screener.get("combined", []):
+                        if comb.get("code") == top["code"]:
+                            tl_data = comb
+                            break
+                    tl_str = _format_three_locks(tl_data) if tl_data else ""
                     strategy_lines.append(
                         f"  {i+1}. {top['name']}({top['code']}) {top['price']}元 "
-                        f"{top['pct_change']:+.1f}%{point_str}"
+                        f"{top['pct_change']:+.1f}%{point_str}{tl_str}"
                     )
                 elements.append({
                     "tag": "div",

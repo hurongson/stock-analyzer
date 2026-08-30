@@ -12,6 +12,8 @@ from backend.screener.strategies.capital_flow import CapitalFlowStrategy
 from backend.screener.strategies.fundamental import FundamentalStrategy
 from backend.screener.strategies.concept_hotspot import ConceptHotspotStrategy
 from backend.analysis.signals import generate_trading_signal
+from backend.analysis.three_locks import three_locks_analyzer
+from backend.analysis.trend_analysis import trend_analyzer
 from backend.utils.helpers import now_str
 
 logger = logging.getLogger(__name__)
@@ -129,6 +131,22 @@ class ScreenerEngine:
                 quote = {"price": item["price"], "pct_change": item["pct_change"]}
                 signal = generate_trading_signal(kline, quote)
                 item["trading_signal"] = signal
+
+                # 三把锁分析（所有选股都带三把锁状态）
+                try:
+                    three_locks = three_locks_analyzer.analyze(kline, quote)
+                    item["three_locks"] = three_locks
+                except Exception as e:
+                    logger.debug(f"生成 {item['code']} 三把锁失败: {e}")
+                    item["three_locks"] = None
+
+                # 走势分析
+                try:
+                    trend_analysis = trend_analyzer.analyze(kline, quote)
+                    item["trend_analysis"] = trend_analysis
+                except Exception as e:
+                    logger.debug(f"生成 {item['code']} 走势分析失败: {e}")
+                    item["trend_analysis"] = None
 
                 # 强势度评估：近期涨幅、成交量放大、连续上涨、涨停
                 strength_score = 0
