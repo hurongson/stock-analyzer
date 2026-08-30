@@ -1,0 +1,410 @@
+{
+  "date": "2026-08-30",
+  "time": "14:30",
+  "market_timing": {
+    "indices": {
+      "sh": {
+        "code": "000001",
+        "name": "上证指数",
+        "price": 11.65,
+        "pct_change": 0.52,
+        "trend": {
+          "trend": "强势上升",
+          "trend_score": 90,
+          "trend_strength": 1.3,
+          "ma5": 11.62,
+          "ma10": 11.43,
+          "ma20": 11.36,
+          "ma60": 10.98,
+          "ma120": 11.0,
+          "bullish_alignment": "True",
+          "bearish_alignment": "False"
+        },
+        "macd": {
+          "dif": 0.1541,
+          "dea": 0.1283,
+          "macd": 0.0515,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "False",
+          "zero_axis_above": "True"
+        },
+        "rsi": {
+          "rsi6": 73.58,
+          "rsi12": 68.52,
+          "rsi24": 62.16,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 84.38,
+          "d": 78.37,
+          "j": 96.4,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "True",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 11.77,
+          "mid": 11.36,
+          "lower": 10.96,
+          "width": 7.07,
+          "position": 85.58,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "True"
+        },
+        "volume": {
+          "current_volume": 83812624.0,
+          "vol_ma5": 103500456.0,
+          "vol_ma10": 103921974.0,
+          "vol_ma20": 99443516.0,
+          "volume_ratio": 0.81,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "atr": {
+          "atr": 0.16,
+          "atr_ratio": 1.41,
+          "volatility_level": "低波动"
+        },
+        "obv": {
+          "obv": 1196988797.0,
+          "obv_ma10": 907546174.0,
+          "trend_up": "True",
+          "divergence_bullish": "False"
+        }
+      }
+    },
+    "sentiment": "偏乐观",
+    "sentiment_score": 67,
+    "position": "60-70%",
+    "reasons": [
+      "大盘强势上升"
+    ]
+  },
+  "picks": [
+    {
+      "code": "000058",
+      "name": "深赛格",
+      "price": 7.18,
+      "pct_change": 4.209,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "涨幅适中(4.2%)，有上涨动能",
+          "放量上涨(量比1.9)，资金入场",
+          "偏强震荡",
+          "MACD多头排列",
+          "中低价股(7.18元)",
+          "5日动量适中(+6.8%)"
+        ],
+        "risks": [],
+        "trend": "偏强震荡",
+        "volume_ratio": 1.94
+      },
+      "buy_price": 7.18,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 7.4,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 7.04,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 7.54,
+      "risk_reward_ratio": 2.57,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（7.4元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（7.4-7.54元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（7.04元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（7.18元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（7.04元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 6.83
+    },
+    {
+      "code": "000068",
+      "name": "华控赛格",
+      "price": 3.3,
+      "pct_change": 3.7736,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "涨幅适中(3.8%)，有上涨动能",
+          "放量上涨(量比1.6)，资金入场",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "低价股(3.3元)，容易次日冲高",
+          "5日动量适中(+7.1%)"
+        ],
+        "risks": [
+          "KDJ超买，次日可能回调"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 1.65
+      },
+      "buy_price": 3.3,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 3.4,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 3.23,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 3.46,
+      "risk_reward_ratio": 2.29,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（3.4元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（3.4-3.46元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（3.23元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（3.3元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（3.23元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 3.02
+    },
+    {
+      "code": "000301",
+      "name": "东方盛虹",
+      "price": 14.1,
+      "pct_change": 3.4483,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "涨幅适中(3.4%)，有上涨动能",
+          "放量上涨(量比1.6)，资金入场",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "5日动量适中(+5.7%)"
+        ],
+        "risks": [],
+        "trend": "强势上升",
+        "volume_ratio": 1.6
+      },
+      "buy_price": 14.1,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 14.52,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 13.82,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 14.8,
+      "risk_reward_ratio": 2.5,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（14.52元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（14.52-14.8元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（13.82元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（14.1元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（13.82元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 13.05
+    },
+    {
+      "code": "000552",
+      "name": "甘肃能化",
+      "price": 2.73,
+      "pct_change": 3.0189,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "涨幅适中(3.0%)，有上涨动能",
+          "成交量温和放大(量比1.2)",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "低价股(2.73元)，容易次日冲高",
+          "5日动量适中(+4.2%)"
+        ],
+        "risks": [],
+        "trend": "强势上升",
+        "volume_ratio": 1.24
+      },
+      "buy_price": 2.73,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 2.81,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 2.68,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 2.87,
+      "risk_reward_ratio": 2.8,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（2.81元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（2.81-2.87元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（2.68元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（2.73元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（2.68元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 2.58
+    },
+    {
+      "code": "000554",
+      "name": "泰山石油",
+      "price": 6.66,
+      "pct_change": 3.096,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "涨幅适中(3.1%)，有上涨动能",
+          "成交量温和放大(量比1.3)",
+          "强势上升，趋势向好",
+          "MACD金叉，短期动能转强",
+          "中低价股(6.66元)",
+          "5日动量适中(+3.9%)"
+        ],
+        "risks": [],
+        "trend": "强势上升",
+        "volume_ratio": 1.3
+      },
+      "buy_price": 6.66,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 6.86,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 6.53,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 6.99,
+      "risk_reward_ratio": 2.54,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（6.86元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（6.86-6.99元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（6.53元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（6.66元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（6.53元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 6.47
+    },
+    {
+      "code": "000576",
+      "name": "甘化科工",
+      "price": 8.16,
+      "pct_change": 2.0,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "温和上涨(2.0%)",
+          "放量上涨(量比2.7)，资金入场",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "中低价股(8.16元)"
+        ],
+        "risks": [],
+        "trend": "强势上升",
+        "volume_ratio": 2.7
+      },
+      "buy_price": 8.16,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 8.4,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 8.0,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 8.57,
+      "risk_reward_ratio": 2.56,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（8.4元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（8.4-8.57元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（8.0元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（8.16元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（8.0元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 7.27
+    },
+    {
+      "code": "000637",
+      "name": "茂化实华",
+      "price": 4.27,
+      "pct_change": 3.1401,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "涨幅适中(3.1%)，有上涨动能",
+          "放量上涨(量比1.5)，资金入场",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "低价股(4.27元)，容易次日冲高",
+          "5日动量适中(+7.0%)"
+        ],
+        "risks": [
+          "KDJ超买，次日可能回调"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 1.54
+      },
+      "buy_price": 4.27,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 4.4,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 4.18,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 4.48,
+      "risk_reward_ratio": 2.33,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（4.4元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（4.4-4.48元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（4.18元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（4.27元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（4.18元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 3.94
+    },
+    {
+      "code": "000663",
+      "name": "永安林业",
+      "price": 5.99,
+      "pct_change": 3.2759,
+      "score": 100,
+      "analysis": {
+        "reasons": [
+          "涨幅适中(3.3%)，有上涨动能",
+          "放量上涨(量比1.9)，资金入场",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "中低价股(5.99元)",
+          "5日动量适中(+6.2%)"
+        ],
+        "risks": [],
+        "trend": "强势上升",
+        "volume_ratio": 1.91
+      },
+      "buy_price": 5.99,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 6.17,
+      "sell_price_note": "次日冲高3%止盈",
+      "stop_loss": 5.87,
+      "stop_loss_note": "跌破2%止损",
+      "target_price": 6.29,
+      "risk_reward_ratio": 2.5,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（6.17元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（6.17-6.29元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（5.87元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（5.99元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（5.87元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 5.6
+    }
+  ],
+  "summary": {
+    "total_stocks": 5342,
+    "initial_filtered": 588,
+    "final_picks": 8
+  }
+}
