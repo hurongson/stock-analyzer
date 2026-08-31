@@ -96,6 +96,11 @@ class LateDayScreener:
                             stock["open"] = rt["open"]
                             updated_count += 1
                 logger.info(f"已更新{updated_count}/{len(candidates)}只股票的实时行情数据")
+                
+                # 实时行情更新后，按换手率过滤（2%-15%为活跃区间）
+                before_count = len(candidates)
+                candidates = [s for s in candidates if s.get("turnover", 0) >= 2 and s.get("turnover", 0) <= 15]
+                logger.info(f"换手率过滤: {before_count} -> {len(candidates)}只（保留2%-15%活跃度）")
             else:
                 logger.warning("实时行情获取失败，使用历史数据")
         except Exception as e:
