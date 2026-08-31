@@ -276,6 +276,36 @@ class DataCollector:
                 logger.error(f"akshare 获取行情失败 {code}: {e}")
         return None
 
+    def get_turnover_rate(self, code: str, trade_date: str = None) -> Optional[Dict]:
+        """获取股票换手率（使用Tushare daily_basic接口，GitHub Actions环境可用）"""
+        code = normalize_stock_code(code)
+        key = f"turnover_{code}_{trade_date or 'latest'}"
+        cached = cache.get("turnover", key)
+        if cached:
+            return cached
+
+        result = {}
+        if TUSHARE_AVAILABLE:
+            try:
+                ts_code = to_ts_code(code)
+                params = {"ts_code": ts_code, "fields": "ts_code,trade_date,turnover_rate,turnover_rate_f,volume_ratio"}
+                if trade_date:
+                    params["trade_date"] = trade_date
+                df = pro.daily_basic(**params)
+                if df is not None and not df.empty:
+                    latest = df.iloc[0]
+                    result = {
+                        "turnover_rate": safe_float(latest.get("turnover_rate"), 0),
+                        "turnover_rate_f": safe_float(latest.get("turnover_rate_f"), 0),
+                        "volume_ratio": safe_float(latest.get("volume_ratio"), 0),
+                        "trade_date": str(latest.get("trade_date", "")),
+                    }
+                    cache.set("turnover", key, result)
+                    return result
+            except Exception as e:
+                logger.debug(f"Tushare 获取换手率失败 {code}: {e}")
+        return None
+
     # ============ 基本面 ============
     def get_fundamental(self, code: str) -> Optional[Dict]:
         code = normalize_stock_code(code)

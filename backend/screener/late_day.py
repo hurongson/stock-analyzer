@@ -186,6 +186,16 @@ class LateDayScreener:
                 if kline is None or len(kline) < 20:
                     continue
 
+                # 获取换手率数据（Tushare daily_basic，GitHub Actions环境可用）
+                try:
+                    turnover_data = collector.get_turnover_rate(code)
+                    if turnover_data:
+                        stock["turnover"] = turnover_data.get("turnover_rate", stock.get("turnover", 0))
+                        if not stock.get("turnover"):
+                            stock["turnover"] = turnover_data.get("turnover_rate_f", 0)
+                except Exception as e:
+                    logger.debug(f"获取换手率失败 {code}: {e}")
+
                 # 把当日实时数据合并到K线中（确保技术指标包含当日数据）
                 current_price = stock["price"]
                 try:
