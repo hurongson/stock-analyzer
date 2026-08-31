@@ -51,10 +51,19 @@ class LateDayScreener:
         if not candidates:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
 
-        # 第二步：获取实时行情数据，确保使用当日最新数据
+        # 第二步：获取实时行情数据，确保使用当日最新数据（带重试机制）
         try:
             import akshare as ak
-            realtime_df = ak.stock_zh_a_spot_em()
+            import time
+            realtime_df = None
+            for retry in range(3):
+                try:
+                    realtime_df = ak.stock_zh_a_spot_em()
+                    if realtime_df is not None and not realtime_df.empty:
+                        break
+                except Exception as e:
+                    logger.warning(f"获取实时行情第{retry+1}次失败: {e}")
+                    time.sleep(2)
             if realtime_df is not None and not realtime_df.empty:
                 realtime_map = {}
                 for _, row in realtime_df.iterrows():
@@ -87,8 +96,10 @@ class LateDayScreener:
                             stock["open"] = rt["open"]
                             updated_count += 1
                 logger.info(f"已更新{updated_count}/{len(candidates)}只股票的实时行情数据")
+            else:
+                logger.warning("实时行情获取失败，使用历史数据")
         except Exception as e:
-            logger.warning(f"获取实时行情失败，使用历史数据: {e}")
+            logger.warning(f"获取实时行情异常，使用历史数据: {e}")
 
         # 第三步：深度分析（获取K线数据，计算技术指标）
         picks = self._deep_analyze(candidates)
