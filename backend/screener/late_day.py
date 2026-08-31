@@ -186,15 +186,22 @@ class LateDayScreener:
                 if kline is None or len(kline) < 20:
                     continue
 
-                # 获取换手率数据（Tushare daily_basic，GitHub Actions环境可用）
+                # 用K线数据计算量比（代替换手率，不依赖外部接口）
                 try:
-                    turnover_data = collector.get_turnover_rate(code)
-                    if turnover_data:
-                        stock["turnover"] = turnover_data.get("turnover_rate", stock.get("turnover", 0))
-                        if not stock.get("turnover"):
-                            stock["turnover"] = turnover_data.get("turnover_rate_f", 0)
+                    volume = kline["volume"]
+                    if len(volume) >= 6:
+                        vol_today = volume.iloc[-1]
+                        vol_ma5 = volume.iloc[-6:-1].mean()  # 前5日均量（不含当日）
+                        if vol_ma5 > 0:
+                            volume_ratio = vol_today / vol_ma5
+                            stock["volume_ratio"] = round(volume_ratio, 2)
+                            # 用量比估算活跃度（量比>1.5=活跃，>2=非常活跃）
+                            if volume_ratio >= 1.5:
+                                stock["turnover"] = max(stock.get("turnover", 0), 3.0)  # 估算为活跃
+                            elif volume_ratio >= 1.2:
+                                stock["turnover"] = max(stock.get("turnover", 0), 2.0)  # 估算为较活跃
                 except Exception as e:
-                    logger.debug(f"获取换手率失败 {code}: {e}")
+                    logger.debug(f"计算量比失败 {code}: {e}")
 
                 # 把当日实时数据合并到K线中（确保技术指标包含当日数据）
                 current_price = stock["price"]
