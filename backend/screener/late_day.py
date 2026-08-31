@@ -51,7 +51,46 @@ class LateDayScreener:
         if not candidates:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
 
-        # 第二步：深度分析（获取K线数据，计算技术指标）
+        # 第二步：获取实时行情数据，确保使用当日最新数据
+        try:
+            import akshare as ak
+            realtime_df = ak.stock_zh_a_spot_em()
+            if realtime_df is not None and not realtime_df.empty:
+                realtime_map = {}
+                for _, row in realtime_df.iterrows():
+                    code = str(row.get("代码", ""))
+                    if code:
+                        realtime_map[code] = {
+                            "price": float(row.get("最新价", 0)),
+                            "pct_change": float(row.get("涨跌幅", 0)),
+                            "volume": float(row.get("成交量", 0)) * 100,  # 手→股
+                            "amount": float(row.get("成交额", 0)),
+                            "turnover": float(row.get("换手率", 0)),
+                            "high": float(row.get("最高", 0)),
+                            "low": float(row.get("最低", 0)),
+                            "open": float(row.get("今开", 0)),
+                        }
+                # 更新候选股票的实时数据
+                updated_count = 0
+                for stock in candidates:
+                    code = stock["code"]
+                    if code in realtime_map:
+                        rt = realtime_map[code]
+                        if rt["price"] > 0:
+                            stock["price"] = rt["price"]
+                            stock["pct_change"] = rt["pct_change"]
+                            stock["volume"] = rt["volume"]
+                            stock["amount"] = rt["amount"]
+                            stock["turnover"] = rt["turnover"]
+                            stock["high"] = rt["high"]
+                            stock["low"] = rt["low"]
+                            stock["open"] = rt["open"]
+                            updated_count += 1
+                logger.info(f"已更新{updated_count}/{len(candidates)}只股票的实时行情数据")
+        except Exception as e:
+            logger.warning(f"获取实时行情失败，使用历史数据: {e}")
+
+        # 第三步：深度分析（获取K线数据，计算技术指标）
         picks = self._deep_analyze(candidates)
         logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
 
@@ -66,11 +105,12 @@ class LateDayScreener:
 
     def _initial_filter(self, stock_df: pd.DataFrame) -> List[Dict]:
         """
-        初筛：基于实时行情数据快速过滤
+        初筛：基于实时行情数据快速过滤（使用akshare实时行情，确保是当日数据）
         条件：
-        - 涨幅 2%-6%（有上涨动能但未涨停，不过高）
-        - 价格 2-30元（低价优先，容易次日冲高）
-        - 成交量 > 500万（有流动性）
+        - 涨幅 1%-5%（有上涨动能但未追高，尾盘买入次日冲高概率更高）
+        - 价格 3-25元（中低价优先，容易次日冲高）
+        - 成交量 > 1000万（有流动性和资金关注）
+        - 换手率 2%-15%（活跃度适中）
         - 非ST、非退市
         - 非北交所、非科创板
         """
@@ -130,8 +170,28 @@ class LateDayScreener:
                 if kline is None or len(kline) < 20:
                     continue
 
-                close = kline["close"]
+                # 把当日实时数据合并到K线中（确保技术指标包含当日数据）
                 current_price = stock["price"]
+                try:
+                    today = pd.Timestamp.now().strftime("%Y-%m-%d")
+                    # 检查K线最后一天是否是今天
+                    last_date = str(kline.index[-1])[:10] if hasattr(kline.index[-1], 'strftime') else str(kline.index[-1])[:10]
+                    if last_date != today:
+                        # 添加当日实时数据到K线
+                        new_row = pd.DataFrame({
+                            "open": [stock.get("open", current_price)],
+                            "high": [stock.get("high", current_price)],
+                            "low": [stock.get("low", current_price)],
+                            "close": [current_price],
+                            "volume": [stock.get("volume", 0)],
+                            "amount": [stock.get("amount", 0)],
+                            "pct_chg": [stock.get("pct_change", 0)],
+                        }, index=pd.to_datetime([today]))
+                        kline = pd.concat([kline, new_row])
+                except Exception as e:
+                    logger.debug(f"合并当日数据失败 {code}: {e}")
+
+                close = kline["close"]
 
                 # 关键过滤：股价必须在20日均线之上（趋势向上）
                 ma20 = calc_sma(close, 20).iloc[-1]
@@ -141,23 +201,35 @@ class LateDayScreener:
                 # 计算技术指标
                 score, analysis = self._calc_late_day_score(kline, stock)
 
-                # 只保留评分>=60的
-                if score >= 60:
-                    # === 买卖点位计算（参照公开尾盘买入法）===
-                    # 买入价 = 尾盘现价（直接买入，不等回调）
+                # 连续放量过滤：近3日成交量递增（资金持续流入）
+                volume = kline["volume"]
+                if len(volume) >= 4:
+                    vol_continuous_up = (volume.iloc[-1] > volume.iloc[-2] > volume.iloc[-3])
+                    if not vol_continuous_up:
+                        # 不是连续放量也可以，但要5日均量大于10日均量
+                        vol_ma5 = volume.iloc[-5:].mean()
+                        vol_ma10 = volume.iloc[-10:].mean() if len(volume) >= 10 else vol_ma5
+                        if vol_ma5 < vol_ma10 * 1.1:
+                            continue  # 量能不足，跳过
+
+                # 只保留评分>=70的（更严格，提高胜率）
+                if score >= 70:
+                    # === 买卖点位计算（优化：更合理的盈亏比）===
+                    # 买入价 = 尾盘现价（14:30-15:00直接买入）
                     buy_price = round(current_price, 2)
                     buy_price_note = "尾盘现价买入"
 
-                    # 卖出价 = 次日冲高3%（保守止盈）
+                    # 卖出价 = 次日冲高5%（优化止盈目标，提高收益）
                     target_3pct = round(current_price * 1.03, 2)
                     target_5pct = round(current_price * 1.05, 2)
-                    sell_price = target_3pct
-                    sell_price_note = "次日冲高3%止盈"
-                    target_price = target_5pct
+                    target_8pct = round(current_price * 1.08, 2)
+                    sell_price = target_5pct
+                    sell_price_note = "次日冲高5%止盈"
+                    target_price = target_8pct
 
-                    # 止损价 = 买入价下方2%（固定比例止损）
-                    stop_loss = round(current_price * 0.98, 2)
-                    stop_loss_note = "跌破2%止损"
+                    # 止损价 = 买入价下方3%（优化：稍微放宽止损，避免被洗出）
+                    stop_loss = round(current_price * 0.97, 2)
+                    stop_loss_note = "跌破3%止损"
 
                     # 盈亏比 = (目标价-买入价)/(买入价-止损价)
                     risk_reward_ratio = round((target_price - buy_price) / (buy_price - stop_loss), 2) if buy_price > stop_loss else None
