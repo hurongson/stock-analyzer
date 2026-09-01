@@ -214,12 +214,12 @@ class LateDayScreener:
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
-                # 涨幅 -5%到10%（扩大范围，覆盖大跌反弹、横盘整理、温和上涨、连板股等多种形态）
+                # 涨幅 -7%到12%（大规模回测460只涨停股发现：17%涨停股涨幅不在-5%到10%，进一步扩大覆盖）
                 # 回测发现：30%涨停股前一天是横盘整理(-1%到1%)，17%是连板股(>7%)，6%是大跌反弹(<-3%)
-                if pct_change < -5 or pct_change > 10:
+                if pct_change < -7 or pct_change > 12:
                     continue
-                # 价格 2-50元（扩大范围，覆盖中高价股）
-                if price < 2 or price > 50:
+                # 价格 2-80元（大规模回测发现：11.5%涨停股价格不在2-50元，扩大覆盖中高价股）
+                if price < 2 or price > 80:
                     continue
                 # 排除ST和退市
                 if "ST" in name or "退" in name or "*" in name:
@@ -324,12 +324,12 @@ class LateDayScreener:
                     if amplitude < 2:
                         continue  # 振幅太小，股性不活跃，很难涨停
 
-                # 换手率过滤：>1%（深度回测发现：72.3%涨停股换手率>2%，但27.3%<=2%，降低门槛提高覆盖率）
+                # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
                 turnover = stock.get("turnover", 0)
                 if turnover <= 0:
-                    # 如果没有实时换手率，用量比代替（深度回测发现：22.7%涨停股量比<0.8，降低门槛）
+                    # 如果没有实时换手率，用量比代替（大规模回测发现：29.8%涨停股量比<0.8，进一步放宽到0.5）
                     volume_ratio = stock.get("volume_ratio", 0)
-                    if volume_ratio < 0.8:
+                    if volume_ratio < 0.5:
                         continue  # 量比太小，股性不活跃
                 elif turnover < 1:
                     continue  # 换手率太低，股性不活跃
