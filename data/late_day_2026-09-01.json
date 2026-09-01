@@ -405,6 +405,13 @@
           "MA5支撑：7.95元",
           "MA20支撑：7.83元"
         ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
       }
     },
     {
@@ -718,6 +725,13 @@
           "MA5支撑：4.82元",
           "MA10支撑：4.38元"
         ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
       }
     },
     {
@@ -1037,6 +1051,15 @@
           "MA5支撑：2.5元",
           "MA20支撑：2.41元"
         ]
+      },
+      "news_impact": {
+        "score": 38,
+        "level": "偏利空",
+        "reasons": [
+          "近期2条负面新闻"
+        ],
+        "has_positive_news": false,
+        "has_negative_news": true
       }
     },
     {
@@ -1352,6 +1375,15 @@
           "MA5支撑：9.17元",
           "MA10支撑：8.77元"
         ]
+      },
+      "news_impact": {
+        "score": 80,
+        "level": "利好",
+        "reasons": [
+          "近期1条正面新闻"
+        ],
+        "has_positive_news": true,
+        "has_negative_news": false
       }
     },
     {
@@ -1676,6 +1708,13 @@
           "MA5支撑：5.25元",
           "MA20支撑：5.12元"
         ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
       }
     },
     {
@@ -1995,6 +2034,15 @@
           "MA5支撑：3.37元",
           "MA60支撑：3.36元"
         ]
+      },
+      "news_impact": {
+        "score": 20,
+        "level": "利空",
+        "reasons": [
+          "近期1条负面新闻"
+        ],
+        "has_positive_news": false,
+        "has_negative_news": true
       }
     },
     {
@@ -2313,6 +2361,13 @@
           "MA5支撑：6.89元",
           "MA20支撑：6.55元"
         ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
       }
     },
     {
@@ -2648,6 +2703,16 @@
           "MA5支撑：2.42元",
           "MA10支撑：2.4元"
         ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [
+          "近期1条正面新闻",
+          "近期1条负面新闻"
+        ],
+        "has_positive_news": true,
+        "has_negative_news": true
       }
     }
   ],
