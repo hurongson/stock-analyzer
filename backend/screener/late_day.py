@@ -463,6 +463,7 @@ class LateDayScreener:
                         "three_locks": three_locks,
                         "trend_analysis": trend_analysis,
                         "news_impact": stock.get("news_impact", {}),
+                        "concept_analysis": stock.get("concept_analysis", {}),
                     }
                     results.append(result)
 
