@@ -290,11 +290,11 @@ class LateDayScreener:
                 kline = collector.get_daily_kline(code, days=60)
                 if kline is None or len(kline) < 20:
                     if i < 5:
-                        logger.info(f"K线数据不足 {stock['name']}({stock.get('code', '')}): kline={'None' if kline is None else len(kline)}天")
+                        logger.debug(f"K线数据不足 {stock['name']}({stock.get('code', '')}): kline={'None' if kline is None else len(kline)}天")
                     continue
                 
                 if i < 3:
-                    logger.info(f"K线数据正常 {stock['name']}({stock.get('code', '')}): {len(kline)}天, 最新收盘{kline['close'].iloc[-1]:.2f}")
+                    logger.debug(f"K线数据正常 {stock['name']}({stock.get('code', '')}): {len(kline)}天, 最新收盘{kline['close'].iloc[-1]:.2f}")
 
                 # 用K线数据计算量比（代替换手率，不依赖外部接口）
                 try:
@@ -339,7 +339,7 @@ class LateDayScreener:
                 low = kline["low"]
                 
                 if i < 3:
-                    logger.info(f"进入过滤条件 {stock['name']}({stock.get('code', '')}): close={len(close)}天, 最新={close.iloc[-1]:.2f}")
+                    logger.debug(f"进入过滤条件 {stock['name']}({stock.get('code', '')}): close={len(close)}天, 最新={close.iloc[-1]:.2f}")
 
                 # 振幅过滤：>2%（深度回测282只涨停股发现：71.3%振幅>3%，但28.7%<=3%，降低门槛提高覆盖率）
                 if len(close) >= 2:
@@ -350,7 +350,7 @@ class LateDayScreener:
                     stock["amplitude"] = round(amplitude, 2)
                     if amplitude < 2:
                         if i < 5:
-                            logger.info(f"振幅过滤 {stock['name']}({stock.get('code', '')}): 振幅{amplitude:.1f}% < 2%")
+                            logger.debug(f"振幅过滤 {stock['name']}({stock.get('code', '')}): 振幅{amplitude:.1f}% < 2%")
                         continue  # 振幅太小，股性不活跃，很难涨停
 
                 # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
@@ -360,11 +360,11 @@ class LateDayScreener:
                     volume_ratio = stock.get("volume_ratio", 0)
                     if volume_ratio < 0.3:
                         if i < 5:
-                            logger.info(f"量比过滤 {stock['name']}({stock.get('code', '')}): 量比{volume_ratio:.2f} < 0.3")
+                            logger.debug(f"量比过滤 {stock['name']}({stock.get('code', '')}): 量比{volume_ratio:.2f} < 0.3")
                         continue  # 量比太小，股性不活跃
                 elif turnover < 1:
                     if i < 5:
-                        logger.info(f"换手率过滤 {stock['name']}({stock.get('code', '')}): 换手率{turnover:.1f}% < 1%")
+                        logger.debug(f"换手率过滤 {stock['name']}({stock.get('code', '')}): 换手率{turnover:.1f}% < 1%")
                     continue  # 换手率太低，股性不活跃
 
                 # 放宽MA20条件：允许股价在20日均线下方10%以内（突破型）
@@ -372,7 +372,7 @@ class LateDayScreener:
                 ma20 = calc_sma(close, 20).iloc[-1]
                 if current_price < ma20 * 0.9:  # 允许低于MA20不超过10%
                     if i < 5:
-                        logger.info(f"MA20过滤 {stock['name']}({stock.get('code', '')}): 价格{current_price:.2f} < MA20*0.9={ma20*0.9:.2f}")
+                        logger.debug(f"MA20过滤 {stock['name']}({stock.get('code', '')}): 价格{current_price:.2f} < MA20*0.9={ma20*0.9:.2f}")
                     continue
 
                 # 计算技术指标
@@ -380,7 +380,7 @@ class LateDayScreener:
                 
                 # 调试日志：输出每只股票的评分情况
                 if i < 10 or score >= 60:
-                    logger.info(f"评分调试 {stock['name']}({stock.get('code', '')}): 涨幅{stock.get('pct_change', 0):.1f}%, 价格{current_price}, 评分{score}, 理由{analysis.get('reasons', [])[:3]}")
+                    logger.debug(f"评分调试 {stock['name']}({stock.get('code', '')}): 涨幅{stock.get('pct_change', 0):.1f}%, 价格{current_price}, 评分{score}, 理由{analysis.get('reasons', [])[:3]}")
 
                 # 去掉量能硬过滤：回测发现46.3%涨停股前一天不满足连续放量条件
                 # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
