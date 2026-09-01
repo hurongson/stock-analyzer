@@ -227,6 +227,19 @@ class LateDayScreener:
                 # 排除北交所（8开头）和科创板（688开头，波动大）
                 if code.startswith("8") or code.startswith("4") or code.startswith("688"):
                     continue
+                # 排除金融板块（银行、证券、保险）- 回测发现涨停股中金融股仅占1%，但推荐中占50%
+                finance_keywords = ["银行", "证券", "保险", "信托", "期货", "金融"]
+                if any(kw in name for kw in finance_keywords):
+                    continue
+                # 排除常见银行股代码
+                bank_codes = ["601398", "601939", "601288", "601988", "600036", "601166", 
+                              "600000", "601328", "000001", "601818", "600015", "601169",
+                              "601009", "002142", "600919", "600926", "601128", "603323",
+                              "002807", "002839", "601658", "601601", "601318", "601336",
+                              "601628", "601099", "600030", "600837", "600999", "601788",
+                              "601211", "600109", "000776", "000166", "600958", "601375"]
+                if code in bank_codes:
+                    continue
 
                 candidates.append({
                     "code": code,
@@ -298,6 +311,28 @@ class LateDayScreener:
                     logger.debug(f"合并当日数据失败 {code}: {e}")
 
                 close = kline["close"]
+                high = kline["high"]
+                low = kline["low"]
+
+                # 振幅过滤：>3%（回测发现62.4%涨停股前一天振幅>3%，银行股通常<3%）
+                if len(close) >= 2:
+                    prev_close = close.iloc[-2]
+                    today_high = high.iloc[-1]
+                    today_low = low.iloc[-1]
+                    amplitude = (today_high - today_low) / prev_close * 100 if prev_close > 0 else 0
+                    stock["amplitude"] = round(amplitude, 2)
+                    if amplitude < 3:
+                        continue  # 振幅太小，股性不活跃，很难涨停
+
+                # 换手率过滤：>2%（回测发现71.1%涨停股前一天换手率>2%，银行股通常<1%）
+                turnover = stock.get("turnover", 0)
+                if turnover <= 0:
+                    # 如果没有实时换手率，用成交量估算（需要流通股本，这里用量比代替）
+                    volume_ratio = stock.get("volume_ratio", 0)
+                    if volume_ratio < 1.2:
+                        continue  # 量比太小，股性不活跃
+                elif turnover < 2:
+                    continue  # 换手率太低，股性不活跃
 
                 # 放宽MA20条件：允许股价在20日均线下方10%以内（突破型）
                 # 回测发现33.8%涨停股前一天股价不在MA20之上，很多是从下方突破的
