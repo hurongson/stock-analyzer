@@ -36,7 +36,7 @@ class LowPriceStrategy(BaseStrategy):
         if has_pe:
             filtered = filtered[(filtered["pe"] > 0) & (filtered["pe"] < 100)]
 
-        filtered = filtered.head(100)
+        filtered = filtered.sort_values("amount", ascending=False).head(100)
 
         for _, row in filtered.iterrows():
             code = row["code"]

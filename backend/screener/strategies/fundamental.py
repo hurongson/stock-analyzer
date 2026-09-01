@@ -31,7 +31,7 @@ class FundamentalStrategy(BaseStrategy):
         if has_mv:
             candidates = candidates[(candidates["total_mv"] > 30e8) & (candidates["total_mv"] < 2000e8)]
 
-        candidates = candidates.head(100)
+        candidates = candidates.sort_values("amount", ascending=False).head(100)
 
         for _, row in candidates.iterrows():
             code = row["code"]

@@ -28,7 +28,7 @@ class TechnicalPatternStrategy(BaseStrategy):
         if df["turnover"].max() > 0:
             candidates = candidates[candidates["turnover"] > 0.5]
 
-        candidates = candidates.head(100)
+        candidates = candidates.sort_values("amount", ascending=False).head(100)
 
         for _, row in candidates.iterrows():
             code = row["code"]
