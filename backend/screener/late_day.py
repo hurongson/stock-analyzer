@@ -185,13 +185,13 @@ class LateDayScreener:
             logger.warning(f"获取实时行情异常，使用历史数据: {e}")
 
         # 第三步：批量获取K线数据（使用Tushare批量接口，避免频率超限）
-        collector = None
+        batch_collector = None
         try:
             from backend.data.collector import DataCollector
-            collector = DataCollector()
+            batch_collector = DataCollector()
             codes = [stock["code"] for stock in candidates]
             logger.info(f"开始批量获取K线数据: {len(codes)}只股票")
-            batch_result = collector.batch_get_daily_kline(codes, days=120)
+            batch_result = batch_collector.batch_get_daily_kline(codes, days=120)
             logger.info(f"批量获取K线完成: 成功{len(batch_result)}/{len(codes)}只")
         except Exception as e:
             logger.warning(f"批量获取K线失败，将使用单只获取: {e}")
