@@ -656,11 +656,23 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
             if news_reasons_str:
                 news_str += f" | {news_reasons_str}"
 
+        # 涨停概率和原因（基于6个月460只涨停股回测分析）
+        analysis = p.get("analysis", {})
+        limit_up_prob = analysis.get("limit_up_probability", 0)
+        limit_up_reasons = analysis.get("limit_up_reasons", [])
+        limit_up_str = ""
+        if limit_up_prob > 0:
+            prob_emoji = "🔥" if limit_up_prob >= 60 else "⚡" if limit_up_prob >= 45 else "📈"
+            limit_up_str = f"\n   {prob_emoji}涨停概率: {limit_up_prob}%"
+            if limit_up_reasons:
+                limit_up_str += f" | {'、'.join(limit_up_reasons[:3])}"
+
         content = (
             f"**{i+1}. 🎯 {p['name']}({p['code']})** {p['price']}元 {p['pct_change']:+.1f}% | 评分{score}\n"
             f"   {point_str}"
             f"{tl_str}"
-            f"{news_str}\n"
+            f"{news_str}"
+            f"{limit_up_str}\n"
             f"   ✅ 理由: {reasons_str}"
         )
         if risks_str:

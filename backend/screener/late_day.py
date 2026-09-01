@@ -27,7 +27,7 @@ class LateDayScreener:
     """尾盘选股器"""
 
     def __init__(self):
-        self.max_results = 8  # 最多推荐8只
+        self.max_results = 20  # 最多推荐20只（基于6个月涨停股回测优化）
 
     def screen(self, stock_df: Optional[pd.DataFrame] = None) -> Dict:
         """
@@ -473,11 +473,14 @@ class LateDayScreener:
                 logger.info(traceback.format_exc()[:500])
                 continue
 
-        # 排序：优先按三把锁点亮数，再按综合评分（确保推荐股票与三把锁一致）
+        # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分
+        # 基于6个月460只涨停股回测分析，涨停概率是最重要的指标
         def sort_key(x):
             tl = x.get("three_locks", {})
             locked = tl.get("total_locked", 0) if tl else 0
-            return (locked, x["score"])
+            analysis = x.get("analysis", {})
+            limit_up_prob = analysis.get("limit_up_probability", 0) if analysis else 0
+            return (limit_up_prob, locked, x["score"])
         results.sort(key=sort_key, reverse=True)
         return results[:self.max_results]
 
@@ -725,6 +728,98 @@ class LateDayScreener:
         except Exception:
             pass
 
+        # 8. 涨停概率预测（基于6个月460只涨停股回测分析）
+        # 回测关键特征：60%涨幅-3%~3%，70%振幅3%~7%，60%换手率2%~7%
+        # 23.5%量比0.5~0.8（缩量整理），86.5%首板，47.6%均线多头
+        limit_up_prob = 30  # 基础概率
+        limit_up_reasons = []
+        
+        # 8.1 涨幅特征（横盘整理概率最高）
+        if -1 <= pct_change < 1:
+            limit_up_prob += 15
+            limit_up_reasons.append("横盘整理(-1%~1%)，蓄势待发")
+        elif -3 <= pct_change < -1:
+            limit_up_prob += 12
+            limit_up_reasons.append("缩量回调(-3%~-1%)，洗盘后反弹")
+        elif 1 <= pct_change <= 3:
+            limit_up_prob += 10
+            limit_up_reasons.append("温和上涨(1%~3%)，稳步推升")
+        
+        # 8.2 振幅特征（振幅大股性活跃）
+        if amplitude >= 5:
+            limit_up_prob += 10
+            limit_up_reasons.append(f"振幅大({amplitude:.1f}%)，股性活跃")
+        elif amplitude >= 3:
+            limit_up_prob += 6
+            limit_up_reasons.append(f"振幅适中({amplitude:.1f}%)")
+        
+        # 8.3 换手率特征（适度活跃概率高）
+        if 3 <= turnover <= 7:
+            limit_up_prob += 8
+            limit_up_reasons.append(f"换手率适中({turnover:.1f}%)，资金关注度高")
+        elif turnover > 7:
+            limit_up_prob += 5
+            limit_up_reasons.append(f"换手率高({turnover:.1f}%)，交投活跃")
+        
+        # 8.4 量比特征（缩量整理后放量涨停是常见模式）
+        if 0.5 <= vol_ratio < 0.8:
+            limit_up_prob += 8
+            limit_up_reasons.append(f"缩量整理(量比{vol_ratio:.1f})，洗盘后可能放量涨停")
+        elif 0.8 <= vol_ratio <= 1.2:
+            limit_up_prob += 5
+            limit_up_reasons.append(f"量能平稳(量比{vol_ratio:.1f})，蓄势整理")
+        elif vol_ratio > 1.5:
+            limit_up_prob += 6
+            limit_up_reasons.append(f"放量(量比{vol_ratio:.1f})，资金关注")
+        
+        # 8.5 均线特征（多头排列趋势强势）
+        try:
+            ma5 = calc_sma(close, 5).iloc[-1]
+            ma10 = calc_sma(close, 10).iloc[-1]
+            ma20_val = calc_sma(close, 20).iloc[-1]
+            if ma5 > ma10 > ma20_val:
+                limit_up_prob += 8
+                limit_up_reasons.append("均线多头排列，趋势强势")
+            elif current_price > ma20_val:
+                limit_up_prob += 4
+                limit_up_reasons.append("股价在MA20上方，趋势向好")
+        except Exception:
+            pass
+        
+        # 8.6 价格特征（低价股更容易涨停）
+        if current_price < 5:
+            limit_up_prob += 8
+            limit_up_reasons.append(f"低价股({current_price}元)，容易涨停")
+        elif current_price < 10:
+            limit_up_prob += 5
+            limit_up_reasons.append(f"中低价股({current_price}元)")
+        
+        # 8.7 消息面加成
+        try:
+            news_impact = stock.get("news_impact", {})
+            news_score = news_impact.get("score", 50)
+            if news_score >= 70:
+                limit_up_prob += 10
+                limit_up_reasons.append("消息面利好，有催化")
+            elif news_score >= 60:
+                limit_up_prob += 5
+                limit_up_reasons.append("消息面偏利好")
+        except Exception:
+            pass
+        
+        # 8.8 概念热点加成
+        try:
+            concept_analysis = stock.get("concept_analysis", {})
+            matched_hot = concept_analysis.get("matched_hot", [])
+            if matched_hot:
+                limit_up_prob += 8
+                limit_up_reasons.append("涉及热门概念，题材风口")
+        except Exception:
+            pass
+        
+        # 限制概率范围
+        limit_up_prob = max(5, min(95, round(limit_up_prob)))
+        
         score = max(0, min(100, round(score)))
 
         analysis = {
@@ -733,6 +828,8 @@ class LateDayScreener:
             "trend": trend_name,
             "volume_ratio": vol_ratio,
             "pattern": pattern,
+            "limit_up_probability": limit_up_prob,
+            "limit_up_reasons": limit_up_reasons,
         }
 
         return score, analysis
