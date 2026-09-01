@@ -56,34 +56,103 @@ class LateDayScreener:
         if not candidates:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
 
-        # 第二步：获取实时行情数据，确保使用当日最新数据（带重试机制）
+        # 第二步：获取实时行情数据，确保使用当日最新数据（多数据源 fallback）
         try:
             import akshare as ak
             import time
             realtime_df = None
-            for retry in range(3):
+            realtime_source = None
+            
+            # 数据源1: 新浪财经（东方财富接口在部分环境代理失败，新浪更稳定）
+            for retry in range(2):
                 try:
-                    realtime_df = ak.stock_zh_a_spot_em()
+                    logger.info(f"尝试新浪财经实时行情（第{retry+1}次）...")
+                    realtime_df = ak.stock_zh_a_spot()
                     if realtime_df is not None and not realtime_df.empty:
+                        realtime_source = "sina"
+                        logger.info(f"✅ 新浪财经实时行情获取成功，共{len(realtime_df)}只股票")
                         break
                 except Exception as e:
-                    logger.warning(f"获取实时行情第{retry+1}次失败: {e}")
+                    logger.warning(f"新浪财经实时行情第{retry+1}次失败: {e}")
                     time.sleep(2)
+            
+            # 数据源2: 腾讯财经（fallback）
+            if realtime_df is None or realtime_df.empty:
+                for retry in range(2):
+                    try:
+                        logger.info(f"尝试腾讯财经实时行情（第{retry+1}次）...")
+                        realtime_df = ak.stock_zh_a_spot_tx()
+                        if realtime_df is not None and not realtime_df.empty:
+                            realtime_source = "tencent"
+                            logger.info(f"✅ 腾讯财经实时行情获取成功，共{len(realtime_df)}只股票")
+                            break
+                    except Exception as e:
+                        logger.warning(f"腾讯财经实时行情第{retry+1}次失败: {e}")
+                        time.sleep(2)
+            
+            # 数据源3: 东方财富（最后fallback）
+            if realtime_df is None or realtime_df.empty:
+                try:
+                    logger.info("尝试东方财富实时行情...")
+                    realtime_df = ak.stock_zh_a_spot_em()
+                    if realtime_df is not None and not realtime_df.empty:
+                        realtime_source = "eastmoney"
+                        logger.info(f"✅ 东方财富实时行情获取成功，共{len(realtime_df)}只股票")
+                except Exception as e:
+                    logger.warning(f"东方财富实时行情失败: {e}")
             if realtime_df is not None and not realtime_df.empty:
                 realtime_map = {}
+                # 根据数据源选择列名映射
+                if realtime_source == "sina":
+                    # 新浪财经列名：代码、名称、最新价、涨跌幅、成交量、成交额、最高、最低、今开
+                    code_col, name_col = "代码", "名称"
+                    price_col, pct_col = "最新价", "涨跌幅"
+                    vol_col, amt_col = "成交量", "成交额"
+                    high_col, low_col, open_col = "最高", "最低", "今开"
+                    turnover_col = None  # 新浪财经没有换手率字段
+                elif realtime_source == "tencent":
+                    # 腾讯财经列名：code, name, hsl(换手率), lb(量比)
+                    code_col, name_col = "code", "name"
+                    price_col, pct_col = None, None  # 腾讯财经可能没有价格和涨幅
+                    vol_col, amt_col = None, None
+                    high_col, low_col, open_col = None, None, None
+                    turnover_col = "hsl"
+                else:
+                    # 东方财富列名：代码、名称、最新价、涨跌幅、成交量、成交额、换手率、最高、最低、今开
+                    code_col, name_col = "代码", "名称"
+                    price_col, pct_col = "最新价", "涨跌幅"
+                    vol_col, amt_col = "成交量", "成交额"
+                    high_col, low_col, open_col = "最高", "最低", "今开"
+                    turnover_col = "换手率"
+                
                 for _, row in realtime_df.iterrows():
-                    code = str(row.get("代码", ""))
-                    if code:
-                        realtime_map[code] = {
-                            "price": float(row.get("最新价", 0)),
-                            "pct_change": float(row.get("涨跌幅", 0)),
-                            "volume": float(row.get("成交量", 0)) * 100,  # 手→股
-                            "amount": float(row.get("成交额", 0)),
-                            "turnover": float(row.get("换手率", 0)),
-                            "high": float(row.get("最高", 0)),
-                            "low": float(row.get("最低", 0)),
-                            "open": float(row.get("今开", 0)),
-                        }
+                    code = str(row.get(code_col, "")) if code_col else ""
+                    # 统一股票代码格式（去掉前缀如bj/sh/sz）
+                    code = code.replace("bj", "").replace("sh", "").replace("sz", "")
+                    if code and len(code) == 6:
+                        try:
+                            price = float(row.get(price_col, 0)) if price_col else 0
+                            pct = float(row.get(pct_col, 0)) if pct_col else 0
+                            vol = float(row.get(vol_col, 0)) * 100 if vol_col else 0  # 手→股
+                            amt = float(row.get(amt_col, 0)) if amt_col else 0
+                            turnover = float(row.get(turnover_col, 0)) if turnover_col else 0
+                            high = float(row.get(high_col, 0)) if high_col else 0
+                            low = float(row.get(low_col, 0)) if low_col else 0
+                            open_p = float(row.get(open_col, 0)) if open_col else 0
+                            
+                            if price > 0:
+                                realtime_map[code] = {
+                                    "price": price,
+                                    "pct_change": pct,
+                                    "volume": vol,
+                                    "amount": amt,
+                                    "turnover": turnover,
+                                    "high": high,
+                                    "low": low,
+                                    "open": open_p,
+                                }
+                        except (ValueError, TypeError):
+                            continue
                 # 更新候选股票的实时数据
                 updated_count = 0
                 for stock in candidates:
