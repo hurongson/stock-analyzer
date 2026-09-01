@@ -466,7 +466,9 @@ class LateDayScreener:
                     results.append(result)
 
             except Exception as e:
-                logger.debug(f"分析 {stock.get('code')} 失败: {e}")
+                logger.info(f"分析失败 {stock.get('code')} {stock.get('name', '')}: {e}")
+                import traceback
+                logger.info(traceback.format_exc()[:500])
                 continue
 
         # 排序：优先按三把锁点亮数，再按综合评分（确保推荐股票与三把锁一致）
