@@ -185,6 +185,7 @@ class LateDayScreener:
             logger.warning(f"获取实时行情异常，使用历史数据: {e}")
 
         # 第三步：批量获取K线数据（使用Tushare批量接口，避免频率超限）
+        collector = None
         try:
             from backend.data.collector import DataCollector
             collector = DataCollector()
