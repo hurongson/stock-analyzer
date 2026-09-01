@@ -171,6 +171,11 @@ class LateDayScreener:
                             updated_count += 1
                 logger.info(f"已更新{updated_count}/{len(candidates)}只股票的实时行情数据")
                 
+                # 更新实时数据后再次过滤涨幅（确保捕捉涨停前夕信号，而非已涨停股票）
+                before_count = len(candidates)
+                candidates = [s for s in candidates if -5 <= s.get("pct_change", 0) <= 5]
+                logger.info(f"实时数据更新后涨幅过滤: {before_count}->{len(candidates)}只（过滤掉涨幅超出-5%到5%的股票）")
+                
                 # 换手率不做硬过滤（GitHub Actions环境可能获取失败），只在评分中考虑
                 logger.info(f"换手率数据: 有{sum(1 for s in candidates if s.get('turnover',0)>0)}只，无{sum(1 for s in candidates if s.get('turnover',0)==0)}只")
             else:
