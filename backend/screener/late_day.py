@@ -687,6 +687,30 @@ class LateDayScreener:
         except Exception as e:
             logger.info(f"消息面分析失败 {stock.get('code', '')}: {e}")
 
+        # 6.6 概念热点评分（10%）- 结合近期热门题材、概念板块
+        try:
+            from backend.analysis.concept import analyze_concept
+            concept_result = analyze_concept(stock.get("code", ""))
+            concept_score = concept_result.get("score", 50)
+            matched_hot = concept_result.get("matched_hot", [])
+            if matched_hot:
+                hot_names = "、".join([h.get("name", "") for h in matched_hot[:3]])
+                if concept_score >= 70:
+                    score += 10
+                    reasons.append(f"热门概念({hot_names})，题材风口")
+                elif concept_score >= 60:
+                    score += 6
+                    reasons.append(f"涉及热门概念({hot_names})")
+                elif concept_score <= 40:
+                    score -= 3
+                    risks.append(f"概念板块走弱({hot_names})")
+            else:
+                score -= 2
+                risks.append("非当前热门题材")
+            stock["concept_analysis"] = concept_result
+        except Exception as e:
+            logger.info(f"概念热点分析失败 {stock.get('code', '')}: {e}")
+
         # 7. 动量评分（10%）
         try:
             mom = calc_momentum(close)

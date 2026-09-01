@@ -328,7 +328,57 @@ class DataCollector:
                 cache.set("quote", key, result)
                 return result
             except Exception as e:
-                logger.error(f"akshare 获取行情失败 {code}: {e}")
+                logger.warning(f"akshare东方财富 获取行情失败 {code}: {str(e)[:80]}")
+
+        # fallback 新浪财经（已验证在GitHub Actions中稳定可用）
+        if AKSHARE_AVAILABLE:
+            try:
+                # 新浪财经需要股票代码加前缀
+                if code.startswith("6"):
+                    sina_code = f"sh{code}"
+                elif code.startswith("0") or code.startswith("3"):
+                    sina_code = f"sz{code}"
+                else:
+                    sina_code = f"bj{code}"
+                
+                df = ak.stock_zh_a_spot()
+                if df is not None and not df.empty:
+                    # 新浪财经接口列名可能不同，尝试兼容
+                    code_col = "代码" if "代码" in df.columns else "symbol"
+                    row = df[df[code_col] == code]
+                    if row.empty:
+                        # 尝试带前缀的代码
+                        row = df[df[code_col] == sina_code]
+                    if not row.empty:
+                        r = row.iloc[0]
+                        name_col = "名称" if "名称" in r.index else "name"
+                        price_col = "最新价" if "最新价" in r.index else "trade"
+                        pct_col = "涨跌幅" if "涨跌幅" in r.index else "changepercent"
+                        result = {
+                            "code": code,
+                            "name": str(r.get(name_col, code)),
+                            "price": safe_float(r.get(price_col), 0),
+                            "pct_change": safe_float(r.get(pct_col), 0),
+                            "change": safe_float(r.get("涨跌额", r.get("change", 0)), 0),
+                            "volume": safe_float(r.get("成交量", r.get("volume", 0)), 0),
+                            "amount": safe_float(r.get("成交额", r.get("amount", 0)), 0),
+                            "high": safe_float(r.get("最高", r.get("high", 0)), 0),
+                            "low": safe_float(r.get("最低", r.get("low", 0)), 0),
+                            "open": safe_float(r.get("今开", r.get("open", 0)), 0),
+                            "prev_close": safe_float(r.get("昨收", r.get("settlement", 0)), 0),
+                            "turnover": safe_float(r.get("换手率", r.get("turnoverratio", 0)), 0),
+                            "pe": None,
+                            "pb": None,
+                            "total_mv": 0,
+                            "circ_mv": 0,
+                        }
+                        if result["price"] > 0:
+                            cache.set("quote", key, result)
+                            logger.info(f"新浪财经获取行情成功 {code}: {result['name']} {result['price']}元")
+                            return result
+            except Exception as e:
+                logger.error(f"新浪财经 获取行情失败 {code}: {str(e)[:80]}")
+
         return None
 
     def get_turnover_rate(self, code: str, trade_date: str = None) -> Optional[Dict]:
@@ -563,21 +613,47 @@ class DataCollector:
 
         # Tushare 没有直接的概念涨幅榜，用 akshare
         if AKSHARE_AVAILABLE:
+            # 优先东方财富
             try:
                 df = ak.stock_board_concept_name_em()
-                if df is None or df.empty:
-                    return None
-                df = df.rename(columns={
-                    "板块名称": "name", "板块代码": "code", "最新价": "price",
-                    "涨跌幅": "pct_change", "总市值": "total_mv",
-                    "换手率": "turnover", "上涨家数": "up_count", "下跌家数": "down_count",
-                    "领涨股票": "leading_stock", "领涨股票-涨跌幅": "leading_pct"
-                })
-                df = df.sort_values("pct_change", ascending=False).head(top_n).reset_index(drop=True)
-                cache.set_dataframe("concept", key, df)
-                return df
+                if df is not None and not df.empty:
+                    df = df.rename(columns={
+                        "板块名称": "name", "板块代码": "code", "最新价": "price",
+                        "涨跌幅": "pct_change", "总市值": "total_mv",
+                        "换手率": "turnover", "上涨家数": "up_count", "下跌家数": "down_count",
+                        "领涨股票": "leading_stock", "领涨股票-涨跌幅": "leading_pct"
+                    })
+                    df = df.sort_values("pct_change", ascending=False).head(top_n).reset_index(drop=True)
+                    cache.set_dataframe("concept", key, df)
+                    logger.info(f"东方财富获取热门概念成功: {len(df)}个")
+                    return df
             except Exception as e:
-                logger.error(f"akshare 获取热门概念失败: {e}")
+                logger.warning(f"东方财富获取热门概念失败: {str(e)[:80]}")
+
+            # 备用：同花顺概念板块（已验证在GitHub Actions中可用）
+            try:
+                df = ak.stock_board_concept_name_ths()
+                if df is not None and not df.empty:
+                    # 同花顺接口列名可能不同，尝试兼容
+                    if "概念名称" in df.columns:
+                        df = df.rename(columns={"概念名称": "name"})
+                    elif "名称" in df.columns:
+                        df = df.rename(columns={"名称": "name"})
+                    if "涨跌幅" in df.columns:
+                        df = df.rename(columns={"涨跌幅": "pct_change"})
+                    elif "涨幅" in df.columns:
+                        df = df.rename(columns={"涨幅": "pct_change"})
+                    # 确保必要列存在
+                    for col in ["name", "pct_change"]:
+                        if col not in df.columns:
+                            df[col] = 0
+                    df = df.sort_values("pct_change", ascending=False).head(top_n).reset_index(drop=True)
+                    cache.set_dataframe("concept", key, df)
+                    logger.info(f"同花顺获取热门概念成功: {len(df)}个")
+                    return df
+            except Exception as e:
+                logger.error(f"同花顺获取热门概念失败: {str(e)[:80]}")
+
         return None
 
     # ============ 全量股票列表 ============
