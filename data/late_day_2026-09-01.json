@@ -112,6 +112,7 @@
           "中低价股(8.36元)"
         ],
         "risks": [
+          "非当前热门题材",
           "短期涨幅过大，可能回调"
         ],
         "trend": "偏强震荡",
@@ -412,6 +413,15 @@
         "reasons": [],
         "has_positive_news": false,
         "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     },
     {
@@ -439,6 +449,7 @@
         ],
         "risks": [
           "KDJ超买，次日可能回调",
+          "非当前热门题材",
           "短期涨幅过大，可能回调"
         ],
         "trend": "强势上升",
@@ -732,6 +743,15 @@
         "reasons": [],
         "has_positive_news": false,
         "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     },
     {
@@ -758,7 +778,8 @@
           "低价股(2.63元)，容易次日冲高"
         ],
         "risks": [
-          "消息面偏利空(偏利空)"
+          "消息面偏利空(偏利空)",
+          "非当前热门题材"
         ],
         "trend": "偏强震荡",
         "volume_ratio": 4.91,
@@ -1060,6 +1081,15 @@
         ],
         "has_positive_news": false,
         "has_negative_news": true
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     },
     {
@@ -1085,7 +1115,9 @@
           "消息面利好(利好)，有正面催化",
           "5日动量适中(+8.5%)"
         ],
-        "risks": [],
+        "risks": [
+          "非当前热门题材"
+        ],
         "trend": "强势上升",
         "volume_ratio": 4.79,
         "pattern": "温和上涨型"
@@ -1384,6 +1416,15 @@
         ],
         "has_positive_news": true,
         "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     },
     {
@@ -1409,7 +1450,9 @@
           "MACD多头排列",
           "中低价股(5.51元)"
         ],
-        "risks": [],
+        "risks": [
+          "非当前热门题材"
+        ],
         "trend": "偏强震荡",
         "volume_ratio": 4.88,
         "pattern": "温和上涨型"
@@ -1715,6 +1758,15 @@
         "reasons": [],
         "has_positive_news": false,
         "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     },
     {
@@ -1742,7 +1794,8 @@
           "5日动量适中(+8.4%)"
         ],
         "risks": [
-          "消息面利空(利空)，需谨慎"
+          "消息面利空(利空)，需谨慎",
+          "非当前热门题材"
         ],
         "trend": "偏强震荡",
         "volume_ratio": 4.88,
@@ -2043,6 +2096,15 @@
         ],
         "has_positive_news": false,
         "has_negative_news": true
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     },
     {
@@ -2069,7 +2131,9 @@
           "中低价股(6.97元)",
           "5日动量适中(+2.4%)"
         ],
-        "risks": [],
+        "risks": [
+          "非当前热门题材"
+        ],
         "trend": "偏强震荡",
         "volume_ratio": 4.8,
         "pattern": "温和上涨型"
@@ -2368,6 +2432,15 @@
         "reasons": [],
         "has_positive_news": false,
         "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     },
     {
@@ -2393,7 +2466,9 @@
           "MACD金叉，短期动能转强",
           "低价股(2.43元)，容易次日冲高"
         ],
-        "risks": [],
+        "risks": [
+          "非当前热门题材"
+        ],
         "trend": "偏强震荡",
         "volume_ratio": 4.83,
         "pattern": "温和上涨型"
@@ -2713,6 +2788,15 @@
         ],
         "has_positive_news": true,
         "has_negative_news": true
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
       }
     }
   ],
