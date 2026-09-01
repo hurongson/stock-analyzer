@@ -214,11 +214,12 @@ class LateDayScreener:
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
-                # 涨幅 -3%到7%（覆盖温和上涨型、横盘突破型、回调反弹型、强势延续型）
-                if pct_change < -3 or pct_change > 7:
+                # 涨幅 -5%到10%（扩大范围，覆盖大跌反弹、横盘整理、温和上涨、连板股等多种形态）
+                # 回测发现：30%涨停股前一天是横盘整理(-1%到1%)，17%是连板股(>7%)，6%是大跌反弹(<-3%)
+                if pct_change < -5 or pct_change > 10:
                     continue
-                # 价格 2-40元（扩大范围，覆盖低价和中高价股）
-                if price < 2 or price > 40:
+                # 价格 2-50元（扩大范围，覆盖中高价股）
+                if price < 2 or price > 50:
                     continue
                 # 排除ST和退市
                 if "ST" in name or "退" in name or "*" in name:
@@ -298,24 +299,18 @@ class LateDayScreener:
 
                 close = kline["close"]
 
-                # 关键过滤：股价必须在20日均线之上（趋势向上）
+                # 放宽MA20条件：允许股价在20日均线下方10%以内（突破型）
+                # 回测发现33.8%涨停股前一天股价不在MA20之上，很多是从下方突破的
                 ma20 = calc_sma(close, 20).iloc[-1]
-                if current_price < ma20:
+                if current_price < ma20 * 0.9:  # 允许低于MA20不超过10%
                     continue
 
                 # 计算技术指标
                 score, analysis = self._calc_late_day_score(kline, stock)
 
-                # 连续放量过滤：近3日成交量递增（资金持续流入）
-                volume = kline["volume"]
-                if len(volume) >= 4:
-                    vol_continuous_up = (volume.iloc[-1] > volume.iloc[-2] > volume.iloc[-3])
-                    if not vol_continuous_up:
-                        # 不是连续放量也可以，但要5日均量大于10日均量
-                        vol_ma5 = volume.iloc[-5:].mean()
-                        vol_ma10 = volume.iloc[-10:].mean() if len(volume) >= 10 else vol_ma5
-                        if vol_ma5 < vol_ma10 * 1.1:
-                            continue  # 量能不足，跳过
+                # 去掉量能硬过滤：回测发现46.3%涨停股前一天不满足连续放量条件
+                # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
+                # 连续放量过滤已移除，改为评分项
 
                 # 只保留评分>=70的（更严格，提高胜率）
                 if score >= 70:
@@ -440,18 +435,19 @@ class LateDayScreener:
         vol_ratio = 0
         trend_name = "未知"
 
-        # 1. 涨幅评分（15%）- 5种形态模式（基于涨停回测优化）
+        # 1. 涨幅评分（15%）- 7种形态模式（基于涨停回测优化）
+        # 回测发现：30%横盘整理(-1%到1%)，23%温和上涨(1%到3%)，18%回调(-3%到-1%)，17%连板(>7%)
         pattern = "未知"
         if 1 <= pct_change <= 3:
             score += 15
             reasons.append(f"温和上涨({pct_change:.1f}%)，次日冲高概率高")
             pattern = "温和上涨型"
         elif -1 <= pct_change < 1:
-            score += 12
+            score += 14
             reasons.append(f"横盘整理({pct_change:.1f}%)，可能突破涨停")
             pattern = "横盘突破型"
         elif -3 <= pct_change < -1:
-            score += 10
+            score += 12
             reasons.append(f"缩量回调({pct_change:.1f}%)，反弹概率高")
             pattern = "回调反弹型"
         elif 3 < pct_change <= 5:
@@ -459,9 +455,17 @@ class LateDayScreener:
             reasons.append(f"涨幅尚可({pct_change:.1f}%)")
             pattern = "温和上涨型"
         elif 5 < pct_change <= 7:
-            score += 8
+            score += 9
             reasons.append(f"强势上涨({pct_change:.1f}%)，可能延续涨停")
             pattern = "强势延续型"
+        elif 7 < pct_change <= 10:
+            score += 11
+            reasons.append(f"连板股({pct_change:.1f}%)，强势延续可能继续涨停")
+            pattern = "连板强势型"
+        elif -5 <= pct_change < -3:
+            score += 8
+            reasons.append(f"大跌反弹({pct_change:.1f}%)，超跌反弹概率高")
+            pattern = "超跌反弹型"
         else:
             risks.append("涨幅异常")
 
