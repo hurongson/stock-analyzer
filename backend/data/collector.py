@@ -578,28 +578,68 @@ class DataCollector:
             except Exception as e:
                 logger.error(f"Tushare 获取股票列表失败: {e}")
 
-        # fallback akshare（带重试）
+        # fallback akshare（带重试，多数据源fallback）
         if AKSHARE_AVAILABLE:
             df = None
+            
+            # 数据源1: 新浪财经（已验证在GitHub Actions中稳定可用）
             for retry in range(3):
                 try:
-                    df = ak.stock_zh_a_spot_em()
+                    logger.info(f"尝试新浪财经获取股票列表（第{retry+1}次）...")
+                    df = ak.stock_zh_a_spot()
                     if df is not None and not df.empty:
+                        logger.info(f"新浪财经获取成功，共 {len(df)} 只股票")
+                        # 统一列名
+                        df = df.rename(columns={
+                            "代码": "code", "名称": "name",
+                            "最新价": "price", "涨跌幅": "pct_change",
+                            "涨跌额": "change", "成交量": "volume",
+                            "成交额": "amount", "最高": "high",
+                            "最低": "low", "今开": "open", "昨收": "prev_close",
+                        })
+                        # 新浪财经缺少的列，添加默认值
+                        for col in ["turnover", "pe", "pb", "total_mv", "circ_mv", "amplitude"]:
+                            if col not in df.columns:
+                                df[col] = 0
+                        # 计算振幅
+                        if "amplitude" in df.columns and "prev_close" in df.columns:
+                            mask = df["prev_close"] > 0
+                            df.loc[mask, "amplitude"] = (df.loc[mask, "high"] - df.loc[mask, "low"]) / df.loc[mask, "prev_close"] * 100
                         break
                 except Exception as e:
-                    logger.warning(f"akshare 获取股票列表第{retry+1}次失败: {e}")
+                    logger.warning(f"新浪财经获取股票列表第{retry+1}次失败: {str(e)[:80]}")
                     time.sleep(2)
+            
+            # 数据源2: 东方财富（备用，在GitHub Actions中可能连接失败）
             if df is None or df.empty:
-                logger.error("akshare 获取股票列表失败（3次重试均失败）")
+                for retry in range(3):
+                    try:
+                        logger.info(f"尝试东方财富获取股票列表（第{retry+1}次）...")
+                        df = ak.stock_zh_a_spot_em()
+                        if df is not None and not df.empty:
+                            logger.info(f"东方财富获取成功，共 {len(df)} 只股票")
+                            df = df.rename(columns={
+                                "序号": "idx", "代码": "code", "名称": "name",
+                                "最新价": "price", "涨跌幅": "pct_change", "涨跌额": "change",
+                                "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
+                                "最高": "high", "最低": "low", "今开": "open", "昨收": "prev_close",
+                                "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
+                                "总市值": "total_mv", "流通市值": "circ_mv"
+                            })
+                            break
+                    except Exception as e:
+                        logger.warning(f"东方财富获取股票列表第{retry+1}次失败: {str(e)[:80]}")
+                        time.sleep(2)
+            
+            if df is None or df.empty:
+                logger.error("所有数据源获取股票列表均失败（新浪财经+东方财富）")
                 return None
-            df = df.rename(columns={
-                "序号": "idx", "代码": "code", "名称": "name",
-                "最新价": "price", "涨跌幅": "pct_change", "涨跌额": "change",
-                "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
-                "最高": "high", "最低": "low", "今开": "open", "昨收": "prev_close",
-                "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
-                "总市值": "total_mv", "流通市值": "circ_mv"
-            })
+            
+            # 确保必要列存在
+            for col in ["code", "name", "price", "pct_change", "volume", "amount"]:
+                if col not in df.columns:
+                    df[col] = 0 if col != "name" else ""
+            
             df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
             cache.set_dataframe("stock_list", key, df)
             return df
