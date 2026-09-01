@@ -99,6 +99,7 @@
       "pattern": "温和上涨型",
       "volume_ratio": 2.22,
       "turnover": 3.0,
+      "amplitude": 13.65,
       "analysis": {
         "reasons": [
           "温和上涨(2.4%)，次日冲高概率高",
@@ -412,6 +413,7 @@
       "pattern": "温和上涨型",
       "volume_ratio": 1.45,
       "turnover": 2.0,
+      "amplitude": 7.42,
       "analysis": {
         "reasons": [
           "温和上涨(1.9%)，次日冲高概率高",
@@ -722,6 +724,7 @@
       "pattern": "温和上涨型",
       "volume_ratio": 1.48,
       "turnover": 2.0,
+      "amplitude": 3.36,
       "analysis": {
         "reasons": [
           "温和上涨(1.2%)，次日冲高概率高",
@@ -1033,6 +1036,7 @@
       "pattern": "横盘突破型",
       "volume_ratio": 6.6,
       "turnover": 3.0,
+      "amplitude": 13.48,
       "analysis": {
         "reasons": [
           "横盘整理(0.7%)，可能突破涨停",
@@ -1342,6 +1346,7 @@
       "pattern": "强势延续型",
       "volume_ratio": 1.39,
       "turnover": 2.0,
+      "amplitude": 10.81,
       "analysis": {
         "reasons": [
           "强势上涨(5.7%)，可能延续涨停",
@@ -1654,6 +1659,7 @@
       "pattern": "温和上涨型",
       "volume_ratio": 1.61,
       "turnover": 3.0,
+      "amplitude": 5.7,
       "analysis": {
         "reasons": [
           "温和上涨(2.8%)，次日冲高概率高",
@@ -1962,6 +1968,7 @@
       "pattern": "回调反弹型",
       "volume_ratio": 3.63,
       "turnover": 3.0,
+      "amplitude": 5.39,
       "analysis": {
         "reasons": [
           "缩量回调(-1.7%)，反弹概率高",
@@ -2277,6 +2284,7 @@
       "pattern": "温和上涨型",
       "volume_ratio": 3.92,
       "turnover": 3.0,
+      "amplitude": 7.39,
       "analysis": {
         "reasons": [
           "温和上涨(1.9%)，次日冲高概率高",
