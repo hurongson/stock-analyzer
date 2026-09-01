@@ -346,6 +346,8 @@ class LateDayScreener:
                     amplitude = (today_high - today_low) / prev_close * 100 if prev_close > 0 else 0
                     stock["amplitude"] = round(amplitude, 2)
                     if amplitude < 2:
+                        if i < 5:
+                            logger.info(f"振幅过滤 {stock['name']}({code}): 振幅{amplitude:.1f}% < 2%")
                         continue  # 振幅太小，股性不活跃，很难涨停
 
                 # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
@@ -354,14 +356,20 @@ class LateDayScreener:
                     # 如果没有实时换手率，用量比代替（涨停前夕分析发现：3.3%涨停股量比<0.5，进一步放宽到0.3）
                     volume_ratio = stock.get("volume_ratio", 0)
                     if volume_ratio < 0.3:
+                        if i < 5:
+                            logger.info(f"量比过滤 {stock['name']}({code}): 量比{volume_ratio:.2f} < 0.3")
                         continue  # 量比太小，股性不活跃
                 elif turnover < 1:
+                    if i < 5:
+                        logger.info(f"换手率过滤 {stock['name']}({code}): 换手率{turnover:.1f}% < 1%")
                     continue  # 换手率太低，股性不活跃
 
                 # 放宽MA20条件：允许股价在20日均线下方10%以内（突破型）
                 # 回测发现33.8%涨停股前一天股价不在MA20之上，很多是从下方突破的
                 ma20 = calc_sma(close, 20).iloc[-1]
                 if current_price < ma20 * 0.9:  # 允许低于MA20不超过10%
+                    if i < 5:
+                        logger.info(f"MA20过滤 {stock['name']}({code}): 价格{current_price:.2f} < MA20*0.9={ma20*0.9:.2f}")
                     continue
 
                 # 计算技术指标
