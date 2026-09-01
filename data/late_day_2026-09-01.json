@@ -88,5 +88,9 @@
     ]
   },
   "picks": [],
-  "summary": {}
+  "summary": {
+    "total_stocks": 5341,
+    "initial_filtered": 50,
+    "final_picks": 0
+  }
 }
