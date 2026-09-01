@@ -92,7 +92,11 @@ def analyze_stock(code: str) -> Dict[str, Any]:
 
     total_score = round(max(0, min(100, total_score)))
 
-    # 综合评级
+    # 综合评级（考虑三把锁信号，确保与尾盘选股规则一致）
+    tl_locked = three_locks.get("total_locked", 0) if three_locks else 0
+    tl_signal = three_locks.get("signal", "") if three_locks else ""
+
+    # 基础评级基于综合评分
     if total_score >= 75:
         rating = "强烈看多"
         action = "买入"
@@ -108,6 +112,22 @@ def analyze_stock(code: str) -> Dict[str, Any]:
     else:
         rating = "强烈看空"
         action = "卖出"
+
+    # 三把锁信号修正（确保与尾盘选股规则一致）
+    if tl_locked == 3 and "买入" in tl_signal:
+        # 三把锁全亮且买入信号，至少偏多
+        if total_score < 60:
+            rating = "偏多（三把锁全亮）"
+            action = "逢低关注"
+            total_score = max(total_score, 60)
+    elif tl_locked == 3 and "卖出" in tl_signal:
+        # 三把锁全亮但卖出信号，保持原评级
+        pass
+    elif tl_locked <= 1 and total_score >= 60:
+        # 三把锁亮灯少但评分高，降级为中性
+        rating = "中性（三把锁不足）"
+        action = "观望"
+        total_score = min(total_score, 55)
 
     # 风险提示
     risks = []
