@@ -638,10 +638,29 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
             tl_signal = tl.get("signal", "")
             tl_str = f"\n   🔒三把锁: {total_locked}/3 {t_locked}趋势 {a_locked}股性 {c_locked}资金 | {tl_signal}"
 
+        # 消息面状态（结合时事新闻、政策消息、公司公告）
+        news_impact = p.get("news_impact", {})
+        news_str = ""
+        if news_impact:
+            news_level = news_impact.get("level", "中性")
+            news_score = news_impact.get("score", 50)
+            news_reasons = news_impact.get("reasons", [])
+            news_reasons_str = "、".join(news_reasons[:2]) if news_reasons else ""
+            if news_level in ["利好", "偏利好"]:
+                news_emoji = "📰"
+            elif news_level in ["利空", "偏利空"]:
+                news_emoji = "⚠️"
+            else:
+                news_emoji = "📄"
+            news_str = f"\n   {news_emoji}消息面: {news_level}({news_score}分)"
+            if news_reasons_str:
+                news_str += f" | {news_reasons_str}"
+
         content = (
             f"**{i+1}. 🎯 {p['name']}({p['code']})** {p['price']}元 {p['pct_change']:+.1f}% | 评分{score}\n"
             f"   {point_str}"
-            f"{tl_str}\n"
+            f"{tl_str}"
+            f"{news_str}\n"
             f"   ✅ 理由: {reasons_str}"
         )
         if risks_str:

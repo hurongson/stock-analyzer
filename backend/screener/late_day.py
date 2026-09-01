@@ -627,6 +627,28 @@ class LateDayScreener:
         elif current_price > 20:
             score -= 3
 
+        # 6.5 消息面评分（10%）- 结合时事新闻、政策消息、公司公告
+        try:
+            from backend.analysis.news_analyzer import news_analyzer
+            news_impact = news_analyzer.get_news_impact_score(code, name)
+            news_score = news_impact.get("score", 50)
+            news_level = news_impact.get("level", "中性")
+            if news_score >= 70:
+                score += 10
+                reasons.append(f"消息面利好({news_level})，有正面催化")
+            elif news_score >= 60:
+                score += 6
+                reasons.append(f"消息面偏利好({news_level})")
+            elif news_score <= 30:
+                score -= 8
+                risks.append(f"消息面利空({news_level})，需谨慎")
+            elif news_score <= 40:
+                score -= 4
+                risks.append(f"消息面偏利空({news_level})")
+            stock["news_impact"] = news_impact
+        except Exception as e:
+            logger.debug(f"消息面分析失败 {code}: {e}")
+
         # 7. 动量评分（10%）
         try:
             mom = calc_momentum(close)
