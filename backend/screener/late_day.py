@@ -290,11 +290,11 @@ class LateDayScreener:
                 kline = collector.get_daily_kline(code, days=60)
                 if kline is None or len(kline) < 20:
                     if i < 5:
-                        logger.info(f"K线数据不足 {stock['name']}({code}): kline={'None' if kline is None else len(kline)}天")
+                        logger.info(f"K线数据不足 {stock['name']}({stock.get('code', '')}): kline={'None' if kline is None else len(kline)}天")
                     continue
                 
                 if i < 3:
-                    logger.info(f"K线数据正常 {stock['name']}({code}): {len(kline)}天, 最新收盘{kline['close'].iloc[-1]:.2f}")
+                    logger.info(f"K线数据正常 {stock['name']}({stock.get('code', '')}): {len(kline)}天, 最新收盘{kline['close'].iloc[-1]:.2f}")
 
                 # 用K线数据计算量比（代替换手率，不依赖外部接口）
                 try:
@@ -311,7 +311,7 @@ class LateDayScreener:
                             elif volume_ratio >= 1.2:
                                 stock["turnover"] = max(stock.get("turnover", 0), 2.0)  # 估算为较活跃
                 except Exception as e:
-                    logger.debug(f"计算量比失败 {code}: {e}")
+                    logger.debug(f"计算量比失败 {stock.get('code', '')}: {e}")
 
                 # 把当日实时数据合并到K线中（确保技术指标包含当日数据）
                 current_price = stock["price"]
@@ -332,14 +332,14 @@ class LateDayScreener:
                         }, index=pd.to_datetime([today]))
                         kline = pd.concat([kline, new_row])
                 except Exception as e:
-                    logger.debug(f"合并当日数据失败 {code}: {e}")
+                    logger.debug(f"合并当日数据失败 {stock.get('code', '')}: {e}")
 
                 close = kline["close"]
                 high = kline["high"]
                 low = kline["low"]
                 
                 if i < 3:
-                    logger.info(f"进入过滤条件 {stock['name']}({code}): close={len(close)}天, 最新={close.iloc[-1]:.2f}")
+                    logger.info(f"进入过滤条件 {stock['name']}({stock.get('code', '')}): close={len(close)}天, 最新={close.iloc[-1]:.2f}")
 
                 # 振幅过滤：>2%（深度回测282只涨停股发现：71.3%振幅>3%，但28.7%<=3%，降低门槛提高覆盖率）
                 if len(close) >= 2:
@@ -380,7 +380,7 @@ class LateDayScreener:
                 
                 # 调试日志：输出每只股票的评分情况
                 if i < 10 or score >= 60:
-                    logger.info(f"评分调试 {stock['name']}({code}): 涨幅{stock.get('pct_change', 0):.1f}%, 价格{current_price}, 评分{score}, 理由{analysis.get('reasons', [])[:3]}")
+                    logger.info(f"评分调试 {stock['name']}({stock.get('code', '')}): 涨幅{stock.get('pct_change', 0):.1f}%, 价格{current_price}, 评分{score}, 理由{analysis.get('reasons', [])[:3]}")
 
                 # 去掉量能硬过滤：回测发现46.3%涨停股前一天不满足连续放量条件
                 # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
@@ -682,7 +682,7 @@ class LateDayScreener:
                 risks.append(f"消息面偏利空({news_level})")
             stock["news_impact"] = news_impact
         except Exception as e:
-            logger.debug(f"消息面分析失败 {code}: {e}")
+            logger.debug(f"消息面分析失败 {stock.get('code', '')}: {e}")
 
         # 7. 动量评分（10%）
         try:
