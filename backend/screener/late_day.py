@@ -337,6 +337,9 @@ class LateDayScreener:
                 close = kline["close"]
                 high = kline["high"]
                 low = kline["low"]
+                
+                if i < 3:
+                    logger.info(f"进入过滤条件 {stock['name']}({code}): close={len(close)}天, 最新={close.iloc[-1]:.2f}")
 
                 # 振幅过滤：>2%（深度回测282只涨停股发现：71.3%振幅>3%，但28.7%<=3%，降低门槛提高覆盖率）
                 if len(close) >= 2:
