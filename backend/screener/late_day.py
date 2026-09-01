@@ -47,11 +47,12 @@ class LateDayScreener:
         # 第一步：初筛（基于实时行情数据快速过滤）
         candidates = self._initial_filter(stock_df)
         logger.info(f"初筛后剩余: {len(candidates)} 只")
-        # 限制候选股票数量，避免运行时间过长（按成交量排序，取前200只）
-        if len(candidates) > 200:
+        # 限制候选股票数量，避免运行时间过长（按成交量排序，取前50只）
+        # 减少到50只，避免Tushare接口频率超限（50次/分钟）
+        if len(candidates) > 50:
             candidates.sort(key=lambda x: x.get("amount", x.get("volume", 0)), reverse=True)
-            candidates = candidates[:200]
-            logger.info(f"候选股票限制为200只（按成交量排序）")
+            candidates = candidates[:50]
+            logger.info(f"候选股票限制为50只（按成交量排序，避免Tushare频率超限）")
 
         if not candidates:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
@@ -183,7 +184,18 @@ class LateDayScreener:
         except Exception as e:
             logger.warning(f"获取实时行情异常，使用历史数据: {e}")
 
-        # 第三步：深度分析（获取K线数据，计算技术指标）
+        # 第三步：批量获取K线数据（使用Tushare批量接口，避免频率超限）
+        try:
+            from backend.data.collector import DataCollector
+            collector = DataCollector()
+            codes = [stock["code"] for stock in candidates]
+            logger.info(f"开始批量获取K线数据: {len(codes)}只股票")
+            batch_result = collector.batch_get_daily_kline(codes, days=120)
+            logger.info(f"批量获取K线完成: 成功{len(batch_result)}/{len(codes)}只")
+        except Exception as e:
+            logger.warning(f"批量获取K线失败，将使用单只获取: {e}")
+
+        # 第四步：深度分析（获取K线数据，计算技术指标）
         picks = self._deep_analyze(candidates)
         logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
 

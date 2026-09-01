@@ -114,6 +114,61 @@ class DataCollector:
         return self._latest_trade_date
 
     # ============ 日线K线 ============
+    def batch_get_daily_kline(self, codes: list, days: int = 120) -> dict:
+        """批量获取多只股票的K线数据（使用Tushare批量接口，避免频率超限）"""
+        result = {}
+        if not codes or not TUSHARE_AVAILABLE:
+            return result
+
+        try:
+            # 获取最近N个交易日的日期
+            end_date = today_str("%Y%m%d")
+            start_date = (pd.Timestamp.now() - pd.Timedelta(days=days * 2)).strftime("%Y%m%d")
+            
+            # 分批获取（每批50只股票，避免单次请求过大）
+            batch_size = 50
+            for i in range(0, len(codes), batch_size):
+                batch_codes = codes[i:i + batch_size]
+                ts_codes = ",".join([to_ts_code(code) for code in batch_codes])
+                
+                try:
+                    df = pro.daily(ts_code=ts_codes, start_date=start_date, end_date=end_date)
+                    if df is not None and not df.empty:
+                        df = df.rename(columns={
+                            "trade_date": "date", "vol": "volume", "pct_chg": "pct_change"
+                        })
+                        df["date"] = pd.to_datetime(df["date"])
+                        df["volume"] = df["volume"] * 100  # 手转股
+                        
+                        # 按股票代码分组
+                        for code in batch_codes:
+                            ts_code = to_ts_code(code)
+                            stock_df = df[df["ts_code"] == ts_code].copy()
+                            if not stock_df.empty:
+                                stock_df = stock_df.sort_values("date").reset_index(drop=True)
+                                stock_df = stock_df.tail(days).reset_index(drop=True)
+                                # 确保列存在
+                                for col in ["open", "high", "low", "close", "volume", "amount", "pct_change", "change"]:
+                                    if col not in stock_df.columns:
+                                        stock_df[col] = 0
+                                # 缓存
+                                key = f"kline_{code}_{days}_qfq"
+                                cache.set_dataframe("kline", key, stock_df)
+                                result[code] = stock_df
+                    
+                    logger.info(f"批量获取K线成功: {len(batch_codes)}只, 实际获取{len([c for c in batch_codes if c in result])}只")
+                except Exception as e:
+                    logger.warning(f"批量获取K线失败（批次{i//batch_size+1}）: {str(e)[:80]}")
+                
+                # 批次之间等待1秒，避免频率超限
+                import time
+                time.sleep(1)
+            
+        except Exception as e:
+            logger.error(f"批量获取K线异常: {e}")
+        
+        return result
+
     def get_daily_kline(self, code: str, days: int = 120, adjust: str = "qfq") -> Optional[pd.DataFrame]:
         code = normalize_stock_code(code)
         key = f"kline_{code}_{days}_{adjust}"
