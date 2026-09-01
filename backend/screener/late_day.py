@@ -409,6 +409,7 @@ class LateDayScreener:
                         "pattern": analysis.get("pattern", "未知"),
                         "volume_ratio": stock.get("volume_ratio", 0),
                         "turnover": stock.get("turnover", 0),
+                        "amplitude": stock.get("amplitude", 0),
                         "analysis": analysis,
                         "buy_price": buy_price,
                         "buy_price_note": buy_price_note,
