@@ -214,9 +214,10 @@ class LateDayScreener:
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
-                # 涨幅 -7%到12%（大规模回测460只涨停股发现：17%涨停股涨幅不在-5%到10%，进一步扩大覆盖）
-                # 回测发现：30%涨停股前一天是横盘整理(-1%到1%)，17%是连板股(>7%)，6%是大跌反弹(<-3%)
-                if pct_change < -7 or pct_change > 12:
+                # 涨幅 -5%到5%（涨停前夕分析460只涨停股发现：60%涨停股涨停前一天涨幅在-3%到3%，横盘整理为主）
+                # 只有13.5%涨停股涨停前一天涨幅>7%（已经接近涨停或连板），推荐已涨停股票没有意义
+                # 重点捕捉涨停前夕信号：横盘整理(-1%到1%)占23.3%，小幅下跌(-3%到-1%)占19.1%，温和上涨(1%到3%)占18.5%
+                if pct_change < -5 or pct_change > 5:
                     continue
                 # 价格 2-80元（大规模回测发现：11.5%涨停股价格不在2-50元，扩大覆盖中高价股）
                 if price < 2 or price > 80:
@@ -327,9 +328,9 @@ class LateDayScreener:
                 # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
                 turnover = stock.get("turnover", 0)
                 if turnover <= 0:
-                    # 如果没有实时换手率，用量比代替（大规模回测发现：29.8%涨停股量比<0.8，进一步放宽到0.5）
+                    # 如果没有实时换手率，用量比代替（涨停前夕分析发现：3.3%涨停股量比<0.5，进一步放宽到0.3）
                     volume_ratio = stock.get("volume_ratio", 0)
-                    if volume_ratio < 0.5:
+                    if volume_ratio < 0.3:
                         continue  # 量比太小，股性不活跃
                 elif turnover < 1:
                     continue  # 换手率太低，股性不活跃
@@ -471,41 +472,36 @@ class LateDayScreener:
         vol_ratio = 0
         trend_name = "未知"
 
-        # 1. 涨幅评分（15%）- 7种形态模式（基于涨停回测优化）
-        # 回测发现：30%横盘整理(-1%到1%)，23%温和上涨(1%到3%)，18%回调(-3%到-1%)，17%连板(>7%)
+        # 1. 涨幅评分（15%）- 基于涨停前夕分析优化（460只涨停股）
+        # 涨停前夕特征：60%涨幅在-3%到3%，横盘整理(-1%到1%)占23.3%最多
+        # 只有13.5%涨幅>7%（已接近涨停），推荐已涨停股票没有意义
         pattern = "未知"
-        if 1 <= pct_change <= 3:
-            score += 15
-            reasons.append(f"温和上涨({pct_change:.1f}%)，次日冲高概率高")
-            pattern = "温和上涨型"
-        elif -1 <= pct_change < 1:
-            score += 14
-            reasons.append(f"横盘整理({pct_change:.1f}%)，可能突破涨停")
+        if -1 <= pct_change < 1:
+            score += 15  # 横盘整理最多，给最高分
+            reasons.append(f"横盘整理({pct_change:.1f}%)，蓄势待发可能突破涨停")
             pattern = "横盘突破型"
         elif -3 <= pct_change < -1:
-            score += 12
-            reasons.append(f"缩量回调({pct_change:.1f}%)，反弹概率高")
+            score += 14  # 小幅回调，次高分
+            reasons.append(f"缩量回调({pct_change:.1f}%)，洗盘后反弹概率高")
             pattern = "回调反弹型"
-        elif 3 < pct_change <= 5:
-            score += 10
-            reasons.append(f"涨幅尚可({pct_change:.1f}%)")
+        elif 1 <= pct_change <= 3:
+            score += 13  # 温和上涨，第三高分
+            reasons.append(f"温和上涨({pct_change:.1f}%)，稳步推升可能涨停")
             pattern = "温和上涨型"
-        elif 5 < pct_change <= 7:
-            score += 9
-            reasons.append(f"强势上涨({pct_change:.1f}%)，可能延续涨停")
-            pattern = "强势延续型"
-        elif 7 < pct_change <= 10:
-            score += 11
-            reasons.append(f"连板股({pct_change:.1f}%)，强势延续可能继续涨停")
-            pattern = "连板强势型"
         elif -5 <= pct_change < -3:
-            score += 8
+            score += 11  # 大跌反弹，一定分数
             reasons.append(f"大跌反弹({pct_change:.1f}%)，超跌反弹概率高")
             pattern = "超跌反弹型"
+        elif 3 < pct_change <= 5:
+            score += 8  # 涨幅较大，较低分（只有5.4%涨停股属于此区间）
+            reasons.append(f"涨幅尚可({pct_change:.1f}%)，注意追高风险")
+            pattern = "温和上涨型"
         else:
             risks.append("涨幅异常")
 
-        # 2. 成交量评分（20%）
+        # 2. 成交量评分（20%）- 基于涨停前夕分析优化
+        # 涨停前夕特征：23.5%量比0.5-0.8（缩量整理），29.6%量比1.0-1.5（温和放量）
+        # 缩量整理后突然放量涨停是常见模式，不应对缩量扣分太多
         try:
             vol = calc_volume_analysis(volume, close)
             vol_ratio = vol["volume_ratio"]
@@ -514,14 +510,20 @@ class LateDayScreener:
                 score += 18
                 reasons.append(f"放量上涨(量比{vol_ratio:.1f})，资金入场")
             elif vol_ratio > 1.5:
-                score += 10
-                reasons.append(f"成交量放大(量比{vol_ratio:.1f})")
+                score += 14
+                reasons.append(f"成交量明显放大(量比{vol_ratio:.1f})，资金关注")
             elif vol_ratio > 1.2:
-                score += 5
+                score += 10
                 reasons.append(f"成交量温和放大(量比{vol_ratio:.1f})")
-            elif vol_ratio < 0.8:
-                score -= 5
-                risks.append("成交量不足，动能可能不够")
+            elif 0.8 <= vol_ratio <= 1.2:
+                score += 8
+                reasons.append(f"成交量平稳(量比{vol_ratio:.1f})，蓄势整理")
+            elif 0.5 <= vol_ratio < 0.8:
+                score += 5  # 缩量整理不扣分，反而给一定分数（洗盘特征）
+                reasons.append(f"缩量整理(量比{vol_ratio:.1f})，洗盘后可能放量涨停")
+            elif vol_ratio < 0.5:
+                score -= 3  # 极度缩量才少量扣分
+                risks.append("成交量极度萎缩，需关注是否有资金关注")
         except Exception:
             pass
 
