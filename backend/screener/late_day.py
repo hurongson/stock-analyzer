@@ -314,24 +314,24 @@ class LateDayScreener:
                 high = kline["high"]
                 low = kline["low"]
 
-                # 振幅过滤：>3%（回测发现62.4%涨停股前一天振幅>3%，银行股通常<3%）
+                # 振幅过滤：>2%（深度回测282只涨停股发现：71.3%振幅>3%，但28.7%<=3%，降低门槛提高覆盖率）
                 if len(close) >= 2:
                     prev_close = close.iloc[-2]
                     today_high = high.iloc[-1]
                     today_low = low.iloc[-1]
                     amplitude = (today_high - today_low) / prev_close * 100 if prev_close > 0 else 0
                     stock["amplitude"] = round(amplitude, 2)
-                    if amplitude < 3:
+                    if amplitude < 2:
                         continue  # 振幅太小，股性不活跃，很难涨停
 
-                # 换手率过滤：>2%（回测发现71.1%涨停股前一天换手率>2%，银行股通常<1%）
+                # 换手率过滤：>1%（深度回测发现：72.3%涨停股换手率>2%，但27.3%<=2%，降低门槛提高覆盖率）
                 turnover = stock.get("turnover", 0)
                 if turnover <= 0:
-                    # 如果没有实时换手率，用成交量估算（需要流通股本，这里用量比代替）
+                    # 如果没有实时换手率，用量比代替（深度回测发现：22.7%涨停股量比<0.8，降低门槛）
                     volume_ratio = stock.get("volume_ratio", 0)
-                    if volume_ratio < 1.2:
+                    if volume_ratio < 0.8:
                         continue  # 量比太小，股性不活跃
-                elif turnover < 2:
+                elif turnover < 1:
                     continue  # 换手率太低，股性不活跃
 
                 # 放宽MA20条件：允许股价在20日均线下方10%以内（突破型）
@@ -522,6 +522,44 @@ class LateDayScreener:
             elif vol_ratio < 0.8:
                 score -= 5
                 risks.append("成交量不足，动能可能不够")
+        except Exception:
+            pass
+
+        # 2.5 振幅评分（5分）- 深度回测发现：振幅大的股票更容易涨停
+        amplitude = stock.get("amplitude", 0)
+        if amplitude >= 5:
+            score += 5
+            reasons.append(f"振幅大({amplitude:.1f}%)，股性活跃")
+        elif amplitude >= 3:
+            score += 3
+            reasons.append(f"振幅适中({amplitude:.1f}%)")
+        elif amplitude >= 2:
+            score += 1
+            reasons.append(f"振幅较小({amplitude:.1f}%)")
+
+        # 2.6 换手率评分（5分）- 深度回测发现：换手率高的股票更容易涨停
+        turnover = stock.get("turnover", 0)
+        if turnover >= 5:
+            score += 5
+            reasons.append(f"换手率高({turnover:.1f}%)，资金关注度高")
+        elif turnover >= 3:
+            score += 3
+            reasons.append(f"换手率适中({turnover:.1f}%)")
+        elif turnover >= 1:
+            score += 1
+            reasons.append(f"换手率较低({turnover:.1f}%)")
+
+        # 2.7 均线多头排列评分（5分）- 深度回测发现：40.1%涨停股均线多头排列
+        try:
+            ma5 = calc_sma(close, 5).iloc[-1]
+            ma10 = calc_sma(close, 10).iloc[-1]
+            ma20_score = calc_sma(close, 20).iloc[-1]
+            if ma5 > ma10 > ma20_score:
+                score += 5
+                reasons.append("均线多头排列，趋势强势")
+            elif ma5 > ma10:
+                score += 2
+                reasons.append("短期均线向上")
         except Exception:
             pass
 
