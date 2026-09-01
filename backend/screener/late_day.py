@@ -47,6 +47,11 @@ class LateDayScreener:
         # 第一步：初筛（基于实时行情数据快速过滤）
         candidates = self._initial_filter(stock_df)
         logger.info(f"初筛后剩余: {len(candidates)} 只")
+        # 限制候选股票数量，避免运行时间过长（按成交量排序，取前200只）
+        if len(candidates) > 200:
+            candidates.sort(key=lambda x: x.get("amount", x.get("volume", 0)), reverse=True)
+            candidates = candidates[:200]
+            logger.info(f"候选股票限制为200只（按成交量排序）")
 
         if not candidates:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
