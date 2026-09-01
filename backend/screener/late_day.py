@@ -289,7 +289,12 @@ class LateDayScreener:
                 # 获取60天K线数据
                 kline = collector.get_daily_kline(code, days=60)
                 if kline is None or len(kline) < 20:
+                    if i < 5:
+                        logger.info(f"K线数据不足 {stock['name']}({code}): kline={'None' if kline is None else len(kline)}天")
                     continue
+                
+                if i < 3:
+                    logger.info(f"K线数据正常 {stock['name']}({code}): {len(kline)}天, 最新收盘{kline['close'].iloc[-1]:.2f}")
 
                 # 用K线数据计算量比（代替换手率，不依赖外部接口）
                 try:
