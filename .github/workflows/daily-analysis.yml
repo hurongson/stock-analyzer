@@ -51,6 +51,7 @@ jobs:
       - name: Run analysis
         env:
           STOCK_LIST: ${{ secrets.STOCK_LIST || github.event.inputs.stocks || '' }}
+          FLOWER_STOCK_LIST: ${{ secrets.FLOWER_STOCK_LIST || '' }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           LLM_MODEL: ${{ secrets.LLM_MODEL }}

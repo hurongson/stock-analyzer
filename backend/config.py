@@ -20,7 +20,12 @@ def _get_env(key: str, default: str = "") -> str:
 
 class Config:
     # ===== 自选股 =====
+    # 主自选股列表
     STOCK_LIST = [s.strip() for s in _get_env("STOCK_LIST", "600519,000001").split(",") if s.strip()]
+    # 关注股票列表（flower stock list，用户额外添加的关注股票）
+    FLOWER_STOCK_LIST = [s.strip() for s in _get_env("FLOWER_STOCK_LIST", "").split(",") if s.strip()]
+    # 合并后的自选股列表（去重）
+    ALL_STOCKS = list(dict.fromkeys(STOCK_LIST + FLOWER_STOCK_LIST))
 
     # ===== LLM =====
     LLM_API_KEY = _get_env("LLM_API_KEY", "")

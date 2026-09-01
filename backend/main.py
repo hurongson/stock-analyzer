@@ -41,7 +41,7 @@ def run_quick_analysis(stocks: list = None, enable_push: bool = True):
     """
     Config.ensure_dirs()
     Config.ENABLE_LLM = False  # 快速模式禁用LLM
-    stock_list = stocks or Config.STOCK_LIST
+    stock_list = stocks or Config.ALL_STOCKS
     logger.info(f"===== 快速盘中分析 =====")
     logger.info(f"自选股: {stock_list}")
 
@@ -100,7 +100,7 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
     if enable_llm is not None:
         Config.ENABLE_LLM = enable_llm
 
-    stock_list = stocks or Config.STOCK_LIST
+    stock_list = stocks or Config.ALL_STOCKS
     logger.info(f"===== 开始每日股票分析 =====")
     logger.info(f"自选股: {stock_list}")
     logger.info(f"LLM 分析: {'开启' if Config.ENABLE_LLM else '关闭'}")

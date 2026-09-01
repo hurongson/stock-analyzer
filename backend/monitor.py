@@ -132,7 +132,7 @@ def main():
     parser.add_argument("--once", action="store_true", help="只运行一次")
     args = parser.parse_args()
 
-    stocks = [s.strip() for s in args.stocks.split(",") if s.strip()] or Config.STOCK_LIST
+    stocks = [s.strip() for s in args.stocks.split(",") if s.strip()] or Config.ALL_STOCKS
     enable_push = not args.no_push
 
     print("=" * 60)
