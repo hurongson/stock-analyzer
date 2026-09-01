@@ -97,10 +97,8 @@ class LateDayScreener:
                             updated_count += 1
                 logger.info(f"已更新{updated_count}/{len(candidates)}只股票的实时行情数据")
                 
-                # 实时行情更新后，按换手率过滤（2%-15%为活跃区间）
-                before_count = len(candidates)
-                candidates = [s for s in candidates if s.get("turnover", 0) >= 2 and s.get("turnover", 0) <= 15]
-                logger.info(f"换手率过滤: {before_count} -> {len(candidates)}只（保留2%-15%活跃度）")
+                # 换手率不做硬过滤（GitHub Actions环境可能获取失败），只在评分中考虑
+                logger.info(f"换手率数据: 有{sum(1 for s in candidates if s.get('turnover',0)>0)}只，无{sum(1 for s in candidates if s.get('turnover',0)==0)}只")
             else:
                 logger.warning("实时行情获取失败，使用历史数据")
         except Exception as e:
@@ -142,11 +140,11 @@ class LateDayScreener:
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
-                # 涨幅 2%-6%（优化：降低上限，避免追高）
-                if pct_change < 2 or pct_change > 6:
+                # 涨幅 -3%到7%（覆盖温和上涨型、横盘突破型、回调反弹型、强势延续型）
+                if pct_change < -3 or pct_change > 7:
                     continue
-                # 价格 2-30元
-                if price < 2 or price > 30:
+                # 价格 2-40元（扩大范围，覆盖低价和中高价股）
+                if price < 2 or price > 40:
                     continue
                 # 排除ST和退市
                 if "ST" in name or "退" in name or "*" in name:
@@ -304,6 +302,9 @@ class LateDayScreener:
                         "score": final_score,
                         "base_score": score,
                         "three_locks_score": tl_score,
+                        "pattern": analysis.get("pattern", "未知"),
+                        "volume_ratio": stock.get("volume_ratio", 0),
+                        "turnover": stock.get("turnover", 0),
                         "analysis": analysis,
                         "buy_price": buy_price,
                         "buy_price_note": buy_price_note,
@@ -365,17 +366,30 @@ class LateDayScreener:
         vol_ratio = 0
         trend_name = "未知"
 
-        # 1. 涨幅评分（15%）
-        if 3 <= pct_change <= 5:
+        # 1. 涨幅评分（15%）- 5种形态模式（基于涨停回测优化）
+        pattern = "未知"
+        if 1 <= pct_change <= 3:
+            score += 15
+            reasons.append(f"温和上涨({pct_change:.1f}%)，次日冲高概率高")
+            pattern = "温和上涨型"
+        elif -1 <= pct_change < 1:
             score += 12
-            reasons.append(f"涨幅适中({pct_change:.1f}%)，有上涨动能")
-        elif 2 <= pct_change < 3:
-            score += 6
-            reasons.append(f"温和上涨({pct_change:.1f}%)")
-        elif 5 < pct_change <= 6:
-            score += 4
-            reasons.append(f"涨幅偏大({pct_change:.1f}%)，注意追高风险")
-            risks.append("涨幅偏大，次日可能回调")
+            reasons.append(f"横盘整理({pct_change:.1f}%)，可能突破涨停")
+            pattern = "横盘突破型"
+        elif -3 <= pct_change < -1:
+            score += 10
+            reasons.append(f"缩量回调({pct_change:.1f}%)，反弹概率高")
+            pattern = "回调反弹型"
+        elif 3 < pct_change <= 5:
+            score += 10
+            reasons.append(f"涨幅尚可({pct_change:.1f}%)")
+            pattern = "温和上涨型"
+        elif 5 < pct_change <= 7:
+            score += 8
+            reasons.append(f"强势上涨({pct_change:.1f}%)，可能延续涨停")
+            pattern = "强势延续型"
+        else:
+            risks.append("涨幅异常")
 
         # 2. 成交量评分（20%）
         try:
@@ -474,6 +488,7 @@ class LateDayScreener:
             "risks": risks,
             "trend": trend_name,
             "volume_ratio": vol_ratio,
+            "pattern": pattern,
         }
 
         return score, analysis
