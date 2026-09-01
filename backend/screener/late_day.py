@@ -462,6 +462,7 @@ class LateDayScreener:
                         "ma20": round(ma20, 2),
                         "three_locks": three_locks,
                         "trend_analysis": trend_analysis,
+                        "news_impact": stock.get("news_impact", {}),
                     }
                     results.append(result)
 
