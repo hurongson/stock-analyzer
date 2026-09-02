@@ -710,17 +710,29 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
             }
         })
 
-    # 操作提示
+    # 操作提示（优化：增加更详细的止损和仓位控制提醒）
+    # 基于2026-09-02回测：大盘下跌时推荐股票平均亏损3.35%，需要严格止损
+    market_timing = late_day_data.get("market_timing", {})
+    market_sentiment = market_timing.get("sentiment", "")
+    market_score = market_timing.get("sentiment_score", 50)
+    
+    # 大盘环境风险提示
+    risk_warning = ""
+    if market_score < 40 or "跌" in market_sentiment:
+        risk_warning = "\n⚠️ **大盘环境偏弱，建议降低仓位，严格止损！**"
+    
     elements.append({"tag": "hr"})
     elements.append({
         "tag": "div",
         "text": {
             "tag": "lark_md",
-            "content": "**📌 操作提示**\n"
-                       "• 买入时机：今日14:30-15:00尾盘买入\n"
-                       "• 卖出时机：次日冲高至目标价卖出，不贪心\n"
-                       "• 止损纪律：跌破止损价立即止损，不扛单\n"
-                       "• 仓位控制：单只股票不超过总仓位20%"
+            "content": f"**📌 操作提示与风险控制**{risk_warning}\n"
+                       "• 买入时机：今日14:30-15:00尾盘买入，不追高\n"
+                       "• 卖出时机：次日冲高3%-5%分批卖出，不贪心\n"
+                       "• 止损纪律：跌破止损价立即止损，亏损达2%无条件止损\n"
+                       "• 仓位控制：单只股票不超过总仓位10%，总仓位不超过50%\n"
+                       "• 大盘下跌时：减少买入数量，提高选股门槛，空仓也是一种策略\n"
+                       "• 特别提醒：尾盘选股为T+1短线策略，次日必须卖出，不做长线"
         }
     })
 

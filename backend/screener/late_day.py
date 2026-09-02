@@ -36,6 +36,21 @@ class LateDayScreener:
         """
         logger.info("开始尾盘选股...")
 
+        # 大盘环境分析（新增：根据大盘情况调整选股策略）
+        # 基于2026-09-02回测：大盘下跌1-2%时，推荐股票平均亏损3.35%
+        market_status = self._analyze_market()
+        logger.info(f"大盘环境: {market_status['status']} (上证指数{market_status['sh_pct']:+.2f}%, 创业板{market_status['cyb_pct']:+.2f}%)")
+        
+        # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
+        if market_status['sh_pct'] < -1.0:
+            self.max_results = 10  # 从20减少到10
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到10只，提高选股门槛")
+        elif market_status['sh_pct'] < -0.5:
+            self.max_results = 15  # 从20减少到15
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到15只")
+        else:
+            self.max_results = 20  # 正常情况推荐20只
+
         # 获取全量股票列表
         if stock_df is None:
             stock_df = collector.get_all_stocks()
@@ -208,6 +223,70 @@ class LateDayScreener:
                 "final_picks": len(picks),
             }
         }
+
+    def _analyze_market(self) -> Dict:
+        """
+        分析大盘环境，根据大盘情况调整选股策略
+        基于2026-09-02回测：大盘下跌1-2%时，推荐股票平均亏损3.35%
+        """
+        try:
+            import requests
+            import re
+            
+            # 获取上证指数、深证成指、创业板指
+            codes = 'sh000001,sz399001,sz399006'
+            url = f'http://hq.sinajs.cn/list={codes}'
+            headers = {'Referer': 'https://finance.sina.com.cn'}
+            response = requests.get(url, headers=headers, timeout=5)
+            response.encoding = 'gbk'
+            lines = response.text.strip().split('\\n')
+            
+            sh_pct = 0
+            sz_pct = 0
+            cyb_pct = 0
+            
+            for i, line in enumerate(lines[:3]):
+                match = re.search(r'=\"([^\"]+)\"', line)
+                if match:
+                    data = match.group(1).split(',')
+                    if len(data) > 3:
+                        current = float(data[3])
+                        prev_close = float(data[2])
+                        if prev_close > 0:
+                            pct = (current - prev_close) / prev_close * 100
+                            if i == 0:
+                                sh_pct = pct
+                            elif i == 1:
+                                sz_pct = pct
+                            elif i == 2:
+                                cyb_pct = pct
+            
+            # 判断大盘状态
+            if sh_pct >= 1:
+                status = "强势上涨"
+            elif sh_pct >= 0:
+                status = "震荡偏强"
+            elif sh_pct >= -0.5:
+                status = "震荡偏弱"
+            elif sh_pct >= -1:
+                status = "小幅下跌"
+            else:
+                status = "大幅下跌"
+            
+            return {
+                "status": status,
+                "sh_pct": sh_pct,
+                "sz_pct": sz_pct,
+                "cyb_pct": cyb_pct,
+            }
+        except Exception as e:
+            logger.warning(f"大盘环境分析失败: {e}，使用默认状态")
+            return {
+                "status": "未知",
+                "sh_pct": 0,
+                "sz_pct": 0,
+                "cyb_pct": 0,
+            }
 
     def _initial_filter(self, stock_df: pd.DataFrame) -> List[Dict]:
         """
@@ -473,6 +552,21 @@ class LateDayScreener:
                 logger.info(traceback.format_exc()[:500])
                 continue
 
+        # 行业分散度限制：同一行业最多推荐2只，避免行业集中风险
+        # 基于2026-09-01回测：化工4只平均-8.02%，行业集中导致大幅亏损
+        industry_count = {}
+        filtered_results = []
+        for stock in results:
+            industry = stock.get("industry", "") or stock.get("所属行业", "") or "未知"
+            if industry not in industry_count:
+                industry_count[industry] = 0
+            if industry_count[industry] < 2:  # 同一行业最多2只
+                industry_count[industry] += 1
+                filtered_results.append(stock)
+        
+        logger.info(f"行业分散度过滤: 从{len(results)}只减少到{len(filtered_results)}只")
+        results = filtered_results
+
         # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分
         # 基于6个月460只涨停股回测分析，涨停概率是最重要的指标
         def sort_key(x):
@@ -728,49 +822,61 @@ class LateDayScreener:
         except Exception:
             pass
 
-        # 8. 涨停概率预测（基于6个月460只涨停股回测分析）
+        # 8. 涨停概率预测（基于6个月460只涨停股回测分析，优化版）
         # 回测关键特征：60%涨幅-3%~3%，70%振幅3%~7%，60%换手率2%~7%
         # 23.5%量比0.5~0.8（缩量整理），86.5%首板，47.6%均线多头
-        limit_up_prob = 30  # 基础概率
+        # 优化：降低基础概率，增加风险扣分，避免过于乐观（2026-09-01回测85%概率实际-6.84%）
+        limit_up_prob = 20  # 基础概率（从30降低到20，更保守）
         limit_up_reasons = []
         
         # 8.1 涨幅特征（横盘整理概率最高）
         if -1 <= pct_change < 1:
-            limit_up_prob += 15
+            limit_up_prob += 12  # 从15降低到12
             limit_up_reasons.append("横盘整理(-1%~1%)，蓄势待发")
         elif -3 <= pct_change < -1:
-            limit_up_prob += 12
+            limit_up_prob += 10  # 从12降低到10
             limit_up_reasons.append("缩量回调(-3%~-1%)，洗盘后反弹")
         elif 1 <= pct_change <= 3:
-            limit_up_prob += 10
+            limit_up_prob += 8  # 从10降低到8
             limit_up_reasons.append("温和上涨(1%~3%)，稳步推升")
+        elif pct_change > 5:
+            limit_up_prob -= 5  # 涨幅过大风险
+            limit_up_reasons.append("涨幅过大(>5%)，追高风险")
         
-        # 8.2 振幅特征（振幅大股性活跃）
-        if amplitude >= 5:
-            limit_up_prob += 10
-            limit_up_reasons.append(f"振幅大({amplitude:.1f}%)，股性活跃")
-        elif amplitude >= 3:
-            limit_up_prob += 6
-            limit_up_reasons.append(f"振幅适中({amplitude:.1f}%)")
-        
-        # 8.3 换手率特征（适度活跃概率高）
-        if 3 <= turnover <= 7:
+        # 8.2 振幅特征（振幅大股性活跃，但过大也有风险）
+        if 3 <= amplitude < 7:
             limit_up_prob += 8
+            limit_up_reasons.append(f"振幅适中({amplitude:.1f}%)，股性活跃")
+        elif amplitude >= 7:
+            limit_up_prob += 4  # 振幅过大，风险增加
+            limit_up_reasons.append(f"振幅大({amplitude:.1f}%)，波动剧烈")
+        elif amplitude >= 2:
+            limit_up_prob += 3
+        
+        # 8.3 换手率特征（适度活跃概率高，过高有风险）
+        if 3 <= turnover <= 7:
+            limit_up_prob += 6  # 从8降低到6
             limit_up_reasons.append(f"换手率适中({turnover:.1f}%)，资金关注度高")
-        elif turnover > 7:
-            limit_up_prob += 5
-            limit_up_reasons.append(f"换手率高({turnover:.1f}%)，交投活跃")
+        elif 7 < turnover <= 15:
+            limit_up_prob += 3
+            limit_up_reasons.append(f"换手率较高({turnover:.1f}%)，交投活跃")
+        elif turnover > 15:
+            limit_up_prob -= 3  # 换手率过高，出货风险
+            limit_up_reasons.append(f"换手率过高({turnover:.1f}%)，出货风险")
         
         # 8.4 量比特征（缩量整理后放量涨停是常见模式）
         if 0.5 <= vol_ratio < 0.8:
-            limit_up_prob += 8
+            limit_up_prob += 6  # 从8降低到6
             limit_up_reasons.append(f"缩量整理(量比{vol_ratio:.1f})，洗盘后可能放量涨停")
         elif 0.8 <= vol_ratio <= 1.2:
-            limit_up_prob += 5
+            limit_up_prob += 4  # 从5降低到4
             limit_up_reasons.append(f"量能平稳(量比{vol_ratio:.1f})，蓄势整理")
-        elif vol_ratio > 1.5:
-            limit_up_prob += 6
-            limit_up_reasons.append(f"放量(量比{vol_ratio:.1f})，资金关注")
+        elif 1.2 < vol_ratio <= 2:
+            limit_up_prob += 4
+            limit_up_reasons.append(f"温和放量(量比{vol_ratio:.1f})，资金关注")
+        elif vol_ratio > 3:
+            limit_up_prob -= 3  # 量比过大，追高风险
+            limit_up_reasons.append(f"量比过大({vol_ratio:.1f})，追高风险")
         
         # 8.5 均线特征（多头排列趋势强势）
         try:
@@ -778,32 +884,41 @@ class LateDayScreener:
             ma10 = calc_sma(close, 10).iloc[-1]
             ma20_val = calc_sma(close, 20).iloc[-1]
             if ma5 > ma10 > ma20_val:
-                limit_up_prob += 8
+                limit_up_prob += 6  # 从8降低到6
                 limit_up_reasons.append("均线多头排列，趋势强势")
             elif current_price > ma20_val:
-                limit_up_prob += 4
+                limit_up_prob += 3  # 从4降低到3
                 limit_up_reasons.append("股价在MA20上方，趋势向好")
+            else:
+                limit_up_prob -= 3  # 股价在MA20下方，趋势偏弱
+                limit_up_reasons.append("股价在MA20下方，趋势偏弱")
         except Exception:
             pass
         
-        # 8.6 价格特征（低价股更容易涨停）
-        if current_price < 5:
-            limit_up_prob += 8
-            limit_up_reasons.append(f"低价股({current_price}元)，容易涨停")
-        elif current_price < 10:
-            limit_up_prob += 5
-            limit_up_reasons.append(f"中低价股({current_price}元)")
+        # 8.6 价格特征（低价股更容易涨停，但波动性大风险高）
+        if 3 <= current_price < 10:
+            limit_up_prob += 5  # 中低价股，平衡收益和风险
+            limit_up_reasons.append(f"中低价股({current_price}元)，弹性好")
+        elif current_price < 3:
+            limit_up_prob += 2  # 低价股风险高，降低加分
+            limit_up_reasons.append(f"低价股({current_price}元)，波动大风险高")
+        elif current_price < 20:
+            limit_up_prob += 3
+            limit_up_reasons.append(f"中价股({current_price}元)")
         
         # 8.7 消息面加成
         try:
             news_impact = stock.get("news_impact", {})
             news_score = news_impact.get("score", 50)
             if news_score >= 70:
-                limit_up_prob += 10
+                limit_up_prob += 8  # 从10降低到8
                 limit_up_reasons.append("消息面利好，有催化")
             elif news_score >= 60:
-                limit_up_prob += 5
+                limit_up_prob += 4  # 从5降低到4
                 limit_up_reasons.append("消息面偏利好")
+            elif news_score <= 30:
+                limit_up_prob -= 5  # 消息面利空，大幅扣分
+                limit_up_reasons.append("消息面利空，风险大")
         except Exception:
             pass
         
@@ -812,13 +927,28 @@ class LateDayScreener:
             concept_analysis = stock.get("concept_analysis", {})
             matched_hot = concept_analysis.get("matched_hot", [])
             if matched_hot:
-                limit_up_prob += 8
+                limit_up_prob += 6  # 从8降低到6
                 limit_up_reasons.append("涉及热门概念，题材风口")
         except Exception:
             pass
         
-        # 限制概率范围
-        limit_up_prob = max(5, min(95, round(limit_up_prob)))
+        # 8.9 风险因素综合扣分（新增）
+        # 连续上涨天数过多，回调风险大
+        try:
+            up_days = 0
+            for j in range(1, min(6, len(close))):
+                if close.iloc[-j] > close.iloc[-j-1]:
+                    up_days += 1
+                else:
+                    break
+            if up_days >= 4:
+                limit_up_prob -= 5
+                limit_up_reasons.append(f"连续上涨{up_days}天，回调风险大")
+        except Exception:
+            pass
+        
+        # 限制概率范围（最高从95降低到80，更保守）
+        limit_up_prob = max(5, min(80, round(limit_up_prob)))
         
         score = max(0, min(100, round(score)))
 
