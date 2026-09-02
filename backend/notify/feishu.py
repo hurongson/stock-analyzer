@@ -709,12 +709,35 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
                 if limit_up_reasons:
                     limit_up_str += f" | {'、'.join(limit_up_reasons[:3])}"
 
+            # 基本面变化和逻辑反证（新增，基于表1和表4逻辑）
+            analysis = p.get("analysis", {})
+            fundamental_score = analysis.get("fundamental_score", 0)
+            fundamental_changes = analysis.get("fundamental_changes", [])
+            fundamental_research = analysis.get("fundamental_research", "")
+            counter_evidences = analysis.get("counter_evidences", [])
+            has_counter_evidence = analysis.get("has_counter_evidence", False)
+            
+            fundamental_str = ""
+            if fundamental_changes or fundamental_research:
+                fundamental_emoji = "📊" if fundamental_score >= 5 else "📉" if fundamental_score < 0 else "📋"
+                fundamental_str = f"\n   {fundamental_emoji}基本面: {fundamental_score}分"
+                if fundamental_changes:
+                    fundamental_str += f" | {'、'.join(fundamental_changes[:2])}"
+                if fundamental_research:
+                    fundamental_str += f"\n   🔍 {fundamental_research}"
+            
+            counter_str = ""
+            if counter_evidences:
+                counter_str = f"\n   ⚠️ 逻辑反证: {'；'.join(counter_evidences[:2])}"
+
             content = (
                 f"**{i+1}. ⭐ {p['name']}({p['code']})** {p['price']}元 {p['pct_change']:+.1f}% | 评分{score}\n"
                 f"   {point_str}"
                 f"{tl_str}"
                 f"{news_str}"
-                f"{limit_up_str}\n"
+                f"{limit_up_str}"
+                f"{fundamental_str}"
+                f"{counter_str}\n"
                 f"   ✅ 理由: {reasons_str}"
             )
             if risks_str:

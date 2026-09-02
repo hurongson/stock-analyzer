@@ -1004,6 +1004,99 @@ class LateDayScreener:
         # 限制概率范围（最高从95降低到80，更保守）
         limit_up_prob = max(5, min(80, round(limit_up_prob)))
         
+        # 9. 基本面变化评分（新增，基于表1：全市场变化扫描逻辑）
+        # 优先寻找：重大订单、客户突破、业绩变化、产品涨价、毛利率拐点、现金流改善、机构盈利预测变化、行业景气变化
+        fundamental_score = 0
+        fundamental_changes = []
+        fundamental_research = ""
+        
+        try:
+            # 9.1 消息面基本面变化
+            news_impact = stock.get("news_impact", {})
+            news_score = news_impact.get("score", 50)
+            news_reasons = news_impact.get("reasons", [])
+            
+            if news_score >= 70:
+                fundamental_score += 10
+                fundamental_changes.append("消息面利好")
+                if news_reasons:
+                    fundamental_changes.extend(news_reasons[:2])
+            elif news_score <= 30:
+                fundamental_score -= 5
+                fundamental_changes.append("消息面利空")
+            
+            # 9.2 概念热点基本面变化
+            concept_analysis = stock.get("concept_analysis", {})
+            matched_hot = concept_analysis.get("matched_hot", [])
+            if matched_hot:
+                fundamental_score += 5
+                fundamental_changes.append(f"涉及热门概念: {'、'.join(matched_hot[:2])}")
+            
+            # 9.3 行业景气度变化
+            industry = stock.get("industry", "")
+            if industry:
+                fundamental_changes.append(f"所属行业: {industry}")
+            
+            # 9.4 确定今天最值得研究什么
+            if fundamental_changes:
+                fundamental_research = f"重点研究: {'、'.join(fundamental_changes[:3])}"
+            else:
+                fundamental_research = "重点研究: 技术面突破信号和资金流向"
+                
+        except Exception as e:
+            fundamental_research = "重点研究: 技术面突破信号和资金流向"
+        
+        # 将基本面评分加入总分（占20%权重）
+        score += fundamental_score * 0.2
+        
+        # 10. 逻辑反证检查（新增，基于表4：逻辑反证逻辑）
+        # 主动寻找反面证据，不迎合用户观点
+        counter_evidences = []
+        try:
+            # 10.1 连续上涨天数过多，回调风险
+            up_days = 0
+            for j in range(1, min(6, len(close))):
+                if close.iloc[-j] > close.iloc[-j-1]:
+                    up_days += 1
+                else:
+                    break
+            if up_days >= 4:
+                counter_evidences.append(f"连续上涨{up_days}天，短期回调风险大")
+            
+            # 10.2 涨幅过大，追高风险
+            if pct_change > 7:
+                counter_evidences.append(f"涨幅过大({pct_change:.1f}%)，追高风险")
+            
+            # 10.3 换手率过高，出货风险
+            turnover = stock.get("turnover", 0)
+            if turnover > 15:
+                counter_evidences.append(f"换手率过高({turnover:.1f}%)，可能出货")
+            
+            # 10.4 量比过大，追高风险
+            if vol_ratio > 3:
+                counter_evidences.append(f"量比过大({vol_ratio:.1f})，短期过热")
+            
+            # 10.5 股价远离均线，回调风险
+            try:
+                ma20_val = calc_sma(close, 20).iloc[-1]
+                if ma20_val > 0 and current_price > ma20_val * 1.2:
+                    deviation = (current_price - ma20_val) / ma20_val * 100
+                    counter_evidences.append(f"股价偏离MA20达{deviation:.1f}%，技术回调风险")
+            except Exception:
+                pass
+            
+            # 10.6 消息面利空
+            if news_score <= 30:
+                counter_evidences.append("消息面偏利空，需警惕基本面恶化")
+                
+        except Exception:
+            pass
+        
+        # 如果有反证，降低评分
+        if counter_evidences:
+            score -= len(counter_evidences) * 2
+            risks.extend(counter_evidences)
+        
         score = max(0, min(100, round(score)))
 
         analysis = {
@@ -1014,6 +1107,12 @@ class LateDayScreener:
             "pattern": pattern,
             "limit_up_probability": limit_up_prob,
             "limit_up_reasons": limit_up_reasons,
+            # 新增：基本面变化和逻辑反证
+            "fundamental_score": round(fundamental_score, 1),
+            "fundamental_changes": fundamental_changes,
+            "fundamental_research": fundamental_research,
+            "counter_evidences": counter_evidences,
+            "has_counter_evidence": len(counter_evidences) > 0,
         }
 
         return score, analysis
