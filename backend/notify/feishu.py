@@ -850,3 +850,122 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
     except Exception as e:
         logger.error(f"尾盘选股飞书推送异常: {e}")
         return False
+
+
+def push_intraday_anomaly(anomaly_data: Dict, webhook_url: str = None) -> bool:
+    """
+    推送盘中异动提醒（表2）
+    默认保持静默，只有出现异动时才推送
+    anomaly_data: {has_anomaly, anomaly_count, anomalies: [...], summary, check_time}
+    """
+    url = webhook_url or Config.FEISHU_WEBHOOK_URL
+    if not url:
+        logger.warning("飞书 Webhook 未配置，跳过推送")
+        return False
+
+    anomalies = anomaly_data.get("anomalies", [])
+    summary = anomaly_data.get("summary", "")
+    check_time = anomaly_data.get("check_time", "")
+
+    if not anomalies:
+        logger.info("盘中无异动，保持静默")
+        return False
+
+    elements = []
+
+    # 标题
+    elements.append({
+        "tag": "div",
+        "text": {
+            "tag": "lark_md",
+            "content": f"**🔔 盘中异动提醒 - {check_time}**\n"
+                       f"检测到{len(anomalies)}起异动：{summary}"
+        }
+    })
+
+    # 按类型分组显示
+    type_groups = {}
+    for anomaly in anomalies:
+        atype = anomaly.get("type", "其他")
+        if atype not in type_groups:
+            type_groups[atype] = []
+        type_groups[atype].append(anomaly)
+
+    for atype, group_anomalies in type_groups.items():
+        elements.append({"tag": "hr"})
+        level = group_anomalies[0].get("level", "medium")
+        level_emoji = "🔴" if level == "high" else "🟡" if level == "medium" else "🟢"
+
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**{level_emoji} {atype}（{len(group_anomalies)}起）**"
+            }
+        })
+
+        for anomaly in group_anomalies[:5]:  # 每种类型最多显示5条
+            description = anomaly.get("description", "")
+            reason = anomaly.get("reason", "暂未确认。")
+
+            content = f"• {description}\n"
+            content += f"  原因分析: {reason}"
+
+            # 显示相关股票信息
+            if anomaly.get("name"):
+                code = anomaly.get("code", "")
+                name = anomaly.get("name", "")
+                pct = anomaly.get("pct_change", 0)
+                content += f"\n  相关股票: {name}({code}) {pct:+.1f}%"
+
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": content
+                }
+            })
+
+    # 底部提示
+    elements.append({"tag": "hr"})
+    elements.append({
+        "tag": "note",
+        "elements": [
+            {
+                "tag": "plain_text",
+                "content": "⚠️ 盘中异动为事件驱动提醒，仅供参考，不构成投资建议。无法确认原因时已标注'暂未确认'。"
+            }
+        ]
+    })
+
+    payload = {
+        "msg_type": "interactive",
+        "card": {
+            "header": {
+                "title": {
+                    "tag": "plain_text",
+                    "content": f"🔔 盘中异动提醒（{len(anomalies)}起）"
+                },
+                "template": "red"
+            },
+            "elements": elements
+        }
+    }
+
+    if Config.FEISHU_SECRET:
+        timestamp = int(time.time())
+        payload["timestamp"] = str(timestamp)
+        payload["sign"] = gen_sign(Config.FEISHU_SECRET, timestamp)
+
+    try:
+        resp = requests.post(url, json=payload, timeout=15)
+        result = resp.json()
+        if result.get("code") == 0 or result.get("StatusCode") == 0:
+            logger.info(f"盘中异动飞书推送成功，共{len(anomalies)}起")
+            return True
+        else:
+            logger.error(f"盘中异动飞书推送失败: {result}")
+            return False
+    except Exception as e:
+        logger.error(f"盘中异动飞书推送异常: {e}")
+        return False

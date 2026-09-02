@@ -183,6 +183,75 @@ def run_screener_only():
     return result
 
 
+def run_anomaly_monitor(enable_push: bool = True):
+    """
+    盘中异动监控（表2）
+    默认保持静默，只有出现异动时才推送
+    """
+    from backend.analysis.intraday_anomaly import intraday_anomaly_monitor
+    from backend.data.collector import data_collector
+    from backend.utils.helpers import save_json
+    from backend.notify.feishu import push_intraday_anomaly
+
+    logger.info("=== 盘中异动监控 ===")
+
+    try:
+        # 获取全市场实时数据
+        logger.info("获取全市场实时数据...")
+        market_df = data_collector.get_all_stocks()
+        if market_df is None or market_df.empty:
+            logger.warning("无法获取市场数据，跳过异动监控")
+            return
+
+        # 转换为字典列表
+        stock_data = []
+        for _, row in market_df.iterrows():
+            stock_data.append({
+                "code": str(row.get("code", "")),
+                "name": str(row.get("name", "")),
+                "price": float(row.get("price", 0)),
+                "pct_change": float(row.get("pct_change", 0)),
+                "volume": float(row.get("volume", 0)),
+                "turnover": float(row.get("turnover", 0)),
+                "volume_ratio": float(row.get("volume_ratio", 0)),
+                "industry": str(row.get("industry", "")),
+            })
+
+        # 统计市场数据
+        up_count = sum(1 for s in stock_data if s["pct_change"] > 0)
+        down_count = sum(1 for s in stock_data if s["pct_change"] < 0)
+        limit_up_count = sum(1 for s in stock_data if s["pct_change"] >= 9.5)
+
+        market_data = {
+            "up_count": up_count,
+            "down_count": down_count,
+            "limit_up_count": limit_up_count,
+            "total_count": len(stock_data),
+        }
+
+        logger.info(f"市场数据: 上涨{up_count}只, 下跌{down_count}只, 涨停{limit_up_count}只")
+
+        # 检查异动
+        result = intraday_anomaly_monitor.check_anomalies(market_data, stock_data)
+
+        # 保存结果
+        path = os.path.join(Config.DATA_DIR, "intraday_anomaly.json")
+        save_json(result, path)
+        logger.info(f"异动监控结果已保存: {path}")
+
+        # 只有检测到异动时才推送（默认静默）
+        if result["has_anomaly"] and enable_push and Config.FEISHU_WEBHOOK_URL:
+            logger.info(f"检测到{result['anomaly_count']}起异动，推送飞书...")
+            push_intraday_anomaly(result)
+        else:
+            logger.info("盘中无异动或未配置推送，保持静默")
+
+    except Exception as e:
+        logger.error(f"盘中异动监控失败: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+
+
 def run_late_day_screener(enable_push: bool = True):
     """尾盘选股（14:30运行，推荐当日买入次日卖出的股票）"""
     Config.ensure_dirs()
@@ -289,6 +358,7 @@ def main():
     parser.add_argument("--analyze", type=str, help="分析指定股票，逗号分隔")
     parser.add_argument("--screener", action="store_true", help="仅运行选股")
     parser.add_argument("--quick", action="store_true", help="快速盘中分析（只分析自选股，不选股，重点买卖信号）")
+    parser.add_argument("--anomaly", action="store_true", help="盘中异动监控（默认静默，只有异动时推送）")
     parser.add_argument("--late-day", action="store_true", help="尾盘选股（14:30运行，推荐当日买入次日卖出）")
     parser.add_argument("--no-push", action="store_true", help="禁用飞书推送")
     parser.add_argument("--no-llm", action="store_true", help="禁用 LLM 分析")
@@ -309,6 +379,9 @@ def main():
     elif args.quick:
         push = not args.no_push and not args.dry_run
         run_quick_analysis(enable_push=push)
+    elif args.anomaly:
+        push = not args.no_push and not args.dry_run
+        run_anomaly_monitor(enable_push=push)
     elif args.late_day:
         push = not args.no_push and not args.dry_run
         run_late_day_screener(enable_push=push)

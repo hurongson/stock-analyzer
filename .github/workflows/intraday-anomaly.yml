@@ -1,0 +1,56 @@
+name: 盘中异动监控
+on:
+  schedule:
+    # 盘中异动监控（北京时间）= UTC
+    # 9:45 = 1:45 UTC（开盘15分钟后）
+    - cron: '45 1 * * 1-5'
+    # 10:30 = 2:30 UTC（上午盘中）
+    - cron: '30 2 * * 1-5'
+    # 11:15 = 3:15 UTC（上午收盘前）
+    - cron: '15 3 * * 1-5'
+    # 13:30 = 5:30 UTC（下午开盘后）
+    - cron: '30 5 * * 1-5'
+    # 14:00 = 6:00 UTC（下午盘中）
+    - cron: '0 6 * * 1-5'
+    # 14:30 = 6:30 UTC（尾盘前）
+    - cron: '30 6 * * 1-5'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  anomaly-monitor:
+    if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run intraday anomaly monitor
+        env:
+          STOCK_LIST: ${{ secrets.STOCK_LIST || '' }}
+          FLOWER_STOCK_LIST: ${{ secrets.FLOWER_STOCK_LIST || '' }}
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          cd backend
+          python main.py --anomaly --force
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/intraday_anomaly.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "🔔 盘中异动监控 $(date +'%Y-%m-%d %H:%M')"
+          git push || echo "Nothing to push or push failed"
