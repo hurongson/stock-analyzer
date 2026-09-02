@@ -117,6 +117,30 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
         })
         elements.append({"tag": "hr"})
 
+    # 选股摘要（显示推荐股票数量，确保用户知道有推荐）
+    if screener:
+        combined_count = len(screener.get("combined", []))
+        special_count = len(screener.get("special_picks", []))
+        limit_up_count = len(screener.get("limit_up_picks", []))
+        if combined_count > 0 or special_count > 0 or limit_up_count > 0:
+            summary_parts = []
+            if special_count > 0:
+                summary_parts.append(f"⭐特别推荐{special_count}只")
+            if limit_up_count > 0:
+                summary_parts.append(f"🔥涨停预测{limit_up_count}只")
+            if combined_count > 0:
+                summary_parts.append(f"🏆综合选股{combined_count}只")
+            summary_str = " | ".join(summary_parts)
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"**🎯 今日选股推荐** {summary_str}\n"
+                               f"   👇 向下滚动查看详细推荐"
+                }
+            })
+            elements.append({"tag": "hr"})
+
     # 自选股摘要 + 交易信号
     valid_analyses = [a for a in analyses if "error" not in a]
     if valid_analyses:
