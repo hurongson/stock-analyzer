@@ -311,10 +311,10 @@ class LateDayScreener:
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
-                # 涨幅 -5%到5%（涨停前夕分析460只涨停股发现：60%涨停股涨停前一天涨幅在-3%到3%，横盘整理为主）
-                # 只有13.5%涨停股涨停前一天涨幅>7%（已经接近涨停或连板），推荐已涨停股票没有意义
-                # 重点捕捉涨停前夕信号：横盘整理(-1%到1%)占23.3%，小幅下跌(-3%到-1%)占19.1%，温和上涨(1%到3%)占18.5%
-                if pct_change < -5 or pct_change > 5:
+                # 涨幅 -5%到10%（优化：从5%扩大到10%，允许连板股）
+                # 2026-09-02回测发现：31%涨停股昨天涨幅>5%（已涨停，连板股）
+                # 60%涨停股涨停前一天涨幅在-3%到3%，横盘整理为主
+                if pct_change < -5 or pct_change > 10:
                     continue
                 # 价格 2-80元（大规模回测发现：11.5%涨停股价格不在2-50元，扩大覆盖中高价股）
                 if price < 2 or price > 80:
@@ -339,12 +339,16 @@ class LateDayScreener:
                 if code in bank_codes:
                     continue
 
+                # 标记连板股（昨天涨幅>5%，可能已涨停）
+                is_lianban = pct_change > 5
+
                 candidates.append({
                     "code": code,
                     "name": name,
                     "price": price,
                     "pct_change": pct_change,
                     "volume": volume,
+                    "is_lianban": is_lianban,  # 新增：连板股标记
                 })
             except Exception:
                 continue
@@ -420,16 +424,18 @@ class LateDayScreener:
                 if i < 3:
                     logger.debug(f"进入过滤条件 {stock['name']}({stock.get('code', '')}): close={len(close)}天, 最新={close.iloc[-1]:.2f}")
 
-                # 振幅过滤：>2%（深度回测282只涨停股发现：71.3%振幅>3%，但28.7%<=3%，降低门槛提高覆盖率）
+                # 振幅过滤：>1%（优化：从2%降低到1%，允许横盘整理股）
+                # 2026-09-02回测发现：34.5%涨停股昨天振幅<2%，横盘整理后突然涨停
+                # 深度回测282只涨停股发现：71.3%振幅>3%，但28.7%<=3%，降低门槛提高覆盖率
                 if len(close) >= 2:
                     prev_close = close.iloc[-2]
                     today_high = high.iloc[-1]
                     today_low = low.iloc[-1]
                     amplitude = (today_high - today_low) / prev_close * 100 if prev_close > 0 else 0
                     stock["amplitude"] = round(amplitude, 2)
-                    if amplitude < 2:
+                    if amplitude < 1:
                         if i < 5:
-                            logger.debug(f"振幅过滤 {stock['name']}({stock.get('code', '')}): 振幅{amplitude:.1f}% < 2%")
+                            logger.debug(f"振幅过滤 {stock['name']}({stock.get('code', '')}): 振幅{amplitude:.1f}% < 1%")
                         continue  # 振幅太小，股性不活跃，很难涨停
 
                 # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
@@ -613,9 +619,35 @@ class LateDayScreener:
 
         # 1. 涨幅评分（15%）- 基于涨停前夕分析优化（460只涨停股）
         # 涨停前夕特征：60%涨幅在-3%到3%，横盘整理(-1%到1%)占23.3%最多
-        # 只有13.5%涨幅>7%（已接近涨停），推荐已涨停股票没有意义
+        # 2026-09-02回测发现：31%涨停股昨天涨幅>5%（已涨停，连板股）
         pattern = "未知"
-        if -1 <= pct_change < 1:
+        is_lianban = stock.get("is_lianban", False) or pct_change > 5
+        
+        if is_lianban:
+            # 连板股专门分析（新增）
+            # 昨天已涨停，今天可能继续连板
+            score += 10  # 连板股基础加分
+            reasons.append(f"连板股(昨涨{pct_change:.1f}%)，强势延续可能继续涨停")
+            pattern = "连板延续型"
+            
+            # 连板股风险评估
+            # 连续涨停天数过多，回调风险大
+            try:
+                up_days = 0
+                for j in range(1, min(6, len(close))):
+                    if close.iloc[-j] > close.iloc[-j-1]:
+                        up_days += 1
+                    else:
+                        break
+                if up_days >= 3:
+                    score -= 5
+                    risks.append(f"连续上涨{up_days}天，高位回调风险大")
+                elif up_days == 2:
+                    score += 3
+                    reasons.append(f"2连板，强势确立")
+            except Exception:
+                pass
+        elif -1 <= pct_change < 1:
             score += 15  # 横盘整理最多，给最高分
             reasons.append(f"横盘整理({pct_change:.1f}%)，蓄势待发可能突破涨停")
             pattern = "横盘突破型"
@@ -829,8 +861,14 @@ class LateDayScreener:
         limit_up_prob = 20  # 基础概率（从30降低到20，更保守）
         limit_up_reasons = []
         
-        # 8.1 涨幅特征（横盘整理概率最高）
-        if -1 <= pct_change < 1:
+        # 8.1 涨幅特征（横盘整理概率最高，连板股单独评估）
+        # 2026-09-02回测发现：31%涨停股昨天涨幅>5%（已涨停，连板股）
+        is_lianban = pct_change > 5
+        if is_lianban:
+            # 连板股专门评估
+            limit_up_prob += 8  # 连板股基础加分（强势延续）
+            limit_up_reasons.append(f"连板股(昨涨{pct_change:.1f}%)，强势延续可能继续涨停")
+        elif -1 <= pct_change < 1:
             limit_up_prob += 12  # 从15降低到12
             limit_up_reasons.append("横盘整理(-1%~1%)，蓄势待发")
         elif -3 <= pct_change < -1:
@@ -839,9 +877,9 @@ class LateDayScreener:
         elif 1 <= pct_change <= 3:
             limit_up_prob += 8  # 从10降低到8
             limit_up_reasons.append("温和上涨(1%~3%)，稳步推升")
-        elif pct_change > 5:
-            limit_up_prob -= 5  # 涨幅过大风险
-            limit_up_reasons.append("涨幅过大(>5%)，追高风险")
+        elif 3 < pct_change <= 5:
+            limit_up_prob += 3
+            limit_up_reasons.append(f"涨幅较大({pct_change:.1f}%)，接近涨停")
         
         # 8.2 振幅特征（振幅大股性活跃，但过大也有风险）
         if 3 <= amplitude < 7:
