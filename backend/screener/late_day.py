@@ -27,7 +27,8 @@ class LateDayScreener:
     """尾盘选股器"""
 
     def __init__(self):
-        self.max_results = 20  # 最多推荐20只（基于6个月涨停股回测优化）
+        self.max_results = 30  # 最多推荐30只（扩大分析范围，用户要求选30支精选10支）
+        self.top_picks = 10  # 精选10支（重点推荐）
 
     def screen(self, stock_df: Optional[pd.DataFrame] = None) -> Dict:
         """
@@ -43,13 +44,13 @@ class LateDayScreener:
         
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
         if market_status['sh_pct'] < -1.0:
-            self.max_results = 10  # 从20减少到10
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到10只，提高选股门槛")
+            self.max_results = 20  # 从30减少到20（不要过度减少，用户要求选30支）
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，提高选股门槛")
         elif market_status['sh_pct'] < -0.5:
-            self.max_results = 15  # 从20减少到15
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到15只")
+            self.max_results = 25  # 从30减少到25
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只")
         else:
-            self.max_results = 20  # 正常情况推荐20只
+            self.max_results = 30  # 正常情况推荐30只
 
         # 获取全量股票列表
         if stock_df is None:
@@ -66,7 +67,7 @@ class LateDayScreener:
         # 减少到50只，避免Tushare接口频率超限（50次/分钟）
         if len(candidates) > 50:
             candidates.sort(key=lambda x: x.get("amount", x.get("volume", 0)), reverse=True)
-            candidates = candidates[:50]
+            candidates = candidates[:100]  # 从50增加到100，扩大分析范围
             logger.info(f"候选股票限制为50只（按成交量排序，避免Tushare频率超限）")
 
         if not candidates:
@@ -471,8 +472,8 @@ class LateDayScreener:
                 # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
                 # 连续放量过滤已移除，改为评分项
 
-                # 只保留评分>=70的（更严格，提高胜率）
-                if score >= 70:
+                # 只保留评分>=60的（降低门槛，扩大推荐范围，用户要求选30支精选10支）
+                if score >= 60:
                     # === 买卖点位计算（优化：更合理的盈亏比）===
                     # 买入价 = 尾盘现价（14:30-15:00直接买入）
                     buy_price = round(current_price, 2)
@@ -566,7 +567,7 @@ class LateDayScreener:
             industry = stock.get("industry", "") or stock.get("所属行业", "") or "未知"
             if industry not in industry_count:
                 industry_count[industry] = 0
-            if industry_count[industry] < 2:  # 同一行业最多2只
+            if industry_count[industry] < 3:  # 同一行业最多3只（从2增加到3，避免过度过滤）
                 industry_count[industry] += 1
                 filtered_results.append(stock)
         
@@ -582,7 +583,22 @@ class LateDayScreener:
             limit_up_prob = analysis.get("limit_up_probability", 0) if analysis else 0
             return (limit_up_prob, locked, x["score"])
         results.sort(key=sort_key, reverse=True)
-        return results[:self.max_results]
+        
+        # 分为精选10支和全部30支
+        all_picks = results[:self.max_results]
+        top_picks = all_picks[:self.top_picks] if len(all_picks) >= self.top_picks else all_picks
+        
+        # 标记精选股票
+        for i, stock in enumerate(top_picks):
+            stock["is_top_pick"] = True
+            stock["top_pick_rank"] = i + 1
+        
+        return {
+            "all_picks": all_picks,  # 全部30支
+            "top_picks": top_picks,  # 精选10支
+            "total_count": len(all_picks),
+            "top_count": len(top_picks),
+        }
 
     def _get_sell_strategy(self, buy_price: float, target_3pct: float, target_5pct: float, stop_loss: float) -> Dict:
         """

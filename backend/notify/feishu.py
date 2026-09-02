@@ -586,9 +586,16 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
 
     date = late_day_data.get("date", "")
     picks = late_day_data.get("picks", [])
+    # 获取精选10支和全部30支（适配新的返回结构）
+    top_picks = late_day_data.get("top_picks", [])
+    all_picks = late_day_data.get("all_picks", picks)
     market_timing = late_day_data.get("market_timing", {})
 
-    if not picks:
+    # 如果没有top_picks，从all_picks中取前10只
+    if not top_picks and all_picks:
+        top_picks = all_picks[:10]
+
+    if not all_picks:
         logger.info("无尾盘选股推荐，跳过推送")
         return False
 
@@ -600,7 +607,8 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         "text": {
             "tag": "lark_md",
             "content": f"**🎯 尾盘选股推荐 - {date} 14:30**\n"
-                       f"当日买入，次日冲高卖出（T+1短线）"
+                       f"当日买入，次日冲高卖出（T+1短线）\n"
+                       f"共推荐{len(all_picks)}只，精选{len(top_picks)}只重点关注"
         }
     })
 
@@ -622,93 +630,135 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         })
         elements.append({"tag": "hr"})
 
-    # 推荐股票列表
-    for i, p in enumerate(picks):
-        buy_price = p.get("buy_price")
-        sell_price = p.get("sell_price")
-        stop_loss = p.get("stop_loss")
-        target_price = p.get("target_price")
-        rr = p.get("risk_reward_ratio")
-        score = p.get("score", 0)
-
-        # 买卖点位
-        point_info = []
-        if buy_price:
-            point_info.append(f"买入{buy_price}元")
-        if sell_price:
-            point_info.append(f"卖出{sell_price}元")
-        if stop_loss:
-            point_info.append(f"止损{stop_loss}元")
-        if target_price:
-            point_info.append(f"目标{target_price}元")
-        if rr:
-            point_info.append(f"盈亏比{rr}")
-        point_str = " | ".join(point_info)
-
-        # 分析理由
-        reasons = p.get("analysis", {}).get("reasons", [])
-        risks = p.get("analysis", {}).get("risks", [])
-        reasons_str = "、".join(reasons[:3]) if reasons else ""
-        risks_str = "、".join(risks[:2]) if risks else ""
-
-        # 三把锁状态
-        tl = p.get("three_locks", {})
-        tl_str = ""
-        if tl:
-            t_locked = "🔒" if tl.get("trend_lock", {}).get("locked") else "🔓"
-            a_locked = "🔒" if tl.get("activity_lock", {}).get("locked") else "🔓"
-            c_locked = "🔒" if tl.get("capital_lock", {}).get("locked") else "🔓"
-            total_locked = tl.get("total_locked", 0)
-            tl_signal = tl.get("signal", "")
-            tl_str = f"\n   🔒三把锁: {total_locked}/3 {t_locked}趋势 {a_locked}股性 {c_locked}资金 | {tl_signal}"
-
-        # 消息面状态（结合时事新闻、政策消息、公司公告）
-        news_impact = p.get("news_impact", {})
-        news_str = ""
-        if news_impact:
-            news_level = news_impact.get("level", "中性")
-            news_score = news_impact.get("score", 50)
-            news_reasons = news_impact.get("reasons", [])
-            news_reasons_str = "、".join(news_reasons[:2]) if news_reasons else ""
-            if news_level in ["利好", "偏利好"]:
-                news_emoji = "📰"
-            elif news_level in ["利空", "偏利空"]:
-                news_emoji = "⚠️"
-            else:
-                news_emoji = "📄"
-            news_str = f"\n   {news_emoji}消息面: {news_level}({news_score}分)"
-            if news_reasons_str:
-                news_str += f" | {news_reasons_str}"
-
-        # 涨停概率和原因（基于6个月460只涨停股回测分析）
-        analysis = p.get("analysis", {})
-        limit_up_prob = analysis.get("limit_up_probability", 0)
-        limit_up_reasons = analysis.get("limit_up_reasons", [])
-        limit_up_str = ""
-        if limit_up_prob > 0:
-            prob_emoji = "🔥" if limit_up_prob >= 60 else "⚡" if limit_up_prob >= 45 else "📈"
-            limit_up_str = f"\n   {prob_emoji}涨停概率: {limit_up_prob}%"
-            if limit_up_reasons:
-                limit_up_str += f" | {'、'.join(limit_up_reasons[:3])}"
-
-        content = (
-            f"**{i+1}. 🎯 {p['name']}({p['code']})** {p['price']}元 {p['pct_change']:+.1f}% | 评分{score}\n"
-            f"   {point_str}"
-            f"{tl_str}"
-            f"{news_str}"
-            f"{limit_up_str}\n"
-            f"   ✅ 理由: {reasons_str}"
-        )
-        if risks_str:
-            content += f"\n   ⚠️ 风险: {risks_str}"
-
+    # 精选10支详细推荐
+    if top_picks:
+        elements.append({"tag": "hr"})
         elements.append({
             "tag": "div",
             "text": {
                 "tag": "lark_md",
-                "content": content
+                "content": f"**⭐ 精选推荐（{len(top_picks)}只，重点关注）**"
             }
         })
+
+        for i, p in enumerate(top_picks):
+            buy_price = p.get("buy_price")
+            sell_price = p.get("sell_price")
+            stop_loss = p.get("stop_loss")
+            target_price = p.get("target_price")
+            rr = p.get("risk_reward_ratio")
+            score = p.get("score", 0)
+
+            # 买卖点位
+            point_info = []
+            if buy_price:
+                point_info.append(f"买入{buy_price}元")
+            if sell_price:
+                point_info.append(f"卖出{sell_price}元")
+            if stop_loss:
+                point_info.append(f"止损{stop_loss}元")
+            if target_price:
+                point_info.append(f"目标{target_price}元")
+            if rr:
+                point_info.append(f"盈亏比{rr}")
+            point_str = " | ".join(point_info)
+
+            # 分析理由
+            reasons = p.get("analysis", {}).get("reasons", [])
+            risks = p.get("analysis", {}).get("risks", [])
+            reasons_str = "、".join(reasons[:3]) if reasons else ""
+            risks_str = "、".join(risks[:2]) if risks else ""
+
+            # 三把锁状态
+            tl = p.get("three_locks", {})
+            tl_str = ""
+            if tl:
+                t_locked = "🔒" if tl.get("trend_lock", {}).get("locked") else "🔓"
+                a_locked = "🔒" if tl.get("activity_lock", {}).get("locked") else "🔓"
+                c_locked = "🔒" if tl.get("capital_lock", {}).get("locked") else "🔓"
+                total_locked = tl.get("total_locked", 0)
+                tl_signal = tl.get("signal", "")
+                tl_str = f"\n   🔒三把锁: {total_locked}/3 {t_locked}趋势 {a_locked}股性 {c_locked}资金 | {tl_signal}"
+
+            # 消息面状态（结合时事新闻、政策消息、公司公告）
+            news_impact = p.get("news_impact", {})
+            news_str = ""
+            if news_impact:
+                news_level = news_impact.get("level", "中性")
+                news_score = news_impact.get("score", 50)
+                news_reasons = news_impact.get("reasons", [])
+                news_reasons_str = "、".join(news_reasons[:2]) if news_reasons else ""
+                if news_level in ["利好", "偏利好"]:
+                    news_emoji = "📰"
+                elif news_level in ["利空", "偏利空"]:
+                    news_emoji = "⚠️"
+                else:
+                    news_emoji = "📄"
+                news_str = f"\n   {news_emoji}消息面: {news_level}({news_score}分)"
+                if news_reasons_str:
+                    news_str += f" | {news_reasons_str}"
+
+            # 涨停概率和原因（基于6个月460只涨停股回测分析）
+            analysis = p.get("analysis", {})
+            limit_up_prob = analysis.get("limit_up_probability", 0)
+            limit_up_reasons = analysis.get("limit_up_reasons", [])
+            limit_up_str = ""
+            if limit_up_prob > 0:
+                prob_emoji = "🔥" if limit_up_prob >= 60 else "⚡" if limit_up_prob >= 45 else "📈"
+                limit_up_str = f"\n   {prob_emoji}涨停概率: {limit_up_prob}%"
+                if limit_up_reasons:
+                    limit_up_str += f" | {'、'.join(limit_up_reasons[:3])}"
+
+            content = (
+                f"**{i+1}. ⭐ {p['name']}({p['code']})** {p['price']}元 {p['pct_change']:+.1f}% | 评分{score}\n"
+                f"   {point_str}"
+                f"{tl_str}"
+                f"{news_str}"
+                f"{limit_up_str}\n"
+                f"   ✅ 理由: {reasons_str}"
+            )
+            if risks_str:
+                content += f"\n   ⚠️ 风险: {risks_str}"
+
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": content
+                }
+            })
+
+    # 全部30支简要列表
+    if all_picks and len(all_picks) > len(top_picks):
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**📋 全部推荐（{len(all_picks)}只，简要列表）**"
+            }
+        })
+
+        # 分批显示，每批10只
+        for batch_start in range(0, len(all_picks), 10):
+            batch = all_picks[batch_start:batch_start+10]
+            batch_str = ""
+            for j, p in enumerate(batch):
+                idx = batch_start + j + 1
+                score = p.get("score", 0)
+                limit_up_prob = p.get("analysis", {}).get("limit_up_probability", 0)
+                batch_str += f"{idx}. {p['name']}({p['code']}) {p['price']}元 评分{score}"
+                if limit_up_prob > 0:
+                    batch_str += f" 涨停{limit_up_prob}%"
+                batch_str += "\n"
+
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": batch_str.strip()
+                }
+            })
 
     # 操作提示（优化：增加更详细的止损和仓位控制提醒）
     # 基于2026-09-02回测：大盘下跌时推荐股票平均亏损3.35%，需要严格止损

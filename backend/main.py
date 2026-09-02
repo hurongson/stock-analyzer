@@ -202,10 +202,20 @@ def run_late_day_screener(enable_push: bool = True):
         result = late_day_screener.screen()
     except Exception as e:
         logger.error(f"尾盘选股失败: {e}")
-        result = {"picks": [], "error": str(e)}
+        result = {"all_picks": [], "top_picks": [], "error": str(e)}
 
-    picks = result.get("picks", [])
-    logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
+    # 适配新的返回结构（all_picks和top_picks）
+    if isinstance(result, dict) and "all_picks" in result:
+        all_picks = result.get("all_picks", [])
+        top_picks = result.get("top_picks", [])
+        picks = all_picks  # 兼容旧代码，picks指向全部推荐
+    else:
+        # 兼容旧的返回结构（直接返回列表）
+        picks = result if isinstance(result, list) else result.get("picks", [])
+        all_picks = picks
+        top_picks = picks[:10] if len(picks) >= 10 else picks
+
+    logger.info(f"尾盘选股完成，共推荐 {len(all_picks)} 只，精选 {len(top_picks)} 只")
 
     # 保存结果
     from backend.utils.helpers import save_json
@@ -214,7 +224,11 @@ def run_late_day_screener(enable_push: bool = True):
         "date": today_str(),
         "time": "14:30",
         "market_timing": market_timing_result,
-        "picks": picks,
+        "picks": all_picks,  # 全部推荐
+        "all_picks": all_picks,  # 全部30支
+        "top_picks": top_picks,  # 精选10支
+        "total_count": len(all_picks),
+        "top_count": len(top_picks),
         "summary": result.get("summary", {}),
     }
     save_json(save_result, path)
