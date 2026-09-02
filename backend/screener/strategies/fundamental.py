@@ -24,6 +24,9 @@ class FundamentalStrategy(BaseStrategy):
 
         # 初筛：基于可用数据过滤
         candidates = df[(df["price"] > 0) & (df["amount"] > 5e7)].copy()
+        # 增加换手率过滤（优化：确保推荐股票有足够活跃度）
+        if "turnover" in df.columns and df["turnover"].max() > 0:
+            candidates = candidates[candidates["turnover"] > 1]  # 换手率>1%，确保活跃度
         if has_pe:
             candidates = candidates[(candidates["pe"] > 0) & (candidates["pe"] < 60)]
         if has_pb:

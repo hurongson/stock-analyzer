@@ -30,7 +30,7 @@ class LowPriceStrategy(BaseStrategy):
         ].copy()
 
         if has_turnover:
-            filtered = filtered[filtered["turnover"] > 0.3]
+            filtered = filtered[filtered["turnover"] > 1]  # 从0.3提高到1，确保活跃度
         if has_mv:
             filtered = filtered[filtered["total_mv"] < 300e8]
         if has_pe:

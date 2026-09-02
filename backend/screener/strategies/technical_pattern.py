@@ -26,7 +26,7 @@ class TechnicalPatternStrategy(BaseStrategy):
         ].copy()
 
         if df["turnover"].max() > 0:
-            candidates = candidates[candidates["turnover"] > 0.5]
+            candidates = candidates[candidates["turnover"] > 1.5]  # 从0.5提高到1.5，确保活跃度
 
         candidates = candidates.sort_values("amount", ascending=False).head(100)
 

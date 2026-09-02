@@ -120,6 +120,7 @@ class ScreenerEngine:
                 item["resonance"] = False
             item["avg_score"] = round(item["total_score"] / item["strategy_count"], 1)
 
+        # 先按策略数量和总分排序
         combined.sort(key=lambda x: (x["strategy_count"], x["total_score"]), reverse=True)
         combined = combined[:Config.SCREENER_MAX_RESULTS]
 
@@ -205,10 +206,70 @@ class ScreenerEngine:
 
         # 按三把锁信号过滤：只保留买入/强烈买入信号的股票作为推荐
         buy_signals = ["强烈买入", "买入", "谨慎买入"]
+        
+        # 增加换手率评分（优化：大部分推荐股票换手率不高，需要加入考虑）
+        # 换手率是股票活跃度的重要指标，换手率太低的股票很难有大的涨幅
+        for item in combined:
+            try:
+                # 从行情数据获取换手率
+                code = item["code"]
+                # 尝试从stock_df中获取换手率
+                if stock_df is not None and not stock_df.empty:
+                    stock_row = stock_df[stock_df["code"] == code]
+                    if not stock_row.empty and "turnover" in stock_row.columns:
+                        turnover = float(stock_row.iloc[0].get("turnover", 0))
+                        item["turnover"] = turnover
+                        
+                        # 换手率评分（0-20分）
+                        turnover_score = 0
+                        if 3 <= turnover <= 10:
+                            turnover_score = 20  # 最佳换手率区间
+                            item["turnover_level"] = "活跃"
+                        elif 1.5 <= turnover < 3:
+                            turnover_score = 12  # 适度活跃
+                            item["turnover_level"] = "适度"
+                        elif 0.5 <= turnover < 1.5:
+                            turnover_score = 5  # 偏低
+                            item["turnover_level"] = "偏低"
+                        elif turnover > 15:
+                            turnover_score = 8  # 过高，可能出货
+                            item["turnover_level"] = "过高"
+                        else:
+                            turnover_score = 0  # 太低，不活跃
+                            item["turnover_level"] = "不活跃"
+                        
+                        item["turnover_score"] = turnover_score
+                    else:
+                        item["turnover"] = 0
+                        item["turnover_score"] = 0
+                        item["turnover_level"] = "未知"
+                else:
+                    item["turnover"] = 0
+                    item["turnover_score"] = 0
+                    item["turnover_level"] = "未知"
+            except Exception as e:
+                item["turnover"] = 0
+                item["turnover_score"] = 0
+                item["turnover_level"] = "未知"
+        
+        # 按三把锁信号 + 换手率综合排序（优化：三把锁优先，换手率其次）
+        def sort_by_tl_turnover(x):
+            tl = x.get("three_locks", {}) or {}
+            tl_locked = tl.get("total_locked", 0)
+            tl_signal = tl.get("signal", "")
+            # 三把锁信号优先级
+            signal_priority = 3 if tl_signal == "强烈买入" else (2 if tl_signal == "买入" else (1 if tl_signal == "谨慎买入" else 0))
+            turnover_score = x.get("turnover_score", 0)
+            total_score = x.get("total_score", 0)
+            return (signal_priority, tl_locked, turnover_score, total_score)
+        
+        combined.sort(key=sort_by_tl_turnover, reverse=True)
+        
         buy_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") in buy_signals]
         watch_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") not in buy_signals]
         
         logger.info(f"三把锁过滤: 买入信号{len(buy_combined)}只, 观望/卖出{len(watch_combined)}只")
+        logger.info(f"换手率分布: 活跃{sum(1 for c in combined if c.get('turnover_level')=='活跃')}只, 适度{sum(1 for c in combined if c.get('turnover_level')=='适度')}只, 偏低{sum(1 for c in combined if c.get('turnover_level')=='偏低')}只")
         
         # 推荐列表只包含买入信号股票，观望股票单独保存供参考
         recommended_combined = buy_combined if buy_combined else combined[:10]
@@ -258,8 +319,16 @@ class ScreenerEngine:
             tl_signal = tl.get("signal", "")
             tl_bonus = 40 if tl_locked == 3 else (20 if tl_locked == 2 else 0)
             
+            # 换手率评分（优化：特别推荐必须有足够活跃度）
+            turnover_score = item.get("turnover_score", 0)
+            turnover = item.get("turnover", 0)
+            
             # 非买入信号的股票不进入特别推荐
             if tl_signal not in ["强烈买入", "买入", "谨慎买入"]:
+                continue
+            
+            # 换手率太低的股票不进入特别推荐（<1%的股票很难有大涨幅）
+            if turnover > 0 and turnover < 1:
                 continue
 
             # 综合特别推荐评分
@@ -269,7 +338,8 @@ class ScreenerEngine:
                 resonance_bonus +
                 strategy_bonus +
                 position_score * 0.2 +
-                tl_bonus
+                tl_bonus +
+                turnover_score * 0.3  # 换手率评分占比30%
             )
 
             # 生成选中原因
@@ -364,6 +434,22 @@ class ScreenerEngine:
             if item.get("avg_score", 0) >= 85:
                 limit_up_score += 8
                 reasons.append(f"综合评分{item['avg_score']}")
+
+            # 7. 换手率（优化：换手率是涨停的重要前提，太低的股票很难涨停）
+            turnover = item.get("turnover", 0)
+            turnover_score = item.get("turnover_score", 0)
+            if 3 <= turnover <= 10:
+                limit_up_score += 20
+                reasons.append(f"换手率{turnover:.1f}%（活跃，易涨停）")
+            elif 1.5 <= turnover < 3:
+                limit_up_score += 12
+                reasons.append(f"换手率{turnover:.1f}%（适度活跃）")
+            elif turnover > 15:
+                limit_up_score += 5
+                reasons.append(f"换手率{turnover:.1f}%（过高，注意风险）")
+            elif turnover > 0 and turnover < 1:
+                limit_up_score -= 10
+                reasons.append(f"换手率{turnover:.1f}%（过低，难涨停）")
 
             item["limit_up_score"] = limit_up_score
             item["limit_up_reasons"] = reasons
