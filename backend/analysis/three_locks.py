@@ -528,7 +528,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"资金锁-量价质量计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 40  # 资金锁门槛40分（缺少资金流向数据时，量价配合已能说明问题）
+        locked = score >= 35  # 资金锁门槛从40分降低到35分（回测发现点亮率仅47.1%，门槛太高）
 
         return {
             "locked": locked,

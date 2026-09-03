@@ -515,12 +515,15 @@ class LateDayScreener:
                     # 将三把锁得分融入总评分（统一评分标准）
                     # 修复：之前三把锁权重过大（最高50分），导致final_score轻易达到100分
                     # 优化：三把锁权重降低到20%，bonus降低，避免过度乐观
+                    # 回测优化：采用加权平均，趋势锁权重最高（点亮率68.1%，预测能力最强），资金锁权重最低（点亮率47.1%）
                     tl_score = 0
                     if three_locks:
                         total_locked = three_locks.get("total_locked", 0)
-                        tl_avg = (three_locks.get("trend_lock",{}).get("score",0) + 
-                                  three_locks.get("activity_lock",{}).get("score",0) + 
-                                  three_locks.get("capital_lock",{}).get("score",0)) / 3
+                        trend_score = three_locks.get("trend_lock",{}).get("score",0)
+                        activity_score = three_locks.get("activity_lock",{}).get("score",0)
+                        capital_score = three_locks.get("capital_lock",{}).get("score",0)
+                        # 加权平均：趋势锁40%，股性锁35%，资金锁25%（回测优化）
+                        tl_avg = trend_score * 0.4 + activity_score * 0.35 + capital_score * 0.25
                         # 三把锁权重：全亮+10分，两亮+5分，一亮0分，零亮-5分（从20/10/0/-10降低）
                         tl_bonus = {3: 10, 2: 5, 1: 0, 0: -5}.get(total_locked, 0)
                         tl_score = int(tl_avg * 0.2 + tl_bonus)  # 三把锁占20%权重（从30%降低）
