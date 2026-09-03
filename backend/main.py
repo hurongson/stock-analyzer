@@ -278,33 +278,42 @@ def run_late_day_screener(enable_push: bool = True):
     logger.info(f"result类型: {type(result)}, 是否字典: {isinstance(result, dict)}")
     if isinstance(result, dict):
         logger.info(f"result键: {list(result.keys())}")
-        logger.info(f"result中all_picks类型: {type(result.get('all_picks'))}")
-        logger.info(f"result中top_picks类型: {type(result.get('top_picks'))}")
     
-    if isinstance(result, dict) and "all_picks" in result:
+    # 处理嵌套结构：result可能是 {"picks": {"all_picks": [...], "top_picks": [...]}, "summary": {...}}
+    # 也可能是 {"all_picks": [...], "top_picks": [...]}
+    if isinstance(result, dict) and "picks" in result and isinstance(result["picks"], dict):
+        # 嵌套结构：从result["picks"]中获取all_picks和top_picks
+        picks_data = result["picks"]
+        all_picks = picks_data.get("all_picks", [])
+        top_picks = picks_data.get("top_picks", [])
+        picks = all_picks
+        logger.info(f"检测到嵌套结构，从picks中获取all_picks和top_picks")
+    elif isinstance(result, dict) and "all_picks" in result:
+        # 扁平结构：直接从result中获取all_picks和top_picks
         all_picks = result.get("all_picks", [])
         top_picks = result.get("top_picks", [])
-        picks = all_picks  # 兼容旧代码，picks指向全部推荐
-        # 严格类型检查：确保all_picks和top_picks都是列表（修复TypeError）
-        if not isinstance(all_picks, list):
-            logger.warning(f"all_picks不是列表，类型: {type(all_picks)}，值: {all_picks}，转换为空列表")
-            all_picks = []
-            picks = []
-        if not isinstance(top_picks, list):
-            logger.warning(f"top_picks不是列表，类型: {type(top_picks)}，值: {top_picks}，转换为空列表")
-            top_picks = []
+        picks = all_picks
+        logger.info(f"检测到扁平结构，直接从result中获取all_picks和top_picks")
     else:
         # 兼容旧的返回结构（直接返回列表）
         logger.info(f"走else分支，result类型: {type(result)}")
         picks = result if isinstance(result, list) else result.get("picks", [])
         all_picks = picks
         top_picks = picks[:10] if len(picks) >= 10 else picks
-        # 严格类型检查
-        if not isinstance(picks, list):
-            logger.warning(f"picks不是列表，类型: {type(picks)}，值: {picks}，转换为空列表")
-            picks = []
-            all_picks = []
-            top_picks = []
+    
+    # 严格类型检查：确保all_picks和top_picks都是列表（修复TypeError）
+    if not isinstance(all_picks, list):
+        logger.warning(f"all_picks不是列表，类型: {type(all_picks)}，转换为空列表")
+        all_picks = []
+        picks = []
+    if not isinstance(top_picks, list):
+        logger.warning(f"top_picks不是列表，类型: {type(top_picks)}，转换为空列表")
+        top_picks = []
+    if not isinstance(picks, list):
+        logger.warning(f"picks不是列表，类型: {type(picks)}，转换为空列表")
+        picks = []
+        all_picks = []
+        top_picks = []
 
     logger.info(f"尾盘选股完成，共推荐 {len(all_picks)} 只，精选 {len(top_picks)} 只")
 
