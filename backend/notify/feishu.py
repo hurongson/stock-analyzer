@@ -587,8 +587,25 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
     date = late_day_data.get("date", "")
     picks = late_day_data.get("picks", [])
     # 获取精选10支和全部30支（适配新的返回结构）
+    # 严格类型检查：确保top_picks和all_picks都是列表，不是字典（修复TypeError）
     top_picks = late_day_data.get("top_picks", [])
     all_picks = late_day_data.get("all_picks", picks)
+    
+    # 如果top_picks不是列表，转换成空列表（修复字典被当成列表的问题）
+    if not isinstance(top_picks, list):
+        logger.warning(f"top_picks不是列表，类型: {type(top_picks)}，转换为空列表")
+        top_picks = []
+    
+    # 如果all_picks不是列表，转换成空列表
+    if not isinstance(all_picks, list):
+        logger.warning(f"all_picks不是列表，类型: {type(all_picks)}，转换为空列表")
+        all_picks = []
+    
+    # 如果picks不是列表，转换成空列表
+    if not isinstance(picks, list):
+        logger.warning(f"picks不是列表，类型: {type(picks)}，转换为空列表")
+        picks = []
+    
     market_timing = late_day_data.get("market_timing", {})
 
     # 如果没有top_picks，从all_picks中取前10只

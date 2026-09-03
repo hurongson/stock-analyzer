@@ -278,11 +278,25 @@ def run_late_day_screener(enable_push: bool = True):
         all_picks = result.get("all_picks", [])
         top_picks = result.get("top_picks", [])
         picks = all_picks  # 兼容旧代码，picks指向全部推荐
+        # 严格类型检查：确保all_picks和top_picks都是列表（修复TypeError）
+        if not isinstance(all_picks, list):
+            logger.warning(f"all_picks不是列表，类型: {type(all_picks)}，转换为空列表")
+            all_picks = []
+            picks = []
+        if not isinstance(top_picks, list):
+            logger.warning(f"top_picks不是列表，类型: {type(top_picks)}，转换为空列表")
+            top_picks = []
     else:
         # 兼容旧的返回结构（直接返回列表）
         picks = result if isinstance(result, list) else result.get("picks", [])
         all_picks = picks
         top_picks = picks[:10] if len(picks) >= 10 else picks
+        # 严格类型检查
+        if not isinstance(picks, list):
+            logger.warning(f"picks不是列表，类型: {type(picks)}，转换为空列表")
+            picks = []
+            all_picks = []
+            top_picks = []
 
     logger.info(f"尾盘选股完成，共推荐 {len(all_picks)} 只，精选 {len(top_picks)} 只")
 
