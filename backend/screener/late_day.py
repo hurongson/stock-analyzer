@@ -473,8 +473,9 @@ class LateDayScreener:
                 # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
                 # 连续放量过滤已移除，改为评分项
 
-                # 只保留评分>=60的（降低门槛，扩大推荐范围，用户要求选30支精选10支）
-                if score >= 60:
+                # 只保留评分>=55的（降低门槛，扩大推荐范围，用户要求选30支精选10支）
+                # 修复：评分系统优化后，final_score上限从100降低到95，需要相应降低门槛
+                if score >= 55:
                     # === 买卖点位计算（优化：更合理的盈亏比）===
                     # 买入价 = 尾盘现价（14:30-15:00直接买入）
                     buy_price = round(current_price, 2)
@@ -512,17 +513,21 @@ class LateDayScreener:
                         trend_analysis = None
 
                     # 将三把锁得分融入总评分（统一评分标准）
+                    # 修复：之前三把锁权重过大（最高50分），导致final_score轻易达到100分
+                    # 优化：三把锁权重降低到20%，bonus降低，避免过度乐观
                     tl_score = 0
                     if three_locks:
                         total_locked = three_locks.get("total_locked", 0)
                         tl_avg = (three_locks.get("trend_lock",{}).get("score",0) + 
                                   three_locks.get("activity_lock",{}).get("score",0) + 
                                   three_locks.get("capital_lock",{}).get("score",0)) / 3
-                        # 三把锁权重：全亮+20分，两亮+10分，一亮0分，零亮-10分
-                        tl_bonus = {3: 20, 2: 10, 1: 0, 0: -10}.get(total_locked, 0)
-                        tl_score = int(tl_avg * 0.3 + tl_bonus)  # 三把锁占30%权重
+                        # 三把锁权重：全亮+10分，两亮+5分，一亮0分，零亮-5分（从20/10/0/-10降低）
+                        tl_bonus = {3: 10, 2: 5, 1: 0, 0: -5}.get(total_locked, 0)
+                        tl_score = int(tl_avg * 0.2 + tl_bonus)  # 三把锁占20%权重（从30%降低）
                     
-                    final_score = min(100, int(score * 0.7 + tl_score))  # 原评分占70%，三把锁占30%
+                    # 原评分占80%，三把锁占20%（从70%/30%调整）
+                    # 限制final_score上限为95分，避免轻易达到100分（100分意味着完美，很少有股票能达到）
+                    final_score = min(95, int(score * 0.8 + tl_score))
 
                     result = {
                         "code": code,
@@ -574,6 +579,37 @@ class LateDayScreener:
         
         logger.info(f"行业分散度过滤: 从{len(results)}只减少到{len(filtered_results)}只")
         results = filtered_results
+
+        # 三把锁信号过滤（修复：之前只排序不过滤，导致强烈卖出的股票也被推荐）
+        # 用户要求"所有股票都按三把锁推送"，只保留买入/强烈买入/谨慎买入信号的股票
+        buy_signals = ["强烈买入", "买入", "谨慎买入"]
+        buy_results = []
+        watch_results = []
+        for stock in results:
+            tl = stock.get("three_locks", {}) or {}
+            tl_signal = tl.get("signal", "")
+            tl_locked = tl.get("total_locked", 0)
+            
+            if tl_signal in buy_signals:
+                buy_results.append(stock)
+            else:
+                watch_results.append(stock)
+        
+        logger.info(f"三把锁过滤: 买入信号{len(buy_results)}只, 观望/卖出{len(watch_results)}只")
+        
+        # 如果买入信号股票不足5只，适当放宽（避免推荐太少）
+        if len(buy_results) < 5:
+            logger.info(f"买入信号股票不足5只，适当放宽到2/3亮的股票")
+            # 增加2/3亮的观望股票
+            for stock in watch_results:
+                tl = stock.get("three_locks", {}) or {}
+                tl_locked = tl.get("total_locked", 0)
+                if tl_locked >= 2 and stock not in buy_results:
+                    buy_results.append(stock)
+                    if len(buy_results) >= 10:
+                        break
+        
+        results = buy_results if buy_results else results[:10]
 
         # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分
         # 基于6个月460只涨停股回测分析，涨停概率是最重要的指标
