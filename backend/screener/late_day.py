@@ -576,7 +576,7 @@ class LateDayScreener:
             industry = stock.get("industry", "") or stock.get("所属行业", "") or "未知"
             if industry not in industry_count:
                 industry_count[industry] = 0
-            if industry_count[industry] < 3:  # 同一行业最多3只（从2增加到3，避免过度过滤）
+            if industry_count[industry] < 5:  # 同一行业最多5只（从3增加到5，避免过度过滤导致推荐太少）
                 industry_count[industry] += 1
                 filtered_results.append(stock)
         

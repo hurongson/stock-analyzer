@@ -642,6 +642,10 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         })
 
         for i, p in enumerate(top_picks):
+            # 类型检查：确保p是字典，跳过字符串等非字典元素（修复AttributeError）
+            if not isinstance(p, dict):
+                logger.warning(f"跳过非字典元素: {type(p)} - {p}")
+                continue
             buy_price = p.get("buy_price")
             sell_price = p.get("sell_price")
             stop_loss = p.get("stop_loss")
@@ -767,6 +771,10 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
             batch = all_picks[batch_start:batch_start+10]
             batch_str = ""
             for j, p in enumerate(batch):
+                # 类型检查：确保p是字典，跳过字符串等非字典元素（修复AttributeError）
+                if not isinstance(p, dict):
+                    logger.warning(f"跳过非字典元素: {type(p)} - {p}")
+                    continue
                 idx = batch_start + j + 1
                 score = p.get("score", 0)
                 limit_up_prob = p.get("analysis", {}).get("limit_up_probability", 0)
