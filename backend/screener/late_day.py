@@ -589,6 +589,10 @@ class LateDayScreener:
         buy_results = []
         watch_results = []
         for stock in results:
+            # 类型检查：确保stock是字典，跳过字符串等非字典元素（修复TypeError）
+            if not isinstance(stock, dict):
+                logger.warning(f"跳过非字典元素: {type(stock)} - {stock}")
+                continue
             tl = stock.get("three_locks", {}) or {}
             tl_signal = tl.get("signal", "")
             tl_locked = tl.get("total_locked", 0)
@@ -617,11 +621,14 @@ class LateDayScreener:
         # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分
         # 基于6个月460只涨停股回测分析，涨停概率是最重要的指标
         def sort_key(x):
+            # 类型检查：确保x是字典（修复TypeError）
+            if not isinstance(x, dict):
+                return (0, 0, 0)
             tl = x.get("three_locks", {})
             locked = tl.get("total_locked", 0) if tl else 0
             analysis = x.get("analysis", {})
             limit_up_prob = analysis.get("limit_up_probability", 0) if analysis else 0
-            return (limit_up_prob, locked, x["score"])
+            return (limit_up_prob, locked, x.get("score", 0))
         results.sort(key=sort_key, reverse=True)
         
         # 分为精选10支和全部30支
