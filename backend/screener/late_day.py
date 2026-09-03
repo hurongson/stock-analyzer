@@ -312,13 +312,14 @@ class LateDayScreener:
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
-                # 涨幅 -5%到10%（优化：从5%扩大到10%，允许连板股）
-                # 2026-09-02回测发现：31%涨停股昨天涨幅>5%（已涨停，连板股）
-                # 60%涨停股涨停前一天涨幅在-3%到3%，横盘整理为主
-                if pct_change < -5 or pct_change > 10:
+                # 涨幅 -10%到10%（优化：从-5%扩大到-10%，允许超跌反弹）
+                # 2026-09-03回测发现：59%涨停股昨天是下跌的，超跌反弹往往更容易涨停
+                # 25%涨停股昨天涨幅超出范围，主要是大跌的股票（-10%到-5%）
+                if pct_change < -10 or pct_change > 10:
                     continue
-                # 价格 2-80元（大规模回测发现：11.5%涨停股价格不在2-50元，扩大覆盖中高价股）
-                if price < 2 or price > 80:
+                # 价格 2-100元（优化：从80元放宽到100元，允许中高价股）
+                # 2026-09-03回测发现：涨停股平均价格25.60元，15.9%>50元
+                if price < 2 or price > 100:
                     continue
                 # 排除ST和退市
                 if "ST" in name or "退" in name or "*" in name:
@@ -636,6 +637,7 @@ class LateDayScreener:
         # 1. 涨幅评分（15%）- 基于涨停前夕分析优化（460只涨停股）
         # 涨停前夕特征：60%涨幅在-3%到3%，横盘整理(-1%到1%)占23.3%最多
         # 2026-09-02回测发现：31%涨停股昨天涨幅>5%（已涨停，连板股）
+        # 2026-09-03回测发现：59%涨停股昨天是下跌的，超跌反弹往往更容易涨停
         pattern = "未知"
         is_lianban = stock.get("is_lianban", False) or pct_change > 5
         
@@ -676,9 +678,18 @@ class LateDayScreener:
             reasons.append(f"温和上涨({pct_change:.1f}%)，稳步推升可能涨停")
             pattern = "温和上涨型"
         elif -5 <= pct_change < -3:
-            score += 11  # 大跌反弹，一定分数
+            score += 13  # 大跌反弹，提高分数（2026-09-03回测：超跌反弹容易涨停）
             reasons.append(f"大跌反弹({pct_change:.1f}%)，超跌反弹概率高")
             pattern = "超跌反弹型"
+        elif -8 <= pct_change < -5:
+            score += 12  # 深度超跌反弹，较高分数（新增）
+            reasons.append(f"深度超跌({pct_change:.1f}%)，报复性反弹概率高")
+            pattern = "深度超跌反弹型"
+        elif -10 <= pct_change < -8:
+            score += 10  # 极端超跌反弹，一定分数（新增）
+            reasons.append(f"极端超跌({pct_change:.1f}%)，注意风险但反弹空间大")
+            pattern = "极端超跌反弹型"
+            risks.append(f"极端超跌({pct_change:.1f}%)，基本面可能有问题")
         elif 3 < pct_change <= 5:
             score += 8  # 涨幅较大，较低分（只有5.4%涨停股属于此区间）
             reasons.append(f"涨幅尚可({pct_change:.1f}%)，注意追高风险")
@@ -888,8 +899,17 @@ class LateDayScreener:
             limit_up_prob += 12  # 从15降低到12
             limit_up_reasons.append("横盘整理(-1%~1%)，蓄势待发")
         elif -3 <= pct_change < -1:
-            limit_up_prob += 10  # 从12降低到10
+            limit_up_prob += 11  # 从10提高到11，超跌反弹容易涨停
             limit_up_reasons.append("缩量回调(-3%~-1%)，洗盘后反弹")
+        elif -5 <= pct_change < -3:
+            limit_up_prob += 10  # 新增，大跌反弹
+            limit_up_reasons.append(f"大跌反弹({pct_change:.1f}%)，超跌反弹概率高")
+        elif -8 <= pct_change < -5:
+            limit_up_prob += 8  # 新增，深度超跌反弹
+            limit_up_reasons.append(f"深度超跌({pct_change:.1f}%)，报复性反弹")
+        elif -10 <= pct_change < -8:
+            limit_up_prob += 5  # 新增，极端超跌反弹
+            limit_up_reasons.append(f"极端超跌({pct_change:.1f}%)，注意风险但反弹空间大")
         elif 1 <= pct_change <= 3:
             limit_up_prob += 8  # 从10降低到8
             limit_up_reasons.append("温和上涨(1%~3%)，稳步推升")
