@@ -702,6 +702,10 @@ class LateDayScreener:
         one_locked_results = []
         watch_results = []
         
+        # 强烈卖出和卖出信号的股票直接排除（严重bug修复：之前强烈卖出的股票因为有2/3亮或1/3亮而被错误推荐）
+        sell_signals = ["强烈卖出", "卖出"]
+        excluded_sell_count = 0
+        
         for stock in results:
             # 类型检查：确保stock是字典，跳过字符串等非字典元素（修复TypeError）
             if not isinstance(stock, dict):
@@ -711,6 +715,12 @@ class LateDayScreener:
             tl_signal = tl.get("signal", "")
             tl_locked = tl.get("total_locked", 0)
             
+            # 严重bug修复：强烈卖出和卖出信号的股票直接跳过，不放入任何结果列表
+            # 无论有几把锁亮，卖出信号的股票都不应该被推荐
+            if tl_signal in sell_signals:
+                excluded_sell_count += 1
+                continue
+            
             if tl_signal in buy_signals:
                 buy_results.append(stock)
             elif tl_locked >= 2:
@@ -719,6 +729,9 @@ class LateDayScreener:
                 one_locked_results.append(stock)
             else:
                 watch_results.append(stock)
+        
+        if excluded_sell_count > 0:
+            logger.info(f"已排除强烈卖出/卖出信号股票: {excluded_sell_count}只（严重bug修复）")
         
         logger.info(f"三把锁过滤: 买入信号{len(buy_results)}只, 2/3亮{len(two_locked_results)}只, 1/3亮{len(one_locked_results)}只, 0/3亮{len(watch_results)}只")
         
