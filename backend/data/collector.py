@@ -160,9 +160,9 @@ class DataCollector:
                 except Exception as e:
                     logger.warning(f"批量获取K线失败（批次{i//batch_size+1}）: {str(e)[:80]}")
                 
-                # 批次之间等待1秒，避免频率超限
+                # 批次之间等待61秒，避免频率超限（Tushare daily_basic频率限制1次/分钟）
                 import time
-                time.sleep(1)
+                time.sleep(61)
             
         except Exception as e:
             logger.error(f"批量获取K线异常: {e}")
@@ -421,9 +421,9 @@ class DataCollector:
                 except Exception as e:
                     logger.warning(f"批量获取换手率失败（批次{i//batch_size+1}）: {str(e)[:80]}")
                 
-                # 批次之间等待1秒，避免频率超限
+                # 批次之间等待61秒，避免频率超限（Tushare daily_basic频率限制1次/分钟）
                 import time
-                time.sleep(1)
+                time.sleep(61)
             
         except Exception as e:
             logger.error(f"批量获取换手率异常: {e}")
