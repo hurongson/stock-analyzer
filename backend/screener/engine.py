@@ -272,7 +272,16 @@ class ScreenerEngine:
         logger.info(f"换手率分布: 活跃{sum(1 for c in combined if c.get('turnover_level')=='活跃')}只, 适度{sum(1 for c in combined if c.get('turnover_level')=='适度')}只, 偏低{sum(1 for c in combined if c.get('turnover_level')=='偏低')}只")
         
         # 推荐列表只包含买入信号股票，观望股票单独保存供参考
-        recommended_combined = buy_combined if buy_combined else combined[:10]
+        # 严重bug修复：如果没有买入信号股票，不要直接取前10只，而是先过滤掉强烈卖出和卖出信号的股票
+        sell_signals = ["强烈卖出", "卖出"]
+        if buy_combined:
+            recommended_combined = buy_combined
+        else:
+            # 过滤掉强烈卖出和卖出信号的股票
+            filtered_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") not in sell_signals]
+            recommended_combined = filtered_combined[:10] if filtered_combined else combined[:10]
+            if len(filtered_combined) < len(combined):
+                logger.info(f"推荐列表过滤掉强烈卖出/卖出信号股票: {len(combined) - len(filtered_combined)}只（严重bug修复）")
 
         # 特别推荐：综合评分 + 强势度 + 共振 + 三把锁全亮，精选3-5只
         special_picks = self._select_special_picks(recommended_combined)
@@ -368,6 +377,13 @@ class ScreenerEngine:
         """
         if not combined:
             return []
+
+        # 严重bug修复：涨停预测之前，先过滤掉强烈卖出和卖出信号的股票
+        sell_signals = ["强烈卖出", "卖出"]
+        filtered_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") not in sell_signals]
+        if len(filtered_combined) < len(combined):
+            logger.info(f"涨停预测过滤掉强烈卖出/卖出信号股票: {len(combined) - len(filtered_combined)}只（严重bug修复）")
+        combined = filtered_combined
 
         predicted = []
         for item in combined:
