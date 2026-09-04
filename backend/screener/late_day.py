@@ -1104,14 +1104,105 @@ class LateDayScreener:
         # 限制概率范围（最高从95降低到80，更保守）
         limit_up_prob = max(5, min(80, round(limit_up_prob)))
         
-        # 9. 基本面变化评分（新增，基于表1：全市场变化扫描逻辑）
-        # 优先寻找：重大订单、客户突破、业绩变化、产品涨价、毛利率拐点、现金流改善、机构盈利预测变化、行业景气变化
+        # 9. 基本面评分（优化：添加真正的基本面数据，之前只基于消息面和概念热点导致都是0分）
+        # 基于：ROE、毛利率、营收增长、利润增长、PE/PB等真正的基本面指标
+        # 消息面和概念热点作为补充
         fundamental_score = 0
         fundamental_changes = []
         fundamental_research = ""
+        fundamental_data = {}
         
         try:
-            # 9.1 消息面基本面变化
+            # 9.0 获取真正的基本面数据（使用Tushare接口，GitHub Actions环境可用）
+            try:
+                from backend.data.collector import DataCollector
+                fundamental_collector = DataCollector()
+                fundamental_data = fundamental_collector.get_fundamental(code)
+                if fundamental_data:
+                    fundamental_changes.append("基本面数据已获取")
+            except Exception as e:
+                logger.debug(f"获取基本面数据失败 {code}: {e}")
+                fundamental_data = {}
+            
+            # 9.1 ROE评分（净资产收益率，最重要的基本面指标）
+            roe = fundamental_data.get("roe", 0)
+            if roe > 0:
+                if roe >= 20:
+                    fundamental_score += 20
+                    fundamental_changes.append(f"ROE优秀({roe:.1f}%)")
+                elif roe >= 15:
+                    fundamental_score += 15
+                    fundamental_changes.append(f"ROE良好({roe:.1f}%)")
+                elif roe >= 10:
+                    fundamental_score += 10
+                    fundamental_changes.append(f"ROE一般({roe:.1f}%)")
+                elif roe >= 5:
+                    fundamental_score += 5
+                    fundamental_changes.append(f"ROE较低({roe:.1f}%)")
+                else:
+                    fundamental_score -= 5
+                    fundamental_changes.append(f"ROE差({roe:.1f}%)")
+            
+            # 9.2 毛利率评分
+            gross_margin = fundamental_data.get("gross_margin", 0)
+            if gross_margin > 0:
+                if gross_margin >= 40:
+                    fundamental_score += 10
+                    fundamental_changes.append(f"毛利率高({gross_margin:.1f}%)")
+                elif gross_margin >= 25:
+                    fundamental_score += 7
+                    fundamental_changes.append(f"毛利率良好({gross_margin:.1f}%)")
+                elif gross_margin >= 15:
+                    fundamental_score += 4
+                    fundamental_changes.append(f"毛利率一般({gross_margin:.1f}%)")
+            
+            # 9.3 营收增长评分
+            revenue_yoy = fundamental_data.get("revenue_yoy", 0)
+            if revenue_yoy > 0:
+                if revenue_yoy >= 30:
+                    fundamental_score += 15
+                    fundamental_changes.append(f"营收高增长({revenue_yoy:.1f}%)")
+                elif revenue_yoy >= 15:
+                    fundamental_score += 10
+                    fundamental_changes.append(f"营收增长良好({revenue_yoy:.1f}%)")
+                elif revenue_yoy >= 5:
+                    fundamental_score += 5
+                    fundamental_changes.append(f"营收稳定增长({revenue_yoy:.1f}%)")
+            elif revenue_yoy < 0:
+                fundamental_score -= 5
+                fundamental_changes.append(f"营收下滑({revenue_yoy:.1f}%)")
+            
+            # 9.4 利润增长评分
+            profit_yoy = fundamental_data.get("profit_yoy", 0)
+            if profit_yoy > 0:
+                if profit_yoy >= 50:
+                    fundamental_score += 15
+                    fundamental_changes.append(f"利润暴增({profit_yoy:.1f}%)")
+                elif profit_yoy >= 30:
+                    fundamental_score += 10
+                    fundamental_changes.append(f"利润高增长({profit_yoy:.1f}%)")
+                elif profit_yoy >= 10:
+                    fundamental_score += 5
+                    fundamental_changes.append(f"利润稳定增长({profit_yoy:.1f}%)")
+            elif profit_yoy < 0:
+                fundamental_score -= 10
+                fundamental_changes.append(f"利润下滑({profit_yoy:.1f}%)")
+            
+            # 9.5 PE/PB估值评分（从行情数据中获取）
+            pe = fundamental_data.get("pe", 0)
+            pb = fundamental_data.get("pb", 0)
+            if pe > 0:
+                if pe <= 15:
+                    fundamental_score += 10
+                    fundamental_changes.append(f"PE低估值({pe:.1f})")
+                elif pe <= 30:
+                    fundamental_score += 5
+                    fundamental_changes.append(f"PE合理({pe:.1f})")
+                elif pe > 50:
+                    fundamental_score -= 5
+                    fundamental_changes.append(f"PE高估({pe:.1f})")
+            
+            # 9.6 消息面基本面变化（作为补充）
             news_impact = stock.get("news_impact", {})
             news_score = news_impact.get("score", 50)
             news_reasons = news_impact.get("reasons", [])
@@ -1125,26 +1216,30 @@ class LateDayScreener:
                 fundamental_score -= 5
                 fundamental_changes.append("消息面利空")
             
-            # 9.2 概念热点基本面变化
+            # 9.7 概念热点基本面变化（作为补充）
             concept_analysis = stock.get("concept_analysis", {})
             matched_hot = concept_analysis.get("matched_hot", [])
             if matched_hot:
                 fundamental_score += 5
                 fundamental_changes.append(f"涉及热门概念: {'、'.join(matched_hot[:2])}")
             
-            # 9.3 行业景气度变化
+            # 9.8 行业景气度变化
             industry = stock.get("industry", "")
             if industry:
                 fundamental_changes.append(f"所属行业: {industry}")
             
-            # 9.4 确定今天最值得研究什么
+            # 9.9 确定今天最值得研究什么
             if fundamental_changes:
                 fundamental_research = f"重点研究: {'、'.join(fundamental_changes[:3])}"
             else:
                 fundamental_research = "重点研究: 技术面突破信号和资金流向"
                 
         except Exception as e:
+            logger.debug(f"基本面评分计算失败 {code}: {e}")
             fundamental_research = "重点研究: 技术面突破信号和资金流向"
+        
+        # 限制基本面评分范围（0-100）
+        fundamental_score = max(0, min(100, fundamental_score))
         
         # 将基本面评分加入总分（占20%权重）
         score += fundamental_score * 0.2
