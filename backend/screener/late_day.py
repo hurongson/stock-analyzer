@@ -304,7 +304,8 @@ class LateDayScreener:
         模式A - 温和上涨型：涨幅 1%-5%，量比>1.2
         模式B - 回调反弹型：涨幅 -3%到1%，缩量整理后反弹（回测发现60%涨停股前一天是这种模式）
         通用条件：
-        - 价格 2-40元（扩大范围，覆盖低价和中高价）
+        - 价格 2-50元（优化：从100元缩小到50元，2026-09-04回测发现84.2%涨停股<20元）
+        - 成交额 0.5-50亿（新增：2026-09-04回测发现65.8%涨停股<5亿，最低0.78亿）
         - 成交量 > 800万（有流动性）
         - 非ST、非退市
         - 非北交所、非科创板
@@ -317,18 +318,23 @@ class LateDayScreener:
                 price = float(row.get("price", 0))
                 pct_change = float(row.get("pct_change", 0))
                 volume = float(row.get("volume", 0))
+                amount = float(row.get("amount", 0))  # 成交额（元）
 
                 # 过滤条件
                 if price <= 0 or pct_change == 0:
                     continue
                 # 涨幅 -10%到10%（优化：从-5%扩大到-10%，允许超跌反弹）
                 # 2026-09-03回测发现：59%涨停股昨天是下跌的，超跌反弹往往更容易涨停
-                # 25%涨停股昨天涨幅超出范围，主要是大跌的股票（-10%到-5%）
                 if pct_change < -10 or pct_change > 10:
                     continue
-                # 价格 2-100元（优化：从80元放宽到100元，允许中高价股）
-                # 2026-09-03回测发现：涨停股平均价格25.60元，15.9%>50元
-                if price < 2 or price > 100:
+                # 价格 2-50元（优化：从100元缩小到50元）
+                # 2026-09-04回测发现：84.2%涨停股<20元，44.7%<10元，>=50元极少
+                if price < 2 or price > 50:
+                    continue
+                # 成交额过滤（新增：2026-09-04回测发现65.8%涨停股<5亿）
+                # 成交额太小（<0.5亿）流动性差，太大（>50亿）难涨停
+                amount_yi = amount / 100000000  # 转换为亿
+                if amount_yi > 0 and (amount_yi < 0.5 or amount_yi > 50):
                     continue
                 # 排除ST和退市
                 if "ST" in name or "退" in name or "*" in name:
@@ -1050,15 +1056,43 @@ class LateDayScreener:
             pass
         
         # 8.6 价格特征（低价股更容易涨停，但波动性大风险高）
+        # 2026-09-04回测发现：84.2%涨停股<20元，44.7%<10元，>=50元极少
         if 3 <= current_price < 10:
-            limit_up_prob += 5  # 中低价股，平衡收益和风险
-            limit_up_reasons.append(f"中低价股({current_price}元)，弹性好")
+            limit_up_prob += 8  # 从5增加到8，中低价股弹性最好（44.7%涨停股<10元）
+            limit_up_reasons.append(f"中低价股({current_price}元)，弹性好易涨停")
         elif current_price < 3:
-            limit_up_prob += 2  # 低价股风险高，降低加分
-            limit_up_reasons.append(f"低价股({current_price}元)，波动大风险高")
+            limit_up_prob += 4  # 从2增加到4，低价股波动大
+            limit_up_reasons.append(f"低价股({current_price}元)，波动大弹性足")
         elif current_price < 20:
-            limit_up_prob += 3
-            limit_up_reasons.append(f"中价股({current_price}元)")
+            limit_up_prob += 5  # 从3增加到5，中价股也容易涨停（84.2%涨停股<20元）
+            limit_up_reasons.append(f"中价股({current_price}元)，价格适中")
+        elif current_price < 50:
+            limit_up_prob += 2  # 高价股涨停概率低
+            limit_up_reasons.append(f"中高价股({current_price}元)，涨停难度大")
+        else:
+            limit_up_prob -= 2  # >=50元极少涨停
+            limit_up_reasons.append(f"高价股({current_price}元)，很难涨停")
+        
+        # 8.6.1 成交额特征（新增：2026-09-04回测发现65.8%涨停股<5亿）
+        # 成交额太小流动性差，太大难涨停，5亿以下最佳
+        amount = stock.get("amount", 0)
+        amount_yi = amount / 100000000 if amount > 0 else 0
+        if amount_yi > 0:
+            if 0.5 <= amount_yi < 5:
+                limit_up_prob += 8  # 小盘股最容易涨停（65.8%涨停股<5亿）
+                limit_up_reasons.append(f"成交额适中({amount_yi:.1f}亿)，小盘股易拉升")
+            elif 5 <= amount_yi < 10:
+                limit_up_prob += 5  # 中盘股也有机会
+                limit_up_reasons.append(f"成交额良好({amount_yi:.1f}亿)，中盘股有机会")
+            elif 10 <= amount_yi < 20:
+                limit_up_prob += 2  # 大盘股涨停难度大
+                limit_up_reasons.append(f"成交额较大({amount_yi:.1f}亿)，大盘股难涨停")
+            elif amount_yi >= 20:
+                limit_up_prob -= 2  # 超大盘股很难涨停
+                limit_up_reasons.append(f"成交额过大({amount_yi:.1f}亿)，很难涨停")
+            elif amount_yi < 0.5:
+                limit_up_prob -= 3  # 成交额太小流动性差
+                limit_up_reasons.append(f"成交额过小({amount_yi:.2f}亿)，流动性差")
         
         # 8.7 消息面加成
         try:
