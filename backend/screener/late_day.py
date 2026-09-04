@@ -1114,6 +1114,7 @@ class LateDayScreener:
         
         try:
             # 9.0 获取真正的基本面数据（使用Tushare接口，GitHub Actions环境可用）
+            code = stock.get("code", "")  # 从stock字典中获取code（修复：之前code未定义）
             try:
                 from backend.data.collector import DataCollector
                 fundamental_collector = DataCollector()
