@@ -685,7 +685,7 @@ class LateDayScreener:
             industry = stock.get("industry", "") or stock.get("所属行业", "") or "未知"
             if industry not in industry_count:
                 industry_count[industry] = 0
-            if industry_count[industry] < 10:  # 同一行业最多10只（从5增加到10，避免过度过滤导致推荐太少，用户要求30只推荐）
+            if industry_count[industry] < 15:  # 同一行业最多15只（从10增加到15，近一个月回测发现行业比较分散，TOP5只占19.2%，限制太严格会错过热门板块）
                 industry_count[industry] += 1
                 filtered_results.append(stock)
         
@@ -1108,24 +1108,24 @@ class LateDayScreener:
             limit_up_prob += 3
         
         # 8.3 换手率特征（适度活跃概率高，过高有风险）
-        # 2026-09-04回测发现：74.4%涨停股换手率在3-15%之间（3-7%占38.5%，7-15%占35.9%）
-        # 只有10.3%涨停股换手率<3%，15.4%>=15%
+        # 2026-09-05近一个月回测发现：3-7%占33.8%，7-15%占32.7%，两者差不多
+        # 17.2%涨停股换手率<3%，11.4%在15-25%，4.9%>25%
         if turnover <= 0:
             pass  # 无换手率数据，不评分
         elif turnover < 3:
-            limit_up_prob -= 3  # 换手率太低，股性不活跃，很难涨停（只有10.3%涨停股<3%）
+            limit_up_prob -= 3  # 换手率太低，股性不活跃，很难涨停（17.2%涨停股<3%）
             limit_up_reasons.append(f"换手率过低({turnover:.1f}%)，股性不活跃")
         elif 3 <= turnover <= 7:
-            limit_up_prob += 8  # 从6增加到8，换手率适中最容易涨停（38.5%涨停股在这个区间）
+            limit_up_prob += 8  # 换手率适中最容易涨停（33.8%涨停股在这个区间）
             limit_up_reasons.append(f"换手率适中({turnover:.1f}%)，资金关注度高")
         elif 7 < turnover <= 15:
-            limit_up_prob += 6  # 从3增加到6，换手率较高也容易涨停（35.9%涨停股在这个区间）
+            limit_up_prob += 8  # 从6增加到8，与3-7%涨停数量差不多（32.7%涨停股在这个区间）
             limit_up_reasons.append(f"换手率良好({turnover:.1f}%)，交投活跃")
         elif 15 < turnover <= 25:
-            limit_up_prob += 2  # 换手率偏高，有一定机会但风险增加（15.4%涨停股>=15%）
+            limit_up_prob += 4  # 从2增加到4，换手率偏高也有一定机会（11.4%涨停股在这个区间）
             limit_up_reasons.append(f"换手率偏高({turnover:.1f}%)，注意风险")
         else:  # turnover > 25
-            limit_up_prob -= 2  # 换手率过高，出货风险大
+            limit_up_prob += 0  # 从-2增加到0，换手率过高但仍有机会（4.9%涨停股>25%）
             limit_up_reasons.append(f"换手率过高({turnover:.1f}%)，出货风险")
         
         # 8.4 量比特征（缩量整理后放量涨停是常见模式）
@@ -1160,39 +1160,45 @@ class LateDayScreener:
             pass
         
         # 8.6 价格特征（低价股更容易涨停，但波动性大风险高）
-        # 2026-09-04回测发现：84.2%涨停股<20元，44.7%<10元，>=50元极少
-        if 3 <= current_price < 10:
-            limit_up_prob += 8  # 从5增加到8，中低价股弹性最好（44.7%涨停股<10元）
+        # 2026-09-05近一个月回测发现：10-20元最多(30.2%)，5-10元其次(24.8%)，20元以下占65.8%
+        if 3 <= current_price < 5:
+            limit_up_prob += 7  # 从8降低到7，3-5元占9.5%
+            limit_up_reasons.append(f"低价股({current_price}元)，弹性好易涨停")
+        elif 5 <= current_price < 10:
+            limit_up_prob += 8  # 保持8分，5-10元占24.8%
             limit_up_reasons.append(f"中低价股({current_price}元)，弹性好易涨停")
+        elif 10 <= current_price < 20:
+            limit_up_prob += 9  # 从5增加到9，10-20元是涨停最多的区间(30.2%)
+            limit_up_reasons.append(f"中价股({current_price}元)，价格适中易涨停")
         elif current_price < 3:
-            limit_up_prob += 4  # 从2增加到4，低价股波动大
-            limit_up_reasons.append(f"低价股({current_price}元)，波动大弹性足")
-        elif current_price < 20:
-            limit_up_prob += 5  # 从3增加到5，中价股也容易涨停（84.2%涨停股<20元）
-            limit_up_reasons.append(f"中价股({current_price}元)，价格适中")
+            limit_up_prob += 6  # 从4增加到6，2-3元占1.1%
+            limit_up_reasons.append(f"超低价股({current_price}元)，波动大弹性足")
         elif current_price < 50:
-            limit_up_prob += 2  # 高价股涨停概率低
-            limit_up_reasons.append(f"中高价股({current_price}元)，涨停难度大")
+            limit_up_prob += 4  # 从2增加到4，20-50元占24.1%
+            limit_up_reasons.append(f"中高价股({current_price}元)，涨停难度较大")
         else:
-            limit_up_prob -= 2  # >=50元极少涨停
+            limit_up_prob += 0  # 从-2增加到0，>=50元占10.0%
             limit_up_reasons.append(f"高价股({current_price}元)，很难涨停")
         
-        # 8.6.1 成交额特征（新增：2026-09-04回测发现65.8%涨停股<5亿）
-        # 成交额太小流动性差，太大难涨停，5亿以下最佳
+        # 8.6.1 成交额特征（2026-09-05近一个月回测优化）
+        # 1-5亿最多(49.8%)，5-10亿其次(19.3%)，10亿以下占78.0%
         amount = stock.get("amount", 0)
         amount_yi = amount / 100000000 if amount > 0 else 0
         if amount_yi > 0:
-            if 0.5 <= amount_yi < 5:
-                limit_up_prob += 8  # 小盘股最容易涨停（65.8%涨停股<5亿）
+            if 1 <= amount_yi < 5:
+                limit_up_prob += 10  # 从8增加到10，1-5亿是涨停最多的区间(49.8%)
                 limit_up_reasons.append(f"成交额适中({amount_yi:.1f}亿)，小盘股易拉升")
             elif 5 <= amount_yi < 10:
-                limit_up_prob += 5  # 中盘股也有机会
+                limit_up_prob += 7  # 从5增加到7，5-10亿占19.3%
                 limit_up_reasons.append(f"成交额良好({amount_yi:.1f}亿)，中盘股有机会")
+            elif 0.5 <= amount_yi < 1:
+                limit_up_prob += 6  # 从8降低到6，0.5-1亿占6.5%
+                limit_up_reasons.append(f"成交额偏小({amount_yi:.1f}亿)，流动性一般")
             elif 10 <= amount_yi < 20:
-                limit_up_prob += 2  # 大盘股涨停难度大
+                limit_up_prob += 4  # 从2增加到4，10-20亿占13.4%
                 limit_up_reasons.append(f"成交额较大({amount_yi:.1f}亿)，大盘股难涨停")
             elif amount_yi >= 20:
-                limit_up_prob -= 2  # 超大盘股很难涨停
+                limit_up_prob += 0  # 从-2增加到0，>=20亿占8.6%
                 limit_up_reasons.append(f"成交额过大({amount_yi:.1f}亿)，很难涨停")
             elif amount_yi < 0.5:
                 limit_up_prob -= 3  # 成交额太小流动性差
