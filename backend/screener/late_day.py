@@ -1014,14 +1014,24 @@ class LateDayScreener:
             limit_up_prob += 3
         
         # 8.3 换手率特征（适度活跃概率高，过高有风险）
-        if 3 <= turnover <= 7:
-            limit_up_prob += 6  # 从8降低到6
+        # 2026-09-04回测发现：74.4%涨停股换手率在3-15%之间（3-7%占38.5%，7-15%占35.9%）
+        # 只有10.3%涨停股换手率<3%，15.4%>=15%
+        if turnover <= 0:
+            pass  # 无换手率数据，不评分
+        elif turnover < 3:
+            limit_up_prob -= 3  # 换手率太低，股性不活跃，很难涨停（只有10.3%涨停股<3%）
+            limit_up_reasons.append(f"换手率过低({turnover:.1f}%)，股性不活跃")
+        elif 3 <= turnover <= 7:
+            limit_up_prob += 8  # 从6增加到8，换手率适中最容易涨停（38.5%涨停股在这个区间）
             limit_up_reasons.append(f"换手率适中({turnover:.1f}%)，资金关注度高")
         elif 7 < turnover <= 15:
-            limit_up_prob += 3
-            limit_up_reasons.append(f"换手率较高({turnover:.1f}%)，交投活跃")
-        elif turnover > 15:
-            limit_up_prob -= 3  # 换手率过高，出货风险
+            limit_up_prob += 6  # 从3增加到6，换手率较高也容易涨停（35.9%涨停股在这个区间）
+            limit_up_reasons.append(f"换手率良好({turnover:.1f}%)，交投活跃")
+        elif 15 < turnover <= 25:
+            limit_up_prob += 2  # 换手率偏高，有一定机会但风险增加（15.4%涨停股>=15%）
+            limit_up_reasons.append(f"换手率偏高({turnover:.1f}%)，注意风险")
+        else:  # turnover > 25
+            limit_up_prob -= 2  # 换手率过高，出货风险大
             limit_up_reasons.append(f"换手率过高({turnover:.1f}%)，出货风险")
         
         # 8.4 量比特征（缩量整理后放量涨停是常见模式）
