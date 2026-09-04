@@ -1230,6 +1230,64 @@ class LateDayScreener:
         except Exception:
             pass
         
+        # 8.8.1 首板股特征评分（新增：2026-09-05近一个月回测发现首板股占81.1%）
+        # 首板股涨停前夕信号：涨幅5-9%、量比>1.5、换手率3-15%、价格10-20元、成交额1-5亿
+        first_board_score = 0
+        first_board_reasons = []
+        
+        # 1. 涨幅在5-9%之间（接近涨停但还没涨停，最容易涨停）
+        pct_change = stock.get("pct_change", 0)
+        if 5 <= pct_change < 9:
+            first_board_score += 8
+            first_board_reasons.append(f"涨幅{pct_change:.1f}%接近涨停")
+        elif 3 <= pct_change < 5:
+            first_board_score += 4
+            first_board_reasons.append(f"涨幅{pct_change:.1f}%蓄势")
+        elif pct_change >= 9:
+            first_board_score += 2  # 已经接近涨停，追高风险
+            first_board_reasons.append(f"涨幅{pct_change:.1f}%已接近涨停")
+        
+        # 2. 成交量放大（量比>1.5，资金关注）
+        if vol_ratio >= 2.0:
+            first_board_score += 6
+            first_board_reasons.append(f"量比{vol_ratio:.1f}显著放量")
+        elif vol_ratio >= 1.5:
+            first_board_score += 4
+            first_board_reasons.append(f"量比{vol_ratio:.1f}温和放量")
+        
+        # 3. 换手率适中（3-15%，股性活跃但不过度）
+        if 3 <= turnover <= 15:
+            first_board_score += 4
+            first_board_reasons.append(f"换手率{turnover:.1f}%适中活跃")
+        
+        # 4. 价格在10-20元之间（首板股涨停最多的区间，占28.3%）
+        if 10 <= current_price < 20:
+            first_board_score += 3
+            first_board_reasons.append(f"价格{current_price}元首板黄金区间")
+        
+        # 5. 成交额在1-5亿之间（首板股涨停最多的区间，占52.1%）
+        amount = stock.get("amount", 0)
+        amount_yi = amount / 100000000 if amount > 0 else 0
+        if 1 <= amount_yi < 5:
+            first_board_score += 3
+            first_board_reasons.append(f"成交额{amount_yi:.1f}亿小盘易拉升")
+        
+        # 6. 技术形态突破（突破近20日高点）
+        try:
+            if kline is not None and len(kline) >= 20:
+                close = kline["close"]
+                high_20 = close.tail(20).max()
+                if current_price >= high_20 * 0.98:
+                    first_board_score += 4
+                    first_board_reasons.append("逼近20日高点突破在即")
+        except Exception:
+            pass
+        
+        # 首板股特征总分（最高28分）
+        if first_board_score > 0:
+            limit_up_prob += first_board_score
+            limit_up_reasons.extend(first_board_reasons[:3])  # 最多显示3个原因
+        
         # 8.9 风险因素综合扣分（新增）
         # 连续上涨天数过多，回调风险大
         try:
