@@ -63,12 +63,13 @@ class LateDayScreener:
         # 第一步：初筛（基于实时行情数据快速过滤）
         candidates = self._initial_filter(stock_df)
         logger.info(f"初筛后剩余: {len(candidates)} 只")
-        # 限制候选股票数量，避免运行时间过长（按成交量排序，取前50只）
-        # 减少到50只，避免Tushare接口频率超限（50次/分钟）
-        if len(candidates) > 50:
+        # 限制候选股票数量，避免运行时间过长（按成交量排序，取前100只）
+        # 从50只增加到100只，增加推荐数量（用户要求30只推荐）
+        # 减少到100只，避免Tushare接口频率超限（50次/分钟）
+        if len(candidates) > 100:
             candidates.sort(key=lambda x: x.get("amount", x.get("volume", 0)), reverse=True)
             candidates = candidates[:100]  # 从50增加到100，扩大分析范围
-            logger.info(f"候选股票限制为50只（按成交量排序，避免Tushare频率超限）")
+            logger.info(f"候选股票限制为100只（按成交量排序，避免Tushare频率超限）")
 
         if not candidates:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
@@ -473,9 +474,9 @@ class LateDayScreener:
                 # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
                 # 连续放量过滤已移除，改为评分项
 
-                # 只保留评分>=55的（降低门槛，扩大推荐范围，用户要求选30支精选10支）
+                # 只保留评分>=50的（降低门槛，扩大推荐范围，用户要求选30支精选10支）
                 # 修复：评分系统优化后，final_score上限从100降低到95，需要相应降低门槛
-                if score >= 55:
+                if score >= 50:
                     # === 买卖点位计算（优化：更合理的盈亏比）===
                     # 买入价 = 尾盘现价（14:30-15:00直接买入）
                     buy_price = round(current_price, 2)
@@ -576,18 +577,23 @@ class LateDayScreener:
             industry = stock.get("industry", "") or stock.get("所属行业", "") or "未知"
             if industry not in industry_count:
                 industry_count[industry] = 0
-            if industry_count[industry] < 5:  # 同一行业最多5只（从3增加到5，避免过度过滤导致推荐太少）
+            if industry_count[industry] < 10:  # 同一行业最多10只（从5增加到10，避免过度过滤导致推荐太少，用户要求30只推荐）
                 industry_count[industry] += 1
                 filtered_results.append(stock)
         
         logger.info(f"行业分散度过滤: 从{len(results)}只减少到{len(filtered_results)}只")
         results = filtered_results
 
-        # 三把锁信号过滤（修复：之前只排序不过滤，导致强烈卖出的股票也被推荐）
-        # 用户要求"所有股票都按三把锁推送"，只保留买入/强烈买入/谨慎买入信号的股票
+        # 三把锁信号过滤（优化：放宽过滤，增加推荐数量）
+        # 第一优先级：买入/强烈买入/谨慎买入信号的股票
+        # 第二优先级：2/3亮以上的股票（即使信号不是买入）
+        # 第三优先级：1/3亮的股票（如果数量还不够）
         buy_signals = ["强烈买入", "买入", "谨慎买入"]
         buy_results = []
+        two_locked_results = []
+        one_locked_results = []
         watch_results = []
+        
         for stock in results:
             # 类型检查：确保stock是字典，跳过字符串等非字典元素（修复TypeError）
             if not isinstance(stock, dict):
@@ -599,24 +605,25 @@ class LateDayScreener:
             
             if tl_signal in buy_signals:
                 buy_results.append(stock)
+            elif tl_locked >= 2:
+                two_locked_results.append(stock)
+            elif tl_locked >= 1:
+                one_locked_results.append(stock)
             else:
                 watch_results.append(stock)
         
-        logger.info(f"三把锁过滤: 买入信号{len(buy_results)}只, 观望/卖出{len(watch_results)}只")
+        logger.info(f"三把锁过滤: 买入信号{len(buy_results)}只, 2/3亮{len(two_locked_results)}只, 1/3亮{len(one_locked_results)}只, 0/3亮{len(watch_results)}只")
         
-        # 如果买入信号股票不足5只，适当放宽（避免推荐太少）
-        if len(buy_results) < 5:
-            logger.info(f"买入信号股票不足5只，适当放宽到2/3亮的股票")
-            # 增加2/3亮的观望股票
-            for stock in watch_results:
-                tl = stock.get("three_locks", {}) or {}
-                tl_locked = tl.get("total_locked", 0)
-                if tl_locked >= 2 and stock not in buy_results:
-                    buy_results.append(stock)
-                    if len(buy_results) >= 10:
-                        break
+        # 合并结果：买入信号 + 2/3亮 + 1/3亮（按优先级排序）
+        # 目标：推荐30只股票，如果买入信号不足，依次补充2/3亮和1/3亮的股票
+        results = buy_results + two_locked_results + one_locked_results
         
-        results = buy_results if buy_results else results[:10]
+        # 如果还是不足10只，增加0/3亮的股票（极端情况）
+        if len(results) < 10:
+            logger.info(f"推荐股票不足10只，增加0/3亮的股票")
+            results = results + watch_results
+        
+        logger.info(f"三把锁过滤后共{len(results)}只股票")
 
         # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分
         # 基于6个月460只涨停股回测分析，涨停概率是最重要的指标
