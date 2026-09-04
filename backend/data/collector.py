@@ -381,6 +381,55 @@ class DataCollector:
 
         return None
 
+    def batch_get_turnover(self, codes: List[str], trade_date: str = None) -> Dict[str, Dict]:
+        """批量获取多只股票的换手率数据（使用Tushare daily_basic批量接口，避免频率超限）"""
+        result = {}
+        if not codes or not TUSHARE_AVAILABLE:
+            return result
+
+        try:
+            # 分批获取（每批50只股票，避免单次请求过大）
+            batch_size = 50
+            for i in range(0, len(codes), batch_size):
+                batch_codes = codes[i:i + batch_size]
+                ts_codes = ",".join([to_ts_code(code) for code in batch_codes])
+                
+                try:
+                    params = {"ts_code": ts_codes, "fields": "ts_code,trade_date,turnover_rate,turnover_rate_f,volume_ratio,pe,pb,total_mv,circ_mv"}
+                    if trade_date:
+                        params["trade_date"] = trade_date
+                    df = pro.daily_basic(**params)
+                    if df is not None and not df.empty:
+                        # 按股票代码分组
+                        for code in batch_codes:
+                            ts_code = to_ts_code(code)
+                            stock_df = df[df["ts_code"] == ts_code].copy()
+                            if not stock_df.empty:
+                                latest = stock_df.iloc[0]
+                                result[code] = {
+                                    "turnover_rate": safe_float(latest.get("turnover_rate"), 0),
+                                    "turnover_rate_f": safe_float(latest.get("turnover_rate_f"), 0),
+                                    "volume_ratio": safe_float(latest.get("volume_ratio"), 0),
+                                    "pe": safe_float(latest.get("pe"), 0),
+                                    "pb": safe_float(latest.get("pb"), 0),
+                                    "total_mv": safe_float(latest.get("total_mv"), 0),
+                                    "circ_mv": safe_float(latest.get("circ_mv"), 0),
+                                    "trade_date": str(latest.get("trade_date", "")),
+                                }
+                    
+                    logger.info(f"批量获取换手率成功: {len(batch_codes)}只, 实际获取{len([c for c in batch_codes if c in result])}只")
+                except Exception as e:
+                    logger.warning(f"批量获取换手率失败（批次{i//batch_size+1}）: {str(e)[:80]}")
+                
+                # 批次之间等待1秒，避免频率超限
+                import time
+                time.sleep(1)
+            
+        except Exception as e:
+            logger.error(f"批量获取换手率异常: {e}")
+        
+        return result
+
     def get_turnover_rate(self, code: str, trade_date: str = None) -> Optional[Dict]:
         """获取股票换手率（使用Tushare daily_basic接口，GitHub Actions环境可用）"""
         code = normalize_stock_code(code)

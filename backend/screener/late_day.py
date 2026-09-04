@@ -220,9 +220,24 @@ class LateDayScreener:
         except Exception as e:
             logger.warning(f"批量获取K线失败，将使用单只获取: {e}")
 
+        # 第三步补充：批量获取换手率数据（使用Tushare daily_basic批量接口）
+        # 修复：新浪财经实时行情接口没有换手率字段，导致所有股票换手率为0
+        batch_turnover_data = {}
+        try:
+            from backend.data.collector import DataCollector
+            turnover_collector = DataCollector()
+            codes = [stock["code"] for stock in candidates]
+            logger.info(f"开始批量获取换手率数据: {len(codes)}只股票")
+            batch_turnover_result = turnover_collector.batch_get_turnover(codes)
+            logger.info(f"批量获取换手率完成: 成功{len(batch_turnover_result)}/{len(codes)}只")
+            if isinstance(batch_turnover_result, dict):
+                batch_turnover_data = batch_turnover_result
+        except Exception as e:
+            logger.warning(f"批量获取换手率失败: {e}")
+
         # 第四步：深度分析（获取K线数据，计算技术指标）
-        # 传递批量获取的K线数据，避免重复获取（修复：之前_deep_analyze自己获取K线导致全部失败）
-        picks = self._deep_analyze(candidates, batch_kline_data)
+        # 传递批量获取的K线数据和换手率数据，避免重复获取
+        picks = self._deep_analyze(candidates, batch_kline_data, batch_turnover_data)
         logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
 
         return {
@@ -372,7 +387,7 @@ class LateDayScreener:
 
         return candidates
 
-    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None) -> List[Dict]:
+    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, batch_turnover_data: Dict = None) -> List[Dict]:
         """
         深度分析：获取K线数据，计算技术指标，评分排序
         买卖点位逻辑（参照公开尾盘买入法）：
@@ -389,10 +404,28 @@ class LateDayScreener:
         use_batch_kline = batch_kline_data is not None and len(batch_kline_data) > 0
         if use_batch_kline:
             logger.info(f"使用批量获取的K线数据: {len(batch_kline_data)}只股票")
+        
+        # 使用批量获取的换手率数据（修复：新浪财经没有换手率字段，导致换手率为0）
+        use_batch_turnover = batch_turnover_data is not None and len(batch_turnover_data) > 0
+        if use_batch_turnover:
+            logger.info(f"使用批量获取的换手率数据: {len(batch_turnover_data)}只股票")
 
         for i, stock in enumerate(candidates):
             try:
                 code = stock["code"]
+                # 优先使用批量获取的换手率数据（修复：新浪财经没有换手率字段）
+                if use_batch_turnover and code in batch_turnover_data:
+                    turnover_data = batch_turnover_data[code]
+                    if turnover_data.get("turnover_rate", 0) > 0:
+                        stock["turnover"] = turnover_data["turnover_rate"]
+                    if turnover_data.get("volume_ratio", 0) > 0:
+                        stock["volume_ratio"] = turnover_data["volume_ratio"]
+                    # 同时更新PE/PB数据，用于基本面评分
+                    if turnover_data.get("pe", 0) > 0:
+                        stock["pe"] = turnover_data["pe"]
+                    if turnover_data.get("pb", 0) > 0:
+                        stock["pb"] = turnover_data["pb"]
+                
                 # 优先使用批量获取的K线数据，避免重复获取（修复：之前自己获取K线导致全部失败）
                 if use_batch_kline and code in batch_kline_data:
                     kline = batch_kline_data[code]
