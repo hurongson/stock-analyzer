@@ -43,14 +43,23 @@ class LateDayScreener:
         logger.info(f"大盘环境: {market_status['status']} (上证指数{market_status['sh_pct']:+.2f}%, 创业板{market_status['cyb_pct']:+.2f}%)")
         
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
+        score_threshold = 50  # 默认评分门槛
+        min_locks = 0  # 默认三把锁门槛（0=不限制）
         if market_status['sh_pct'] < -1.0:
-            self.max_results = 20  # 从30减少到20（不要过度减少，用户要求选30支）
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，提高选股门槛")
+            self.max_results = 20  # 从30减少到20
+            score_threshold = 58  # 提高评分门槛（从50提高到58）
+            min_locks = 1  # 至少1/3亮
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，评分门槛提高到58分，三把锁至少1/3亮")
         elif market_status['sh_pct'] < -0.5:
             self.max_results = 25  # 从30减少到25
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只")
+            score_threshold = 54  # 提高评分门槛（从50提高到54）
+            min_locks = 1  # 至少1/3亮
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到54分，三把锁至少1/3亮")
         else:
             self.max_results = 30  # 正常情况推荐30只
+            score_threshold = 50  # 正常评分门槛
+            min_locks = 0  # 不限制三把锁
+            logger.info(f"大盘正常，推荐数量30只，评分门槛50分")
 
         # 获取全量股票列表
         if stock_df is None:
@@ -221,9 +230,9 @@ class LateDayScreener:
             logger.warning(f"批量获取K线失败，将使用单只获取: {e}")
 
         # 第四步：深度分析（获取K线数据，计算技术指标）
-        # 传递批量获取的K线数据，避免重复获取
+        # 传递批量获取的K线数据和大盘环境参数，避免重复获取
         # 注意：换手率数据通过量比估算（Tushare daily_basic频率限制1次/小时无法使用）
-        picks = self._deep_analyze(candidates, batch_kline_data)
+        picks = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks)
         logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
 
         return {
@@ -373,7 +382,7 @@ class LateDayScreener:
 
         return candidates
 
-    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None) -> List[Dict]:
+    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, score_threshold: int = 50, min_locks: int = 0) -> List[Dict]:
         """
         深度分析：获取K线数据，计算技术指标，评分排序
         买卖点位逻辑（参照公开尾盘买入法）：
@@ -392,6 +401,44 @@ class LateDayScreener:
             logger.info(f"使用批量获取的K线数据: {len(batch_kline_data)}只股票")
         
         # 换手率数据通过量比估算（Tushare daily_basic频率限制1次/小时无法使用）
+        
+        # 板块效应分析（新增：2026-09-04回测发现农业/食品板块9只涨停，占23.1%）
+        # 基于股票名称关键词识别热门板块，给热门板块内的股票加分
+        sector_keywords = {
+            "农业食品": ["农", "粮", "种", "牧", "渔", "食", "酒", "饮", "奶", "肉", "蛋", "糖", "盐", "油", "面", "米", "果", "菜", "茶", "烟", "饲", "肥", "农药", "渔", "养殖", "屠宰", "食品", "农业", "种业", "牧业", "渔业"],
+            "医药医疗": ["药", "医", "疗", "健", "康", "生物", "制药", "药业", "医疗", "医院", "诊所", "疫苗", "检测", "器械", "耗材", "健康", "保健"],
+            "新能源": ["新能", "光伏", "风电", "锂电", "电池", "储能", "氢能", "充电", "新能源", "太阳能", "风能", "核能", "碳中和", "碳交易"],
+            "科技半导体": ["科技", "半导体", "芯片", "集成", "电子", "软件", "信息", "通信", "5G", "人工智能", "AI", "大数据", "云计算", "物联网", "区块链", "量子", "机器人", "智能"],
+            "汽车交通": ["汽车", "车", "交通", "运输", "物流", "快递", "航运", "航空", "机场", "港口", "铁路", "公路", "公交", "出租", "网约车", "新能源汽车", "电动车", "智能驾驶"],
+            "房地产建筑": ["地产", "房", "建筑", "建材", "水泥", "钢铁", "玻璃", "陶瓷", "涂料", "防水", "装修", "装饰", "物业", "园林", "环保", "节能"],
+            "金融": ["银行", "证券", "保险", "信托", "期货", "金融", "基金", "租赁", "担保", "典当", "财富", "资管"],
+            "传媒娱乐": ["传媒", "娱乐", "影视", "电影", "电视", "广播", "出版", "游戏", "动漫", "音乐", "体育", "旅游", "酒店", "餐饮", "免税", "彩票"],
+            "化工材料": ["化工", "化学", "材料", "塑料", "橡胶", "纤维", "涂料", "染料", "颜料", "化肥", "农药", "医药中间体", "新材料", "石墨烯", "碳纤维", "稀土", "有色", "金属", "黄金", "白银", "铜", "铝", "锌", "镍", "钴", "锂"],
+            "电力能源": ["电力", "能源", "火电", "水电", "核电", "风电", "光伏", "生物质", "地热", "潮汐", "煤炭", "石油", "天然气", "燃气", "油品", "加油"],
+            "商业零售": ["商业", "零售", "百货", "超市", "商场", "购物", "电商", "网购", "直播", "带货", "连锁", "加盟", "批发", "贸易", "外贸", "跨境"],
+            "军工国防": ["军工", "国防", "航天", "航空", "兵器", "船舶", "核工业", "军事", "武器", "装备", "雷达", "导弹", "卫星", "飞船", "航母", "潜艇", "坦克"],
+        }
+        
+        # 统计候选股票的板块分布
+        sector_count = {}
+        stock_sector = {}
+        for stock in candidates:
+            name = stock.get("name", "")
+            matched_sectors = []
+            for sector, keywords in sector_keywords.items():
+                if any(kw in name for kw in keywords):
+                    matched_sectors.append(sector)
+            if matched_sectors:
+                # 取第一个匹配的板块作为主板块
+                main_sector = matched_sectors[0]
+                stock_sector[stock["code"]] = main_sector
+                sector_count[main_sector] = sector_count.get(main_sector, 0) + 1
+        
+        # 识别热门板块（候选股票数量最多的前3个板块）
+        hot_sectors = sorted(sector_count.items(), key=lambda x: x[1], reverse=True)[:3]
+        hot_sector_names = [s[0] for s in hot_sectors if s[1] >= 2]  # 至少2只股票才算热门板块
+        if hot_sector_names:
+            logger.info(f"热门板块识别: {', '.join([f'{s}({sector_count[s]}只)' for s in hot_sector_names])}")
 
         for i, stock in enumerate(candidates):
             try:
@@ -514,8 +561,18 @@ class LateDayScreener:
                         logger.debug(f"MA20过滤 {stock['name']}({stock.get('code', '')}): 价格{current_price:.2f} < MA20*0.9={ma20*0.9:.2f}")
                     continue
 
+                # 板块效应加分（新增：热门板块内的股票更容易涨停）
+                sector_bonus = 0
+                stock_main_sector = stock_sector.get(code, "")
+                if stock_main_sector in hot_sector_names:
+                    sector_bonus = 5  # 热门板块加5分
+                    stock["sector_bonus"] = sector_bonus
+                    stock["sector"] = stock_main_sector
+                
                 # 计算技术指标
                 score, analysis = self._calc_late_day_score(kline, stock)
+                # 加上板块效应加分
+                score = score + sector_bonus
                 
                 # 调试日志：输出每只股票的评分情况
                 if i < 10 or score >= 60:
@@ -525,9 +582,9 @@ class LateDayScreener:
                 # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
                 # 连续放量过滤已移除，改为评分项
 
-                # 只保留评分>=50的（降低门槛，扩大推荐范围，用户要求选30支精选10支）
+                # 只保留评分>=score_threshold的（大盘下跌时提高门槛，正常情况50分）
                 # 修复：评分系统优化后，final_score上限从100降低到95，需要相应降低门槛
-                if score >= 50:
+                if score >= score_threshold:
                     # === 买卖点位计算（优化：更合理的盈亏比）===
                     # 买入价 = 尾盘现价（14:30-15:00直接买入）
                     buy_price = round(current_price, 2)
@@ -667,10 +724,16 @@ class LateDayScreener:
         
         # 合并结果：买入信号 + 2/3亮 + 1/3亮（按优先级排序）
         # 目标：推荐30只股票，如果买入信号不足，依次补充2/3亮和1/3亮的股票
-        results = buy_results + two_locked_results + one_locked_results
+        # 大盘下跌时，min_locks=1，只保留至少1/3亮的股票
+        if min_locks >= 2:
+            results = buy_results + two_locked_results
+        elif min_locks >= 1:
+            results = buy_results + two_locked_results + one_locked_results
+        else:
+            results = buy_results + two_locked_results + one_locked_results
         
-        # 如果还是不足10只，增加0/3亮的股票（极端情况）
-        if len(results) < 10:
+        # 如果还是不足10只，增加0/3亮的股票（极端情况，大盘正常时）
+        if len(results) < 10 and min_locks == 0:
             logger.info(f"推荐股票不足10只，增加0/3亮的股票")
             results = results + watch_results
         
@@ -748,7 +811,7 @@ class LateDayScreener:
         if is_lianban:
             # 连板股专门分析（新增）
             # 昨天已涨停，今天可能继续连板
-            score += 10  # 连板股基础加分
+            score += 15  # 连板股基础加分（从10增加到15，连板股更容易继续涨停）
             reasons.append(f"连板股(昨涨{pct_change:.1f}%)，强势延续可能继续涨停")
             pattern = "连板延续型"
             
@@ -997,7 +1060,7 @@ class LateDayScreener:
         is_lianban = pct_change > 5
         if is_lianban:
             # 连板股专门评估
-            limit_up_prob += 8  # 连板股基础加分（强势延续）
+            limit_up_prob += 12  # 连板股基础加分（从8增加到12，连板股更容易继续涨停）
             limit_up_reasons.append(f"连板股(昨涨{pct_change:.1f}%)，强势延续可能继续涨停")
         elif -1 <= pct_change < 1:
             limit_up_prob += 12  # 从15降低到12
