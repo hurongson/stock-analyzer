@@ -2254,10 +2254,10 @@
         ]
       },
       "news_impact": {
-        "score": 68,
+        "score": 62,
         "level": "偏利好",
         "reasons": [
-          "近期3条正面新闻"
+          "近期2条正面新闻"
         ],
         "has_positive_news": true,
         "has_negative_news": false
@@ -5905,10 +5905,10 @@
         ]
       },
       "news_impact": {
-        "score": 68,
+        "score": 62,
         "level": "偏利好",
         "reasons": [
-          "近期3条正面新闻"
+          "近期2条正面新闻"
         ],
         "has_positive_news": true,
         "has_negative_news": false
@@ -9556,10 +9556,10 @@
         ]
       },
       "news_impact": {
-        "score": 68,
+        "score": 62,
         "level": "偏利好",
         "reasons": [
-          "近期3条正面新闻"
+          "近期2条正面新闻"
         ],
         "has_positive_news": true,
         "has_negative_news": false
