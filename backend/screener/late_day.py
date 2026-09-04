@@ -202,7 +202,7 @@ class LateDayScreener:
             logger.warning(f"获取实时行情异常，使用历史数据: {e}")
 
         # 第三步：批量获取K线数据（使用Tushare批量接口，避免频率超限）
-        batch_collector = None
+        batch_kline_data = {}  # 存储批量获取的K线数据
         try:
             from backend.data.collector import DataCollector
             batch_collector = DataCollector()
@@ -210,11 +210,19 @@ class LateDayScreener:
             logger.info(f"开始批量获取K线数据: {len(codes)}只股票")
             batch_result = batch_collector.batch_get_daily_kline(codes, days=60)
             logger.info(f"批量获取K线完成: 成功{len(batch_result)}/{len(codes)}只")
+            # 存储批量获取的K线数据
+            if isinstance(batch_result, dict):
+                batch_kline_data = batch_result
+            elif isinstance(batch_result, list):
+                for item in batch_result:
+                    if isinstance(item, dict) and 'code' in item:
+                        batch_kline_data[item['code']] = item.get('kline', item)
         except Exception as e:
             logger.warning(f"批量获取K线失败，将使用单只获取: {e}")
 
         # 第四步：深度分析（获取K线数据，计算技术指标）
-        picks = self._deep_analyze(candidates)
+        # 传递批量获取的K线数据，避免重复获取（修复：之前_deep_analyze自己获取K线导致全部失败）
+        picks = self._deep_analyze(candidates, batch_kline_data)
         logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
 
         return {
@@ -358,7 +366,7 @@ class LateDayScreener:
 
         return candidates
 
-    def _deep_analyze(self, candidates: List[Dict]) -> List[Dict]:
+    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None) -> List[Dict]:
         """
         深度分析：获取K线数据，计算技术指标，评分排序
         买卖点位逻辑（参照公开尾盘买入法）：
@@ -366,14 +374,33 @@ class LateDayScreener:
         - 卖出价 = 次日冲高3%（止盈目标，保守）
         - 目标价 = 次日冲高5%（激进目标）
         - 止损价 = 买入价下方2%（固定比例止损）
+        
+        Args:
+            candidates: 候选股票列表
+            batch_kline_data: 批量获取的K线数据（字典，key为股票代码）
         """
         results = []
+        use_batch_kline = batch_kline_data is not None and len(batch_kline_data) > 0
+        if use_batch_kline:
+            logger.info(f"使用批量获取的K线数据: {len(batch_kline_data)}只股票")
 
         for i, stock in enumerate(candidates):
             try:
                 code = stock["code"]
-                # 获取60天K线数据
-                kline = collector.get_daily_kline(code, days=60)
+                # 优先使用批量获取的K线数据，避免重复获取（修复：之前自己获取K线导致全部失败）
+                if use_batch_kline and code in batch_kline_data:
+                    kline = batch_kline_data[code]
+                    # 确保kline是DataFrame格式
+                    if not isinstance(kline, pd.DataFrame):
+                        # 尝试转换为DataFrame
+                        if isinstance(kline, list):
+                            kline = pd.DataFrame(kline)
+                        elif isinstance(kline, dict):
+                            kline = pd.DataFrame(kline)
+                else:
+                    # 批量获取失败时，使用单只获取
+                    kline = collector.get_daily_kline(code, days=60)
+                
                 if kline is None or len(kline) < 20:
                     if i < 5:
                         logger.debug(f"K线数据不足 {stock['name']}({stock.get('code', '')}): kline={'None' if kline is None else len(kline)}天")
