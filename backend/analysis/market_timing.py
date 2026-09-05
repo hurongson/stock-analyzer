@@ -4,8 +4,6 @@
 参考指数：上证指数(000001)、深证成指(399001)、创业板指(399006)
 """
 import logging
-import pandas as pd
-import numpy as np
 from typing import Dict, Any, Optional
 from backend.data.collector import collector
 from backend.analysis.indicators import (

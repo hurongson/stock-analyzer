@@ -4,8 +4,7 @@
 支持市场环境过滤、多维度信号、动态买卖点位
 """
 import pandas as pd
-import numpy as np
-from typing import Dict, List, Optional
+from typing import Dict, List
 from backend.analysis.indicators import (
     calc_sma, calc_ema, calc_macd, calc_kdj, calc_rsi,
     calc_bollinger, calc_volume_analysis, calc_support_resistance,

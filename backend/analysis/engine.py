@@ -4,7 +4,6 @@
 """
 import logging
 from typing import Dict, Any
-from datetime import datetime
 from backend.data.collector import collector
 from backend.analysis.technical import analyze_technical
 from backend.analysis.fundamental import analyze_fundamental
