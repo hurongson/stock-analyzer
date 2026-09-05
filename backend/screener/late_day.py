@@ -668,6 +668,14 @@ class LateDayScreener:
                         "trend_analysis": trend_analysis,
                         "news_impact": stock.get("news_impact", {}),
                         "concept_analysis": stock.get("concept_analysis", {}),
+                        # 基本面评分（修复：之前没有保存到结果中，导致都是0分）
+                        "fundamental_score": fundamental_score,
+                        "fundamental": {
+                            "score": fundamental_score,
+                            "data": fundamental_data,
+                            "changes": fundamental_changes,
+                            "research": fundamental_research,
+                        },
                     }
                     results.append(result)
 
