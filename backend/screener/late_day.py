@@ -1326,15 +1326,20 @@ class LateDayScreener:
         try:
             # 9.0 获取真正的基本面数据（使用Tushare接口，GitHub Actions环境可用）
             code = stock.get("code", "")  # 从stock字典中获取code（修复：之前code未定义）
+            fundamental_data_acquired = False
             try:
                 from backend.data.collector import DataCollector
                 fundamental_collector = DataCollector()
                 fundamental_data = fundamental_collector.get_fundamental(code)
                 if fundamental_data:
                     fundamental_changes.append("基本面数据已获取")
+                    fundamental_data_acquired = True
+                else:
+                    fundamental_changes.append("基本面数据获取失败，使用中性评分")
             except Exception as e:
                 logger.debug(f"获取基本面数据失败 {code}: {e}")
                 fundamental_data = {}
+                fundamental_changes.append("基本面数据获取异常，使用中性评分")
             
             # 9.1 ROE评分（净资产收益率，最重要的基本面指标）
             roe = fundamental_data.get("roe", 0)
@@ -1452,6 +1457,11 @@ class LateDayScreener:
         
         # 限制基本面评分范围（0-100）
         fundamental_score = max(0, min(100, fundamental_score))
+        
+        # 对于无法获取基本面数据的股票，使用中性评分30分（避免0分造成误解）
+        if not fundamental_data_acquired and fundamental_score == 0:
+            fundamental_score = 30
+            fundamental_changes.append("无基本面数据，使用中性评分30分")
         
         # 将基本面评分加入总分（占20%权重）
         score += fundamental_score * 0.2
