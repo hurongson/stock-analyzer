@@ -374,7 +374,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"股性锁-当日振幅计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 50  # 股性锁门槛50分（尾盘选股股票本身股性活跃）
+        locked = score >= 60  # 股性锁门槛从50分提高到60分（回测发现点亮率100%，门槛太低失去筛选意义）
 
         return {
             "locked": locked,
@@ -528,7 +528,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"资金锁-量价质量计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 35  # 资金锁门槛从40分降低到35分（回测发现点亮率仅47.1%，门槛太高）
+        locked = score >= 30  # 资金锁门槛从35分降低到30分（回测发现点亮率仅23.1%，门槛还是太高）
 
         return {
             "locked": locked,
