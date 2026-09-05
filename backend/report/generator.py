@@ -5,7 +5,7 @@
 import os
 import json
 import logging
-from typing import Dict, List, Any
+from typing import Dict, List
 from datetime import datetime
 from backend.config import Config
 from backend.utils.helpers import today_str, save_json

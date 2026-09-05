@@ -4,7 +4,7 @@ LLM 深度分析模块
 """
 import logging
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Optional
 from backend.config import Config
 
 logger = logging.getLogger(__name__)

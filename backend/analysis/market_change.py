@@ -10,8 +10,8 @@
 """
 
 import logging
-from typing import Dict, List, Optional
-from datetime import datetime, timedelta
+from typing import Dict, List
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 

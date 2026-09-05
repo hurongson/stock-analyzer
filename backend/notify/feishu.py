@@ -9,7 +9,7 @@ import hashlib
 import base64
 import logging
 import requests
-from typing import Dict, Optional
+from typing import Dict
 from backend.config import Config
 
 logger = logging.getLogger(__name__)

@@ -4,9 +4,8 @@
 """
 import logging
 import re
-from typing import List, Dict, Optional
-from datetime import datetime, timedelta
-import pandas as pd
+from typing import List, Dict
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
