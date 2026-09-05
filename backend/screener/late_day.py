@@ -1238,30 +1238,48 @@ class LateDayScreener:
         except Exception:
             pass
         
-        # 8.8.1 首板股特征评分（新增：2026-09-05近一个月回测发现首板股占81.1%）
-        # 首板股涨停前夕信号：涨幅5-9%、量比>1.5、换手率3-15%、价格10-20元、成交额1-5亿
+        # 8.8.1 首板股特征评分（优化：2026-09-05基于涨停前夕回测分析）
+        # 涨停前夕特征：60%涨幅在-3%到3%，横盘整理(-1%到1%)占23.3%最多
+        # 23.5%量比0.5-0.8（缩量整理），29.6%量比1.0-1.5（温和放量）
         first_board_score = 0
         first_board_reasons = []
         
-        # 1. 涨幅在5-9%之间（接近涨停但还没涨停，最容易涨停）
+        # 1. 涨幅评分（优化：增加横盘整理评分，减少已涨幅较大的评分）
+        # 涨停前夕通常是横盘整理，而不是已经涨幅5-9%
         pct_change = stock.get("pct_change", 0)
-        if 5 <= pct_change < 9:
-            first_board_score += 8
-            first_board_reasons.append(f"涨幅{pct_change:.1f}%接近涨停")
-        elif 3 <= pct_change < 5:
-            first_board_score += 4
-            first_board_reasons.append(f"涨幅{pct_change:.1f}%蓄势")
+        if -1 <= pct_change <= 1:
+            first_board_score += 6  # 横盘整理，蓄势待发（23.3%涨停股在此区间）
+            first_board_reasons.append(f"横盘整理({pct_change:.1f}%)蓄势待发")
+        elif -3 <= pct_change < -1 or 1 < pct_change <= 3:
+            first_board_score += 4  # 小幅波动，也可能涨停前夕（60%涨停股在-3%到3%）
+            first_board_reasons.append(f"小幅波动({pct_change:.1f}%)")
+        elif 3 < pct_change < 5:
+            first_board_score += 3  # 开始启动
+            first_board_reasons.append(f"涨幅{pct_change:.1f}%开始启动")
+        elif 5 <= pct_change < 9:
+            first_board_score += 2  # 已经涨幅较大，追高风险增加
+            first_board_reasons.append(f"涨幅{pct_change:.1f}%追高风险")
         elif pct_change >= 9:
-            first_board_score += 2  # 已经接近涨停，追高风险
+            first_board_score += 0  # 已经接近涨停，错过最佳买入时机
             first_board_reasons.append(f"涨幅{pct_change:.1f}%已接近涨停")
         
-        # 2. 成交量放大（量比>1.5，资金关注）
-        if vol_ratio >= 2.0:
-            first_board_score += 6
-            first_board_reasons.append(f"量比{vol_ratio:.1f}显著放量")
-        elif vol_ratio >= 1.5:
-            first_board_score += 4
-            first_board_reasons.append(f"量比{vol_ratio:.1f}温和放量")
+        # 2. 量比评分（优化：增加缩量整理和温和放量评分，减少显著放量评分）
+        # 涨停前夕通常是缩量整理（洗盘）或温和放量（资金开始关注）
+        if 0.5 <= vol_ratio < 0.8:
+            first_board_score += 5  # 缩量整理，洗盘后可能放量涨停（23.5%涨停股在此区间）
+            first_board_reasons.append(f"缩量整理(量比{vol_ratio:.1f})洗盘")
+        elif 1.0 <= vol_ratio <= 1.5:
+            first_board_score += 5  # 温和放量，资金开始关注（29.6%涨停股在此区间）
+            first_board_reasons.append(f"温和放量(量比{vol_ratio:.1f})资金关注")
+        elif 0.8 <= vol_ratio < 1.0:
+            first_board_score += 3  # 量能平稳
+            first_board_reasons.append(f"量能平稳(量比{vol_ratio:.1f})")
+        elif 1.5 < vol_ratio <= 2.0:
+            first_board_score += 2  # 明显放量
+            first_board_reasons.append(f"明显放量(量比{vol_ratio:.1f})")
+        elif vol_ratio > 2.0:
+            first_board_score += 1  # 显著放量，可能追高
+            first_board_reasons.append(f"显著放量(量比{vol_ratio:.1f})追高风险")
         
         # 3. 换手率适中（3-15%，股性活跃但不过度）
         if 3 <= turnover <= 15:
@@ -1291,7 +1309,7 @@ class LateDayScreener:
         except Exception:
             pass
         
-        # 首板股特征总分（最高28分）
+        # 首板股特征总分（最高30分）
         if first_board_score > 0:
             limit_up_prob += first_board_score
             limit_up_reasons.extend(first_board_reasons[:3])  # 最多显示3个原因
