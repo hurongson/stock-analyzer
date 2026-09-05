@@ -19,12 +19,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from backend.config import Config
 from backend.utils.helpers import is_trading_day, today_str
-from backend.analysis.engine import analyze_stock, analyze_batch
+from backend.analysis.engine import analyze_batch
 from backend.analysis.market_timing import market_timing_instance
 from backend.screener.engine import screener
 from backend.screener.late_day import late_day_screener
 from backend.report.generator import generate_daily_report, save_report
-from backend.notify.feishu import push_daily_report, send_feishu_text, push_late_day_picks
+from backend.notify.feishu import push_daily_report, push_late_day_picks
 
 logging.basicConfig(
     level=logging.INFO,

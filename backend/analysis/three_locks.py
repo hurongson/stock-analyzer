@@ -10,12 +10,9 @@
 """
 import logging
 import pandas as pd
-import numpy as np
-from typing import Dict, Any, Optional, List
+from typing import Dict, Optional
 from backend.analysis.indicators import (
-    calc_ma_system, calc_macd, calc_kdj, calc_rsi,
-    calc_volume_analysis, calc_trend, calc_momentum,
-    calc_bollinger, calc_atr
+    calc_volume_analysis, calc_trend, calc_bollinger
 )
 
 logger = logging.getLogger(__name__)

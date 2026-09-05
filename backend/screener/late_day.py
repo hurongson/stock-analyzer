@@ -10,14 +10,13 @@
 """
 import logging
 import pandas as pd
-import numpy as np
 from typing import Dict, List, Optional
 from backend.data.collector import collector
 from backend.analysis.three_locks import three_locks_analyzer
 from backend.analysis.trend_analysis import trend_analyzer
 from backend.analysis.indicators import (
-    calc_sma, calc_trend, calc_macd, calc_kdj, calc_rsi,
-    calc_bollinger, calc_volume_analysis, calc_ma_system, calc_momentum
+    calc_sma, calc_trend, calc_macd, calc_kdj,
+    calc_volume_analysis, calc_momentum
 )
 
 logger = logging.getLogger(__name__)
