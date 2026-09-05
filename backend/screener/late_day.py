@@ -1309,7 +1309,32 @@ class LateDayScreener:
         except Exception:
             pass
         
-        # 首板股特征总分（最高30分）
+        # 7. 缩量整理后放量（新增：洗盘后放量涨停特征）
+        # 涨停前夕通常是前几天缩量整理（洗盘），今天开始放量（资金关注）
+        try:
+            if kline is not None and len(kline) >= 10:
+                volume = kline["volume"]
+                # 前5天平均成交量（不含今天）
+                prev_5_avg = volume.iloc[-6:-1].mean()
+                # 今天成交量
+                today_vol = volume.iloc[-1]
+                # 前3天平均成交量（不含今天）
+                prev_3_avg = volume.iloc[-4:-1].mean()
+                
+                # 缩量整理后放量：前3天缩量（低于5日均量），今天放量（高于5日均量）
+                if prev_3_avg < prev_5_avg * 0.9 and today_vol > prev_5_avg * 1.1:
+                    first_board_score += 5  # 缩量整理后放量，洗盘结束信号
+                    first_board_reasons.append("缩量整理后放量，洗盘结束")
+                elif prev_3_avg < prev_5_avg * 0.95 and today_vol > prev_5_avg * 1.05:
+                    first_board_score += 3  # 轻微缩量后放量
+                    first_board_reasons.append("轻微缩量后放量，资金关注")
+                elif today_vol > prev_5_avg * 1.3:
+                    first_board_score += 2  # 显著放量
+                    first_board_reasons.append("显著放量，资金涌入")
+        except Exception:
+            pass
+        
+        # 首板股特征总分（最高35分）
         if first_board_score > 0:
             limit_up_prob += first_board_score
             limit_up_reasons.extend(first_board_reasons[:3])  # 最多显示3个原因
