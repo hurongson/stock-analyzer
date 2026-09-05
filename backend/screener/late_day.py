@@ -668,16 +668,17 @@ class LateDayScreener:
                         "trend_analysis": trend_analysis,
                         "news_impact": stock.get("news_impact", {}),
                         "concept_analysis": stock.get("concept_analysis", {}),
-                        # 基本面评分（修复：之前没有保存到结果中，导致都是0分）
-                        "fundamental_score": fundamental_score,
+                        # 基本面评分（先初始化为0，后面计算完成后更新）
+                        "fundamental_score": 0,
                         "fundamental": {
-                            "score": fundamental_score,
-                            "data": fundamental_data,
-                            "changes": fundamental_changes,
-                            "research": fundamental_research,
+                            "score": 0,
+                            "data": {},
+                            "changes": [],
+                            "research": "",
                         },
                     }
                     results.append(result)
+                    result_index = len(results) - 1  # 记录当前结果在列表中的索引
 
             except Exception as e:
                 logger.info(f"分析失败 {stock.get('code')} {stock.get('name', '')}: {e}")
@@ -1454,6 +1455,19 @@ class LateDayScreener:
         
         # 将基本面评分加入总分（占20%权重）
         score += fundamental_score * 0.2
+        
+        # 更新results列表中对应元素的基本面评分（修复：之前没有保存到结果中，导致都是0分）
+        if 'result_index' in locals() and result_index < len(results):
+            results[result_index]["fundamental_score"] = fundamental_score
+            results[result_index]["fundamental"] = {
+                "score": fundamental_score,
+                "data": fundamental_data,
+                "changes": fundamental_changes,
+                "research": fundamental_research,
+            }
+            # 同时更新总分（因为基本面评分加入了总分）
+            results[result_index]["base_score"] = score
+            results[result_index]["score"] = min(95, int(score * 0.8 + results[result_index].get("three_locks_score", 0)))
         
         # 10. 逻辑反证检查（新增，基于表4：逻辑反证逻辑）
         # 主动寻找反面证据，不迎合用户观点
