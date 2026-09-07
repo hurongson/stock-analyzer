@@ -46,19 +46,19 @@ class LateDayScreener:
         min_locks = 0  # 默认三把锁门槛（0=不限制）
         if market_status['sh_pct'] < -1.0:
             self.max_results = 20  # 从30减少到20
-            score_threshold = 58  # 提高评分门槛（从50提高到58）
+            score_threshold = 55  # 提高评分门槛（从50提高到55）
             min_locks = 1  # 至少1/3亮
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，评分门槛提高到58分，三把锁至少1/3亮")
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，评分门槛提高到55分，三把锁至少1/3亮")
         elif market_status['sh_pct'] < -0.5:
             self.max_results = 25  # 从30减少到25
-            score_threshold = 54  # 提高评分门槛（从50提高到54）
+            score_threshold = 50  # 提高评分门槛（从50提高到50）
             min_locks = 1  # 至少1/3亮
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到54分，三把锁至少1/3亮")
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到50分，三把锁至少1/3亮")
         else:
             self.max_results = 30  # 正常情况推荐30只
-            score_threshold = 40  # 正常评分门槛（从50降低到40，确保至少能推荐一些股票）
+            score_threshold = 35  # 正常评分门槛（从40降低到35，基于2026-09-07回测，很多涨停股票评分低于40分）
             min_locks = 0  # 不限制三把锁
-            logger.info(f"大盘正常，推荐数量30只，评分门槛40分")
+            logger.info(f"大盘正常，推荐数量30只，评分门槛35分（基于回测优化，提高涨停股命中率）")
 
         # 获取全量股票列表
         if stock_df is None:
@@ -71,13 +71,12 @@ class LateDayScreener:
         # 第一步：初筛（基于实时行情数据快速过滤）
         candidates = self._initial_filter(stock_df)
         logger.info(f"初筛后剩余: {len(candidates)} 只")
-        # 限制候选股票数量，避免运行时间过长（按成交量排序，取前100只）
-        # 从50只增加到100只，增加推荐数量（用户要求30只推荐）
-        # 减少到100只，避免Tushare接口频率超限（50次/分钟）
-        if len(candidates) > 100:
+        # 限制候选股票数量，避免运行时间过长（按成交量排序，取前120只）
+        # 基于2026-09-07回测优化：从100增加到120，扩大分析范围，提高涨停股命中率
+        if len(candidates) > 120:
             candidates.sort(key=lambda x: x.get("amount", x.get("volume", 0)), reverse=True)
-            candidates = candidates[:100]  # 从50增加到100，扩大分析范围
-            logger.info(f"候选股票限制为100只（按成交量排序，避免Tushare频率超限）")
+            candidates = candidates[:120]  # 从100增加到120，扩大分析范围
+            logger.info(f"候选股票限制为120只（按成交量排序，基于回测优化提高命中率）")
 
         if not candidates:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
@@ -423,13 +422,13 @@ class LateDayScreener:
         
         # 换手率数据通过量比估算（Tushare daily_basic频率限制1次/小时无法使用）
         
-        # 板块效应分析（新增：2026-09-04回测发现农业/食品板块9只涨停，占23.1%）
+        # 板块效应分析（基于2026-09-07回测优化：科技/电子类占25.3%，是最大的明确行业类别）
         # 基于股票名称关键词识别热门板块，给热门板块内的股票加分
         sector_keywords = {
-            "农业食品": ["农", "粮", "种", "牧", "渔", "食", "酒", "饮", "奶", "肉", "蛋", "糖", "盐", "油", "面", "米", "果", "菜", "茶", "烟", "饲", "肥", "农药", "渔", "养殖", "屠宰", "食品", "农业", "种业", "牧业", "渔业"],
+            "科技半导体": ["科技", "半导体", "芯片", "集成", "电路", "电子", "软件", "信息", "通信", "5G", "人工智能", "AI", "大数据", "云计算", "物联网", "区块链", "量子", "机器人", "智能", "光电", "射频", "传感", "精密", "微", "数字", "网络", "互联", "数据", "计算", "存储", "显示", "光学", "激光"],
+            "农业食品": ["农", "粮", "种", "牧", "渔", "食", "酒", "饮", "奶", "肉", "蛋", "糖", "盐", "油", "面", "米", "果", "菜", "茶", "烟", "饲", "肥", "农药", "养殖", "屠宰", "食品", "农业", "种业", "牧业", "渔业"],
             "医药医疗": ["药", "医", "疗", "健", "康", "生物", "制药", "药业", "医疗", "医院", "诊所", "疫苗", "检测", "器械", "耗材", "健康", "保健"],
             "新能源": ["新能", "光伏", "风电", "锂电", "电池", "储能", "氢能", "充电", "新能源", "太阳能", "风能", "核能", "碳中和", "碳交易"],
-            "科技半导体": ["科技", "半导体", "芯片", "集成", "电子", "软件", "信息", "通信", "5G", "人工智能", "AI", "大数据", "云计算", "物联网", "区块链", "量子", "机器人", "智能"],
             "汽车交通": ["汽车", "车", "交通", "运输", "物流", "快递", "航运", "航空", "机场", "港口", "铁路", "公路", "公交", "出租", "网约车", "新能源汽车", "电动车", "智能驾驶"],
             "房地产建筑": ["地产", "房", "建筑", "建材", "水泥", "钢铁", "玻璃", "陶瓷", "涂料", "防水", "装修", "装饰", "物业", "园林", "环保", "节能"],
             "金融": ["银行", "证券", "保险", "信托", "期货", "金融", "基金", "租赁", "担保", "典当", "财富", "资管"],
@@ -450,8 +449,11 @@ class LateDayScreener:
                 if any(kw in name for kw in keywords):
                     matched_sectors.append(sector)
             if matched_sectors:
-                # 取第一个匹配的板块作为主板块
-                main_sector = matched_sectors[0]
+                # 科技半导体优先（回测显示科技/电子类涨停最多）
+                if "科技半导体" in matched_sectors:
+                    main_sector = "科技半导体"
+                else:
+                    main_sector = matched_sectors[0]
                 stock_sector[stock["code"]] = main_sector
                 sector_count[main_sector] = sector_count.get(main_sector, 0) + 1
         
@@ -582,17 +584,20 @@ class LateDayScreener:
                         logger.debug(f"MA20过滤 {stock['name']}({stock.get('code', '')}): 价格{current_price:.2f} < MA20*0.9={ma20*0.9:.2f}")
                     continue
 
-                # 板块效应加分（优化：基于2026-09-07回测，科技/电子类涨停最多）
+                # 板块效应加分（基于2026-09-07回测深度优化：科技/电子类占25.3%，是最大的明确行业类别）
                 # 热门板块内的股票更容易涨停，增加加分权重
                 sector_bonus = 0
                 stock_main_sector = stock_sector.get(code, "")
+                # 科技半导体板块基础加分（即使不是热门板块，也有基础加分，因为回测显示科技/电子类涨停最多）
+                if stock_main_sector == "科技半导体":
+                    sector_bonus = 4  # 科技半导体基础加4分
                 if stock_main_sector in hot_sector_names:
-                    sector_bonus = 8  # 从5增加到8，热门板块加8分
-                    # 科技半导体板块额外加分（今日涨停最多的板块，13只科技股+7只电子股）
+                    sector_bonus += 8  # 热门板块加8分
+                    # 科技半导体板块作为热门板块时额外加分（今日涨停最多的板块，23只科技/电子类）
                     if stock_main_sector == "科技半导体":
-                        sector_bonus += 3  # 科技半导体额外加3分
-                    stock["sector_bonus"] = sector_bonus
-                    stock["sector"] = stock_main_sector
+                        sector_bonus += 3  # 科技半导体热门板块额外加3分
+                stock["sector_bonus"] = sector_bonus
+                stock["sector"] = stock_main_sector
                 
                 # 计算技术指标
                 score, analysis = self._calc_late_day_score(kline, stock)
