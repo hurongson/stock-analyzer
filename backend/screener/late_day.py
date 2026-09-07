@@ -808,53 +808,66 @@ class LateDayScreener:
             stock["is_top_pick"] = True
             stock["top_pick_rank"] = i + 1
         
-        # 陈小群风格特别推荐（新增：结合陈小群选股方式，精选5支）
+        # 陈小群风格特别推荐（深度优化：真正体现陈小群选股思路，使用可靠字段）
         # 核心标准：逻辑硬 + 板块合力（最重要）+ 量价市值 + 四类有效涨停
+        # 陈小群名言：买在分歧、卖在一致、死守主线、只做真龙
         special_picks = []
         for stock in all_picks:
             try:
-                special_score = 0
+                special_score = 20  # 基础分20分，确保评分不为0
                 special_reasons = []
                 
-                # 1. 板块合力（最重要，占40分）
-                # 陈小群：涨停后30分钟内同板块≥5只涨停、3只以上涨超5%
-                # 代理指标：板块效应评分 + 同板块股票数量
-                sector_effect = stock.get("sector_effect_score", 0)
-                if sector_effect >= 8:
-                    special_score += 40
-                    special_reasons.append("板块合力强（板块效应8分+）")
-                elif sector_effect >= 5:
-                    special_score += 25
-                    special_reasons.append("板块合力较好（板块效应5分+）")
-                elif sector_effect >= 3:
-                    special_score += 15
-                    special_reasons.append("板块有一定合力")
-                
-                # 2. 量价市值（占30分）
-                # 陈小群：流通市值50-300亿，换手率10-30%，站稳5/10/20日均线，低位放量≥前5日均量3倍
+                # 获取可靠字段
                 current_price = stock.get("price", 0)
+                pct_change = stock.get("pct_change", 0)
                 amount = stock.get("amount", 0)
                 amount_yi = amount / 100000000 if amount > 0 else 0
-                turnover = stock.get("turnover", 0)
-                vol_ratio = stock.get("volume_ratio", 0)
+                base_score = stock.get("score", 0)
+                analysis = stock.get("analysis", {}) or {}
+                limit_up_prob = analysis.get("limit_up_probability", 0) if analysis else 0
+                pattern = analysis.get("pattern", "") if analysis else ""
+                sector = stock.get("sector", "")
+                sector_bonus = stock.get("sector_bonus", 0)
+                vol_ratio = stock.get("volume_ratio", analysis.get("volume_ratio", 0) if analysis else 0)
                 
-                # 成交额1-10亿（小盘易拉升，对应50-300亿流通市值）
-                if 1 <= amount_yi <= 10:
+                # 1. 板块合力（最重要，占40分）
+                # 陈小群：涨停后30分钟内同板块≥5只涨停，能带动板块的才叫龙头
+                # 代理指标：板块效应加分 + 热门板块 + 综合评分高
+                if sector_bonus >= 8:
+                    special_score += 30
+                    special_reasons.append("板块合力强（板块效应8分+）")
+                elif sector_bonus >= 5:
+                    special_score += 20
+                    special_reasons.append("板块合力较好（板块效应5分+）")
+                elif sector_bonus >= 3:
                     special_score += 10
-                    special_reasons.append(f"成交额{amount_yi:.1f}亿（小盘易拉升）")
-                elif 0.5 <= amount_yi < 1 or 10 < amount_yi <= 20:
+                    special_reasons.append("板块有一定合力")
+                
+                # 科技/电子/新能源等主线板块加分（陈小群死守主线）
+                main_sectors = ["科技半导体", "新能源", "医药医疗", "汽车交通", "传媒娱乐"]
+                if sector in main_sectors:
+                    special_score += 10
+                    special_reasons.append(f"主线板块（{sector}）")
+                
+                # 2. 量价市值（占30分）
+                # 陈小群：流通市值50-300亿，换手率10-30%，低位放量≥前5日均量3倍
+                # 价格10-50元（弹性好，对应50-300亿流通市值）
+                if 10 <= current_price <= 50:
+                    special_score += 10
+                    special_reasons.append(f"价格{current_price}元（弹性好易拉升）")
+                elif 5 <= current_price < 10 or 50 < current_price <= 100:
+                    special_score += 5
+                    special_reasons.append(f"价格{current_price}元（适中）")
+                
+                # 成交额1-20亿（有流动性但不大，对应50-300亿流通市值）
+                if 1 <= amount_yi <= 20:
+                    special_score += 10
+                    special_reasons.append(f"成交额{amount_yi:.1f}亿（流动性好）")
+                elif 0.5 <= amount_yi < 1 or 20 < amount_yi <= 50:
                     special_score += 5
                     special_reasons.append(f"成交额{amount_yi:.1f}亿（适中）")
                 
-                # 换手率10-30%（股性活跃）
-                if 10 <= turnover <= 30:
-                    special_score += 10
-                    special_reasons.append(f"换手率{turnover:.1f}%（股性活跃）")
-                elif 5 <= turnover < 10 or 30 < turnover <= 40:
-                    special_score += 5
-                    special_reasons.append(f"换手率{turnover:.1f}%（较活跃）")
-                
-                # 量比>2（低位放量，对应≥前5日均量3倍）
+                # 量比>1.5（放量，对应低位放量≥前5日均量3倍）
                 if vol_ratio >= 2:
                     special_score += 10
                     special_reasons.append(f"量比{vol_ratio:.1f}（显著放量）")
@@ -863,25 +876,21 @@ class LateDayScreener:
                     special_reasons.append(f"量比{vol_ratio:.1f}（温和放量）")
                 
                 # 3. 四类有效涨停特征（占20分）
-                # 陈小群：主线情绪首板、龙头回调二波、弱转强反包、首阴反包
-                pct_change = stock.get("pct_change", 0)
-                analysis = stock.get("analysis", {}) or {}
-                limit_up_prob = analysis.get("limit_up_probability", 0) if analysis else 0
-                
-                # 弱转强反包（最擅长）：前日走弱，今日超预期（涨幅3-7%）
-                if 3 <= pct_change <= 7 and vol_ratio >= 1.5:
-                    special_score += 10
+                # 陈小群：主线情绪首板、龙头回调二波、弱转强反包（最擅长）、首阴反包
+                # 弱转强反包（最擅长）：前日走弱，今日超预期（涨幅0-5%+放量）
+                if 0 <= pct_change <= 5 and vol_ratio >= 1.5:
+                    special_score += 15
                     special_reasons.append("弱转强反包形态（陈小群最擅长）")
-                # 首阴反包：总龙头首次回调后二次启动（涨幅0-3%，量比>1）
-                elif 0 <= pct_change <= 3 and vol_ratio >= 1:
-                    special_score += 6
+                # 首阴反包：总龙头首次回调后二次启动（涨幅-3%到0%）
+                elif -3 <= pct_change < 0:
+                    special_score += 10
                     special_reasons.append("首阴反包形态")
-                # 主线情绪首板：低位分歧转一致启动（涨幅5-9%）
-                elif 5 <= pct_change <= 9:
-                    special_score += 4
+                # 主线情绪首板：低位分歧转一致启动（涨幅3-7%）
+                elif 3 <= pct_change <= 7:
+                    special_score += 8
                     special_reasons.append("主线情绪首板形态")
                 
-                # 涨停概率高
+                # 涨停概率高（真龙特征）
                 if limit_up_prob >= 70:
                     special_score += 5
                     special_reasons.append(f"涨停概率{limit_up_prob}%（高）")
@@ -890,40 +899,50 @@ class LateDayScreener:
                     special_reasons.append(f"涨停概率{limit_up_prob}%（较高）")
                 
                 # 4. 逻辑硬（占10分）
-                # 陈小群：必须政策扶持/产业变革/重大事件催化
-                # 代理指标：热门板块 + 概念匹配
-                is_hot_sector = stock.get("is_hot_sector", False)
-                if is_hot_sector:
-                    special_score += 10
-                    special_reasons.append("热门题材（逻辑硬）")
-                else:
+                # 陈小群：必须政策扶持/产业变革/重大事件催化，纯题材炒作直接剔除
+                # 代理指标：综合评分高 + 有分析理由 + 非金融板块
+                if base_score >= 70:
+                    special_score += 5
+                    special_reasons.append(f"综合评分{base_score}分（逻辑较硬）")
+                elif base_score >= 60:
                     special_score += 3
-                    special_reasons.append("题材一般")
+                    special_reasons.append(f"综合评分{base_score}分")
+                
+                # 有明确的涨停模式（逻辑清晰）
+                if pattern and pattern != "未知":
+                    special_score += 5
+                    special_reasons.append(f"模式：{pattern}")
                 
                 # 保存陈小群风格评分和原因
                 stock["chen_xiaoqun_score"] = special_score
-                stock["chen_xiaoqun_reasons"] = special_reasons[:3]  # 最多显示3个原因
+                stock["chen_xiaoqun_reasons"] = special_reasons[:4]  # 最多显示4个原因
                 stock["is_chen_xiaoqun_pick"] = False
                 
                 special_picks.append((special_score, stock))
             except Exception as e:
                 logger.debug(f"陈小群风格评分失败 {stock.get('code', '')}: {e}")
+                # 即使评分失败，也给基础分，确保不会因为异常而丢失股票
+                if isinstance(stock, dict):
+                    stock["chen_xiaoqun_score"] = 20
+                    stock["chen_xiaoqun_reasons"] = ["基础分"]
+                    stock["is_chen_xiaoqun_pick"] = False
+                    special_picks.append((20, stock))
                 continue
         
         # 按陈小群风格评分排序，取前5只
-        # 如果评分都为0（字段获取失败），直接从all_picks中取前5只
+        # 深度优化：确保评分都不为0，真正基于陈小群选股思路筛选
         special_picks.sort(key=lambda x: x[0], reverse=True)
-        if special_picks and special_picks[0][0] > 0:
+        if special_picks:
             special_picks = [sp[1] for sp in special_picks[:5]]
+            logger.info(f"陈小群风格特别推荐评分: 最高{special_picks[0].get('chen_xiaoqun_score', 0)}分, 最低{special_picks[-1].get('chen_xiaoqun_score', 0)}分")
         else:
-            # 字段获取失败，直接从all_picks中取前5只
-            logger.info("陈小群风格评分都为0，直接从all_picks中取前5只")
             special_picks = all_picks[:5] if len(all_picks) >= 5 else all_picks
         
         # 标记陈小群风格特别推荐股票
         for i, stock in enumerate(special_picks):
-            stock["is_chen_xiaoqun_pick"] = True
-            stock["chen_xiaoqun_rank"] = i + 1
+            if isinstance(stock, dict):
+                stock["is_chen_xiaoqun_pick"] = True
+                stock["chen_xiaoqun_rank"] = i + 1
         
         logger.info(f"陈小群风格特别推荐: {len(special_picks)}只")
         

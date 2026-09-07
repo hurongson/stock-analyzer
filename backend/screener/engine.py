@@ -59,7 +59,7 @@ class ScreenerEngine:
                 all_results[name] = []
 
         # 合并去重 + 综合排序
-        combined, special_picks = self._merge_results(all_results)
+        combined, special_picks, chen_xiaoqun_picks = self._merge_results(all_results)
 
         # 涨停预测
         limit_up_picks = self._predict_limit_up(combined)
@@ -71,15 +71,17 @@ class ScreenerEngine:
             "strategy_counts": {k: len(v) for k, v in all_results.items()},
             "combined_count": len(combined),
             "special_picks_count": len(special_picks),
+            "chen_xiaoqun_picks_count": len(chen_xiaoqun_picks),
             "limit_up_picks_count": len(limit_up_picks),
         }
 
-        logger.info(f"选股完成，合并后共 {len(combined)} 只股票，特别推荐 {len(special_picks)} 只，涨停预测 {len(limit_up_picks)} 只")
+        logger.info(f"选股完成，合并后共 {len(combined)} 只股票，特别推荐 {len(special_picks)} 只，陈小群风格推荐 {len(chen_xiaoqun_picks)} 只，涨停预测 {len(limit_up_picks)} 只")
 
         return {
             "strategies": all_results,
             "combined": combined,
             "special_picks": special_picks,
+            "chen_xiaoqun_picks": chen_xiaoqun_picks,
             "limit_up_picks": limit_up_picks,
             "summary": summary,
         }
@@ -289,8 +291,153 @@ class ScreenerEngine:
 
         # 特别推荐：综合评分 + 强势度 + 共振 + 三把锁全亮，精选3-5只
         special_picks = self._select_special_picks(recommended_combined)
+        
+        # 陈小群风格特别推荐（独立列表，5只）
+        # 核心标准：逻辑硬 + 板块合力（最重要）+ 量价市值 + 四类有效涨停
+        # 陈小群名言：买在分歧、卖在一致、死守主线、只做真龙
+        chen_xiaoqun_picks = self._select_chen_xiaoqun_picks(recommended_combined)
 
-        return recommended_combined, special_picks
+        return recommended_combined, special_picks, chen_xiaoqun_picks
+    
+    def _select_chen_xiaoqun_picks(self, combined: List[Dict]) -> List[Dict]:
+        """
+        陈小群风格特别推荐筛选（独立方法，5只）
+        核心标准：逻辑硬 + 板块合力（最重要）+ 量价市值 + 四类有效涨停
+        陈小群：买在分歧、卖在一致、死守主线、只做真龙
+        """
+        if not combined:
+            return []
+        
+        scored = []
+        for item in combined:
+            try:
+                chen_score = 20  # 基础分20分，确保评分不为0
+                chen_reasons = []
+                
+                # 获取可靠字段
+                current_price = item.get("price", 0)
+                pct_change = item.get("pct_change", 0)
+                total_score = item.get("total_score", 0)
+                strength_score = item.get("strength_score", 0)
+                turnover = item.get("turnover", 0)
+                turnover_score = item.get("turnover_score", 0)
+                strategy_count = item.get("strategy_count", 0)
+                resonance = item.get("resonance", False)
+                tl = item.get("three_locks", {}) or {}
+                tl_locked = tl.get("total_locked", 0)
+                tl_signal = tl.get("signal", "")
+                
+                # 1. 板块合力（最重要，占40分）
+                # 陈小群：涨停后30分钟内同板块≥5只涨停，能带动板块的才叫龙头
+                # 代理指标：多策略命中 + 共振 + 强势度高
+                if strategy_count >= 3:
+                    chen_score += 20
+                    chen_reasons.append(f"{strategy_count}策略共振（板块合力强）")
+                elif strategy_count >= 2:
+                    chen_score += 12
+                    chen_reasons.append(f"{strategy_count}策略命中（板块合力较好）")
+                
+                if resonance:
+                    chen_score += 10
+                    chen_reasons.append("多策略共振（真龙特征）")
+                
+                if strength_score >= 60:
+                    chen_score += 10
+                    chen_reasons.append(f"强势度{strength_score}分（资金关注）")
+                elif strength_score >= 40:
+                    chen_score += 5
+                    chen_reasons.append(f"强势度{strength_score}分")
+                
+                # 2. 量价市值（占30分）
+                # 陈小群：流通市值50-300亿，换手率10-30%，低位放量≥前5日均量3倍
+                # 价格10-50元（弹性好，对应50-300亿流通市值）
+                if 10 <= current_price <= 50:
+                    chen_score += 10
+                    chen_reasons.append(f"价格{current_price}元（弹性好易拉升）")
+                elif 5 <= current_price < 10 or 50 < current_price <= 100:
+                    chen_score += 5
+                    chen_reasons.append(f"价格{current_price}元（适中）")
+                
+                # 换手率5-20%（股性活跃，对应陈小群的10-30%）
+                if 5 <= turnover <= 20:
+                    chen_score += 10
+                    chen_reasons.append(f"换手率{turnover:.1f}%（股性活跃）")
+                elif 3 <= turnover < 5 or 20 < turnover <= 30:
+                    chen_score += 5
+                    chen_reasons.append(f"换手率{turnover:.1f}%（较活跃）")
+                elif turnover_score >= 12:
+                    chen_score += 5
+                    chen_reasons.append("换手率评分高（活跃）")
+                
+                # 三把锁2/3亮以上（有资金关注，对应低位放量）
+                if tl_locked >= 2:
+                    chen_score += 10
+                    chen_reasons.append(f"三把锁{tl_locked}/3亮（资金关注）")
+                elif tl_locked >= 1:
+                    chen_score += 5
+                    chen_reasons.append(f"三把锁{tl_locked}/3亮")
+                
+                # 3. 四类有效涨停特征（占20分）
+                # 陈小群：主线情绪首板、龙头回调二波、弱转强反包（最擅长）、首阴反包
+                # 弱转强反包（最擅长）：前日走弱，今日超预期（涨幅0-5%）
+                if 0 <= pct_change <= 5:
+                    chen_score += 15
+                    chen_reasons.append("弱转强反包形态（陈小群最擅长）")
+                # 首阴反包：总龙头首次回调后二次启动（涨幅-3%到0%）
+                elif -3 <= pct_change < 0:
+                    chen_score += 10
+                    chen_reasons.append("首阴反包形态")
+                # 主线情绪首板：低位分歧转一致启动（涨幅3-7%）
+                elif 3 <= pct_change <= 7:
+                    chen_score += 8
+                    chen_reasons.append("主线情绪首板形态")
+                
+                # 综合评分高（真龙特征）
+                if total_score >= 70:
+                    chen_score += 5
+                    chen_reasons.append(f"综合评分{total_score}分（真龙）")
+                elif total_score >= 60:
+                    chen_score += 3
+                    chen_reasons.append(f"综合评分{total_score}分")
+                
+                # 4. 逻辑硬（占10分）
+                # 陈小群：必须政策扶持/产业变革/重大事件催化，纯题材炒作直接剔除
+                # 代理指标：非金融板块 + 有明确的强势理由
+                if strength_score >= 50 and strategy_count >= 2:
+                    chen_score += 10
+                    chen_reasons.append("逻辑较硬（多策略+强势）")
+                elif strength_score >= 30:
+                    chen_score += 5
+                    chen_reasons.append("有一定逻辑支撑")
+                
+                # 保存陈小群风格评分和原因
+                item["chen_xiaoqun_score"] = chen_score
+                item["chen_xiaoqun_reasons"] = chen_reasons[:4]
+                item["is_chen_xiaoqun_pick"] = False
+                
+                scored.append((chen_score, item))
+            except Exception as e:
+                logger.debug(f"陈小群风格评分失败 {item.get('code', '')}: {e}")
+                # 即使评分失败，也给基础分
+                if isinstance(item, dict):
+                    item["chen_xiaoqun_score"] = 20
+                    item["chen_xiaoqun_reasons"] = ["基础分"]
+                    item["is_chen_xiaoqun_pick"] = False
+                    scored.append((20, item))
+                continue
+        
+        # 按陈小群风格评分排序，取前5只
+        scored.sort(key=lambda x: x[0], reverse=True)
+        if scored:
+            result = [sp[1] for sp in scored[:5]]
+            # 标记陈小群风格特别推荐股票
+            for i, stock in enumerate(result):
+                if isinstance(stock, dict):
+                    stock["is_chen_xiaoqun_pick"] = True
+                    stock["chen_xiaoqun_rank"] = i + 1
+            logger.info(f"陈小群风格特别推荐: {len(result)}只, 最高评分{result[0].get('chen_xiaoqun_score', 0)}分")
+            return result
+        return []
 
     def _select_special_picks(self, combined: List[Dict]) -> List[Dict]:
         """

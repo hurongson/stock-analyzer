@@ -121,13 +121,16 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
     if screener:
         combined_count = len(screener.get("combined", []))
         special_count = len(screener.get("special_picks", []))
+        chen_xiaoqun_count = len(screener.get("chen_xiaoqun_picks", []))
         limit_up_count = len(screener.get("limit_up_picks", []))
-        if combined_count > 0 or special_count > 0 or limit_up_count > 0:
+        if combined_count > 0 or special_count > 0 or chen_xiaoqun_count > 0 or limit_up_count > 0:
             summary_parts = []
             if special_count > 0:
                 summary_parts.append(f"⭐特别推荐{special_count}只")
+            if chen_xiaoqun_count > 0:
+                summary_parts.append(f"🔥陈小群{chen_xiaoqun_count}只")
             if limit_up_count > 0:
-                summary_parts.append(f"🔥涨停预测{limit_up_count}只")
+                summary_parts.append(f"⚡涨停预测{limit_up_count}只")
             if combined_count > 0:
                 summary_parts.append(f"🏆综合选股{combined_count}只")
             summary_str = " | ".join(summary_parts)
@@ -297,6 +300,52 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
             "text": {
                 "tag": "lark_md",
                 "content": "\n".join(special_lines)
+            }
+        })
+
+    # 选股推荐 - 陈小群风格特别推荐（独立列表，5只）
+    # 核心标准：逻辑硬 + 板块合力（最重要）+ 量价市值 + 四类有效涨停
+    if screener and screener.get("chen_xiaoqun_picks"):
+        chen_picks = screener["chen_xiaoqun_picks"]
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🔥 陈小群风格特别推荐（{len(chen_picks)}只，板块合力+量价市值+四类有效涨停）**\n"
+                           f"陈小群名言：买在分歧、卖在一致、死守主线、只做真龙"
+            }
+        })
+        chen_lines = []
+        for i, c in enumerate(chen_picks):
+            ts = c.get("trading_signal") or {}
+            buy_p = ts.get("buy_price")
+            sell_p = ts.get("sell_price")
+            stop_p = ts.get("stop_loss")
+            target_p = ts.get("target_price")
+            point_info = []
+            if buy_p:
+                point_info.append(f"买{buy_p}")
+            if sell_p:
+                point_info.append(f"卖{sell_p}")
+            if stop_p:
+                point_info.append(f"止损{stop_p}")
+            if target_p:
+                point_info.append(f"目标{target_p}")
+            point_str = f" | {'/'.join(point_info)}" if point_info else ""
+            reasons = "、".join(c.get("chen_xiaoqun_reasons", [])[:3])
+            chen_score = c.get("chen_xiaoqun_score", 0)
+            tl_str = _format_three_locks(c)
+            chen_lines.append(
+                f"{i+1}. 🔥 **{c['name']}**({c['code']}) {c['price']}元 "
+                f"{c['pct_change']:+.1f}% | 陈小群评分{chen_score}{point_str}{tl_str}\n"
+                f"   理由: {reasons}"
+            )
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "\n".join(chen_lines)
             }
         })
 
