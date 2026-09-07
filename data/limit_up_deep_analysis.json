@@ -1,0 +1,21 @@
+{
+  "total": 93,
+  "first_board_count": 80,
+  "lian_ban_count": 13,
+  "morning_zt_count": 32,
+  "afternoon_zt_count": 19,
+  "no_zbc_count": 36,
+  "has_zbc_count": 57,
+  "price_stats": {
+    "mean": 39.04344086021506,
+    "median": 17.89,
+    "first_board_mean": 43.765125000000005,
+    "lian_ban_mean": 9.986923076923079
+  },
+  "amount_stats": {
+    "mean": 10.349061023548389,
+    "median": 5.48068272,
+    "first_board_mean": 11.515426037000001,
+    "lian_ban_mean": 3.1714301715384616
+  }
+}
