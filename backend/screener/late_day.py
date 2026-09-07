@@ -56,9 +56,9 @@ class LateDayScreener:
             logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到54分，三把锁至少1/3亮")
         else:
             self.max_results = 30  # 正常情况推荐30只
-            score_threshold = 50  # 正常评分门槛
+            score_threshold = 40  # 正常评分门槛（从50降低到40，确保至少能推荐一些股票）
             min_locks = 0  # 不限制三把锁
-            logger.info(f"大盘正常，推荐数量30只，评分门槛50分")
+            logger.info(f"大盘正常，推荐数量30只，评分门槛40分")
 
         # 获取全量股票列表
         if stock_df is None:
