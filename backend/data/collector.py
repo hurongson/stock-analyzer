@@ -712,6 +712,80 @@ class DataCollector:
         if cached is not None and not cached.empty:
             return cached
 
+        # 判断是否在交易时段（北京时间9:30-15:00，工作日）
+        # 交易时段优先使用akshare实时行情，避免Tushare日线数据滞后
+        # 注意：GitHub Actions运行在UTC时区，需要转换为北京时间（UTC+8）
+        now_utc = pd.Timestamp.now(tz='UTC')
+        now_beijing = now_utc.tz_convert('Asia/Shanghai')
+        is_trading_hours = (
+            now_beijing.weekday() < 5 and  # 工作日
+            ((now_beijing.hour == 9 and now_beijing.minute >= 30) or  # 9:30-9:59
+             (10 <= now_beijing.hour <= 11) or  # 10:00-11:59
+             (now_beijing.hour == 13) or  # 13:00-13:59
+             (now_beijing.hour == 14 and now_beijing.minute <= 59))  # 14:00-14:59
+        )
+        
+        # 交易时段优先使用akshare实时行情（新浪财经）
+        if is_trading_hours and AKSHARE_AVAILABLE:
+            logger.info("当前为交易时段，优先使用akshare实时行情数据")
+            df = None
+            
+            # 数据源1: 新浪财经（已验证在GitHub Actions中稳定可用）
+            for retry in range(3):
+                try:
+                    logger.info(f"尝试新浪财经获取实时行情（第{retry+1}次）...")
+                    df = ak.stock_zh_a_spot()
+                    if df is not None and not df.empty:
+                        logger.info(f"新浪财经获取实时行情成功，共 {len(df)} 只股票")
+                        # 统一列名
+                        df = df.rename(columns={
+                            "代码": "code", "名称": "name",
+                            "最新价": "price", "涨跌幅": "pct_change",
+                            "涨跌额": "change", "成交量": "volume",
+                            "成交额": "amount", "最高": "high",
+                            "最低": "low", "今开": "open", "昨收": "prev_close",
+                        })
+                        # 新浪财经缺少的列，添加默认值
+                        for col in ["turnover", "pe", "pb", "total_mv", "circ_mv", "amplitude"]:
+                            if col not in df.columns:
+                                df[col] = 0
+                        # 计算振幅
+                        if "amplitude" in df.columns and "prev_close" in df.columns:
+                            mask = df["prev_close"] > 0
+                            df.loc[mask, "amplitude"] = (df.loc[mask, "high"] - df.loc[mask, "low"]) / df.loc[mask, "prev_close"] * 100
+                        # 过滤 ST、退市
+                        df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
+                        cache.set_dataframe("stock_list", key, df)
+                        return df
+                except Exception as e:
+                    logger.warning(f"新浪财经获取实时行情第{retry+1}次失败: {str(e)[:80]}")
+                    time.sleep(2)
+            
+            # 数据源2: 东方财富（备用）
+            if df is None or df.empty:
+                for retry in range(3):
+                    try:
+                        logger.info(f"尝试东方财富获取实时行情（第{retry+1}次）...")
+                        df = ak.stock_zh_a_spot_em()
+                        if df is not None and not df.empty:
+                            logger.info(f"东方财富获取实时行情成功，共 {len(df)} 只股票")
+                            df = df.rename(columns={
+                                "序号": "idx", "代码": "code", "名称": "name",
+                                "最新价": "price", "涨跌幅": "pct_change", "涨跌额": "change",
+                                "成交量": "volume", "成交额": "amount", "振幅": "amplitude",
+                                "最高": "high", "最低": "low", "今开": "open", "昨收": "prev_close",
+                                "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
+                                "总市值": "total_mv", "流通市值": "circ_mv"
+                            })
+                            df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
+                            cache.set_dataframe("stock_list", key, df)
+                            return df
+                    except Exception as e:
+                        logger.warning(f"东方财富获取实时行情第{retry+1}次失败: {str(e)[:80]}")
+                        time.sleep(2)
+            
+            logger.warning("交易时段akshare实时行情获取失败，将尝试Tushare日线数据")
+
         # 优先 Tushare：用 daily(trade_date) 获取全量股票日线，不依赖频率受限的 stock_basic
         if TUSHARE_AVAILABLE:
             try:
