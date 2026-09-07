@@ -885,8 +885,14 @@ class LateDayScreener:
                 continue
         
         # 按陈小群风格评分排序，取前5只
+        # 如果评分都为0（字段获取失败），直接从all_picks中取前5只
         special_picks.sort(key=lambda x: x[0], reverse=True)
-        special_picks = [sp[1] for sp in special_picks[:5]]
+        if special_picks and special_picks[0][0] > 0:
+            special_picks = [sp[1] for sp in special_picks[:5]]
+        else:
+            # 字段获取失败，直接从all_picks中取前5只
+            logger.info("陈小群风格评分都为0，直接从all_picks中取前5只")
+            special_picks = all_picks[:5] if len(all_picks) >= 5 else all_picks
         
         # 标记陈小群风格特别推荐股票
         for i, stock in enumerate(special_picks):
