@@ -332,6 +332,53 @@ class ScreenerEngine:
             turnover_score = item.get("turnover_score", 0)
             turnover = item.get("turnover", 0)
             
+            # 陈小群风格评分（新增：结合陈小群选股方式）
+            # 核心标准：板块合力（最重要）+ 量价市值 + 四类有效涨停 + 逻辑硬
+            chen_xiaoqun_score = 0
+            
+            # 1. 板块合力（最重要，占40分）
+            # 陈小群：涨停后30分钟内同板块≥5只涨停、3只以上涨超5%
+            # 代理指标：策略数量（多策略选中说明板块合力强）+ 共振
+            if item.get("resonance"):
+                chen_xiaoqun_score += 25
+            strategy_count = item.get("strategy_count", 0)
+            if strategy_count >= 3:
+                chen_xiaoqun_score += 15
+            elif strategy_count >= 2:
+                chen_xiaoqun_score += 8
+            
+            # 2. 量价市值（占30分）
+            # 陈小群：流通市值50-300亿，换手率10-30%，低位放量≥前5日均量3倍
+            amount = item.get("amount", 0)
+            amount_yi = amount / 100000000 if amount > 0 else 0
+            if 1 <= amount_yi <= 10:
+                chen_xiaoqun_score += 10  # 小盘易拉升
+            elif 0.5 <= amount_yi < 1 or 10 < amount_yi <= 20:
+                chen_xiaoqun_score += 5
+            
+            if 10 <= turnover <= 30:
+                chen_xiaoqun_score += 10  # 股性活跃
+            elif 5 <= turnover < 10 or 30 < turnover <= 40:
+                chen_xiaoqun_score += 5
+            
+            # 3. 四类有效涨停特征（占20分）
+            # 陈小群：主线情绪首板、龙头回调二波、弱转强反包、首阴反包
+            pct_change = item.get("pct_change", 0)
+            if 3 <= pct_change <= 7 and turnover >= 5:
+                chen_xiaoqun_score += 10  # 弱转强反包形态（最擅长）
+            elif 0 <= pct_change <= 3 and turnover >= 3:
+                chen_xiaoqun_score += 6  # 首阴反包形态
+            elif 5 <= pct_change <= 9:
+                chen_xiaoqun_score += 4  # 主线情绪首板形态
+            
+            # 4. 逻辑硬（占10分）
+            # 陈小群：必须政策扶持/产业变革/重大事件催化
+            # 代理指标：强势度评分高说明有资金关注，逻辑较硬
+            if strength_score >= 50:
+                chen_xiaoqun_score += 10
+            elif strength_score >= 30:
+                chen_xiaoqun_score += 5
+            
             # 非买入信号的股票不进入特别推荐
             if tl_signal not in ["强烈买入", "买入"]:  # 严重bug修复：谨慎买入的股票不进入特别推荐
                 continue
@@ -340,15 +387,16 @@ class ScreenerEngine:
             if turnover > 0 and turnover < 1:
                 continue
 
-            # 综合特别推荐评分
+            # 综合特别推荐评分（原有评分 + 陈小群风格评分）
             special_score = (
-                total_score * 0.2 +
-                strength_score * 0.2 +
-                resonance_bonus +
+                total_score * 0.15 +
+                strength_score * 0.15 +
+                resonance_bonus * 0.5 +
                 strategy_bonus +
-                position_score * 0.2 +
-                tl_bonus +
-                turnover_score * 0.3  # 换手率评分占比30%
+                position_score * 0.15 +
+                tl_bonus * 0.5 +
+                turnover_score * 0.2 +
+                chen_xiaoqun_score * 0.4  # 陈小群风格评分占比40%
             )
 
             # 生成选中原因

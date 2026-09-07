@@ -586,10 +586,11 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
 
     date = late_day_data.get("date", "")
     picks = late_day_data.get("picks", [])
-    # 获取精选10支和全部30支（适配新的返回结构）
+    # 获取精选10支、全部30支和陈小群风格特别推荐5支（适配新的返回结构）
     # 严格类型检查：确保top_picks和all_picks都是列表，不是字典（修复TypeError）
     top_picks = late_day_data.get("top_picks", [])
     all_picks = late_day_data.get("all_picks", picks)
+    special_picks = late_day_data.get("special_picks", [])  # 陈小群风格特别推荐5支
     
     # 如果top_picks不是列表，转换成空列表（修复字典被当成列表的问题）
     if not isinstance(top_picks, list):
@@ -625,7 +626,7 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
             "tag": "lark_md",
             "content": f"**🎯 尾盘选股推荐 - {date} 14:30**\n"
                        f"当日买入，次日冲高卖出（T+1短线）\n"
-                       f"共推荐{len(all_picks)}只，精选{len(top_picks)}只重点关注"
+                       f"共推荐{len(all_picks)}只，精选{len(top_picks)}只，陈小群风格特别推荐{len(special_picks)}只"
         }
     })
 
@@ -646,6 +647,39 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
             }
         })
         elements.append({"tag": "hr"})
+
+    # 陈小群风格特别推荐5支（新增：结合陈小群选股方式）
+    if special_picks:
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🔥 陈小群风格特别推荐（{len(special_picks)}只，板块合力+量价市值+四类有效涨停）**"
+            }
+        })
+
+        for i, p in enumerate(special_picks):
+            # 类型检查：确保p是字典
+            if not isinstance(p, dict):
+                continue
+            name = p.get("name", p.get("code", ""))
+            code = p.get("code", "")
+            price = p.get("price", 0)
+            pct = p.get("pct_change", 0)
+            score = p.get("chen_xiaoqun_score", 0)
+            reasons = p.get("chen_xiaoqun_reasons", [])
+            reasons_str = "、".join(reasons[:2]) if reasons else ""
+            
+            pct_emoji = "📈" if pct >= 0 else "📉"
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"{i+1}. **{name}({code})** {price}元 {pct_emoji}{pct:+.1f}% | 陈小群评分{score:.0f}\n"
+                               f"   理由: {reasons_str}"
+                }
+            })
 
     # 精选10支详细推荐
     if top_picks:
