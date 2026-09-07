@@ -8,7 +8,7 @@ import time
 import logging
 import pandas as pd
 import numpy as np
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict
 from backend.data.cache import cache
 from backend.utils.helpers import normalize_stock_code, retry, today_str
 from backend.config import Config

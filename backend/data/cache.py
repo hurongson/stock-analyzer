@@ -7,10 +7,9 @@ import json
 import time
 import logging
 import pandas as pd
-from datetime import datetime
 from typing import Optional, Any
 from backend.config import Config
-from backend.utils.helpers import cache_key, today_str
+from backend.utils.helpers import today_str
 
 logger = logging.getLogger(__name__)
 
