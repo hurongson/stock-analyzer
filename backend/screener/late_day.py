@@ -718,33 +718,29 @@ class LateDayScreener:
 
         # 行业分散度限制：同一行业最多推荐2只，避免行业集中风险
         # 基于2026-09-01回测：化工4只平均-8.02%，行业集中导致大幅亏损
+        # 基于2026-09-07回测优化：从15增加到25，因为行业分散度过滤从86只减少到15只，太严格了，错过很多涨停股
         industry_count = {}
         filtered_results = []
         for stock in results:
             industry = stock.get("industry", "") or stock.get("所属行业", "") or "未知"
             if industry not in industry_count:
                 industry_count[industry] = 0
-            if industry_count[industry] < 15:  # 同一行业最多15只（从10增加到15，近一个月回测发现行业比较分散，TOP5只占19.2%，限制太严格会错过热门板块）
+            if industry_count[industry] < 25:  # 同一行业最多25只（从15增加到25，基于2026-09-07回测，行业分散度过滤太严格错过很多涨停股）
                 industry_count[industry] += 1
                 filtered_results.append(stock)
         
-        logger.info(f"行业分散度过滤: 从{len(results)}只减少到{len(filtered_results)}只")
+        logger.info(f"行业分散度过滤: 从{len(results)}只减少到{len(filtered_results)}只（同一行业最多25只）")
         results = filtered_results
 
-        # 三把锁信号过滤（优化：放宽过滤，增加推荐数量）
-        # 第一优先级：买入/强烈买入/谨慎买入信号的股票
-        # 第二优先级：2/3亮以上的股票（即使信号不是买入）
-        # 第三优先级：1/3亮的股票（如果数量还不够）
-        buy_signals = ["强烈买入", "买入"]  # 严重bug修复：谨慎买入的股票不进入推荐列表
-        buy_results = []
-        two_locked_results = []
-        one_locked_results = []
-        watch_results = []
-        
-        # 强烈卖出和卖出信号的股票直接排除（严重bug修复：之前强烈卖出的股票因为有2/3亮或1/3亮而被错误推荐）
-        sell_signals = ["强烈卖出", "卖出", "谨慎买入"]  # 严重bug修复：谨慎买入的股票也不进入推荐列表
+        # 三把锁信号过滤（基于2026-09-07回测深度优化：放宽过滤，只排除卖出信号，不再限制点亮数）
+        # 之前的问题：买入信号0只，2/3亮0只，只有1/3亮6只，导致推荐数量太少
+        # 优化方案：只排除强烈卖出/卖出/谨慎买入信号的股票，不再限制三把锁点亮数
+        # 三把锁仍然作为排序的参考，但不作为硬过滤条件
+        buy_signals = ["强烈买入", "买入"]  # 买入信号（用于排序优先）
+        sell_signals = ["强烈卖出", "卖出", "谨慎买入"]  # 严重bug修复：谨慎买入的股票不进入推荐列表
         excluded_sell_count = 0
         
+        filtered_results = []
         for stock in results:
             # 类型检查：确保stock是字典，跳过字符串等非字典元素（修复TypeError）
             if not isinstance(stock, dict):
@@ -760,36 +756,13 @@ class LateDayScreener:
                 excluded_sell_count += 1
                 continue
             
-            if tl_signal in buy_signals:
-                buy_results.append(stock)
-            elif tl_locked >= 2:
-                two_locked_results.append(stock)
-            elif tl_locked >= 1:
-                one_locked_results.append(stock)
-            else:
-                watch_results.append(stock)
+            filtered_results.append(stock)
         
         if excluded_sell_count > 0:
             logger.info(f"已排除强烈卖出/卖出/谨慎买入信号股票: {excluded_sell_count}只（严重bug修复）")
         
-        logger.info(f"三把锁过滤: 买入信号{len(buy_results)}只, 2/3亮{len(two_locked_results)}只, 1/3亮{len(one_locked_results)}只, 0/3亮{len(watch_results)}只")
-        
-        # 合并结果：买入信号 + 2/3亮 + 1/3亮（按优先级排序）
-        # 目标：推荐30只股票，如果买入信号不足，依次补充2/3亮和1/3亮的股票
-        # 大盘下跌时，min_locks=1，只保留至少1/3亮的股票
-        if min_locks >= 2:
-            results = buy_results + two_locked_results
-        elif min_locks >= 1:
-            results = buy_results + two_locked_results + one_locked_results
-        else:
-            results = buy_results + two_locked_results + one_locked_results
-        
-        # 如果还是不足10只，增加0/3亮的股票（极端情况，大盘正常时）
-        if len(results) < 10 and min_locks == 0:
-            logger.info(f"推荐股票不足10只，增加0/3亮的股票")
-            results = results + watch_results
-        
-        logger.info(f"三把锁过滤后共{len(results)}只股票")
+        logger.info(f"三把锁过滤: 从{len(results)}只减少到{len(filtered_results)}只（只排除卖出信号，不再限制点亮数）")
+        results = filtered_results
 
         # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分
         # 基于6个月460只涨停股回测分析，涨停概率是最重要的指标
