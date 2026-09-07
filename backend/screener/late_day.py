@@ -704,14 +704,14 @@ class LateDayScreener:
         # 第一优先级：买入/强烈买入/谨慎买入信号的股票
         # 第二优先级：2/3亮以上的股票（即使信号不是买入）
         # 第三优先级：1/3亮的股票（如果数量还不够）
-        buy_signals = ["强烈买入", "买入", "谨慎买入"]
+        buy_signals = ["强烈买入", "买入"]  # 严重bug修复：谨慎买入的股票不进入推荐列表
         buy_results = []
         two_locked_results = []
         one_locked_results = []
         watch_results = []
         
         # 强烈卖出和卖出信号的股票直接排除（严重bug修复：之前强烈卖出的股票因为有2/3亮或1/3亮而被错误推荐）
-        sell_signals = ["强烈卖出", "卖出"]
+        sell_signals = ["强烈卖出", "卖出", "谨慎买入"]  # 严重bug修复：谨慎买入的股票也不进入推荐列表
         excluded_sell_count = 0
         
         for stock in results:
@@ -739,7 +739,7 @@ class LateDayScreener:
                 watch_results.append(stock)
         
         if excluded_sell_count > 0:
-            logger.info(f"已排除强烈卖出/卖出信号股票: {excluded_sell_count}只（严重bug修复）")
+            logger.info(f"已排除强烈卖出/卖出/谨慎买入信号股票: {excluded_sell_count}只（严重bug修复）")
         
         logger.info(f"三把锁过滤: 买入信号{len(buy_results)}只, 2/3亮{len(two_locked_results)}只, 1/3亮{len(one_locked_results)}只, 0/3亮{len(watch_results)}只")
         
