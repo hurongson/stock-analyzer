@@ -231,23 +231,23 @@ class LateDayScreener:
         # 第四步：深度分析（获取K线数据，计算技术指标）
         # 传递批量获取的K线数据和大盘环境参数，避免重复获取
         # 注意：换手率数据通过量比估算（Tushare daily_basic频率限制1次/小时无法使用）
-        picks = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks)
-        logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
-
-        # 分为精选10支、全部推荐和陈小群风格特别推荐5支
-        all_picks = picks[:self.max_results] if len(picks) >= self.max_results else picks
-        top_picks = all_picks[:self.top_picks] if len(all_picks) >= self.top_picks else all_picks
-        # 陈小群风格特别推荐5支（直接从推荐中取前5只，后续可优化评分）
-        special_picks = all_picks[:5] if len(all_picks) >= 5 else all_picks
+        deep_result = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks)
         
-        # 标记精选和特别推荐股票
-        for i, stock in enumerate(top_picks):
-            stock["is_top_pick"] = True
-            stock["top_pick_rank"] = i + 1
-        for i, stock in enumerate(special_picks):
-            stock["is_chen_xiaoqun_pick"] = True
-            stock["chen_xiaoqun_rank"] = i + 1
+        # 从_deep_analyze返回的字典中获取all_picks、top_picks和special_picks
+        # 兼容_deep_analyze返回字典或列表的情况
+        if isinstance(deep_result, dict):
+            all_picks = deep_result.get("all_picks", [])
+            top_picks = deep_result.get("top_picks", [])
+            special_picks = deep_result.get("special_picks", [])
+            picks = all_picks
+        else:
+            # 兼容旧版本：_deep_analyze返回列表
+            picks = deep_result if isinstance(deep_result, list) else []
+            all_picks = picks[:self.max_results] if len(picks) >= self.max_results else picks
+            top_picks = all_picks[:self.top_picks] if len(all_picks) >= self.top_picks else all_picks
+            special_picks = all_picks[:5] if len(all_picks) >= 5 else all_picks
         
+        logger.info(f"尾盘选股完成，共推荐 {len(all_picks)} 只")
         logger.info(f"陈小群风格特别推荐: {len(special_picks)}只")
         
         return {
@@ -261,7 +261,7 @@ class LateDayScreener:
             "summary": {
                 "total_stocks": len(stock_df),
                 "initial_filtered": len(candidates),
-                "final_picks": len(picks),
+                "final_picks": len(all_picks),
             }
         }
 
