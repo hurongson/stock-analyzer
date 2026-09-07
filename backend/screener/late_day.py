@@ -234,8 +234,30 @@ class LateDayScreener:
         picks = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks)
         logger.info(f"尾盘选股完成，共推荐 {len(picks)} 只")
 
+        # 分为精选10支、全部推荐和陈小群风格特别推荐5支
+        all_picks = picks[:self.max_results] if len(picks) >= self.max_results else picks
+        top_picks = all_picks[:self.top_picks] if len(all_picks) >= self.top_picks else all_picks
+        # 陈小群风格特别推荐5支（直接从推荐中取前5只，后续可优化评分）
+        special_picks = all_picks[:5] if len(all_picks) >= 5 else all_picks
+        
+        # 标记精选和特别推荐股票
+        for i, stock in enumerate(top_picks):
+            stock["is_top_pick"] = True
+            stock["top_pick_rank"] = i + 1
+        for i, stock in enumerate(special_picks):
+            stock["is_chen_xiaoqun_pick"] = True
+            stock["chen_xiaoqun_rank"] = i + 1
+        
+        logger.info(f"陈小群风格特别推荐: {len(special_picks)}只")
+        
         return {
             "picks": picks,
+            "all_picks": all_picks,  # 全部30支
+            "top_picks": top_picks,  # 精选10支
+            "special_picks": special_picks,  # 陈小群风格特别推荐5支
+            "total_count": len(all_picks),
+            "top_count": len(top_picks),
+            "special_count": len(special_picks),
             "summary": {
                 "total_stocks": len(stock_df),
                 "initial_filtered": len(candidates),
