@@ -756,10 +756,27 @@ class DataCollector:
                         for col in ["turnover", "pe", "pb", "total_mv", "circ_mv", "amplitude"]:
                             if col not in df.columns:
                                 df[col] = 0
-                        # 计算振幅
-                        if "amplitude" in df.columns and "prev_close" in df.columns:
-                            mask = df["prev_close"] > 0
-                            df.loc[mask, "amplitude"] = (df.loc[mask, "high"] - df.loc[mask, "low"]) / df.loc[mask, "prev_close"] * 100
+                        
+                        # 数据清洗：确保关键列是数值类型，避免计算振幅时出错
+                        numeric_cols = ["price", "pct_change", "change", "volume", "amount", 
+                                       "high", "low", "open", "prev_close", "amplitude"]
+                        for col in numeric_cols:
+                            if col in df.columns:
+                                df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+                        
+                        # 计算振幅（添加异常处理，避免无效值导致整个获取失败）
+                        try:
+                            if "prev_close" in df.columns and "high" in df.columns and "low" in df.columns:
+                                mask = df["prev_close"] > 0
+                                if mask.any():
+                                    df.loc[mask, "amplitude"] = (
+                                        (df.loc[mask, "high"] - df.loc[mask, "low"]) / 
+                                        df.loc[mask, "prev_close"] * 100
+                                    )
+                        except Exception as e:
+                            logger.warning(f"计算振幅失败，使用默认值0: {str(e)[:80]}")
+                            df["amplitude"] = 0
+                        
                         # 过滤 ST、退市
                         df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
                         cache.set_dataframe("stock_list", key, df)
@@ -784,6 +801,14 @@ class DataCollector:
                                 "换手率": "turnover", "市盈率-动态": "pe", "市净率": "pb",
                                 "总市值": "total_mv", "流通市值": "circ_mv"
                             })
+                            # 数据清洗：确保关键列是数值类型
+                            numeric_cols_em = ["price", "pct_change", "change", "volume", "amount", 
+                                              "high", "low", "open", "prev_close", "amplitude", "turnover"]
+                            for col in numeric_cols_em:
+                                if col in df.columns:
+                                    df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+                            
+                            # 过滤 ST、退市
                             df = df[~df["name"].str.contains("ST|退", na=False)].reset_index(drop=True)
                             cache.set_dataframe("stock_list", key, df)
                             return df
