@@ -712,22 +712,29 @@ class DataCollector:
         if cached is not None and not cached.empty:
             return cached
 
-        # 判断是否在交易时段（北京时间9:30-15:00，工作日）
-        # 交易时段优先使用akshare实时行情，避免Tushare日线数据滞后
+        # 判断是否在交易时段（北京时间9:30-15:00，工作日，包括午休时间）
+        # 交易时段和午休时间优先使用akshare实时行情，避免Tushare日线数据滞后
         # 注意：GitHub Actions运行在UTC时区，需要转换为北京时间（UTC+8）
         now_utc = pd.Timestamp.now(tz='UTC')
         now_beijing = now_utc.tz_convert('Asia/Shanghai')
-        is_trading_hours = (
-            now_beijing.weekday() < 5 and  # 工作日
-            ((now_beijing.hour == 9 and now_beijing.minute >= 30) or  # 9:30-9:59
-             (10 <= now_beijing.hour <= 11) or  # 10:00-11:59
-             (now_beijing.hour == 13) or  # 13:00-13:59
-             (now_beijing.hour == 14 and now_beijing.minute <= 59))  # 14:00-14:59
+        # 扩大实时行情使用范围：工作日9:30-15:00（包括午休时间11:30-13:00）
+        # 午休时间的行情是上午收盘的行情，比Tushare的日线数据更新
+        is_trading_day = now_beijing.weekday() < 5  # 工作日
+        is_market_hours = (
+            (now_beijing.hour == 9 and now_beijing.minute >= 30) or  # 9:30-9:59
+            (10 <= now_beijing.hour <= 11) or  # 10:00-11:59（包括午休前）
+            (now_beijing.hour == 12) or  # 12:00-12:59（午休时间，使用上午收盘行情）
+            (now_beijing.hour == 13) or  # 13:00-13:59
+            (now_beijing.hour == 14 and now_beijing.minute <= 59) or  # 14:00-14:59
+            (now_beijing.hour == 15 and now_beijing.minute <= 30)  # 15:00-15:30（收盘后半小时，使用收盘行情）
         )
+        use_realtime = is_trading_day and is_market_hours
         
-        # 交易时段优先使用akshare实时行情（新浪财经）
-        if is_trading_hours and AKSHARE_AVAILABLE:
-            logger.info("当前为交易时段，优先使用akshare实时行情数据")
+        logger.info(f"当前北京时间: {now_beijing.strftime('%Y-%m-%d %H:%M:%S')}, 工作日: {is_trading_day}, 交易时段: {is_market_hours}, 使用实时行情: {use_realtime}")
+        
+        # 交易时段和午休时间优先使用akshare实时行情（新浪财经）
+        if use_realtime and AKSHARE_AVAILABLE:
+            logger.info("当前为交易时段/午休时间，优先使用akshare实时行情数据")
             df = None
             
             # 数据源1: 新浪财经（已验证在GitHub Actions中稳定可用）
@@ -784,7 +791,7 @@ class DataCollector:
                         logger.warning(f"东方财富获取实时行情第{retry+1}次失败: {str(e)[:80]}")
                         time.sleep(2)
             
-            logger.warning("交易时段akshare实时行情获取失败，将尝试Tushare日线数据")
+            logger.warning("交易时段/午休时间akshare实时行情获取失败，将尝试Tushare日线数据")
 
         # 优先 Tushare：用 daily(trade_date) 获取全量股票日线，不依赖频率受限的 stock_basic
         if TUSHARE_AVAILABLE:
