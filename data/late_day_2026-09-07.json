@@ -447,10 +447,12 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 1,
-      "chen_xiaoqun_score": 8,
+      "chen_xiaoqun_score": 50,
       "chen_xiaoqun_reasons": [
+        "价格8.43元（适中）",
+        "首阴反包形态",
         "涨停概率80%（高）",
-        "题材一般"
+        "综合评分88分（逻辑较硬）"
       ],
       "is_chen_xiaoqun_pick": true,
       "chen_xiaoqun_rank": 1
@@ -818,10 +820,12 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 2,
-      "chen_xiaoqun_score": 8,
+      "chen_xiaoqun_score": 45,
       "chen_xiaoqun_reasons": [
+        "首阴反包形态",
         "涨停概率77%（高）",
-        "题材一般"
+        "综合评分89分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
       "chen_xiaoqun_rank": 2
@@ -1193,13 +1197,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 3,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
+        "价格5.33元（适中）",
         "涨停概率61%（较高）",
-        "题材一般"
+        "综合评分72分（逻辑较硬）",
+        "模式：温和上涨型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 3
+      "chen_xiaoqun_rank": 4
     },
     {
       "code": "002437",
@@ -1565,13 +1571,13 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 4,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 33,
       "chen_xiaoqun_reasons": [
         "涨停概率57%（较高）",
-        "题材一般"
+        "综合评分72分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
-      "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 4
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002131",
@@ -1952,13 +1958,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 5,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 43,
       "chen_xiaoqun_reasons": [
+        "首阴反包形态",
         "涨停概率55%（较高）",
-        "题材一般"
+        "综合评分73分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 5
+      "chen_xiaoqun_rank": 3
     },
     {
       "code": "601212",
@@ -2339,12 +2347,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 6,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
+        "价格7.0元（适中）",
         "涨停概率51%（较高）",
-        "题材一般"
+        "综合评分93分（逻辑较硬）",
+        "模式：超跌反弹型"
       ],
-      "is_chen_xiaoqun_pick": false
+      "is_chen_xiaoqun_pick": true,
+      "chen_xiaoqun_rank": 5
     }
   ],
   "all_picks": [
@@ -2708,10 +2719,12 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 1,
-      "chen_xiaoqun_score": 8,
+      "chen_xiaoqun_score": 50,
       "chen_xiaoqun_reasons": [
+        "价格8.43元（适中）",
+        "首阴反包形态",
         "涨停概率80%（高）",
-        "题材一般"
+        "综合评分88分（逻辑较硬）"
       ],
       "is_chen_xiaoqun_pick": true,
       "chen_xiaoqun_rank": 1
@@ -3079,10 +3092,12 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 2,
-      "chen_xiaoqun_score": 8,
+      "chen_xiaoqun_score": 45,
       "chen_xiaoqun_reasons": [
+        "首阴反包形态",
         "涨停概率77%（高）",
-        "题材一般"
+        "综合评分89分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
       "chen_xiaoqun_rank": 2
@@ -3454,13 +3469,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 3,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
+        "价格5.33元（适中）",
         "涨停概率61%（较高）",
-        "题材一般"
+        "综合评分72分（逻辑较硬）",
+        "模式：温和上涨型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 3
+      "chen_xiaoqun_rank": 4
     },
     {
       "code": "002437",
@@ -3826,13 +3843,13 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 4,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 33,
       "chen_xiaoqun_reasons": [
         "涨停概率57%（较高）",
-        "题材一般"
+        "综合评分72分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
-      "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 4
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002131",
@@ -4213,13 +4230,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 5,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 43,
       "chen_xiaoqun_reasons": [
+        "首阴反包形态",
         "涨停概率55%（较高）",
-        "题材一般"
+        "综合评分73分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 5
+      "chen_xiaoqun_rank": 3
     },
     {
       "code": "601212",
@@ -4600,12 +4619,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 6,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
+        "价格7.0元（适中）",
         "涨停概率51%（较高）",
-        "题材一般"
+        "综合评分93分（逻辑较硬）",
+        "模式：超跌反弹型"
       ],
-      "is_chen_xiaoqun_pick": false
+      "is_chen_xiaoqun_pick": true,
+      "chen_xiaoqun_rank": 5
     }
   ],
   "top_picks": [
@@ -4969,10 +4991,12 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 1,
-      "chen_xiaoqun_score": 8,
+      "chen_xiaoqun_score": 50,
       "chen_xiaoqun_reasons": [
+        "价格8.43元（适中）",
+        "首阴反包形态",
         "涨停概率80%（高）",
-        "题材一般"
+        "综合评分88分（逻辑较硬）"
       ],
       "is_chen_xiaoqun_pick": true,
       "chen_xiaoqun_rank": 1
@@ -5340,10 +5364,12 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 2,
-      "chen_xiaoqun_score": 8,
+      "chen_xiaoqun_score": 45,
       "chen_xiaoqun_reasons": [
+        "首阴反包形态",
         "涨停概率77%（高）",
-        "题材一般"
+        "综合评分89分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
       "chen_xiaoqun_rank": 2
@@ -5715,13 +5741,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 3,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
+        "价格5.33元（适中）",
         "涨停概率61%（较高）",
-        "题材一般"
+        "综合评分72分（逻辑较硬）",
+        "模式：温和上涨型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 3
+      "chen_xiaoqun_rank": 4
     },
     {
       "code": "002437",
@@ -6087,13 +6115,13 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 4,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 33,
       "chen_xiaoqun_reasons": [
         "涨停概率57%（较高）",
-        "题材一般"
+        "综合评分72分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
-      "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 4
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002131",
@@ -6474,13 +6502,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 5,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 43,
       "chen_xiaoqun_reasons": [
+        "首阴反包形态",
         "涨停概率55%（较高）",
-        "题材一般"
+        "综合评分73分（逻辑较硬）",
+        "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 5
+      "chen_xiaoqun_rank": 3
     },
     {
       "code": "601212",
@@ -6861,12 +6891,15 @@
       },
       "is_top_pick": true,
       "top_pick_rank": 6,
-      "chen_xiaoqun_score": 6,
+      "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
+        "价格7.0元（适中）",
         "涨停概率51%（较高）",
-        "题材一般"
+        "综合评分93分（逻辑较硬）",
+        "模式：超跌反弹型"
       ],
-      "is_chen_xiaoqun_pick": false
+      "is_chen_xiaoqun_pick": true,
+      "chen_xiaoqun_rank": 5
     }
   ],
   "total_count": 6,
