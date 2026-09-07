@@ -279,9 +279,13 @@ class ScreenerEngine:
         else:
             # 过滤掉强烈卖出、卖出和谨慎买入信号的股票
             filtered_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") not in sell_signals]
-            recommended_combined = filtered_combined[:10] if filtered_combined else combined[:10]
+            # 严重bug修复：即使filtered_combined为空，也不要直接取combined，因为combined可能包含谨慎买入的股票
+            # 如果过滤后没有股票，就返回空列表，而不是返回包含谨慎买入的股票
+            recommended_combined = filtered_combined[:10] if filtered_combined else []
             if len(filtered_combined) < len(combined):
                 logger.info(f"推荐列表过滤掉强烈卖出/卖出/谨慎买入信号股票: {len(combined) - len(filtered_combined)}只（严重bug修复）")
+            if not recommended_combined:
+                logger.warning("过滤后没有符合条件的推荐股票（所有股票都是强烈卖出/卖出/谨慎买入信号）")
 
         # 特别推荐：综合评分 + 强势度 + 共振 + 三把锁全亮，精选3-5只
         special_picks = self._select_special_picks(recommended_combined)
