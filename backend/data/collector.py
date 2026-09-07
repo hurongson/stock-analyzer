@@ -619,14 +619,32 @@ class DataCollector:
         if cached:
             return cached
 
-        # 优先 Tushare
+        # 优化：基于2026-09-07回测，获取概念数据太慢导致运行时间过长（40分钟）
+        # 增加快速失败机制，避免长时间等待
+        # 优先 Tushare（增加超时控制）
         if TUSHARE_AVAILABLE:
             try:
                 ts_code = to_ts_code(code)
-                df = pro.concept_detail(ts_code=ts_code, fields='id,concept_name')
+                # Tushare concept_detail接口可能很慢，设置较短的超时
+                import signal
+                def timeout_handler(signum, frame):
+                    raise TimeoutError("Tushare concept_detail timeout")
+                try:
+                    signal.signal(signal.SIGALRM, timeout_handler)
+                    signal.alarm(3)  # 3秒超时
+                    df = pro.concept_detail(ts_code=ts_code, fields='id,concept_name')
+                    signal.alarm(0)  # 取消超时
+                except TimeoutError:
+                    signal.alarm(0)
+                    logger.debug(f"Tushare 获取概念超时 {code}")
+                    df = None
+                except Exception:
+                    signal.alarm(0)
+                    df = None
+                
                 if df is not None and not df.empty:
                     concepts = df["concept_name"].tolist()
-                    # 补充行业
+                    # 补充行业（快速获取，不超时）
                     try:
                         basic_df = pro.stock_basic(ts_code=ts_code, fields='ts_code,industry')
                         if basic_df is not None and not basic_df.empty:
@@ -640,10 +658,25 @@ class DataCollector:
             except Exception as e:
                 logger.debug(f"Tushare 获取概念失败 {code}: {e}")
 
-        # fallback akshare
+        # fallback akshare（增加超时控制，避免长时间等待）
         if AKSHARE_AVAILABLE:
             try:
-                detail = ak.stock_individual_info_em(symbol=code)
+                import signal
+                def timeout_handler_ak(signum, frame):
+                    raise TimeoutError("akshare stock_individual_info_em timeout")
+                try:
+                    signal.signal(signal.SIGALRM, timeout_handler_ak)
+                    signal.alarm(3)  # 3秒超时
+                    detail = ak.stock_individual_info_em(symbol=code)
+                    signal.alarm(0)  # 取消超时
+                except TimeoutError:
+                    signal.alarm(0)
+                    logger.debug(f"akshare 获取概念超时 {code}")
+                    detail = None
+                except Exception:
+                    signal.alarm(0)
+                    detail = None
+                
                 if detail is not None and not detail.empty:
                     industry_row = detail[detail["item"] == "行业"]
                     if not industry_row.empty:
