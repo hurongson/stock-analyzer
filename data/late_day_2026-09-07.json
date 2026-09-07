@@ -88,6 +88,394 @@
   },
   "picks": [
     {
+      "code": "600869",
+      "name": "远东股份",
+      "price": 20.88,
+      "pct_change": -1.509,
+      "score": 89,
+      "base_score": 100,
+      "three_locks_score": 9,
+      "pattern": "回调反弹型",
+      "volume_ratio": 0.86,
+      "turnover": 3.0,
+      "amplitude": 5.27,
+      "analysis": {
+        "reasons": [
+          "缩量回调(-1.5%)，洗盘后反弹概率高",
+          "成交量明显放大(量比4.8)，资金关注",
+          "振幅大(5.3%)，股性活跃",
+          "换手率适中(3.0%)",
+          "均线多头排列，趋势强势",
+          "上升趋势，趋势向好",
+          "MACD多头排列",
+          "消息面偏利好(偏利好)",
+          "5日动量适中(+7.1%)"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.8)，短期过热"
+        ],
+        "trend": "上升趋势",
+        "volume_ratio": 4.78,
+        "pattern": "回调反弹型",
+        "limit_up_probability": 80,
+        "limit_up_reasons": [
+          "缩量回调(-3%~-1%)，洗盘后反弹",
+          "振幅适中(5.3%)，股性活跃",
+          "换手率适中(3.0%)，资金关注度高",
+          "量比过大(4.8)，追高风险",
+          "均线多头排列，趋势强势",
+          "中高价股(20.88元)，科技股集中易涨停",
+          "成交额大(49.8亿)，大资金抱团龙头",
+          "消息面偏利好",
+          "小幅波动(-1.5%)",
+          "显著放量(量比4.8)追高风险",
+          "换手率3.0%适中活跃"
+        ],
+        "fundamental_score": 4,
+        "fundamental_changes": [
+          "基本面数据已获取",
+          "毛利率一般(16.8%)"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.8)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 20.88,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 21.92,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 20.25,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 22.55,
+      "risk_reward_ratio": 2.65,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（21.51元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（21.51-21.92元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（20.25元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（20.88元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（20.25元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 17.92,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（上升趋势）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "上升趋势",
+            "trend_score": 75,
+            "recent_high": 21.97,
+            "prev_high": 19.95
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 73,
+          "reasons": [
+            "5日振幅7.8%，波动空间适中，股性活跃",
+            "20日内有1次涨停，股性活跃",
+            "量比4.8，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅5.3%，短线活跃"
+          ],
+          "risks": [
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 7.75,
+            "avg_amplitude_10d": 8.16,
+            "big_yang_count_20d": 4,
+            "zhangting_count_20d": 1,
+            "volume_ratio": 4.78,
+            "vol_ma5": 5058168275.0,
+            "vol_ma10": 2660678442.0,
+            "continuous_vol_up": 1,
+            "today_amplitude": 5.27
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 24,
+          "reasons": [
+            "OBV 5日显著上升，资金流入",
+            "5日量价齐升，资金面健康"
+          ],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 1,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": 844.06,
+            "price_up_5d": "True",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 39,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（上升趋势）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 20.7,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "nearest_resistance": {
+            "price": 21.12,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA60"
+          },
+          "supports": [
+            {
+              "price": 20.7,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 19.42,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 17.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 15.15,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 14.14,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 21.12,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 21.71,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 21.97,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 21.97,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 15.15,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 20.7,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 19.42,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 17.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 21.12,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 21.71,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 14.14,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 20.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 21.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 19.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "处于支撑压力中间，震荡整理"
+        },
+        "patterns": [
+          {
+            "name": "双底（W底）",
+            "type": "看涨",
+            "confidence": 70,
+            "description": "形成双底形态，是较强的看涨反转信号，突破颈线后确认"
+          }
+        ],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA60",
+              "value": 21.12
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA5",
+              "value": 20.7
+            },
+            {
+              "name": "MA10",
+              "value": 19.42
+            },
+            {
+              "name": "MA20",
+              "value": 17.92
+            }
+          ],
+          "ma5": 20.7,
+          "ma10": 19.42,
+          "ma20": 17.92,
+          "ma60": 21.12
+        },
+        "volume_price": {
+          "relation": "价涨量增",
+          "description": "价格上涨伴随成交量放大，资金积极入场，上涨动能充足",
+          "score": 85,
+          "price_change_5d": 7.08,
+          "volume_change_5d": 1821.88
+        },
+        "overall_score": 82,
+        "operation_suggestion": "走势强劲，可积极做多，顺势持有；上升趋势中，支撑位20.7元附近可考虑低吸；出现看涨形态：双底（W底），关注确认信号；量价配合良好，可继续持有",
+        "key_points": [
+          "第一支撑：20.7元（MA5）",
+          "第一压力：21.12元（MA60）",
+          "MA5支撑：20.7元",
+          "MA10支撑：19.42元",
+          "MA60压力：21.12元"
+        ]
+      },
+      "news_impact": {
+        "score": 65,
+        "level": "偏利好",
+        "reasons": [
+          "近期1条正面新闻"
+        ],
+        "has_positive_news": true,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 1,
+      "chen_xiaoqun_score": 55,
+      "chen_xiaoqun_reasons": [
+        "价格20.88元（弹性好易拉升）",
+        "首阴反包形态",
+        "涨停概率80%（高）",
+        "综合评分89分（逻辑较硬）"
+      ],
+      "is_chen_xiaoqun_pick": true,
+      "chen_xiaoqun_rank": 1
+    },
+    {
       "code": "002354",
       "name": "天娱数科",
       "price": 8.43,
@@ -446,7 +834,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 1,
+      "top_pick_rank": 2,
       "chen_xiaoqun_score": 50,
       "chen_xiaoqun_reasons": [
         "价格8.43元（适中）",
@@ -455,7 +843,7 @@
         "综合评分88分（逻辑较硬）"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 1
+      "chen_xiaoqun_rank": 2
     },
     {
       "code": "000560",
@@ -819,7 +1207,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 2,
+      "top_pick_rank": 3,
       "chen_xiaoqun_score": 45,
       "chen_xiaoqun_reasons": [
         "首阴反包形态",
@@ -828,7 +1216,389 @@
         "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 2
+      "chen_xiaoqun_rank": 3
+    },
+    {
+      "code": "600121",
+      "name": "郑州煤电",
+      "price": 4.94,
+      "pct_change": -3.516,
+      "score": 87,
+      "base_score": 100,
+      "three_locks_score": 7,
+      "pattern": "超跌反弹型",
+      "volume_ratio": 0.97,
+      "turnover": 3.0,
+      "amplitude": 6.07,
+      "analysis": {
+        "reasons": [
+          "大跌反弹(-3.5%)，超跌反弹概率高",
+          "成交量明显放大(量比4.8)，资金关注",
+          "振幅大(6.1%)，股性活跃",
+          "换手率适中(3.0%)",
+          "均线多头排列，趋势强势",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "低价股(4.94元)，容易次日冲高"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.8)，短期过热"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 4.78,
+        "pattern": "超跌反弹型",
+        "limit_up_probability": 71,
+        "limit_up_reasons": [
+          "大跌反弹(-3.5%)，超跌反弹概率高",
+          "振幅适中(6.1%)，股性活跃",
+          "换手率适中(3.0%)，资金关注度高",
+          "量比过大(4.8)，追高风险",
+          "均线多头排列，趋势强势",
+          "低价股(4.94元)，弹性好易涨停",
+          "成交额较大(11.3亿)，科技龙头有资金关注",
+          "显著放量(量比4.8)追高风险",
+          "换手率3.0%适中活跃",
+          "轻微缩量后放量，资金关注"
+        ],
+        "fundamental_score": 7,
+        "fundamental_changes": [
+          "基本面数据已获取",
+          "毛利率良好(30.9%)"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.8)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 4.94,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 5.19,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 4.79,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 5.34,
+      "risk_reward_ratio": 2.67,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（5.09元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（5.09-5.19元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（4.79元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（4.94元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（4.79元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 4.46,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（强势上升）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "强势上升",
+            "trend_score": 90,
+            "recent_high": 5.94,
+            "prev_high": 5.4
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 67,
+          "reasons": [
+            "5日振幅8.7%，波动剧烈",
+            "20日内2次涨停，股性极其活跃",
+            "量比4.8，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅6.1%，短线活跃"
+          ],
+          "risks": [
+            "振幅过大，短线风险较高",
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 8.71,
+            "avg_amplitude_10d": 8.15,
+            "big_yang_count_20d": 4,
+            "zhangting_count_20d": 2,
+            "volume_ratio": 4.78,
+            "vol_ma5": 4837688127.0,
+            "vol_ma10": 2483920343.0,
+            "continuous_vol_up": 2,
+            "today_amplitude": 6.07
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 0,
+          "reasons": [],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足",
+            "OBV下降，资金可能流出",
+            "5日量价配合不佳"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 1,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": -45.28,
+            "price_up_5d": "False",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 23,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（强势上升）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 4.92,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA10"
+          },
+          "nearest_resistance": {
+            "price": 5.2,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "supports": [
+            {
+              "price": 4.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.46,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.01,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 3.81,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 3.3,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 5.2,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 5.63,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 5.94,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 5.94,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 3.81,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 5.2,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 4.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.46,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.01,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 5.63,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 3.3,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 4.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 5.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 3.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "接近支撑位，关注反弹机会"
+        },
+        "patterns": [
+          {
+            "name": "双底（W底）",
+            "type": "看涨",
+            "confidence": 70,
+            "description": "形成双底形态，是较强的看涨反转信号，突破颈线后确认"
+          }
+        ],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA5",
+              "value": 5.2
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA10",
+              "value": 4.92
+            },
+            {
+              "name": "MA20",
+              "value": 4.46
+            },
+            {
+              "name": "MA60",
+              "value": 4.01
+            }
+          ],
+          "ma5": 5.2,
+          "ma10": 4.92,
+          "ma20": 4.46,
+          "ma60": 4.01
+        },
+        "volume_price": {
+          "relation": "价跌量增",
+          "description": "价格下跌伴随成交量放大，资金出逃，下跌动能较强",
+          "score": 20,
+          "price_change_5d": -6.79,
+          "volume_change_5d": 3616.94
+        },
+        "overall_score": 74,
+        "operation_suggestion": "走势偏强，可逢低布局，设置止损；上升趋势中，支撑位4.92元附近可考虑低吸；出现看涨形态：双底（W底），关注确认信号；放量下跌，及时止损离场",
+        "key_points": [
+          "第一支撑：4.92元（MA10）",
+          "第一压力：5.2元（MA5）",
+          "MA10支撑：4.92元",
+          "MA20支撑：4.46元",
+          "MA5压力：5.2元"
+        ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 4,
+      "chen_xiaoqun_score": 35,
+      "chen_xiaoqun_reasons": [
+        "涨停概率71%（高）",
+        "综合评分87分（逻辑较硬）",
+        "模式：超跌反弹型"
+      ],
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002081",
@@ -1196,7 +1966,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 3,
+      "top_pick_rank": 5,
       "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
         "价格5.33元（适中）",
@@ -1205,7 +1975,382 @@
         "模式：温和上涨型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 4
+      "chen_xiaoqun_rank": 5
+    },
+    {
+      "code": "002418",
+      "name": "康盛股份",
+      "price": 5.33,
+      "pct_change": 2.303,
+      "score": 87,
+      "base_score": 100,
+      "three_locks_score": 7,
+      "pattern": "温和上涨型",
+      "volume_ratio": 0.59,
+      "turnover": 2.0,
+      "amplitude": 7.32,
+      "analysis": {
+        "reasons": [
+          "温和上涨(2.3%)，稳步推升可能涨停",
+          "成交量明显放大(量比4.7)，资金关注",
+          "振幅大(7.3%)，股性活跃",
+          "换手率较低(2.0%)",
+          "均线多头排列，趋势强势",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "中低价股(5.33元)"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.7)，短期过热"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 4.72,
+        "pattern": "温和上涨型",
+        "limit_up_probability": 57,
+        "limit_up_reasons": [
+          "温和上涨(1%~3%)，稳步推升",
+          "振幅大(7.3%)，波动剧烈",
+          "换手率过低(2.0%)，股性不活跃",
+          "量比过大(4.7)，追高风险",
+          "均线多头排列，趋势强势",
+          "中低价股(5.33元)，弹性好易涨停",
+          "成交额较大(11.6亿)，科技龙头有资金关注",
+          "小幅波动(2.3%)",
+          "显著放量(量比4.7)追高风险",
+          "缩量整理后放量，洗盘结束"
+        ],
+        "fundamental_score": 0,
+        "fundamental_changes": [
+          "基本面数据已获取"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.7)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 5.33,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 5.6,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 5.17,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 5.76,
+      "risk_reward_ratio": 2.69,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（5.49元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（5.49-5.6元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（5.17元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（5.33元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（5.17元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 4.54,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（强势上升）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "强势上升",
+            "trend_score": 90,
+            "recent_high": 6.14,
+            "prev_high": 5.86
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 67,
+          "reasons": [
+            "5日振幅10.5%，波动剧烈",
+            "20日内5次涨停，股性极其活跃",
+            "量比4.7，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅7.3%，短线活跃"
+          ],
+          "risks": [
+            "振幅过大，短线风险较高",
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 10.55,
+            "avg_amplitude_10d": 10.16,
+            "big_yang_count_20d": 6,
+            "zhangting_count_20d": 5,
+            "volume_ratio": 4.72,
+            "vol_ma5": 4708498923.0,
+            "vol_ma10": 2516423033.0,
+            "continuous_vol_up": 1,
+            "today_amplitude": 7.32
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 0,
+          "reasons": [],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足",
+            "OBV下降，资金可能流出",
+            "5日量价配合不佳"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 0,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": -12.04,
+            "price_up_5d": "False",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 23,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（强势上升）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 5.27,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA10"
+          },
+          "nearest_resistance": {
+            "price": 5.47,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "supports": [
+            {
+              "price": 5.27,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.54,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.0,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 3.47,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 2.92,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 5.47,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 6.14,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 6.16,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 6.14,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 3.47,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 5.47,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 5.27,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.54,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.0,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 6.16,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 2.92,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 5.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 6.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 4.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "处于支撑压力中间，震荡整理"
+        },
+        "patterns": [],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA5",
+              "value": 5.47
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA10",
+              "value": 5.27
+            },
+            {
+              "name": "MA20",
+              "value": 4.54
+            },
+            {
+              "name": "MA60",
+              "value": 4.0
+            }
+          ],
+          "ma5": 5.47,
+          "ma10": 5.27,
+          "ma20": 4.54,
+          "ma60": 4.0
+        },
+        "volume_price": {
+          "relation": "价跌量增",
+          "description": "价格下跌伴随成交量放大，资金出逃，下跌动能较强",
+          "score": 20,
+          "price_change_5d": -8.26,
+          "volume_change_5d": 1351.69
+        },
+        "overall_score": 68,
+        "operation_suggestion": "走势偏强，可逢低布局，设置止损；上升趋势中，支撑位5.27元附近可考虑低吸；放量下跌，及时止损离场",
+        "key_points": [
+          "第一支撑：5.27元（MA10）",
+          "第一压力：5.47元（MA5）",
+          "MA10支撑：5.27元",
+          "MA20支撑：4.54元",
+          "MA5压力：5.47元"
+        ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 6,
+      "chen_xiaoqun_score": 38,
+      "chen_xiaoqun_reasons": [
+        "价格5.33元（适中）",
+        "涨停概率57%（较高）",
+        "综合评分87分（逻辑较硬）",
+        "模式：温和上涨型"
+      ],
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002437",
@@ -1570,7 +2715,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 4,
+      "top_pick_rank": 7,
       "chen_xiaoqun_score": 33,
       "chen_xiaoqun_reasons": [
         "涨停概率57%（较高）",
@@ -1957,7 +3102,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 5,
+      "top_pick_rank": 8,
       "chen_xiaoqun_score": 43,
       "chen_xiaoqun_reasons": [
         "首阴反包形态",
@@ -1966,7 +3111,7 @@
         "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 3
+      "chen_xiaoqun_rank": 4
     },
     {
       "code": "601212",
@@ -2346,7 +3491,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 6,
+      "top_pick_rank": 9,
       "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
         "价格7.0元（适中）",
@@ -2354,12 +3499,399 @@
         "综合评分93分（逻辑较硬）",
         "模式：超跌反弹型"
       ],
-      "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 5
+      "is_chen_xiaoqun_pick": false
     }
   ],
   "all_picks": [
     {
+      "code": "600869",
+      "name": "远东股份",
+      "price": 20.88,
+      "pct_change": -1.509,
+      "score": 89,
+      "base_score": 100,
+      "three_locks_score": 9,
+      "pattern": "回调反弹型",
+      "volume_ratio": 0.86,
+      "turnover": 3.0,
+      "amplitude": 5.27,
+      "analysis": {
+        "reasons": [
+          "缩量回调(-1.5%)，洗盘后反弹概率高",
+          "成交量明显放大(量比4.8)，资金关注",
+          "振幅大(5.3%)，股性活跃",
+          "换手率适中(3.0%)",
+          "均线多头排列，趋势强势",
+          "上升趋势，趋势向好",
+          "MACD多头排列",
+          "消息面偏利好(偏利好)",
+          "5日动量适中(+7.1%)"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.8)，短期过热"
+        ],
+        "trend": "上升趋势",
+        "volume_ratio": 4.78,
+        "pattern": "回调反弹型",
+        "limit_up_probability": 80,
+        "limit_up_reasons": [
+          "缩量回调(-3%~-1%)，洗盘后反弹",
+          "振幅适中(5.3%)，股性活跃",
+          "换手率适中(3.0%)，资金关注度高",
+          "量比过大(4.8)，追高风险",
+          "均线多头排列，趋势强势",
+          "中高价股(20.88元)，科技股集中易涨停",
+          "成交额大(49.8亿)，大资金抱团龙头",
+          "消息面偏利好",
+          "小幅波动(-1.5%)",
+          "显著放量(量比4.8)追高风险",
+          "换手率3.0%适中活跃"
+        ],
+        "fundamental_score": 4,
+        "fundamental_changes": [
+          "基本面数据已获取",
+          "毛利率一般(16.8%)"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.8)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 20.88,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 21.92,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 20.25,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 22.55,
+      "risk_reward_ratio": 2.65,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（21.51元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（21.51-21.92元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（20.25元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（20.88元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（20.25元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 17.92,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（上升趋势）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "上升趋势",
+            "trend_score": 75,
+            "recent_high": 21.97,
+            "prev_high": 19.95
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 73,
+          "reasons": [
+            "5日振幅7.8%，波动空间适中，股性活跃",
+            "20日内有1次涨停，股性活跃",
+            "量比4.8，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅5.3%，短线活跃"
+          ],
+          "risks": [
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 7.75,
+            "avg_amplitude_10d": 8.16,
+            "big_yang_count_20d": 4,
+            "zhangting_count_20d": 1,
+            "volume_ratio": 4.78,
+            "vol_ma5": 5058168275.0,
+            "vol_ma10": 2660678442.0,
+            "continuous_vol_up": 1,
+            "today_amplitude": 5.27
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 24,
+          "reasons": [
+            "OBV 5日显著上升，资金流入",
+            "5日量价齐升，资金面健康"
+          ],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 1,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": 844.06,
+            "price_up_5d": "True",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 39,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（上升趋势）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 20.7,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "nearest_resistance": {
+            "price": 21.12,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA60"
+          },
+          "supports": [
+            {
+              "price": 20.7,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 19.42,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 17.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 15.15,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 14.14,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 21.12,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 21.71,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 21.97,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 21.97,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 15.15,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 20.7,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 19.42,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 17.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 21.12,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 21.71,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 14.14,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 20.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 21.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 19.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "处于支撑压力中间，震荡整理"
+        },
+        "patterns": [
+          {
+            "name": "双底（W底）",
+            "type": "看涨",
+            "confidence": 70,
+            "description": "形成双底形态，是较强的看涨反转信号，突破颈线后确认"
+          }
+        ],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA60",
+              "value": 21.12
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA5",
+              "value": 20.7
+            },
+            {
+              "name": "MA10",
+              "value": 19.42
+            },
+            {
+              "name": "MA20",
+              "value": 17.92
+            }
+          ],
+          "ma5": 20.7,
+          "ma10": 19.42,
+          "ma20": 17.92,
+          "ma60": 21.12
+        },
+        "volume_price": {
+          "relation": "价涨量增",
+          "description": "价格上涨伴随成交量放大，资金积极入场，上涨动能充足",
+          "score": 85,
+          "price_change_5d": 7.08,
+          "volume_change_5d": 1821.88
+        },
+        "overall_score": 82,
+        "operation_suggestion": "走势强劲，可积极做多，顺势持有；上升趋势中，支撑位20.7元附近可考虑低吸；出现看涨形态：双底（W底），关注确认信号；量价配合良好，可继续持有",
+        "key_points": [
+          "第一支撑：20.7元（MA5）",
+          "第一压力：21.12元（MA60）",
+          "MA5支撑：20.7元",
+          "MA10支撑：19.42元",
+          "MA60压力：21.12元"
+        ]
+      },
+      "news_impact": {
+        "score": 65,
+        "level": "偏利好",
+        "reasons": [
+          "近期1条正面新闻"
+        ],
+        "has_positive_news": true,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 1,
+      "chen_xiaoqun_score": 55,
+      "chen_xiaoqun_reasons": [
+        "价格20.88元（弹性好易拉升）",
+        "首阴反包形态",
+        "涨停概率80%（高）",
+        "综合评分89分（逻辑较硬）"
+      ],
+      "is_chen_xiaoqun_pick": true,
+      "chen_xiaoqun_rank": 1
+    },
+    {
       "code": "002354",
       "name": "天娱数科",
       "price": 8.43,
@@ -2718,7 +4250,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 1,
+      "top_pick_rank": 2,
       "chen_xiaoqun_score": 50,
       "chen_xiaoqun_reasons": [
         "价格8.43元（适中）",
@@ -2727,7 +4259,7 @@
         "综合评分88分（逻辑较硬）"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 1
+      "chen_xiaoqun_rank": 2
     },
     {
       "code": "000560",
@@ -3091,7 +4623,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 2,
+      "top_pick_rank": 3,
       "chen_xiaoqun_score": 45,
       "chen_xiaoqun_reasons": [
         "首阴反包形态",
@@ -3100,7 +4632,389 @@
         "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 2
+      "chen_xiaoqun_rank": 3
+    },
+    {
+      "code": "600121",
+      "name": "郑州煤电",
+      "price": 4.94,
+      "pct_change": -3.516,
+      "score": 87,
+      "base_score": 100,
+      "three_locks_score": 7,
+      "pattern": "超跌反弹型",
+      "volume_ratio": 0.97,
+      "turnover": 3.0,
+      "amplitude": 6.07,
+      "analysis": {
+        "reasons": [
+          "大跌反弹(-3.5%)，超跌反弹概率高",
+          "成交量明显放大(量比4.8)，资金关注",
+          "振幅大(6.1%)，股性活跃",
+          "换手率适中(3.0%)",
+          "均线多头排列，趋势强势",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "低价股(4.94元)，容易次日冲高"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.8)，短期过热"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 4.78,
+        "pattern": "超跌反弹型",
+        "limit_up_probability": 71,
+        "limit_up_reasons": [
+          "大跌反弹(-3.5%)，超跌反弹概率高",
+          "振幅适中(6.1%)，股性活跃",
+          "换手率适中(3.0%)，资金关注度高",
+          "量比过大(4.8)，追高风险",
+          "均线多头排列，趋势强势",
+          "低价股(4.94元)，弹性好易涨停",
+          "成交额较大(11.3亿)，科技龙头有资金关注",
+          "显著放量(量比4.8)追高风险",
+          "换手率3.0%适中活跃",
+          "轻微缩量后放量，资金关注"
+        ],
+        "fundamental_score": 7,
+        "fundamental_changes": [
+          "基本面数据已获取",
+          "毛利率良好(30.9%)"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.8)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 4.94,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 5.19,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 4.79,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 5.34,
+      "risk_reward_ratio": 2.67,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（5.09元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（5.09-5.19元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（4.79元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（4.94元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（4.79元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 4.46,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（强势上升）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "强势上升",
+            "trend_score": 90,
+            "recent_high": 5.94,
+            "prev_high": 5.4
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 67,
+          "reasons": [
+            "5日振幅8.7%，波动剧烈",
+            "20日内2次涨停，股性极其活跃",
+            "量比4.8，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅6.1%，短线活跃"
+          ],
+          "risks": [
+            "振幅过大，短线风险较高",
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 8.71,
+            "avg_amplitude_10d": 8.15,
+            "big_yang_count_20d": 4,
+            "zhangting_count_20d": 2,
+            "volume_ratio": 4.78,
+            "vol_ma5": 4837688127.0,
+            "vol_ma10": 2483920343.0,
+            "continuous_vol_up": 2,
+            "today_amplitude": 6.07
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 0,
+          "reasons": [],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足",
+            "OBV下降，资金可能流出",
+            "5日量价配合不佳"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 1,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": -45.28,
+            "price_up_5d": "False",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 23,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（强势上升）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 4.92,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA10"
+          },
+          "nearest_resistance": {
+            "price": 5.2,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "supports": [
+            {
+              "price": 4.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.46,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.01,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 3.81,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 3.3,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 5.2,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 5.63,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 5.94,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 5.94,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 3.81,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 5.2,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 4.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.46,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.01,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 5.63,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 3.3,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 4.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 5.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 3.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "接近支撑位，关注反弹机会"
+        },
+        "patterns": [
+          {
+            "name": "双底（W底）",
+            "type": "看涨",
+            "confidence": 70,
+            "description": "形成双底形态，是较强的看涨反转信号，突破颈线后确认"
+          }
+        ],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA5",
+              "value": 5.2
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA10",
+              "value": 4.92
+            },
+            {
+              "name": "MA20",
+              "value": 4.46
+            },
+            {
+              "name": "MA60",
+              "value": 4.01
+            }
+          ],
+          "ma5": 5.2,
+          "ma10": 4.92,
+          "ma20": 4.46,
+          "ma60": 4.01
+        },
+        "volume_price": {
+          "relation": "价跌量增",
+          "description": "价格下跌伴随成交量放大，资金出逃，下跌动能较强",
+          "score": 20,
+          "price_change_5d": -6.79,
+          "volume_change_5d": 3616.94
+        },
+        "overall_score": 74,
+        "operation_suggestion": "走势偏强，可逢低布局，设置止损；上升趋势中，支撑位4.92元附近可考虑低吸；出现看涨形态：双底（W底），关注确认信号；放量下跌，及时止损离场",
+        "key_points": [
+          "第一支撑：4.92元（MA10）",
+          "第一压力：5.2元（MA5）",
+          "MA10支撑：4.92元",
+          "MA20支撑：4.46元",
+          "MA5压力：5.2元"
+        ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 4,
+      "chen_xiaoqun_score": 35,
+      "chen_xiaoqun_reasons": [
+        "涨停概率71%（高）",
+        "综合评分87分（逻辑较硬）",
+        "模式：超跌反弹型"
+      ],
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002081",
@@ -3468,7 +5382,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 3,
+      "top_pick_rank": 5,
       "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
         "价格5.33元（适中）",
@@ -3477,7 +5391,382 @@
         "模式：温和上涨型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 4
+      "chen_xiaoqun_rank": 5
+    },
+    {
+      "code": "002418",
+      "name": "康盛股份",
+      "price": 5.33,
+      "pct_change": 2.303,
+      "score": 87,
+      "base_score": 100,
+      "three_locks_score": 7,
+      "pattern": "温和上涨型",
+      "volume_ratio": 0.59,
+      "turnover": 2.0,
+      "amplitude": 7.32,
+      "analysis": {
+        "reasons": [
+          "温和上涨(2.3%)，稳步推升可能涨停",
+          "成交量明显放大(量比4.7)，资金关注",
+          "振幅大(7.3%)，股性活跃",
+          "换手率较低(2.0%)",
+          "均线多头排列，趋势强势",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "中低价股(5.33元)"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.7)，短期过热"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 4.72,
+        "pattern": "温和上涨型",
+        "limit_up_probability": 57,
+        "limit_up_reasons": [
+          "温和上涨(1%~3%)，稳步推升",
+          "振幅大(7.3%)，波动剧烈",
+          "换手率过低(2.0%)，股性不活跃",
+          "量比过大(4.7)，追高风险",
+          "均线多头排列，趋势强势",
+          "中低价股(5.33元)，弹性好易涨停",
+          "成交额较大(11.6亿)，科技龙头有资金关注",
+          "小幅波动(2.3%)",
+          "显著放量(量比4.7)追高风险",
+          "缩量整理后放量，洗盘结束"
+        ],
+        "fundamental_score": 0,
+        "fundamental_changes": [
+          "基本面数据已获取"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.7)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 5.33,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 5.6,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 5.17,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 5.76,
+      "risk_reward_ratio": 2.69,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（5.49元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（5.49-5.6元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（5.17元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（5.33元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（5.17元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 4.54,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（强势上升）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "强势上升",
+            "trend_score": 90,
+            "recent_high": 6.14,
+            "prev_high": 5.86
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 67,
+          "reasons": [
+            "5日振幅10.5%，波动剧烈",
+            "20日内5次涨停，股性极其活跃",
+            "量比4.7，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅7.3%，短线活跃"
+          ],
+          "risks": [
+            "振幅过大，短线风险较高",
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 10.55,
+            "avg_amplitude_10d": 10.16,
+            "big_yang_count_20d": 6,
+            "zhangting_count_20d": 5,
+            "volume_ratio": 4.72,
+            "vol_ma5": 4708498923.0,
+            "vol_ma10": 2516423033.0,
+            "continuous_vol_up": 1,
+            "today_amplitude": 7.32
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 0,
+          "reasons": [],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足",
+            "OBV下降，资金可能流出",
+            "5日量价配合不佳"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 0,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": -12.04,
+            "price_up_5d": "False",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 23,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（强势上升）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 5.27,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA10"
+          },
+          "nearest_resistance": {
+            "price": 5.47,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "supports": [
+            {
+              "price": 5.27,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.54,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.0,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 3.47,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 2.92,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 5.47,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 6.14,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 6.16,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 6.14,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 3.47,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 5.47,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 5.27,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.54,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.0,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 6.16,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 2.92,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 5.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 6.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 4.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "处于支撑压力中间，震荡整理"
+        },
+        "patterns": [],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA5",
+              "value": 5.47
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA10",
+              "value": 5.27
+            },
+            {
+              "name": "MA20",
+              "value": 4.54
+            },
+            {
+              "name": "MA60",
+              "value": 4.0
+            }
+          ],
+          "ma5": 5.47,
+          "ma10": 5.27,
+          "ma20": 4.54,
+          "ma60": 4.0
+        },
+        "volume_price": {
+          "relation": "价跌量增",
+          "description": "价格下跌伴随成交量放大，资金出逃，下跌动能较强",
+          "score": 20,
+          "price_change_5d": -8.26,
+          "volume_change_5d": 1351.69
+        },
+        "overall_score": 68,
+        "operation_suggestion": "走势偏强，可逢低布局，设置止损；上升趋势中，支撑位5.27元附近可考虑低吸；放量下跌，及时止损离场",
+        "key_points": [
+          "第一支撑：5.27元（MA10）",
+          "第一压力：5.47元（MA5）",
+          "MA10支撑：5.27元",
+          "MA20支撑：4.54元",
+          "MA5压力：5.47元"
+        ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 6,
+      "chen_xiaoqun_score": 38,
+      "chen_xiaoqun_reasons": [
+        "价格5.33元（适中）",
+        "涨停概率57%（较高）",
+        "综合评分87分（逻辑较硬）",
+        "模式：温和上涨型"
+      ],
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002437",
@@ -3842,7 +6131,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 4,
+      "top_pick_rank": 7,
       "chen_xiaoqun_score": 33,
       "chen_xiaoqun_reasons": [
         "涨停概率57%（较高）",
@@ -4229,7 +6518,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 5,
+      "top_pick_rank": 8,
       "chen_xiaoqun_score": 43,
       "chen_xiaoqun_reasons": [
         "首阴反包形态",
@@ -4238,7 +6527,7 @@
         "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 3
+      "chen_xiaoqun_rank": 4
     },
     {
       "code": "601212",
@@ -4618,7 +6907,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 6,
+      "top_pick_rank": 9,
       "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
         "价格7.0元（适中）",
@@ -4626,12 +6915,399 @@
         "综合评分93分（逻辑较硬）",
         "模式：超跌反弹型"
       ],
-      "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 5
+      "is_chen_xiaoqun_pick": false
     }
   ],
   "top_picks": [
     {
+      "code": "600869",
+      "name": "远东股份",
+      "price": 20.88,
+      "pct_change": -1.509,
+      "score": 89,
+      "base_score": 100,
+      "three_locks_score": 9,
+      "pattern": "回调反弹型",
+      "volume_ratio": 0.86,
+      "turnover": 3.0,
+      "amplitude": 5.27,
+      "analysis": {
+        "reasons": [
+          "缩量回调(-1.5%)，洗盘后反弹概率高",
+          "成交量明显放大(量比4.8)，资金关注",
+          "振幅大(5.3%)，股性活跃",
+          "换手率适中(3.0%)",
+          "均线多头排列，趋势强势",
+          "上升趋势，趋势向好",
+          "MACD多头排列",
+          "消息面偏利好(偏利好)",
+          "5日动量适中(+7.1%)"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.8)，短期过热"
+        ],
+        "trend": "上升趋势",
+        "volume_ratio": 4.78,
+        "pattern": "回调反弹型",
+        "limit_up_probability": 80,
+        "limit_up_reasons": [
+          "缩量回调(-3%~-1%)，洗盘后反弹",
+          "振幅适中(5.3%)，股性活跃",
+          "换手率适中(3.0%)，资金关注度高",
+          "量比过大(4.8)，追高风险",
+          "均线多头排列，趋势强势",
+          "中高价股(20.88元)，科技股集中易涨停",
+          "成交额大(49.8亿)，大资金抱团龙头",
+          "消息面偏利好",
+          "小幅波动(-1.5%)",
+          "显著放量(量比4.8)追高风险",
+          "换手率3.0%适中活跃"
+        ],
+        "fundamental_score": 4,
+        "fundamental_changes": [
+          "基本面数据已获取",
+          "毛利率一般(16.8%)"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.8)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 20.88,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 21.92,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 20.25,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 22.55,
+      "risk_reward_ratio": 2.65,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（21.51元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（21.51-21.92元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（20.25元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（20.88元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（20.25元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 17.92,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（上升趋势）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "上升趋势",
+            "trend_score": 75,
+            "recent_high": 21.97,
+            "prev_high": 19.95
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 73,
+          "reasons": [
+            "5日振幅7.8%，波动空间适中，股性活跃",
+            "20日内有1次涨停，股性活跃",
+            "量比4.8，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅5.3%，短线活跃"
+          ],
+          "risks": [
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 7.75,
+            "avg_amplitude_10d": 8.16,
+            "big_yang_count_20d": 4,
+            "zhangting_count_20d": 1,
+            "volume_ratio": 4.78,
+            "vol_ma5": 5058168275.0,
+            "vol_ma10": 2660678442.0,
+            "continuous_vol_up": 1,
+            "today_amplitude": 5.27
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 24,
+          "reasons": [
+            "OBV 5日显著上升，资金流入",
+            "5日量价齐升，资金面健康"
+          ],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 1,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": 844.06,
+            "price_up_5d": "True",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 39,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（上升趋势）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 20.7,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "nearest_resistance": {
+            "price": 21.12,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA60"
+          },
+          "supports": [
+            {
+              "price": 20.7,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 19.42,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 17.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 15.15,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 14.14,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 21.12,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 21.71,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 21.97,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 21.97,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 15.15,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 20.7,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 19.42,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 17.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 21.12,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 21.71,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 14.14,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 20.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 21.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 19.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "处于支撑压力中间，震荡整理"
+        },
+        "patterns": [
+          {
+            "name": "双底（W底）",
+            "type": "看涨",
+            "confidence": 70,
+            "description": "形成双底形态，是较强的看涨反转信号，突破颈线后确认"
+          }
+        ],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA60",
+              "value": 21.12
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA5",
+              "value": 20.7
+            },
+            {
+              "name": "MA10",
+              "value": 19.42
+            },
+            {
+              "name": "MA20",
+              "value": 17.92
+            }
+          ],
+          "ma5": 20.7,
+          "ma10": 19.42,
+          "ma20": 17.92,
+          "ma60": 21.12
+        },
+        "volume_price": {
+          "relation": "价涨量增",
+          "description": "价格上涨伴随成交量放大，资金积极入场，上涨动能充足",
+          "score": 85,
+          "price_change_5d": 7.08,
+          "volume_change_5d": 1821.88
+        },
+        "overall_score": 82,
+        "operation_suggestion": "走势强劲，可积极做多，顺势持有；上升趋势中，支撑位20.7元附近可考虑低吸；出现看涨形态：双底（W底），关注确认信号；量价配合良好，可继续持有",
+        "key_points": [
+          "第一支撑：20.7元（MA5）",
+          "第一压力：21.12元（MA60）",
+          "MA5支撑：20.7元",
+          "MA10支撑：19.42元",
+          "MA60压力：21.12元"
+        ]
+      },
+      "news_impact": {
+        "score": 65,
+        "level": "偏利好",
+        "reasons": [
+          "近期1条正面新闻"
+        ],
+        "has_positive_news": true,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 1,
+      "chen_xiaoqun_score": 55,
+      "chen_xiaoqun_reasons": [
+        "价格20.88元（弹性好易拉升）",
+        "首阴反包形态",
+        "涨停概率80%（高）",
+        "综合评分89分（逻辑较硬）"
+      ],
+      "is_chen_xiaoqun_pick": true,
+      "chen_xiaoqun_rank": 1
+    },
+    {
       "code": "002354",
       "name": "天娱数科",
       "price": 8.43,
@@ -4990,7 +7666,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 1,
+      "top_pick_rank": 2,
       "chen_xiaoqun_score": 50,
       "chen_xiaoqun_reasons": [
         "价格8.43元（适中）",
@@ -4999,7 +7675,7 @@
         "综合评分88分（逻辑较硬）"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 1
+      "chen_xiaoqun_rank": 2
     },
     {
       "code": "000560",
@@ -5363,7 +8039,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 2,
+      "top_pick_rank": 3,
       "chen_xiaoqun_score": 45,
       "chen_xiaoqun_reasons": [
         "首阴反包形态",
@@ -5372,7 +8048,389 @@
         "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 2
+      "chen_xiaoqun_rank": 3
+    },
+    {
+      "code": "600121",
+      "name": "郑州煤电",
+      "price": 4.94,
+      "pct_change": -3.516,
+      "score": 87,
+      "base_score": 100,
+      "three_locks_score": 7,
+      "pattern": "超跌反弹型",
+      "volume_ratio": 0.97,
+      "turnover": 3.0,
+      "amplitude": 6.07,
+      "analysis": {
+        "reasons": [
+          "大跌反弹(-3.5%)，超跌反弹概率高",
+          "成交量明显放大(量比4.8)，资金关注",
+          "振幅大(6.1%)，股性活跃",
+          "换手率适中(3.0%)",
+          "均线多头排列，趋势强势",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "低价股(4.94元)，容易次日冲高"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.8)，短期过热"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 4.78,
+        "pattern": "超跌反弹型",
+        "limit_up_probability": 71,
+        "limit_up_reasons": [
+          "大跌反弹(-3.5%)，超跌反弹概率高",
+          "振幅适中(6.1%)，股性活跃",
+          "换手率适中(3.0%)，资金关注度高",
+          "量比过大(4.8)，追高风险",
+          "均线多头排列，趋势强势",
+          "低价股(4.94元)，弹性好易涨停",
+          "成交额较大(11.3亿)，科技龙头有资金关注",
+          "显著放量(量比4.8)追高风险",
+          "换手率3.0%适中活跃",
+          "轻微缩量后放量，资金关注"
+        ],
+        "fundamental_score": 7,
+        "fundamental_changes": [
+          "基本面数据已获取",
+          "毛利率良好(30.9%)"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.8)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 4.94,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 5.19,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 4.79,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 5.34,
+      "risk_reward_ratio": 2.67,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（5.09元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（5.09-5.19元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（4.79元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（4.94元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（4.79元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 4.46,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（强势上升）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "强势上升",
+            "trend_score": 90,
+            "recent_high": 5.94,
+            "prev_high": 5.4
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 67,
+          "reasons": [
+            "5日振幅8.7%，波动剧烈",
+            "20日内2次涨停，股性极其活跃",
+            "量比4.8，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅6.1%，短线活跃"
+          ],
+          "risks": [
+            "振幅过大，短线风险较高",
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 8.71,
+            "avg_amplitude_10d": 8.15,
+            "big_yang_count_20d": 4,
+            "zhangting_count_20d": 2,
+            "volume_ratio": 4.78,
+            "vol_ma5": 4837688127.0,
+            "vol_ma10": 2483920343.0,
+            "continuous_vol_up": 2,
+            "today_amplitude": 6.07
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 0,
+          "reasons": [],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足",
+            "OBV下降，资金可能流出",
+            "5日量价配合不佳"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 1,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": -45.28,
+            "price_up_5d": "False",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 23,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（强势上升）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 4.92,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA10"
+          },
+          "nearest_resistance": {
+            "price": 5.2,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "supports": [
+            {
+              "price": 4.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.46,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.01,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 3.81,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 3.3,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 5.2,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 5.63,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 5.94,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 5.94,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 3.81,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 5.2,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 4.92,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.46,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.01,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 5.63,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 3.3,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 4.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 5.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 3.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "接近支撑位，关注反弹机会"
+        },
+        "patterns": [
+          {
+            "name": "双底（W底）",
+            "type": "看涨",
+            "confidence": 70,
+            "description": "形成双底形态，是较强的看涨反转信号，突破颈线后确认"
+          }
+        ],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA5",
+              "value": 5.2
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA10",
+              "value": 4.92
+            },
+            {
+              "name": "MA20",
+              "value": 4.46
+            },
+            {
+              "name": "MA60",
+              "value": 4.01
+            }
+          ],
+          "ma5": 5.2,
+          "ma10": 4.92,
+          "ma20": 4.46,
+          "ma60": 4.01
+        },
+        "volume_price": {
+          "relation": "价跌量增",
+          "description": "价格下跌伴随成交量放大，资金出逃，下跌动能较强",
+          "score": 20,
+          "price_change_5d": -6.79,
+          "volume_change_5d": 3616.94
+        },
+        "overall_score": 74,
+        "operation_suggestion": "走势偏强，可逢低布局，设置止损；上升趋势中，支撑位4.92元附近可考虑低吸；出现看涨形态：双底（W底），关注确认信号；放量下跌，及时止损离场",
+        "key_points": [
+          "第一支撑：4.92元（MA10）",
+          "第一压力：5.2元（MA5）",
+          "MA10支撑：4.92元",
+          "MA20支撑：4.46元",
+          "MA5压力：5.2元"
+        ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 4,
+      "chen_xiaoqun_score": 35,
+      "chen_xiaoqun_reasons": [
+        "涨停概率71%（高）",
+        "综合评分87分（逻辑较硬）",
+        "模式：超跌反弹型"
+      ],
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002081",
@@ -5740,7 +8798,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 3,
+      "top_pick_rank": 5,
       "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
         "价格5.33元（适中）",
@@ -5749,7 +8807,382 @@
         "模式：温和上涨型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 4
+      "chen_xiaoqun_rank": 5
+    },
+    {
+      "code": "002418",
+      "name": "康盛股份",
+      "price": 5.33,
+      "pct_change": 2.303,
+      "score": 87,
+      "base_score": 100,
+      "three_locks_score": 7,
+      "pattern": "温和上涨型",
+      "volume_ratio": 0.59,
+      "turnover": 2.0,
+      "amplitude": 7.32,
+      "analysis": {
+        "reasons": [
+          "温和上涨(2.3%)，稳步推升可能涨停",
+          "成交量明显放大(量比4.7)，资金关注",
+          "振幅大(7.3%)，股性活跃",
+          "换手率较低(2.0%)",
+          "均线多头排列，趋势强势",
+          "强势上升，趋势向好",
+          "MACD多头排列",
+          "中低价股(5.33元)"
+        ],
+        "risks": [
+          "非当前热门题材",
+          "量比过大(4.7)，短期过热"
+        ],
+        "trend": "强势上升",
+        "volume_ratio": 4.72,
+        "pattern": "温和上涨型",
+        "limit_up_probability": 57,
+        "limit_up_reasons": [
+          "温和上涨(1%~3%)，稳步推升",
+          "振幅大(7.3%)，波动剧烈",
+          "换手率过低(2.0%)，股性不活跃",
+          "量比过大(4.7)，追高风险",
+          "均线多头排列，趋势强势",
+          "中低价股(5.33元)，弹性好易涨停",
+          "成交额较大(11.6亿)，科技龙头有资金关注",
+          "小幅波动(2.3%)",
+          "显著放量(量比4.7)追高风险",
+          "缩量整理后放量，洗盘结束"
+        ],
+        "fundamental_score": 0,
+        "fundamental_changes": [
+          "基本面数据已获取"
+        ],
+        "fundamental_research": "重点研究: 技术面突破信号和资金流向",
+        "counter_evidences": [
+          "量比过大(4.7)，短期过热"
+        ],
+        "has_counter_evidence": true
+      },
+      "buy_price": 5.33,
+      "buy_price_note": "尾盘现价买入",
+      "sell_price": 5.6,
+      "sell_price_note": "次日冲高5%止盈",
+      "stop_loss": 5.17,
+      "stop_loss_note": "跌破3%止损",
+      "target_price": 5.76,
+      "risk_reward_ratio": 2.69,
+      "sell_strategy": {
+        "time": "次日9:30-10:30（早盘半小时内必须卖出）",
+        "take_profit_1": "高开3%以上：开盘5分钟不涨停直接卖出（5.49元）",
+        "take_profit_2": "平开/小幅高开：冲高3%-5%分批卖出（5.49-5.6元）",
+        "take_profit_3": "涨停封死：可持有到第三天，跌破分时线再卖",
+        "stop_loss_1": "低开：开盘15分钟内无法翻红，果断止损（5.17元）",
+        "stop_loss_2": "跌破昨日收盘价：立即卖出（5.33元）",
+        "stop_loss_3": "亏损达到2%：无条件止损（5.17元）",
+        "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓"
+      },
+      "ma20": 4.54,
+      "three_locks": {
+        "trend_lock": {
+          "locked": false,
+          "score": 40,
+          "reasons": [
+            "强势上升趋势（强势上升）",
+            "近期高点不断抬高"
+          ],
+          "risks": [],
+          "details": {
+            "trend": "强势上升",
+            "trend_score": 90,
+            "recent_high": 6.14,
+            "prev_high": 5.86
+          },
+          "name": "趋势锁",
+          "icon": "📈"
+        },
+        "activity_lock": {
+          "locked": true,
+          "score": 67,
+          "reasons": [
+            "5日振幅10.5%，波动剧烈",
+            "20日内5次涨停，股性极其活跃",
+            "量比4.7，极度活跃",
+            "5日均量大于10日均量，量能持续放大",
+            "当日振幅7.3%，短线活跃"
+          ],
+          "risks": [
+            "振幅过大，短线风险较高",
+            "量比过大，可能是短期情绪炒作"
+          ],
+          "details": {
+            "avg_amplitude_5d": 10.55,
+            "avg_amplitude_10d": 10.16,
+            "big_yang_count_20d": 6,
+            "zhangting_count_20d": 5,
+            "volume_ratio": 4.72,
+            "vol_ma5": 4708498923.0,
+            "vol_ma10": 2516423033.0,
+            "continuous_vol_up": 1,
+            "today_amplitude": 7.32
+          },
+          "name": "股性锁",
+          "icon": "⚡"
+        },
+        "capital_lock": {
+          "locked": false,
+          "score": 0,
+          "reasons": [],
+          "risks": [
+            "近3日无量价齐升，资金未翻红",
+            "5日内资金翻红天数不足",
+            "OBV下降，资金可能流出",
+            "5日量价配合不佳"
+          ],
+          "details": {
+            "continuous_red_days": 0,
+            "red_days_5d": 0,
+            "obv_continuous_up": 0,
+            "obv_trend_5d": -12.04,
+            "price_up_5d": "False",
+            "vol_up_5d": "True"
+          },
+          "name": "资金锁",
+          "icon": "💰"
+        },
+        "total_locked": 1,
+        "signal": "观望",
+        "signal_strength": 23,
+        "summary": "一把锁点亮（股性锁🔒），观望为主"
+      },
+      "trend_analysis": {
+        "trend": {
+          "direction": "上升",
+          "strength": "强",
+          "score": 100,
+          "reasons": [
+            "均线多头排列，上升趋势明确",
+            "趋势指标强势（强势上升）",
+            "高低点同步抬高，上升趋势健康",
+            "MACD多头排列，中期趋势向上"
+          ],
+          "description": "强势上升趋势，趋势健康，顺势操作"
+        },
+        "support_resistance": {
+          "nearest_support": {
+            "price": 5.27,
+            "type": "支撑",
+            "strength": "中",
+            "source": "MA10"
+          },
+          "nearest_resistance": {
+            "price": 5.47,
+            "type": "压力",
+            "strength": "中",
+            "source": "MA5"
+          },
+          "supports": [
+            {
+              "price": 5.27,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.54,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.0,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 3.47,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 2.92,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            }
+          ],
+          "resistances": [
+            {
+              "price": 5.47,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 6.14,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 6.16,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            }
+          ],
+          "all_levels": [
+            {
+              "price": 6.14,
+              "type": "压力",
+              "strength": "中",
+              "source": "20日高点"
+            },
+            {
+              "price": 3.47,
+              "type": "支撑",
+              "strength": "中",
+              "source": "20日低点"
+            },
+            {
+              "price": 5.47,
+              "type": "压力",
+              "strength": "中",
+              "source": "MA5"
+            },
+            {
+              "price": 5.27,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA10"
+            },
+            {
+              "price": 4.54,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA20"
+            },
+            {
+              "price": 4.0,
+              "type": "支撑",
+              "strength": "中",
+              "source": "MA60"
+            },
+            {
+              "price": 6.16,
+              "type": "压力",
+              "strength": "强",
+              "source": "布林上轨"
+            },
+            {
+              "price": 2.92,
+              "type": "支撑",
+              "strength": "强",
+              "source": "布林下轨"
+            },
+            {
+              "price": 5.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 6.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            },
+            {
+              "price": 4.0,
+              "type": "心理关口",
+              "strength": "弱",
+              "source": "整数关口"
+            }
+          ],
+          "position_description": "处于支撑压力中间，震荡整理"
+        },
+        "patterns": [],
+        "ma_analysis": {
+          "alignment": "多头排列",
+          "alignment_score": 90,
+          "position": "均线之上",
+          "position_score": 80,
+          "above_count": 3,
+          "pressures": [
+            {
+              "name": "MA5",
+              "value": 5.47
+            }
+          ],
+          "supports": [
+            {
+              "name": "MA10",
+              "value": 5.27
+            },
+            {
+              "name": "MA20",
+              "value": 4.54
+            },
+            {
+              "name": "MA60",
+              "value": 4.0
+            }
+          ],
+          "ma5": 5.47,
+          "ma10": 5.27,
+          "ma20": 4.54,
+          "ma60": 4.0
+        },
+        "volume_price": {
+          "relation": "价跌量增",
+          "description": "价格下跌伴随成交量放大，资金出逃，下跌动能较强",
+          "score": 20,
+          "price_change_5d": -8.26,
+          "volume_change_5d": 1351.69
+        },
+        "overall_score": 68,
+        "operation_suggestion": "走势偏强，可逢低布局，设置止损；上升趋势中，支撑位5.27元附近可考虑低吸；放量下跌，及时止损离场",
+        "key_points": [
+          "第一支撑：5.27元（MA10）",
+          "第一压力：5.47元（MA5）",
+          "MA10支撑：5.27元",
+          "MA20支撑：4.54元",
+          "MA5压力：5.47元"
+        ]
+      },
+      "news_impact": {
+        "score": 50,
+        "level": "中性",
+        "reasons": [],
+        "has_positive_news": false,
+        "has_negative_news": false
+      },
+      "concept_analysis": {
+        "concepts": [],
+        "matched_hot": [],
+        "score": 45,
+        "conclusions": [
+          "暂无明确概念标签",
+          "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
+        ]
+      },
+      "fundamental_score": 0,
+      "fundamental": {
+        "score": 0,
+        "data": {},
+        "changes": [],
+        "research": ""
+      },
+      "is_top_pick": true,
+      "top_pick_rank": 6,
+      "chen_xiaoqun_score": 38,
+      "chen_xiaoqun_reasons": [
+        "价格5.33元（适中）",
+        "涨停概率57%（较高）",
+        "综合评分87分（逻辑较硬）",
+        "模式：温和上涨型"
+      ],
+      "is_chen_xiaoqun_pick": false
     },
     {
       "code": "002437",
@@ -6114,7 +9547,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 4,
+      "top_pick_rank": 7,
       "chen_xiaoqun_score": 33,
       "chen_xiaoqun_reasons": [
         "涨停概率57%（较高）",
@@ -6501,7 +9934,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 5,
+      "top_pick_rank": 8,
       "chen_xiaoqun_score": 43,
       "chen_xiaoqun_reasons": [
         "首阴反包形态",
@@ -6510,7 +9943,7 @@
         "模式：横盘突破型"
       ],
       "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 3
+      "chen_xiaoqun_rank": 4
     },
     {
       "code": "601212",
@@ -6890,7 +10323,7 @@
         "research": ""
       },
       "is_top_pick": true,
-      "top_pick_rank": 6,
+      "top_pick_rank": 9,
       "chen_xiaoqun_score": 38,
       "chen_xiaoqun_reasons": [
         "价格7.0元（适中）",
@@ -6898,15 +10331,14 @@
         "综合评分93分（逻辑较硬）",
         "模式：超跌反弹型"
       ],
-      "is_chen_xiaoqun_pick": true,
-      "chen_xiaoqun_rank": 5
+      "is_chen_xiaoqun_pick": false
     }
   ],
-  "total_count": 6,
-  "top_count": 6,
+  "total_count": 9,
+  "top_count": 9,
   "summary": {
     "total_stocks": 5345,
     "initial_filtered": 88,
-    "final_picks": 6
+    "final_picks": 9
   }
 }
