@@ -358,14 +358,14 @@ class LateDayScreener:
                 # 2026-09-03回测发现：59%涨停股昨天是下跌的，超跌反弹往往更容易涨停
                 if pct_change < -10 or pct_change > 10:
                     continue
-                # 价格 2-50元（优化：从100元缩小到50元）
-                # 2026-09-04回测发现：84.2%涨停股<20元，44.7%<10元，>=50元极少
-                if price < 2 or price > 50:
+                # 价格 2-200元（优化：从50元扩大到200元，2026-09-07回测发现21.5%涨停股>50元，科技股价格较高）
+                # 2026-09-04回测发现84.2%涨停股<20元，但市场环境变化，不能只关注低价股
+                if price < 2 or price > 200:
                     continue
-                # 成交额过滤（新增：2026-09-04回测发现65.8%涨停股<5亿）
-                # 成交额太小（<0.5亿）流动性差，太大（>50亿）难涨停
+                # 成交额过滤（优化：从0.5-50亿扩大到0.5-100亿，2026-09-07回测发现30.1%涨停股>10亿）
+                # 成交额太小（<0.5亿）流动性差，太大（>100亿）难涨停
                 amount_yi = amount / 100000000  # 转换为亿
-                if amount_yi > 0 and (amount_yi < 0.5 or amount_yi > 50):
+                if amount_yi > 0 and (amount_yi < 0.5 or amount_yi > 100):
                     continue
                 # 排除ST和退市
                 if "ST" in name or "退" in name or "*" in name:
@@ -582,11 +582,15 @@ class LateDayScreener:
                         logger.debug(f"MA20过滤 {stock['name']}({stock.get('code', '')}): 价格{current_price:.2f} < MA20*0.9={ma20*0.9:.2f}")
                     continue
 
-                # 板块效应加分（新增：热门板块内的股票更容易涨停）
+                # 板块效应加分（优化：基于2026-09-07回测，科技/电子类涨停最多）
+                # 热门板块内的股票更容易涨停，增加加分权重
                 sector_bonus = 0
                 stock_main_sector = stock_sector.get(code, "")
                 if stock_main_sector in hot_sector_names:
-                    sector_bonus = 5  # 热门板块加5分
+                    sector_bonus = 8  # 从5增加到8，热门板块加8分
+                    # 科技半导体板块额外加分（今日涨停最多的板块，13只科技股+7只电子股）
+                    if stock_main_sector == "科技半导体":
+                        sector_bonus += 3  # 科技半导体额外加3分
                     stock["sector_bonus"] = sector_bonus
                     stock["sector"] = stock_main_sector
                 
@@ -1310,47 +1314,49 @@ class LateDayScreener:
         except Exception:
             pass
         
-        # 8.6 价格特征（低价股更容易涨停，但波动性大风险高）
-        # 2026-09-05近一个月回测发现：10-20元最多(30.2%)，5-10元其次(24.8%)，20元以下占65.8%
+        # 8.6 价格特征（基于2026-09-07回测优化：市场环境变化，中高价股涨停增多）
+        # 2026-09-05近一个月回测：10-20元最多(30.2%)，5-10元其次(24.8%)，20元以下占65.8%
+        # 2026-09-07今日回测：10-20元最多(28.0%)，20-50元其次(24.7%)，50元以上21.5%（科技股价格高）
         if 3 <= current_price < 5:
-            limit_up_prob += 7  # 从8降低到7，3-5元占9.5%
+            limit_up_prob += 7  # 3-5元占9.5%
             limit_up_reasons.append(f"低价股({current_price}元)，弹性好易涨停")
         elif 5 <= current_price < 10:
-            limit_up_prob += 8  # 保持8分，5-10元占24.8%
+            limit_up_prob += 8  # 5-10元占24.8%
             limit_up_reasons.append(f"中低价股({current_price}元)，弹性好易涨停")
         elif 10 <= current_price < 20:
-            limit_up_prob += 9  # 从5增加到9，10-20元是涨停最多的区间(30.2%)
+            limit_up_prob += 9  # 10-20元是涨停最多的区间(28.0%)
             limit_up_reasons.append(f"中价股({current_price}元)，价格适中易涨停")
         elif current_price < 3:
-            limit_up_prob += 6  # 从4增加到6，2-3元占1.1%
+            limit_up_prob += 6  # 2-3元占1.1%
             limit_up_reasons.append(f"超低价股({current_price}元)，波动大弹性足")
         elif current_price < 50:
-            limit_up_prob += 4  # 从2增加到4，20-50元占24.1%
-            limit_up_reasons.append(f"中高价股({current_price}元)，涨停难度较大")
+            limit_up_prob += 7  # 从4增加到7，20-50元占24.7%（市场环境变化，中高价股增多）
+            limit_up_reasons.append(f"中高价股({current_price}元)，科技股集中易涨停")
         else:
-            limit_up_prob += 0  # 从-2增加到0，>=50元占10.0%
-            limit_up_reasons.append(f"高价股({current_price}元)，很难涨停")
+            limit_up_prob += 5  # 从0增加到5，>=50元占21.5%（今日高价股涨停很多，主要是科技股）
+            limit_up_reasons.append(f"高价股({current_price}元)，科技龙头有涨停机会")
         
-        # 8.6.1 成交额特征（2026-09-05近一个月回测优化）
-        # 1-5亿最多(49.8%)，5-10亿其次(19.3%)，10亿以下占78.0%
+        # 8.6.1 成交额特征（基于2026-09-07回测优化：大成交额股涨停增多）
+        # 2026-09-05近一个月回测：1-5亿最多(49.8%)，5-10亿其次(19.3%)，10亿以下占78.0%
+        # 2026-09-07今日回测：1-5亿最多(43.0%)，5-10亿其次(25.8%)，10亿以上28.0%（大成交额科技股）
         amount = stock.get("amount", 0)
         amount_yi = amount / 100000000 if amount > 0 else 0
         if amount_yi > 0:
             if 1 <= amount_yi < 5:
-                limit_up_prob += 10  # 从8增加到10，1-5亿是涨停最多的区间(49.8%)
+                limit_up_prob += 10  # 1-5亿是涨停最多的区间(43.0%)
                 limit_up_reasons.append(f"成交额适中({amount_yi:.1f}亿)，小盘股易拉升")
             elif 5 <= amount_yi < 10:
-                limit_up_prob += 7  # 从5增加到7，5-10亿占19.3%
+                limit_up_prob += 8  # 从7增加到8，5-10亿占25.8%
                 limit_up_reasons.append(f"成交额良好({amount_yi:.1f}亿)，中盘股有机会")
             elif 0.5 <= amount_yi < 1:
-                limit_up_prob += 6  # 从8降低到6，0.5-1亿占6.5%
+                limit_up_prob += 6  # 0.5-1亿占6.5%
                 limit_up_reasons.append(f"成交额偏小({amount_yi:.1f}亿)，流动性一般")
             elif 10 <= amount_yi < 20:
-                limit_up_prob += 4  # 从2增加到4，10-20亿占13.4%
-                limit_up_reasons.append(f"成交额较大({amount_yi:.1f}亿)，大盘股难涨停")
+                limit_up_prob += 7  # 从4增加到7，10-20亿占15.1%（大成交额科技股增多）
+                limit_up_reasons.append(f"成交额较大({amount_yi:.1f}亿)，科技龙头有资金关注")
             elif amount_yi >= 20:
-                limit_up_prob += 0  # 从-2增加到0，>=20亿占8.6%
-                limit_up_reasons.append(f"成交额过大({amount_yi:.1f}亿)，很难涨停")
+                limit_up_prob += 5  # 从0增加到5，>=20亿占12.9%（今日大成交额股涨停很多）
+                limit_up_reasons.append(f"成交额大({amount_yi:.1f}亿)，大资金抱团龙头")
             elif amount_yi < 0.5:
                 limit_up_prob -= 3  # 成交额太小流动性差
                 limit_up_reasons.append(f"成交额过小({amount_yi:.2f}亿)，流动性差")

@@ -708,8 +708,25 @@ class DataCollector:
     # ============ 全量股票列表 ============
     def get_all_stocks(self) -> Optional[pd.DataFrame]:
         key = "all_stocks"
-        cached = cache.get_dataframe("stock_list", key)
+        # 交易时段使用5分钟缓存过期，确保数据实时；非交易时段使用按天缓存
+        now_utc = pd.Timestamp.now(tz='UTC')
+        now_beijing = now_utc.tz_convert('Asia/Shanghai')
+        is_trading_day = now_beijing.weekday() < 5
+        is_market_hours = (
+            (now_beijing.hour == 9 and now_beijing.minute >= 30) or
+            (10 <= now_beijing.hour <= 11) or
+            (now_beijing.hour == 12) or
+            (now_beijing.hour == 13) or
+            (now_beijing.hour == 14 and now_beijing.minute <= 59) or
+            (now_beijing.hour == 15 and now_beijing.minute <= 30)
+        )
+        use_realtime = is_trading_day and is_market_hours
+        
+        # 交易时段：缓存5分钟过期，确保数据实时
+        max_age = 300 if use_realtime else None
+        cached = cache.get_dataframe("stock_list", key, max_age_seconds=max_age)
         if cached is not None and not cached.empty:
+            logger.info(f"使用缓存股票列表（交易时段5分钟过期），共{len(cached)}只")
             return cached
 
         # 判断是否在交易时段（北京时间9:30-15:00，工作日，包括午休时间）
