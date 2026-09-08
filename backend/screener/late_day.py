@@ -565,8 +565,8 @@ class LateDayScreener:
                     amplitude = (today_high - today_low) / prev_close * 100 if prev_close > 0 else 0
                     stock["amplitude"] = round(amplitude, 2)
                     if amplitude < 1:
-                        if i < 5:
-                            logger.debug(f"振幅过滤 {stock['name']}({stock.get('code', '')}): 振幅{amplitude:.1f}% < 1%")
+                        if i < 10:
+                            logger.info(f"振幅过滤 {stock['name']}({stock.get('code', '')}): high={today_high:.2f}, low={today_low:.2f}, prev_close={prev_close:.2f}, 振幅{amplitude:.2f}% < 1%")
                         continue  # 振幅太小，股性不活跃，很难涨停
                 stats["amplitude_ok"] += 1
 
