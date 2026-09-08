@@ -1,0 +1,149 @@
+name: 每日复盘分析
+
+on:
+  schedule:
+    # 每个交易日北京时间 15:30 = UTC 07:30（封盘后复盘分析）
+    - cron: '30 7 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      no_push:
+        description: '禁用飞书推送（true/false）'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  daily-review:
+    if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate stock name map
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+        run: |
+          cd backend
+          python scripts/generate_stock_name_map.py || echo "生成映射表失败，使用默认映射表"
+
+      - name: Collect today's limit-up stocks
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+        run: |
+          cd backend
+          python -c "
+import requests
+import json
+from datetime import datetime
+
+today = datetime.now().strftime('%Y%m%d')
+url = f'http://push2ex.eastmoney.com/getTopicZTPool?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt&Pageindex=0&pagesize=200&sort=fbt:asc&date={today}'
+
+try:
+    resp = requests.get(url, timeout=10)
+    data = resp.json()
+    if data.get('data') and data['data'].get('pool'):
+        stocks = data['data']['pool']
+        print(f'今天涨停股票数量: {len(stocks)}')
+        with open(f'data/limit_up_{today}.json', 'w') as f:
+            json.dump(stocks, f, ensure_ascii=False, indent=2)
+        print(f'已保存到 data/limit_up_{today}.json')
+    else:
+        print('未获取到涨停股票数据')
+except Exception as e:
+    print(f'获取涨停股票失败: {e}')
+" || echo "收集涨停股票数据失败"
+
+      - name: Run daily review analysis
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          NO_PUSH: ${{ github.event.inputs.no_push || 'false' }}
+        run: |
+          cd backend
+          python -c "
+import sys
+sys.path.insert(0, '.')
+from analysis.daily_review import daily_review_analyzer
+from notify.feishu import feishu_notifier
+import os
+
+# 运行复盘分析
+result = daily_review_analyzer.analyze()
+report = daily_review_analyzer.generate_report(result)
+
+# 保存报告到文件
+with open('data/review_report.txt', 'w', encoding='utf-8') as f:
+    f.write(report)
+
+print('复盘分析完成')
+print(f'报告长度: {len(report)}字符')
+
+# 飞书推送
+no_push = os.environ.get('NO_PUSH', 'false')
+if no_push != 'true':
+    try:
+        # 发送复盘报告到飞书
+        webhook = os.environ.get('FEISHU_WEBHOOK_URL', '')
+        if webhook:
+            import requests
+            import json
+            
+            # 分段发送（飞书消息长度限制）
+            max_length = 4000
+            segments = []
+            current = ''
+            for line in report.split('\\n'):
+                if len(current) + len(line) + 1 > max_length:
+                    segments.append(current)
+                    current = line
+                else:
+                    current += '\\n' + line
+            if current:
+                segments.append(current)
+            
+            for i, seg in enumerate(segments):
+                title = f'📊 每日复盘分析报告 ({i+1}/{len(segments)})' if len(segments) > 1 else '📊 每日复盘分析报告'
+                payload = {
+                    'msg_type': 'text',
+                    'content': {
+                        'text': f'{title}\\n\\n{seg}'
+                    }
+                }
+                resp = requests.post(webhook, json=payload, timeout=10)
+                print(f'飞书推送段{i+1}: {resp.status_code}')
+            
+            print('飞书推送完成')
+        else:
+            print('未配置飞书Webhook，跳过推送')
+    except Exception as e:
+        print(f'飞书推送失败: {e}')
+else:
+    print('已禁用飞书推送')
+"
+
+      - name: Commit review results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/limit_up_*.json data/reviews/ data/review_report.txt 2>/dev/null || true
+          git commit -m "每日复盘分析结果 $(date +'%Y-%m-%d')" || echo "无新数据需要提交"
+          git push || echo "推送失败，可能无新数据"
