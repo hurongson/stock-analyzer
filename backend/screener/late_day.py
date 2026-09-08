@@ -534,11 +534,30 @@ class LateDayScreener:
                     # 检查K线最后一天是否是今天
                     last_date = str(kline.index[-1])[:10] if hasattr(kline.index[-1], 'strftime') else str(kline.index[-1])[:10]
                     if last_date != today:
+                        # 获取当日high和low，检查是否合理（修复：之前high和low都是current_price导致振幅为0）
+                        today_high = stock.get("high", 0)
+                        today_low = stock.get("low", 0)
+                        today_open = stock.get("open", current_price)
+                        # 如果high和low不合理（都等于close或者high<=low），使用前一天的high和low估算
+                        if today_high <= 0 or today_low <= 0 or today_high <= today_low or (today_high == current_price and today_low == current_price):
+                            # 使用前一天的振幅估算当日振幅
+                            if len(kline) >= 2:
+                                prev_high = high.iloc[-1] if 'high' in kline.columns else current_price * 1.02
+                                prev_low = low.iloc[-1] if 'low' in kline.columns else current_price * 0.98
+                                prev_close_amt = close.iloc[-1] if len(close) > 0 else current_price
+                                prev_amplitude = (prev_high - prev_low) / prev_close_amt if prev_close_amt > 0 else 0.02
+                                today_high = current_price * (1 + prev_amplitude / 2)
+                                today_low = current_price * (1 - prev_amplitude / 2)
+                                today_open = current_price * (1 - prev_amplitude / 4)
+                            else:
+                                today_high = current_price * 1.02
+                                today_low = current_price * 0.98
+                                today_open = current_price
                         # 添加当日实时数据到K线
                         new_row = pd.DataFrame({
-                            "open": [stock.get("open", current_price)],
-                            "high": [stock.get("high", current_price)],
-                            "low": [stock.get("low", current_price)],
+                            "open": [today_open],
+                            "high": [today_high],
+                            "low": [today_low],
                             "close": [current_price],
                             "volume": [stock.get("volume", 0)],
                             "amount": [stock.get("amount", 0)],
