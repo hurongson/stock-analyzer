@@ -465,8 +465,12 @@ class LateDayScreener:
         if hot_sector_names:
             logger.info(f"热门板块识别: {', '.join([f'{s}({sector_count[s]}只)' for s in hot_sector_names])}")
 
+        # 统计计数器：排查推荐0只股票的问题
+        stats = {"total": 0, "kline_ok": 0, "amplitude_ok": 0, "turnover_ok": 0, "ma20_ok": 0, "score_ok": 0, "errors": 0}
+        
         for i, stock in enumerate(candidates):
             try:
+                stats["total"] += 1
                 code = stock["code"]
                 # 优先使用批量获取的K线数据，避免重复获取（修复：之前自己获取K线导致全部失败）
                 if use_batch_kline and code in batch_kline_data:
@@ -486,6 +490,7 @@ class LateDayScreener:
                     if i < 5:
                         logger.debug(f"K线数据不足 {stock['name']}({stock.get('code', '')}): kline={'None' if kline is None else len(kline)}天")
                     continue
+                stats["kline_ok"] += 1
                 
                 if i < 3:
                     logger.debug(f"K线数据正常 {stock['name']}({stock.get('code', '')}): {len(kline)}天, 最新收盘{kline['close'].iloc[-1]:.2f}")
@@ -563,6 +568,7 @@ class LateDayScreener:
                         if i < 5:
                             logger.debug(f"振幅过滤 {stock['name']}({stock.get('code', '')}): 振幅{amplitude:.1f}% < 1%")
                         continue  # 振幅太小，股性不活跃，很难涨停
+                stats["amplitude_ok"] += 1
 
                 # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
                 turnover = stock.get("turnover", 0)
@@ -577,6 +583,7 @@ class LateDayScreener:
                     if i < 5:
                         logger.debug(f"换手率过滤 {stock['name']}({stock.get('code', '')}): 换手率{turnover:.1f}% < 1%")
                     continue  # 换手率太低，股性不活跃
+                stats["turnover_ok"] += 1
 
                 # 放宽MA20条件：允许股价在20日均线下方10%以内（突破型）
                 # 回测发现33.8%涨停股前一天股价不在MA20之上，很多是从下方突破的
@@ -585,6 +592,7 @@ class LateDayScreener:
                     if i < 5:
                         logger.debug(f"MA20过滤 {stock['name']}({stock.get('code', '')}): 价格{current_price:.2f} < MA20*0.9={ma20*0.9:.2f}")
                     continue
+                stats["ma20_ok"] += 1
 
                 # 板块效应加分（基于2026-09-07回测深度优化：科技/电子类占25.3%，是最大的明确行业类别）
                 # 热门板块内的股票更容易涨停，增加加分权重
@@ -617,6 +625,7 @@ class LateDayScreener:
                 # 只保留评分>=score_threshold的（大盘下跌时提高门槛，正常情况50分）
                 # 修复：评分系统优化后，final_score上限从100降低到95，需要相应降低门槛
                 if score >= score_threshold:
+                    stats["score_ok"] += 1
                     # === 买卖点位计算（优化：更合理的盈亏比）===
                     # 买入价 = 尾盘现价（14:30-15:00直接买入）
                     buy_price = round(current_price, 2)
@@ -713,10 +722,14 @@ class LateDayScreener:
                     result_index = len(results) - 1  # 记录当前结果在列表中的索引
 
             except Exception as e:
+                stats["errors"] += 1
                 logger.info(f"分析失败 {stock.get('code')} {stock.get('name', '')}: {e}")
                 import traceback
                 logger.info(traceback.format_exc()[:500])
                 continue
+        
+        # 输出统计信息：排查推荐0只股票的问题
+        logger.info(f"深度分析统计: 总数{stats['total']}, K线正常{stats['kline_ok']}, 振幅通过{stats['amplitude_ok']}, 换手率通过{stats['turnover_ok']}, MA20通过{stats['ma20_ok']}, 评分通过{stats['score_ok']}, 错误{stats['errors']}, 最终结果{len(results)}")
 
         # 行业分散度限制：同一行业最多推荐2只，避免行业集中风险
         # 基于2026-09-01回测：化工4只平均-8.02%，行业集中导致大幅亏损
