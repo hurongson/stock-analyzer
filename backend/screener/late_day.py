@@ -613,16 +613,24 @@ class LateDayScreener:
                     continue
                 stats["ma20_ok"] += 1
 
-                # 板块效应加分（基于2026-09-07回测深度优化：科技/电子类占25.3%，是最大的明确行业类别）
+                # 板块效应加分（基于2026-09-08回测优化：农业食品、传媒娱乐、科技半导体、医药医疗是涨停最多的行业）
                 # 热门板块内的股票更容易涨停，增加加分权重
                 sector_bonus = 0
                 stock_main_sector = stock_sector.get(code, "")
-                # 科技半导体板块基础加分（即使不是热门板块，也有基础加分，因为回测显示科技/电子类涨停最多）
-                if stock_main_sector == "科技半导体":
-                    sector_bonus = 4  # 科技半导体基础加4分
+                # 基础加分：基于2026-09-08回测，涨停最多的行业给予基础加分
+                sector_base_bonus = {
+                    "科技半导体": 4,  # 科技半导体基础加4分（长期涨停最多）
+                    "农业食品": 3,    # 农业食品基础加3分（2026-09-08涨停8只，占11.3%）
+                    "传媒娱乐": 3,    # 传媒娱乐基础加3分（2026-09-08涨停7只，占9.9%）
+                    "医药医疗": 3,    # 医药医疗基础加3分（2026-09-08涨停6只，占8.5%）
+                    "化工材料": 2,    # 化工材料基础加2分
+                    "新能源": 2,      # 新能源基础加2分
+                }
+                if stock_main_sector in sector_base_bonus:
+                    sector_bonus = sector_base_bonus[stock_main_sector]
                 if stock_main_sector in hot_sector_names:
-                    sector_bonus += 8  # 热门板块加8分
-                    # 科技半导体板块作为热门板块时额外加分（今日涨停最多的板块，23只科技/电子类）
+                    sector_bonus += 10  # 热门板块加10分（从8分提高）
+                    # 科技半导体板块作为热门板块时额外加分
                     if stock_main_sector == "科技半导体":
                         sector_bonus += 3  # 科技半导体热门板块额外加3分
                 stock["sector_bonus"] = sector_bonus
@@ -1102,11 +1110,18 @@ class LateDayScreener:
             score += 1
             reasons.append(f"振幅较小({amplitude:.1f}%)")
 
-        # 2.6 换手率评分（5分）- 深度回测发现：换手率高的股票更容易涨停
+        # 2.6 换手率评分（8分）- 基于2026-09-08回测优化：涨停股平均换手率8.9%，7-15%占42.5%
+        # 换手率高的股票资金关注度高，更容易涨停
         turnover = stock.get("turnover", 0)
-        if turnover >= 5:
-            score += 5
+        if turnover >= 10:
+            score += 8
+            reasons.append(f"换手率极高({turnover:.1f}%)，资金关注度极高")
+        elif turnover >= 7:
+            score += 6
             reasons.append(f"换手率高({turnover:.1f}%)，资金关注度高")
+        elif turnover >= 5:
+            score += 5
+            reasons.append(f"换手率较高({turnover:.1f}%)，资金关注度较高")
         elif turnover >= 3:
             score += 3
             reasons.append(f"换手率适中({turnover:.1f}%)")

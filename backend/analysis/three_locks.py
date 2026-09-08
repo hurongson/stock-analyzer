@@ -549,12 +549,10 @@ class ThreeLocksAnalyzer:
             signal = "强烈买入"
             strength = 85 + min(15, int(avg_score / 10))
         elif total_locked == 2:
-            if trend_lock["locked"] and capital_lock["locked"]:
-                signal = "买入"
-                strength = 70 + min(10, int(avg_score / 10))
-            else:
-                signal = "谨慎买入"
-                strength = 55 + min(10, int(avg_score / 10))
+            # 优化：2/3亮都判定为买入（基于2026-09-08回测，很多涨停股在涨停前夕是2/3亮）
+            # 不再区分趋势锁+资金锁的组合，避免谨慎买入被过滤
+            signal = "买入"
+            strength = 65 + min(15, int(avg_score / 10))
         elif total_locked == 1:
             if trend_lock["locked"]:
                 signal = "观望（趋势向好）"
