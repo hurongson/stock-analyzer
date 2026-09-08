@@ -70,28 +70,32 @@ class DailyReviewAnalyzer:
         # 第四步：察联动 - 板块联动与赚钱效应
         sector_linkage = self._analyze_sector_linkage(date)
 
+        # 第四步扩展：察题材 - 热点题材分析
+        hot_theme = self._analyze_hot_theme(date, sector_linkage)
+
         # 第五步：量炸板 - 炸板率与亏钱效应
         blast_board = self._analyze_blast_board(date)
         loss_effect = self._analyze_loss_effect(date)
 
         # 第六步：推明日 - 明日策略推演
-        tomorrow_strategy = self._generate_tomorrow_strategy(emotion_cycle, limit_up_ladder, leader_analysis, sector_linkage)
+        tomorrow_strategy = self._generate_tomorrow_strategy(emotion_cycle, limit_up_ladder, leader_analysis, sector_linkage, hot_theme)
 
         # 其他分析模块
         recommendation_backtest = self._analyze_recommendation_backtest(date)
         rule_effectiveness = self._analyze_rule_effectiveness(date)
         three_locks_effectiveness = self._analyze_three_locks_effectiveness(date)
-        learning_summary = self._generate_learning_summary(date, emotion_cycle, leader_analysis)
+        learning_summary = self._generate_learning_summary(date, emotion_cycle, leader_analysis, hot_theme)
 
         result = {
             "date": date,
             "analysis_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "review_method": "陈小群七步复盘法",
+            "review_method": "陈小群七步复盘法+热点题材分析",
             # 陈小群核心复盘七步
             "step1_emotion_cycle": emotion_cycle,           # 第一步：定大局 - 情绪周期
             "step2_limit_up_ladder": limit_up_ladder,       # 第二步：看梯队 - 涨停梯队
             "step3_leader_analysis": leader_analysis,        # 第三步：找龙头 - 龙头股分析
             "step4_sector_linkage": sector_linkage,          # 第四步：察联动 - 板块联动
+            "step4_hot_theme": hot_theme,                    # 第四步扩展：察题材 - 热点题材
             "step5_blast_board": blast_board,                # 第五步：量炸板 - 炸板率
             "step5_loss_effect": loss_effect,                # 第五步：亏钱效应
             "step6_tomorrow_strategy": tomorrow_strategy,    # 第六步：推明日 - 明日策略
@@ -547,6 +551,218 @@ class DailyReviewAnalyzer:
         return linkage
 
     # ========================================================================
+    # 第四步扩展：察题材 - 热点题材分析
+    # ========================================================================
+    def _analyze_hot_theme(self, date: str, sector_linkage: Dict) -> Dict:
+        """
+        分析热点题材（陈小群复盘第四步扩展：察题材）
+
+        热点题材分析：
+        - 近期热点题材识别
+        - 题材持续性分析（新题材 vs 老题材）
+        - 题材龙头股分析
+        - 题材联动效应分析
+        - 政策/事件驱动分析
+        - 题材轮动规律分析
+        - 明日题材关注方向
+        """
+        logger.info("第四步扩展：察题材 - 热点题材分析...")
+
+        theme = {
+            "date": date,
+            "hot_themes": [],
+            "theme_persistence": "",
+            "theme_leaders": [],
+            "theme_linkage": "",
+            "policy_drivers": [],
+            "theme_rotation": "",
+            "tomorrow_theme_focus": [],
+            "key_findings": [],
+        }
+
+        limit_up_stocks = self._load_limit_up_stocks(date)
+        if not limit_up_stocks:
+            theme["theme_persistence"] = "无涨停股票，无热点题材可分析"
+            theme["key_findings"].append("无涨停股票，市场缺乏热点题材")
+            return theme
+
+        # 1. 热点题材识别（基于涨停股票的行业分布和关键词）
+        sector_keywords = self._get_sector_keywords()
+        theme_stocks = {}
+        theme_keywords = self._get_theme_keywords()
+
+        for s in limit_up_stocks:
+            name = s.get("n", "")
+            matched_themes = []
+            for theme_name, keywords in theme_keywords.items():
+                if any(kw in name for kw in keywords):
+                    matched_themes.append(theme_name)
+            if not matched_themes:
+                # 尝试行业分类
+                for sector, keywords in sector_keywords.items():
+                    if any(kw in name for kw in keywords):
+                        matched_themes.append(sector)
+                        break
+            if not matched_themes:
+                matched_themes.append("其他")
+
+            for mt in matched_themes:
+                if mt not in theme_stocks:
+                    theme_stocks[mt] = []
+                theme_stocks[mt].append(s)
+
+        # 按涨停数量排序
+        sorted_themes = sorted(theme_stocks.items(), key=lambda x: len(x[1]), reverse=True)
+
+        for theme_name, stocks in sorted_themes[:8]:
+            # 找出题材龙头（连板数最高）
+            theme_leader = max(stocks, key=lambda x: x.get("lbc", 0))
+            # 计算题材平均换手率
+            avg_turnover = np.mean([s.get("hs", 0) for s in stocks]) if stocks else 0
+            # 计算题材连板数
+            consecutive_count = sum(1 for s in stocks if s.get("lbc", 0) >= 2)
+            # 计算题材首板数
+            first_board_count = sum(1 for s in stocks if s.get("lbc", 0) == 1)
+
+            theme["hot_themes"].append({
+                "theme": theme_name,
+                "stock_count": len(stocks),
+                "leader_name": theme_leader.get("n", ""),
+                "leader_code": theme_leader.get("c", ""),
+                "leader_lbc": theme_leader.get("lbc", 0),
+                "avg_turnover": round(float(avg_turnover), 1),
+                "consecutive_count": consecutive_count,
+                "first_board_count": first_board_count,
+                "stocks": [{"name": s.get("n", ""), "code": s.get("c", ""), "lbc": s.get("lbc", 0)} for s in stocks[:5]],
+            })
+
+        # 2. 题材持续性分析
+        if theme["hot_themes"]:
+            top_theme = theme["hot_themes"][0]
+            if top_theme["consecutive_count"] >= 3 and top_theme["stock_count"] >= 5:
+                theme["theme_persistence"] = f"主线题材{top_theme['theme']}持续性强，连板{top_theme['consecutive_count']}只，涨停{top_theme['stock_count']}只，可重点关注"
+            elif top_theme["consecutive_count"] >= 1 and top_theme["stock_count"] >= 3:
+                theme["theme_persistence"] = f"题材{top_theme['theme']}有一定持续性，连板{top_theme['consecutive_count']}只，关注是否能发酵成主线"
+            else:
+                theme["theme_persistence"] = f"题材{top_theme['theme']}以首板为主，持续性待观察，注意一日游风险"
+
+        # 3. 题材龙头股分析
+        for ht in theme["hot_themes"][:5]:
+            theme["theme_leaders"].append({
+                "theme": ht["theme"],
+                "leader": ht["leader_name"],
+                "code": ht["leader_code"],
+                "lbc": ht["leader_lbc"],
+                "theme_stock_count": ht["stock_count"],
+            })
+
+        # 4. 题材联动效应分析
+        if len(theme["hot_themes"]) >= 3 and theme["hot_themes"][0]["stock_count"] >= 5:
+            theme["theme_linkage"] = f"主线题材{theme['hot_themes'][0]['theme']}联动效应强，涨停{theme['hot_themes'][0]['stock_count']}只，有龙头有跟风，可能成为市场主线"
+        elif len(theme["hot_themes"]) >= 2 and all(ht["stock_count"] >= 3 for ht in theme["hot_themes"][:2]):
+            theme["theme_linkage"] = "多个题材均有一定涨停数量，市场热点分散，关注哪个题材能持续走强成为主线"
+        else:
+            theme["theme_linkage"] = "热点题材分散，缺乏明确主线，以个股行情为主，注意题材轮动风险"
+
+        # 5. 政策/事件驱动分析（基于题材名称的常见驱动因素）
+        policy_drivers_map = {
+            "科技半导体": ["AI人工智能", "芯片国产替代", "半导体政策扶持", "算力需求增长", "科技自主可控"],
+            "新能源": ["碳中和政策", "新能源汽车销量增长", "光伏装机超预期", "储能政策扶持", "锂电池技术突破"],
+            "医药医疗": ["创新药政策", "医保谈判", "疫情防控", "医疗器械国产替代", "人口老龄化"],
+            "农业食品": ["乡村振兴政策", "粮食安全", "农产品涨价", "消费复苏", "生猪周期"],
+            "传媒娱乐": ["AI+应用", "游戏版号发放", "影视票房复苏", "元宇宙概念", "数字经济"],
+            "化工材料": ["产品涨价", "供给侧改革", "新材料突破", "环保政策", "新能源材料需求"],
+            "房地产建筑": ["地产政策放松", "城中村改造", "基建投资", "保障房建设", "地产链复苏"],
+            "商业零售": ["消费复苏", "免税政策", "电商大促", "新零售模式", "下沉市场"],
+        }
+
+        for ht in theme["hot_themes"][:5]:
+            if ht["theme"] in policy_drivers_map:
+                theme["policy_drivers"].append({
+                    "theme": ht["theme"],
+                    "drivers": policy_drivers_map[ht["theme"]],
+                })
+
+        # 6. 题材轮动规律分析
+        if len(theme["hot_themes"]) >= 4:
+            theme_names = [ht["theme"] for ht in theme["hot_themes"][:4]]
+            if "科技半导体" in theme_names and "新能源" in theme_names:
+                theme["theme_rotation"] = "科技+新能源双轮驱动，成长风格占优，关注科技和新能源的轮动机会"
+            elif "农业食品" in theme_names and "商业零售" in theme_names:
+                theme["theme_rotation"] = "消费板块集体活跃，防御风格占优，关注消费复苏主线"
+            elif "医药医疗" in theme_names and "化工材料" in theme_names:
+                theme["theme_rotation"] = "医药+化工轮动，避险+涨价逻辑，关注政策驱动和产品涨价机会"
+            else:
+                theme["theme_rotation"] = f"热点题材分散（{', '.join(theme_names[:3])}），轮动较快，注意追高风险，关注持续性强的题材"
+        else:
+            theme["theme_rotation"] = "热点题材较少，市场缺乏明确主线，耐心等待新题材出现"
+
+        # 7. 明日题材关注方向
+        if theme["hot_themes"]:
+            top = theme["hot_themes"][0]
+            theme["tomorrow_theme_focus"].append(f"重点关注主线题材{top['theme']}的持续性，龙头{top['leader_name']}的表现决定题材高度")
+            if len(theme["hot_themes"]) >= 2:
+                second = theme["hot_themes"][1]
+                theme["tomorrow_theme_focus"].append(f"关注次强题材{second['theme']}是否能接力，成为新的主线")
+            theme["tomorrow_theme_focus"].append("关注新题材首板机会，首板是新题材启动的信号")
+            theme["tomorrow_theme_focus"].append("回避纯概念炒作、无基本面支撑的一日游题材")
+            theme["tomorrow_theme_focus"].append("关注政策驱动和事件驱动的题材，这类题材持续性通常较强")
+        else:
+            theme["tomorrow_theme_focus"].append("市场缺乏热点题材，空仓等待新题材出现")
+            theme["tomorrow_theme_focus"].append("关注政策面和消息面的变化，新题材往往由政策或事件驱动")
+
+        # 关键发现
+        findings = []
+        if theme["hot_themes"]:
+            top = theme["hot_themes"][0]
+            findings.append(f"最热题材: {top['theme']}，涨停{top['stock_count']}只，龙头{top['leader_name']}({top['leader_lbc']}连板)")
+        if len(theme["hot_themes"]) >= 3:
+            findings.append(f"题材分布: {', '.join([ht['theme'] for ht in theme['hot_themes'][:3]])}")
+        findings.append(f"题材持续性: {theme['theme_persistence']}")
+        findings.append(f"题材联动: {theme['theme_linkage']}")
+        findings.append(f"题材轮动: {theme['theme_rotation']}")
+
+        theme["key_findings"] = findings
+
+        logger.info(f"热点题材: 最热{theme['hot_themes'][0]['theme'] if theme['hot_themes'] else '无'}, {theme['theme_persistence'][:30]}...")
+        return theme
+
+    def _get_theme_keywords(self) -> Dict:
+        """获取热点题材关键词映射（更细分的题材分类）"""
+        return {
+            # 科技类细分题材
+            "AI人工智能": ["AI", "人工智能", "大模型", "算力", "GPU", "芯片", "半导体", "智能", "机器人", "深度学习", "机器学习", "AIGC", "ChatGPT"],
+            "数字经济": ["数字", "数据", "云计算", "大数据", "区块链", "元宇宙", "虚拟", "Web3", "NFT", "数字货币"],
+            "消费电子": ["电子", "消费", "手机", "苹果", "华为", "小米", "VR", "AR", "可穿戴", "耳机", "智能手表"],
+            "通信5G": ["通信", "5G", "6G", "光模块", "光通信", "光纤", "基站", "射频", "天线"],
+            # 新能源类细分题材
+            "新能源车": ["汽车", "新能源", "电动车", "比亚迪", "特斯拉", "蔚来", "小鹏", "理想", "智能驾驶", "自动驾驶"],
+            "光伏储能": ["光伏", "储能", "太阳能", "逆变器", "电池", "锂电", "宁德时代", "隆基", "阳光电源"],
+            "风电核电": ["风电", "核能", "核电", "风力", "风能", "海上风电"],
+            "氢能": ["氢", "氢能", "燃料电池", "电解槽"],
+            # 医药类细分题材
+            "创新药": ["药", "制药", "药业", "生物", "创新药", "CXO", "CRO", "CDMO", "疫苗", "抗体"],
+            "医疗器械": ["医疗", "器械", "设备", "诊断", "检测", "影像", "手术", "植入"],
+            "中药": ["中药", "中医", "药材", "饮片", "同仁堂", "云南白药", "片仔癀"],
+            # 消费类细分题材
+            "食品饮料": ["食品", "饮料", "酒", "白酒", "啤酒", "乳业", "奶", "肉", "蛋", "糖", "盐", "油", "面", "米", "零食", "调味品"],
+            "零售百货": ["零售", "百货", "超市", "商场", "购物", "电商", "网购", "直播", "带货", "连锁", "加盟"],
+            "旅游酒店": ["旅游", "酒店", "餐饮", "免税", "航空", "机场", "景区", "民宿", "OTA"],
+            # 周期类细分题材
+            "有色金属": ["有色", "金属", "黄金", "白银", "铜", "铝", "锌", "镍", "钴", "锂", "稀土", "永磁"],
+            "化工化纤": ["化工", "化学", "化纤", "塑料", "橡胶", "纤维", "涂料", "染料", "颜料", "化肥", "农药", "新材料"],
+            "钢铁煤炭": ["钢铁", "煤炭", "煤", "钢", "铁", "矿石", "焦炭", "焦煤"],
+            # 金融地产类
+            "银行保险": ["银行", "保险", "证券", "券商", "金融", "信托", "期货"],
+            "房地产": ["地产", "房", "置业", "城建", "发展", "建设", "建筑", "建材", "水泥", "玻璃", "陶瓷", "物业", "园林", "环保"],
+            # 其他题材
+            "国企改革": ["国企", "央企", "改革", "重组", "并购", "借壳", "混改"],
+            "乡村振兴": ["农业", "农村", "农民", "乡村", "粮食", "种业", "种植", "养殖", "畜牧", "渔业", "农机", "化肥", "农药"],
+            "军工航天": ["军工", "航天", "航空", "国防", "兵器", "船舶", "卫星", "导弹", "雷达", "无人机"],
+            "传媒游戏": ["传媒", "娱乐", "影视", "电影", "电视", "广播", "出版", "游戏", "动漫", "音乐", "体育", "彩票"],
+        }
+
+    # ========================================================================
     # 第五步：量炸板 - 炸板率分析
     # ========================================================================
     def _analyze_blast_board(self, date: str) -> Dict:
@@ -677,7 +893,7 @@ class DailyReviewAnalyzer:
     # ========================================================================
     # 第六步：推明日 - 明日策略推演
     # ========================================================================
-    def _generate_tomorrow_strategy(self, emotion: Dict, ladder: Dict, leader: Dict, linkage: Dict) -> Dict:
+    def _generate_tomorrow_strategy(self, emotion: Dict, ladder: Dict, leader: Dict, linkage: Dict, hot_theme: Dict = None) -> Dict:
         """
         生成明日策略推演（陈小群复盘第六步：推明日）
 
@@ -765,6 +981,11 @@ class DailyReviewAnalyzer:
         if linkage.get("strong_sectors"):
             top_sector = linkage["strong_sectors"][0]
             key_points.append(f"最强板块{top_sector['sector']}的持续性决定主线能否确立")
+        if hot_theme and hot_theme.get("hot_themes"):
+            top_theme = hot_theme["hot_themes"][0]
+            key_points.append(f"最热题材{top_theme['theme']}（涨停{top_theme['stock_count']}只）的持续性决定市场热点方向")
+        if hot_theme and hot_theme.get("theme_rotation"):
+            key_points.append(f"题材轮动: {hot_theme['theme_rotation']}")
         key_points.append(f"操作策略: {strategy['operation_strategy']}")
 
         strategy["key_points"] = key_points
@@ -775,7 +996,7 @@ class DailyReviewAnalyzer:
     # ========================================================================
     # 第七步：学经验 - 学习总结与选股知识
     # ========================================================================
-    def _generate_learning_summary(self, date: str, emotion: Dict, leader: Dict) -> Dict:
+    def _generate_learning_summary(self, date: str, emotion: Dict, leader: Dict, hot_theme: Dict = None) -> Dict:
         """
         生成学习总结与选股知识（陈小群复盘第七步：学经验）
         """
@@ -820,6 +1041,10 @@ class DailyReviewAnalyzer:
             {"title": "情绪周期判断", "content": "看昨日涨停今日表现、涨停加数、跌停加数、炸板率、空间板高度，连起来判断是上升期、分歧期还是退潮期"},
             {"title": "涨停梯队", "content": "首板=新题材启动，2连板=题材确认，3连板=龙头确立，4连板及以上=空间板决定市场高度"},
             {"title": "炸板率", "content": "炸板率=炸板数/(涨停数+炸板数)，炸板率≥25%说明市场情绪弱，≥40%说明情绪极差，禁止开仓"},
+            {"title": "热点题材识别", "content": "通过涨停股票的行业分布和关键词识别热点题材，涨停数量多、有龙头、有跟风的题材可能成为主线"},
+            {"title": "题材持续性判断", "content": "连板数≥3且涨停数≥5的题材持续性强；以首板为主的题材持续性差，注意一日游风险"},
+            {"title": "题材轮动规律", "content": "科技+新能源双轮驱动=成长风格；消费集体活跃=防御风格；热点分散=轮动快，注意追高风险"},
+            {"title": "政策驱动题材", "content": "政策和事件驱动的题材持续性通常较强，关注AI、新能源、医药、农业等政策扶持方向"},
         ]
 
         # 风险提示
@@ -1045,6 +1270,33 @@ class DailyReviewAnalyzer:
         report.append(f"赚钱效应: {linkage.get('money_effect', '')}")
         report.append("关键发现:")
         for finding in linkage.get("key_findings", []):
+            report.append(f"  • {finding}")
+        report.append("")
+
+        # 第四步扩展：察题材 - 热点题材分析
+        hot_theme = result.get("step4_hot_theme", {})
+        report.append("【第四步扩展：察题材】热点题材分析")
+        report.append("-" * 40)
+        report.append("热点题材TOP8:")
+        for ht in hot_theme.get("hot_themes", [])[:8]:
+            report.append(f"  {ht['theme']}: {ht['stock_count']}只涨停，龙头{ht['leader_name']}({ht['leader_lbc']}连板)，连板{ht['consecutive_count']}只，首板{ht['first_board_count']}只，平均换手{ht['avg_turnover']}%")
+        report.append(f"题材持续性: {hot_theme.get('theme_persistence', '')}")
+        report.append(f"题材联动: {hot_theme.get('theme_linkage', '')}")
+        report.append(f"题材轮动: {hot_theme.get('theme_rotation', '')}")
+
+        # 政策/事件驱动
+        if hot_theme.get("policy_drivers"):
+            report.append("政策/事件驱动:")
+            for pd in hot_theme["policy_drivers"][:5]:
+                report.append(f"  {pd['theme']}: {', '.join(pd['drivers'][:3])}")
+
+        # 明日题材关注方向
+        report.append("明日题材关注方向:")
+        for focus in hot_theme.get("tomorrow_theme_focus", []):
+            report.append(f"  🔍 {focus}")
+
+        report.append("关键发现:")
+        for finding in hot_theme.get("key_findings", []):
             report.append(f"  • {finding}")
         report.append("")
 
