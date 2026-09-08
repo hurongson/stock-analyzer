@@ -805,17 +805,60 @@ class LateDayScreener:
         logger.info(f"三把锁过滤: 从{len(results)}只减少到{len(filtered_results)}只（只保留买入信号，排除卖出和观望信号）")
         results = filtered_results
 
+        # 初始化反向筛选结果变量
+        reverse_result = None
+        reverse_eliminated = []
+        reverse_downgraded = []
+
+        # 反向筛选（空头模式）：基于博主"WorkBuddy股票淘汰器"逻辑
+        # 核心思想：不是寻找值得买的股票，而是想办法淘汰股票
+        # 7大淘汰规则：真实变化、变化量级、市场预期、财务验证、历史兑现、可理解性、反证
+        # 风险专家一票否决权
+        try:
+            from screener.reverse_screener import reverse_screener
+            reverse_result = reverse_screener.screen(results)
+
+            # 被淘汰的股票（淘汰分>=60或风险否决）：从推荐列表中移除
+            reverse_eliminated = reverse_result.get("eliminated", [])
+            eliminated_codes = set(s.get("code", "") for s in reverse_eliminated)
+
+            # 被降级的股票（淘汰分30-60）：标记降级
+            reverse_downgraded = reverse_result.get("downgraded", [])
+            downgraded_codes = set(s.get("code", "") for s in reverse_downgraded)
+
+            # 从推荐列表中移除被淘汰的股票
+            results_before_reverse = len(results)
+            results = [s for s in results if s.get("code", "") not in eliminated_codes]
+
+            # 标记被降级的股票
+            for s in results:
+                if s.get("code", "") in downgraded_codes:
+                    s["reverse_downgraded"] = True
+                    rs = s.get("reverse_screen", {})
+                    s["reverse_elimination_score"] = rs.get("elimination_score", 0)
+
+            logger.info(f"反向筛选（空头模式）: 从{results_before_reverse}只减少到{len(results)}只，淘汰{len(reverse_eliminated)}只，降级{len(reverse_downgraded)}只")
+            logger.info(f"反向筛选总结: {reverse_result.get('summary', '')}")
+        except Exception as e:
+            logger.error(f"反向筛选失败: {e}")
+            reverse_result = None
+            reverse_eliminated = []
+
         # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分
         # 基于6个月460只涨停股回测分析，涨停概率是最重要的指标
+        # 反向筛选降级的股票排序优先级降低
         def sort_key(x):
             # 类型检查：确保x是字典（修复TypeError）
             if not isinstance(x, dict):
-                return (0, 0, 0)
+                return (0, 0, 0, 0)
             tl = x.get("three_locks", {})
             locked = tl.get("total_locked", 0) if tl else 0
             analysis = x.get("analysis", {})
             limit_up_prob = analysis.get("limit_up_probability", 0) if analysis else 0
-            return (limit_up_prob, locked, x.get("score", 0))
+            # 反向筛选降级的股票排序优先级降低（淘汰分越高，排序越靠后）
+            reverse_score = x.get("reverse_elimination_score", 0)
+            reverse_priority = 100 - reverse_score  # 淘汰分越低，优先级越高
+            return (limit_up_prob, locked, x.get("score", 0), reverse_priority)
         results.sort(key=sort_key, reverse=True)
         
         # 分为精选10支和全部30支
@@ -972,6 +1015,30 @@ class LateDayScreener:
             "total_count": len(all_picks),
             "top_count": len(top_picks),
             "special_count": len(special_picks),
+            # 反向筛选（空头模式）结果
+            "reverse_screen": {
+                "enabled": reverse_result is not None,
+                "summary": reverse_result.get("summary", "") if reverse_result else "",
+                "eliminated_count": len(reverse_eliminated),
+                "downgraded_count": len(reverse_downgraded),
+                "eliminated_stocks": [
+                    {
+                        "name": s.get("name", ""),
+                        "code": s.get("code", ""),
+                        "elimination_score": s.get("reverse_screen", {}).get("elimination_score", 0),
+                        "elimination_reasons": s.get("reverse_screen", {}).get("elimination_reasons", []),
+                        "vetoed": s.get("reverse_veto", {}).get("vetoed", False),
+                        "veto_reasons": s.get("reverse_veto", {}).get("veto_reasons", []),
+                    }
+                    for s in reverse_eliminated[:20]  # 最多展示20只
+                ],
+                "elimination_reasons_stats": reverse_result.get("elimination_reasons", {}) if reverse_result else {},
+                "three_level_funnel": {
+                    "observation_pool_count": len(reverse_result.get("three_level_funnel", {}).get("observation_pool", [])) if reverse_result else 0,
+                    "research_pool_count": len(reverse_result.get("three_level_funnel", {}).get("research_pool", [])) if reverse_result else 0,
+                    "core_pool_count": len(reverse_result.get("three_level_funnel", {}).get("core_pool", [])) if reverse_result else 0,
+                } if reverse_result else {},
+            } if reverse_result else {"enabled": False},
         }
 
     def _get_sell_strategy(self, buy_price: float, target_3pct: float, target_5pct: float, stop_loss: float) -> Dict:

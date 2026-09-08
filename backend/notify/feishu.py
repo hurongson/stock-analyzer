@@ -917,6 +917,81 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         }
     })
 
+    # 反向筛选（空头模式）淘汰股展示
+    # 基于博主"WorkBuddy股票淘汰器"逻辑：不是寻找值得买的股票，而是想办法淘汰股票
+    reverse_screen = late_day_data.get("reverse_screen", {})
+    if reverse_screen and reverse_screen.get("enabled"):
+        elements.append({"tag": "hr"})
+        eliminated_count = reverse_screen.get("eliminated_count", 0)
+        downgraded_count = reverse_screen.get("downgraded_count", 0)
+        summary = reverse_screen.get("summary", "")
+        funnel = reverse_screen.get("three_level_funnel", {})
+
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🔍 反向筛选（空头模式）- 帮你少犯'什么都想买'的错**\n"
+                           f"淘汰{eliminated_count}只，降级{downgraded_count}只，保留{len(all_picks)}只\n"
+                           f"三级漏斗: 观察池{funnel.get('observation_pool_count', 0)}只 → 研究池{funnel.get('research_pool_count', 0)}只 → 核心池{funnel.get('core_pool_count', 0)}只"
+            }
+        })
+
+        # 淘汰原因统计
+        elimination_reasons = reverse_screen.get("elimination_reasons_stats", {})
+        if elimination_reasons:
+            top_reasons = sorted(elimination_reasons.items(), key=lambda x: -x[1])[:5]
+            reasons_str = "、".join([f"{r}({c}只)" for r, c in top_reasons])
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"**主要淘汰原因**: {reasons_str}"
+                }
+            })
+
+        # 被淘汰的股票列表（前10只）
+        eliminated_stocks = reverse_screen.get("eliminated_stocks", [])
+        if eliminated_stocks:
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"**❌ 被淘汰股票（前{min(10, len(eliminated_stocks))}只，为什么不值得研究）**"
+                }
+            })
+
+            for i, s in enumerate(eliminated_stocks[:10]):
+                name = s.get("name", "")
+                code = s.get("code", "")
+                score = s.get("elimination_score", 0)
+                reasons = s.get("elimination_reasons", [])
+                vetoed = s.get("vetoed", False)
+                veto_reasons = s.get("veto_reasons", [])
+
+                reasons_str = "、".join(reasons[:2]) if reasons else ""
+                veto_str = " ⛔风险否决" if vetoed else ""
+                if veto_reasons:
+                    reasons_str = "、".join(veto_reasons[:1]) + ("、" + reasons_str if reasons_str else "")
+
+                elements.append({
+                    "tag": "div",
+                    "text": {
+                        "tag": "lark_md",
+                        "content": f"{i+1}. **{name}**({code}) 淘汰分{score}{veto_str}\n"
+                                   f"   原因: {reasons_str}"
+                    }
+                })
+
+        # 反向筛选核心理念
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "💡 **反向筛选核心理念**: AI最适合散户的用法不是帮你发现更多机会，而是帮你少犯'什么都想买'的错。股票被淘汰仅代表研究优先级降低，不代表未来价格表现。"
+            }
+        })
+
     # 底部
     elements.append({"tag": "hr"})
     elements.append({
