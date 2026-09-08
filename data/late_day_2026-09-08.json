@@ -77,81 +77,6 @@
           "trend_up": "False",
           "divergence_bullish": "False"
         }
-      },
-      "sz": {
-        "code": "399001",
-        "name": "深证成指",
-        "price": 13724.38,
-        "pct_change": -0.37,
-        "trend": {
-          "trend": "下降趋势",
-          "trend_score": 20,
-          "trend_strength": 23.9,
-          "ma5": 13650.59,
-          "ma10": 13798.36,
-          "ma20": 13993.29,
-          "ma60": 14533.86,
-          "ma120": 14701.16,
-          "bullish_alignment": "False",
-          "bearish_alignment": "True"
-        },
-        "macd": {
-          "dif": -164.4028,
-          "dea": -152.2561,
-          "macd": -24.2935,
-          "golden_cross": "False",
-          "death_cross": "False",
-          "hist_increasing": "True",
-          "zero_axis_above": "False"
-        },
-        "rsi": {
-          "rsi6": 32.57,
-          "rsi12": 38.74,
-          "rsi24": 44.26,
-          "status": "正常",
-          "golden_cross": "False"
-        },
-        "kdj": {
-          "k": 32.87,
-          "d": 30.49,
-          "j": 37.64,
-          "golden_cross": "False",
-          "death_cross": "False",
-          "overbought": "False",
-          "oversold": "False",
-          "j_overbought": "False",
-          "j_oversold": "False"
-        },
-        "bollinger": {
-          "upper": 14656.6,
-          "mid": 13993.29,
-          "lower": 13329.98,
-          "width": 9.48,
-          "position": 29.73,
-          "breakout_upper": "False",
-          "breakout_lower": "False",
-          "bandwidth_expanding": "True"
-        },
-        "volume": {
-          "current_volume": "526544652",
-          "vol_ma5": 597905043.0,
-          "vol_ma10": 615506520.0,
-          "vol_ma20": 622915944.0,
-          "volume_ratio": 0.88,
-          "volume_status": "量能正常",
-          "volume_price": "量价配合正常"
-        },
-        "atr": {
-          "atr": 265.23,
-          "atr_ratio": 1.93,
-          "volatility_level": "低波动"
-        },
-        "obv": {
-          "obv": 1831839249.0,
-          "obv_ma10": 2405988093.0,
-          "trend_up": "False",
-          "divergence_bullish": "False"
-        }
       }
     },
     "sentiment": "偏乐观",
@@ -168,7 +93,7 @@
   "top_count": 0,
   "summary": {
     "total_stocks": 5353,
-    "initial_filtered": 91,
+    "initial_filtered": 93,
     "final_picks": 0
   }
 }
