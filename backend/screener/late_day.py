@@ -416,6 +416,8 @@ class LateDayScreener:
             batch_kline_data: 批量获取的K线数据（字典，key为股票代码）
         """
         results = []
+        # 调试日志：排查推荐0只股票的问题
+        logger.info(f"深度分析开始: candidates={len(candidates)}只, batch_kline_data={len(batch_kline_data) if batch_kline_data else 0}只, score_threshold={score_threshold}")
         use_batch_kline = batch_kline_data is not None and len(batch_kline_data) > 0
         if use_batch_kline:
             logger.info(f"使用批量获取的K线数据: {len(batch_kline_data)}只股票")
