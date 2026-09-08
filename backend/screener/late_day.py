@@ -604,9 +604,9 @@ class LateDayScreener:
                 # 加上板块效应加分
                 score = score + sector_bonus
                 
-                # 调试日志：输出每只股票的评分情况
+                # 调试日志：输出每只股票的评分情况（改为info级别，方便在GitHub Actions中排查问题）
                 if i < 10 or score >= 60:
-                    logger.debug(f"评分调试 {stock['name']}({stock.get('code', '')}): 涨幅{stock.get('pct_change', 0):.1f}%, 价格{current_price}, 评分{score}, 理由{analysis.get('reasons', [])[:3]}")
+                    logger.info(f"评分调试 {stock['name']}({stock.get('code', '')}): 涨幅{stock.get('pct_change', 0):.1f}%, 价格{current_price}, 评分{score}, 理由{analysis.get('reasons', [])[:3]}")
 
                 # 去掉量能硬过滤：回测发现46.3%涨停股前一天不满足连续放量条件
                 # 很多是缩量整理后突然放量涨停，量能只在评分中考虑
