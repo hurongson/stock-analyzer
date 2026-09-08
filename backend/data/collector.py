@@ -258,80 +258,29 @@ class DataCollector:
     def get_realtime_quote(self, code: str) -> Optional[Dict]:
         code = normalize_stock_code(code)
         key = f"quote_{code}"
-        cached = cache.get("quote", key)
+        
+        # 优化：交易时段使用5分钟缓存过期，确保数据实时；非交易时段使用按天缓存
+        now_utc = pd.Timestamp.now(tz='UTC')
+        now_beijing = now_utc.tz_convert('Asia/Shanghai')
+        is_trading_day = now_beijing.weekday() < 5
+        is_market_hours = (
+            (now_beijing.hour == 9 and now_beijing.minute >= 30) or
+            (10 <= now_beijing.hour <= 11) or
+            (now_beijing.hour == 12) or
+            (now_beijing.hour == 13) or
+            (now_beijing.hour == 14 and now_beijing.minute <= 59) or
+            (now_beijing.hour == 15 and now_beijing.minute <= 30)
+        )
+        use_realtime = is_trading_day and is_market_hours
+        max_age = 300 if use_realtime else None  # 交易时段5分钟过期
+        
+        cached = cache.get("quote", key, max_age_seconds=max_age)
         if cached:
             return cached
 
-        # 优先 Tushare：从K线最新数据获取价格（不依赖频率受限的 stock_basic/daily_basic）
-        if TUSHARE_AVAILABLE:
-            try:
-                kline = self.get_daily_kline(code, days=10)
-                if kline is not None and not kline.empty:
-                    latest = kline.iloc[-1]
-                    prev = kline.iloc[-2] if len(kline) >= 2 else None
-                    price = safe_float(latest.get("close"), 0)
-                    prev_close = safe_float(latest.get("prev_close"), safe_float(prev.get("close") if prev is not None else 0, 0))
-                    change = price - prev_close if prev_close else 0
-                    pct_change = (change / prev_close * 100) if prev_close else 0
-
-                    result = {
-                        "code": code,
-                        "name": self.STOCK_NAME_MAP.get(code, code),
-                        "price": price,
-                        "pct_change": round(pct_change, 2),
-                        "change": round(change, 2),
-                        "volume": safe_float(latest.get("volume"), 0),
-                        "amount": safe_float(latest.get("amount"), 0),
-                        "high": safe_float(latest.get("high"), 0),
-                        "low": safe_float(latest.get("low"), 0),
-                        "open": safe_float(latest.get("open"), 0),
-                        "prev_close": prev_close,
-                        "turnover": safe_float(latest.get("turnover"), 0),
-                        "pe": None,
-                        "pb": None,
-                        "total_mv": 0,
-                        "circ_mv": 0,
-                    }
-                    cache.set("quote", key, result)
-                    return result
-            except Exception as e:
-                logger.debug(f"Tushare 获取行情失败 {code}: {e}")
-
-        # fallback akshare
-        if AKSHARE_AVAILABLE:
-            try:
-                df = ak.stock_zh_a_spot_em()
-                if df is None or df.empty:
-                    return None
-                row = df[df["代码"] == code]
-                if row.empty:
-                    return None
-                r = row.iloc[0]
-                result = {
-                    "code": code, "name": r.get("名称", ""),
-                    "price": safe_float(r.get("最新价"), 0),
-                    "pct_change": safe_float(r.get("涨跌幅"), 0),
-                    "change": safe_float(r.get("涨跌额"), 0),
-                    "volume": safe_float(r.get("成交量"), 0),
-                    "amount": safe_float(r.get("成交额"), 0),
-                    "amplitude": safe_float(r.get("振幅"), 0),
-                    "high": safe_float(r.get("最高"), 0),
-                    "low": safe_float(r.get("最低"), 0),
-                    "open": safe_float(r.get("今开"), 0),
-                    "prev_close": safe_float(r.get("昨收"), 0),
-                    "turnover": safe_float(r.get("换手率"), 0),
-                    "pe": safe_float(r.get("市盈率-动态")),
-                    "pb": safe_float(r.get("市净率")),
-                    "total_mv": safe_float(r.get("总市值"), 0),
-                    "circ_mv": safe_float(r.get("流通市值"), 0),
-                }
-                cache.set("quote", key, result)
-                return result
-            except Exception as e:
-                logger.warning(f"akshare东方财富 获取行情失败 {code}: {str(e)[:80]}")
-
-        # fallback 新浪财经（已验证在GitHub Actions中稳定可用）
-        if AKSHARE_AVAILABLE:
+        # 优化：交易时段优先使用新浪财经实时行情（已验证在GitHub Actions中稳定可用）
+        # 非交易时段使用Tushare日K线数据（更稳定）
+        if use_realtime and AKSHARE_AVAILABLE:
             try:
                 # 新浪财经需要股票代码加前缀
                 if code.startswith("6"):
@@ -374,10 +323,78 @@ class DataCollector:
                         }
                         if result["price"] > 0:
                             cache.set("quote", key, result)
-                            logger.info(f"新浪财经获取行情成功 {code}: {result['name']} {result['price']}元")
+                            logger.debug(f"新浪财经获取实时行情成功 {code}: {result['name']} {result['price']}元")
                             return result
             except Exception as e:
-                logger.error(f"新浪财经 获取行情失败 {code}: {str(e)[:80]}")
+                logger.debug(f"新浪财经获取实时行情失败 {code}: {str(e)[:80]}")
+
+        # 非交易时段或实时行情获取失败：使用Tushare日K线数据
+        if TUSHARE_AVAILABLE:
+            try:
+                kline = self.get_daily_kline(code, days=10)
+                if kline is not None and not kline.empty:
+                    latest = kline.iloc[-1]
+                    prev = kline.iloc[-2] if len(kline) >= 2 else None
+                    price = safe_float(latest.get("close"), 0)
+                    prev_close = safe_float(latest.get("prev_close"), safe_float(prev.get("close") if prev is not None else 0, 0))
+                    change = price - prev_close if prev_close else 0
+                    pct_change = (change / prev_close * 100) if prev_close else 0
+
+                    result = {
+                        "code": code,
+                        "name": self.STOCK_NAME_MAP.get(code, code),
+                        "price": price,
+                        "pct_change": round(pct_change, 2),
+                        "change": round(change, 2),
+                        "volume": safe_float(latest.get("volume"), 0),
+                        "amount": safe_float(latest.get("amount"), 0),
+                        "high": safe_float(latest.get("high"), 0),
+                        "low": safe_float(latest.get("low"), 0),
+                        "open": safe_float(latest.get("open"), 0),
+                        "prev_close": prev_close,
+                        "turnover": safe_float(latest.get("turnover"), 0),
+                        "pe": None,
+                        "pb": None,
+                        "total_mv": 0,
+                        "circ_mv": 0,
+                    }
+                    cache.set("quote", key, result)
+                    return result
+            except Exception as e:
+                logger.debug(f"Tushare 获取行情失败 {code}: {e}")
+
+        # fallback akshare东方财富
+        if AKSHARE_AVAILABLE:
+            try:
+                df = ak.stock_zh_a_spot_em()
+                if df is None or df.empty:
+                    return None
+                row = df[df["代码"] == code]
+                if row.empty:
+                    return None
+                r = row.iloc[0]
+                result = {
+                    "code": code, "name": r.get("名称", ""),
+                    "price": safe_float(r.get("最新价"), 0),
+                    "pct_change": safe_float(r.get("涨跌幅"), 0),
+                    "change": safe_float(r.get("涨跌额"), 0),
+                    "volume": safe_float(r.get("成交量"), 0),
+                    "amount": safe_float(r.get("成交额"), 0),
+                    "amplitude": safe_float(r.get("振幅"), 0),
+                    "high": safe_float(r.get("最高"), 0),
+                    "low": safe_float(r.get("最低"), 0),
+                    "open": safe_float(r.get("今开"), 0),
+                    "prev_close": safe_float(r.get("昨收"), 0),
+                    "turnover": safe_float(r.get("换手率"), 0),
+                    "pe": safe_float(r.get("市盈率-动态")),
+                    "pb": safe_float(r.get("市净率")),
+                    "total_mv": safe_float(r.get("总市值"), 0),
+                    "circ_mv": safe_float(r.get("流通市值"), 0),
+                }
+                cache.set("quote", key, result)
+                return result
+            except Exception as e:
+                logger.warning(f"akshare东方财富 获取行情失败 {code}: {str(e)[:80]}")
 
         return None
 
