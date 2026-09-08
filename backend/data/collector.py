@@ -1008,3 +1008,5 @@ class DataCollector:
 
 # 全局单例
 collector = DataCollector()
+# 兼容旧代码：data_collector别名（盘中异动监控等模块使用）
+data_collector = collector
