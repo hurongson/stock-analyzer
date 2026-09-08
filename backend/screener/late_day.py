@@ -766,12 +766,11 @@ class LateDayScreener:
         logger.info(f"行业分散度过滤: 从{len(results)}只减少到{len(filtered_results)}只（同一行业最多25只）")
         results = filtered_results
 
-        # 三把锁信号过滤（基于2026-09-07回测深度优化：放宽过滤，只排除卖出信号，不再限制点亮数）
-        # 之前的问题：买入信号0只，2/3亮0只，只有1/3亮6只，导致推荐数量太少
-        # 优化方案：只排除强烈卖出/卖出/谨慎买入信号的股票，不再限制三把锁点亮数
-        # 三把锁仍然作为排序的参考，但不作为硬过滤条件
-        buy_signals = ["强烈买入", "买入"]  # 买入信号（用于排序优先）
-        sell_signals = ["强烈卖出", "卖出", "谨慎买入"]  # 严重bug修复：谨慎买入的股票不进入推荐列表
+        # 三把锁信号过滤（优化：只保留买入信号，排除卖出和观望信号）
+        # 用户反馈：观望的股票不应该出现在推荐里，只推荐有明确买入信号的股票
+        # 三把锁门槛已降低（趋势40分、股性50分、资金30分），确保有足够的买入信号股票
+        buy_signals = ["强烈买入", "买入"]  # 只保留买入信号
+        sell_signals = ["强烈卖出", "卖出", "谨慎买入", "观望", "观望（趋势向好）"]  # 排除卖出和观望信号
         excluded_sell_count = 0
         
         filtered_results = []
@@ -784,18 +783,18 @@ class LateDayScreener:
             tl_signal = tl.get("signal", "")
             tl_locked = tl.get("total_locked", 0)
             
-            # 严重bug修复：强烈卖出和卖出信号的股票直接跳过，不放入任何结果列表
-            # 无论有几把锁亮，卖出信号的股票都不应该被推荐
-            if tl_signal in sell_signals:
+            # 严重bug修复：强烈卖出、卖出、谨慎买入、观望信号的股票直接跳过，不放入任何结果列表
+            # 只保留有明确买入信号的股票（强烈买入、买入）
+            if tl_signal in sell_signals or tl_signal not in buy_signals:
                 excluded_sell_count += 1
                 continue
             
             filtered_results.append(stock)
         
         if excluded_sell_count > 0:
-            logger.info(f"已排除强烈卖出/卖出/谨慎买入信号股票: {excluded_sell_count}只（严重bug修复）")
+            logger.info(f"已排除卖出/观望信号股票: {excluded_sell_count}只（只保留买入信号）")
         
-        logger.info(f"三把锁过滤: 从{len(results)}只减少到{len(filtered_results)}只（只排除卖出信号，不再限制点亮数）")
+        logger.info(f"三把锁过滤: 从{len(results)}只减少到{len(filtered_results)}只（只保留买入信号，排除卖出和观望信号）")
         results = filtered_results
 
         # 排序：优先按涨停概率，再按三把锁点亮数，最后按综合评分

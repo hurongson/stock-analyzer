@@ -191,7 +191,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"趋势锁-布林带计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 55  # 趋势锁门槛55分
+        locked = score >= 40  # 趋势锁门槛从55降低到40（解决所有股票都是观望信号的问题，让更多股票能达到买入信号）
 
         return {
             "locked": locked,
@@ -371,7 +371,7 @@ class ThreeLocksAnalyzer:
             logger.debug(f"股性锁-当日振幅计算失败: {e}")
 
         score = max(0, min(100, round(score)))
-        locked = score >= 60  # 股性锁门槛从50分提高到60分（回测发现点亮率100%，门槛太低失去筛选意义）
+        locked = score >= 50  # 股性锁门槛从60降低到50（解决所有股票都是观望信号的问题，让更多股票能达到买入信号）
 
         return {
             "locked": locked,
