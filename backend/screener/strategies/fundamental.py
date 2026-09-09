@@ -2,6 +2,7 @@
 策略四：基本面选股
 低估值 + 高ROE + 业绩增长 + 合理市值
 """
+import time
 import pandas as pd
 from typing import List, Dict
 from backend.screener.strategies.base import BaseStrategy
@@ -16,6 +17,10 @@ class FundamentalStrategy(BaseStrategy):
 
     def screen(self, df: pd.DataFrame, **kwargs) -> List[Dict]:
         results = []
+
+        # 超时保护：基本面策略最多运行10分钟，避免获取财务数据超时导致整体超时
+        start_time = time.time()
+        MAX_RUN_TIME = 10 * 60  # 10分钟
 
         # 判断数据可用性
         has_pe = df["pe"].max() > 0
@@ -34,16 +39,30 @@ class FundamentalStrategy(BaseStrategy):
         if has_mv:
             candidates = candidates[(candidates["total_mv"] > 30e8) & (candidates["total_mv"] < 2000e8)]
 
-        candidates = candidates.sort_values("amount", ascending=False).head(100)
+        # 优化：从100只减少到30只，避免逐个获取财务数据导致运行超时
+        candidates = candidates.sort_values("amount", ascending=False).head(30)
+
+        logger.info(f"基本面策略候选股票: {len(candidates)}只（优化：从100只减少到30只，避免运行超时）")
 
         for _, row in candidates.iterrows():
-            code = row["code"]
-            try:
-                fund = collector.get_fundamental(code)
-                if not fund:
-                    # 用行情中的 PE/PB 做简化判断
+            # 超时检查：如果超过10分钟，停止获取财务数据，使用已有数据
+            if time.time() - start_time > MAX_RUN_TIME:
+                logger.warning(f"基本面策略运行超过{MAX_RUN_TIME/60:.0f}分钟，停止获取财务数据，使用已有数据完成剩余股票")
+                # 对剩余股票使用PE/PB简化判断
+                fund = {"pe": row.get("pe"), "pb": row.get("pb")}
+            else:
+                code = row["code"]
+                try:
+                    fund = collector.get_fundamental(code)
+                    if not fund:
+                        # 用行情中的 PE/PB 做简化判断
+                        fund = {"pe": row.get("pe"), "pb": row.get("pb")}
+                except Exception as e:
+                    logger.debug(f"基本面分析 {code} 失败: {e}")
+                    # 失败时使用PE/PB简化判断，不重试
                     fund = {"pe": row.get("pe"), "pb": row.get("pb")}
 
+            try:
                 score = 40
                 reasons = []
 
@@ -127,8 +146,10 @@ class FundamentalStrategy(BaseStrategy):
                         min(100, score)
                     ))
             except Exception as e:
-                logger.debug(f"基本面分析 {code} 失败: {e}")
+                logger.debug(f"基本面分析 {row.get('code', '')} 评分失败: {e}")
                 continue
 
+        elapsed = time.time() - start_time
+        logger.info(f"基本面策略完成: 选出{len(results)}只，运行时间{elapsed/60:.1f}分钟")
         results.sort(key=lambda x: x["score"], reverse=True)
         return results[:20]
