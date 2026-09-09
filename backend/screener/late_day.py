@@ -587,7 +587,20 @@ class LateDayScreener:
                         if i < 10:
                             logger.info(f"振幅过滤 {stock['name']}({stock.get('code', '')}): high={today_high:.2f}, low={today_low:.2f}, prev_close={prev_close:.2f}, 振幅{amplitude:.2f}% < 1%")
                         continue  # 振幅太小，股性不活跃，很难涨停
+                    # 2026-09-09回测优化：振幅>12%的股票波动太大，风险高（金螳螂振幅12.05%，次日-6.83%）
+                    elif amplitude > 12:
+                        if i < 10:
+                            logger.info(f"振幅过大过滤 {stock['name']}({stock.get('code', '')}): 振幅{amplitude:.2f}% > 12%，波动太大风险高")
+                        continue
                 stats["amplitude_ok"] += 1
+
+                # 2026-09-09回测优化：昨日涨幅>4.5%的股票追高风险大，排除
+                # 回测发现：金螳螂+4.32%, 中公教育+3.90%, 青山纸业+3.58% 次日都下跌
+                pct_change = stock.get("pct_change", 0)
+                if pct_change > 4.5:
+                    if i < 10:
+                        logger.info(f"昨日涨幅过大过滤 {stock['name']}({stock.get('code', '')}): 涨幅{pct_change:.2f}% > 4.5%，追高风险大")
+                    continue
 
                 # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
                 turnover = stock.get("turnover", 0)
@@ -1130,10 +1143,16 @@ class LateDayScreener:
             reasons.append(f"极端超跌({pct_change:.1f}%)，注意风险但反弹空间大")
             pattern = "极端超跌反弹型"
             risks.append(f"极端超跌({pct_change:.1f}%)，基本面可能有问题")
-        elif 3 < pct_change <= 5:
-            score += 8  # 涨幅较大，较低分（只有5.4%涨停股属于此区间）
+        elif 3 < pct_change <= 4:
+            score += 5  # 2026-09-09回测优化：涨幅3-4%降低评分（从8分降到5分），追高风险增加
             reasons.append(f"涨幅尚可({pct_change:.1f}%)，注意追高风险")
             pattern = "温和上涨型"
+            risks.append(f"昨日涨幅{pct_change:.1f}%偏高，次日回调风险增加")
+        elif 4 < pct_change <= 5:
+            score += 2  # 2026-09-09回测优化：涨幅4-5%大幅降低评分（从8分降到2分），追高风险大
+            reasons.append(f"涨幅较大({pct_change:.1f}%)，追高风险大")
+            pattern = "温和上涨型"
+            risks.append(f"昨日涨幅{pct_change:.1f}%过高，次日大概率回调")
         else:
             risks.append("涨幅异常")
 
@@ -1166,35 +1185,44 @@ class LateDayScreener:
             pass
 
         # 2.5 振幅评分（5分）- 深度回测发现：振幅大的股票更容易涨停
+        # 2026-09-09回测优化：振幅>10%的股票风险高（金螳螂振幅12.05%，次日-6.83%），需要扣分
         amplitude = stock.get("amplitude", 0)
-        if amplitude >= 5:
+        if 5 <= amplitude < 10:
             score += 5
             reasons.append(f"振幅大({amplitude:.1f}%)，股性活跃")
-        elif amplitude >= 3:
+        elif 3 <= amplitude < 5:
             score += 3
             reasons.append(f"振幅适中({amplitude:.1f}%)")
-        elif amplitude >= 2:
+        elif 2 <= amplitude < 3:
             score += 1
             reasons.append(f"振幅较小({amplitude:.1f}%)")
+        elif amplitude >= 10:
+            score -= 3  # 振幅过大，波动剧烈，风险高
+            reasons.append(f"振幅过大({amplitude:.1f}%)，波动剧烈风险高")
+            risks.append(f"振幅{amplitude:.1f}%过大，次日波动风险高")
 
         # 2.6 换手率评分（8分）- 基于2026-09-08回测优化：涨停股平均换手率8.9%，7-15%占42.5%
         # 换手率高的股票资金关注度高，更容易涨停
+        # 2026-09-09回测优化：罗牛山换手率12%，次日收益+3.08%（最好），高换手率股票表现更好
         turnover = stock.get("turnover", 0)
-        if turnover >= 10:
+        if turnover >= 15:
             score += 8
             reasons.append(f"换手率极高({turnover:.1f}%)，资金关注度极高")
-        elif turnover >= 7:
-            score += 6
+        elif turnover >= 10:
+            score += 8  # 从6分提高到8分，高换手率股票表现更好
             reasons.append(f"换手率高({turnover:.1f}%)，资金关注度高")
+        elif turnover >= 8:
+            score += 7  # 新增：换手率8-10%也给高分
+            reasons.append(f"换手率较高({turnover:.1f}%)，资金关注度较高")
         elif turnover >= 5:
             score += 5
-            reasons.append(f"换手率较高({turnover:.1f}%)，资金关注度较高")
+            reasons.append(f"换手率适中({turnover:.1f}%)")
         elif turnover >= 3:
             score += 3
-            reasons.append(f"换手率适中({turnover:.1f}%)")
+            reasons.append(f"换手率偏低({turnover:.1f}%)")
         elif turnover >= 1:
             score += 1
-            reasons.append(f"换手率较低({turnover:.1f}%)")
+            reasons.append(f"换手率低({turnover:.1f}%)，股性不活跃")
 
         # 2.7 均线多头排列评分（5分）- 深度回测发现：40.1%涨停股均线多头排列
         try:
