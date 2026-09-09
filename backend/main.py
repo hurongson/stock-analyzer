@@ -94,7 +94,7 @@ def run_quick_analysis(stocks: list = None, enable_push: bool = True):
 
 
 def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm: bool = None):
-    """运行完整分析流程"""
+    """运行完整分析流程（增加超时保护，确保即使超时也能推送已有结果）"""
     Config.ensure_dirs()
 
     if enable_llm is not None:
@@ -105,6 +105,19 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
     logger.info(f"自选股: {stock_list}")
     logger.info(f"LLM 分析: {'开启' if Config.ENABLE_LLM else '关闭'}")
 
+    # 超时保护：记录开始时间，设置最大运行时间50分钟（工作流超时60分钟，留10分钟余量）
+    import time
+    start_time = time.time()
+    MAX_RUN_TIME = 50 * 60  # 50分钟
+
+    def is_timeout():
+        """检查是否超时"""
+        elapsed = time.time() - start_time
+        if elapsed > MAX_RUN_TIME:
+            logger.warning(f"⚠️ 运行时间已达{elapsed/60:.1f}分钟，接近超时限制，跳过后续步骤以确保飞书推送")
+            return True
+        return False
+
     # 0. 市场择时
     logger.info("--- 步骤0: 市场择时分析 ---")
     try:
@@ -114,49 +127,85 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
         logger.error(f"市场择时失败: {e}")
         market_timing_result = None
 
-    # 1. 选股
-    logger.info("--- 步骤1: 运行选股引擎 ---")
-    try:
-        screener_result = screener.run_all()
-        logger.info(f"选股完成，共选出 {screener_result.get('summary', {}).get('combined_count', 0)} 只")
-    except Exception as e:
-        logger.error(f"选股失败: {e}")
-        screener_result = None
+    # 1. 选股（超时保护：如果超时就跳过选股）
+    screener_result = None
+    if not is_timeout():
+        logger.info("--- 步骤1: 运行选股引擎 ---")
+        try:
+            screener_result = screener.run_all()
+            logger.info(f"选股完成，共选出 {screener_result.get('summary', {}).get('combined_count', 0)} 只")
+        except Exception as e:
+            logger.error(f"选股失败: {e}")
+            screener_result = None
+    else:
+        logger.warning("跳过选股引擎（超时保护）")
 
-    # 2. 自选股分析
+    # 2. 自选股分析（超时保护：如果超时就只分析部分股票）
     logger.info("--- 步骤2: 自选股分析 ---")
+    stock_analyses = []
     try:
-        stock_analyses = analyze_batch(stock_list)
+        if is_timeout():
+            # 超时保护：只分析前5只股票，确保能完成
+            logger.warning(f"超时保护：只分析前5只股票（共{len(stock_list)}只）")
+            stock_list_partial = stock_list[:5]
+        else:
+            stock_list_partial = stock_list
+
+        stock_analyses = analyze_batch(stock_list_partial)
         logger.info(f"完成 {len(stock_analyses)} 只股票分析")
     except Exception as e:
         logger.error(f"自选股分析失败: {e}")
         stock_analyses = []
 
-    # 3. 生成报告
+    # 3. 生成报告（即使超时也要生成报告）
     logger.info("--- 步骤3: 生成报告 ---")
-    report = generate_daily_report(stock_analyses, screener_result)
-    # 添加市场择时结果
-    if market_timing_result:
-        report["json"]["market_timing"] = market_timing_result
+    try:
+        report = generate_daily_report(stock_analyses, screener_result)
+        # 添加市场择时结果
+        if market_timing_result:
+            report["json"]["market_timing"] = market_timing_result
+        # 添加超时标记
+        if is_timeout():
+            report["json"]["timeout_warning"] = "⚠️ 分析超时，部分数据可能不完整"
+            logger.warning("报告标记为超时（部分数据可能不完整）")
+    except Exception as e:
+        logger.error(f"生成报告失败: {e}")
+        # 生成最小报告
+        report = {"json": {"date": today_str(), "stocks": [], "timeout_warning": "⚠️ 生成报告失败，使用最小报告"}}
 
     # 4. 保存报告
-    report_path = save_report(report)
-    logger.info(f"报告已保存: {report_path}")
+    try:
+        report_path = save_report(report)
+        logger.info(f"报告已保存: {report_path}")
 
-    # 同时保存一份 latest.json 供前端读取
-    latest_path = os.path.join(Config.DATA_DIR, "latest.json")
-    from backend.utils.helpers import save_json
-    save_json(report["json"], latest_path)
-    logger.info(f"最新报告已保存: {latest_path}")
+        # 同时保存一份 latest.json 供前端读取
+        latest_path = os.path.join(Config.DATA_DIR, "latest.json")
+        from backend.utils.helpers import save_json
+        save_json(report["json"], latest_path)
+        logger.info(f"最新报告已保存: {latest_path}")
+    except Exception as e:
+        logger.error(f"保存报告失败: {e}")
 
-    # 5. 推送飞书
+    # 5. 推送飞书（最重要：即使超时也要推送）
     if enable_push and Config.FEISHU_WEBHOOK_URL:
         logger.info("--- 步骤4: 推送飞书 ---")
-        push_daily_report(report["json"])
+        try:
+            push_daily_report(report["json"])
+            logger.info("飞书推送成功")
+        except Exception as e:
+            logger.error(f"飞书推送失败: {e}")
+            # 尝试推送简化消息
+            try:
+                from backend.notify.feishu import send_feishu_text
+                send_feishu_text(f"⚠️ 每日股票分析超时，部分数据不完整。已完成{len(stock_analyses)}只股票分析。")
+                logger.info("简化飞书消息推送成功")
+            except Exception as e2:
+                logger.error(f"简化飞书消息推送也失败: {e2}")
     else:
         logger.info("跳过飞书推送（未配置 Webhook 或禁用推送）")
 
-    logger.info("===== 分析完成 =====")
+    elapsed = time.time() - start_time
+    logger.info(f"===== 分析完成，总运行时间: {elapsed/60:.1f}分钟 =====")
     return report
 
 
