@@ -570,8 +570,10 @@ class ThreeLocksAnalyzer:
                 strength = 30
 
         # 风险调整
+        # 2026-09-09优化：提高门槛从>=4改为>=6，避免因为数据不足（换手率为0、资金流向获取失败等）导致的误降级
+        # 之前所有股票都因为总风险数>=4被降级为观望，导致推荐股票为空
         total_risks = len(trend_lock["risks"]) + len(activity_lock["risks"]) + len(capital_lock["risks"])
-        if total_risks >= 4:
+        if total_risks >= 6:
             strength = max(20, strength - 15)
             if signal == "强烈买入":
                 signal = "谨慎买入"
