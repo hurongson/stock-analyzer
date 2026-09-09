@@ -126,11 +126,31 @@ class ScreenerEngine:
         combined.sort(key=lambda x: (x["strategy_count"], x["total_score"]), reverse=True)
         combined = combined[:Config.SCREENER_MAX_RESULTS]
 
+        # 2026-09-09优化：使用批量获取K线，避免Tushare频率超限（50次/分钟）
+        # 之前逐个获取K线导致频率超限，所有股票三把锁信号都是"数据不足"
+        logger.info(f"批量获取 {len(combined)} 只股票的K线数据...")
+        codes = [item["code"] for item in combined]
+        kline_dict = {}
+        try:
+            kline_dict = collector.batch_get_daily_kline(codes, days=60)
+            logger.info(f"批量获取K线成功: {len(kline_dict)}只")
+        except Exception as e:
+            logger.error(f"批量获取K线失败: {e}")
+            # 批量获取失败时，回退到逐个获取
+            logger.info("回退到逐个获取K线...")
+            for item in combined:
+                try:
+                    kline = collector.get_daily_kline(item["code"], days=60)
+                    if kline is not None:
+                        kline_dict[item["code"]] = kline
+                except Exception as e:
+                    logger.debug(f"获取 {item['code']} K线失败: {e}")
+
         # 为综合选股结果生成交易信号（买卖点位）+ 强势度评估
         logger.info(f"为 {len(combined)} 只选股生成交易信号和强势度评估...")
         for item in combined:
             try:
-                kline = collector.get_daily_kline(item["code"], days=60)
+                kline = kline_dict.get(item["code"])
                 quote = {"price": item["price"], "pct_change": item["pct_change"]}
                 signal = generate_trading_signal(kline, quote)
                 item["trading_signal"] = signal
