@@ -3,7 +3,8 @@
 整合技术面、基本面、资金面、概念热点、LLM深度分析
 """
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Optional
+import pandas as pd
 from backend.data.collector import collector
 from backend.analysis.technical import analyze_technical
 from backend.analysis.fundamental import analyze_fundamental
@@ -27,15 +28,17 @@ WEIGHTS = {
 }
 
 
-def analyze_stock(code: str) -> Dict[str, Any]:
+def analyze_stock(code: str, kline: Optional[pd.DataFrame] = None, quote: Optional[Dict] = None) -> Dict[str, Any]:
     """
     对单只股票进行五维综合分析
+    2026-09-09优化：支持传入预获取的K线和行情数据，避免逐个获取导致Tushare频率超限
     """
     code = normalize_stock_code(code)
     logger.info(f"开始分析股票: {code}")
 
-    # 获取基本信息
-    quote = collector.get_realtime_quote(code)
+    # 获取基本信息（如果没有传入预获取的行情数据）
+    if quote is None:
+        quote = collector.get_realtime_quote(code)
     stock_info = quote or {"code": code, "name": code, "price": 0, "pct_change": 0}
 
     # 五维分析
@@ -45,7 +48,9 @@ def analyze_stock(code: str) -> Dict[str, Any]:
     concept = analyze_concept(code)
 
     # 交易信号（基于K线技术指标，给出明确买卖建议）
-    kline = collector.get_daily_kline(code, days=60)
+    # 2026-09-09优化：如果传入了预获取的K线数据，直接使用，避免逐个获取
+    if kline is None:
+        kline = collector.get_daily_kline(code, days=60)
     trading_signal = generate_trading_signal(kline, stock_info)
 
     # 三把锁分析（趋势锁+股性锁+资金锁）
@@ -172,13 +177,60 @@ def analyze_stock(code: str) -> Dict[str, Any]:
 
 
 def analyze_batch(codes: list) -> list:
-    """批量分析股票"""
+    """批量分析股票
+    2026-09-09优化：使用批量获取K线和行情数据，避免逐个获取导致Tushare频率超限
+    """
     results = []
-    for code in codes:
+    
+    # 标准化股票代码
+    normalized_codes = [normalize_stock_code(c) for c in codes]
+    
+    # 批量获取K线数据（避免Tushare频率超限）
+    logger.info(f"批量获取 {len(normalized_codes)} 只股票的K线数据...")
+    kline_dict = {}
+    try:
+        kline_dict = collector.batch_get_daily_kline(normalized_codes, days=60)
+        logger.info(f"批量获取K线成功: {len(kline_dict)}只")
+    except Exception as e:
+        logger.error(f"批量获取K线失败: {e}")
+    
+    # 批量获取实时行情数据（从全市场行情中筛选）
+    logger.info(f"批量获取 {len(normalized_codes)} 只股票的实时行情...")
+    quote_dict = {}
+    try:
+        all_stocks = collector.get_all_stocks()
+        if all_stocks is not None and not all_stocks.empty:
+            # 确保代码列是字符串
+            code_col = 'code' if 'code' in all_stocks.columns else all_stocks.columns[0]
+            all_stocks[code_col] = all_stocks[code_col].astype(str).str.zfill(6)
+            # 筛选需要的股票
+            filtered = all_stocks[all_stocks[code_col].isin(normalized_codes)]
+            for _, row in filtered.iterrows():
+                code = row[code_col]
+                quote_dict[code] = {
+                    "code": code,
+                    "name": row.get("name", code),
+                    "price": float(row.get("price", 0)),
+                    "pct_change": float(row.get("pct_change", 0)),
+                    "high": float(row.get("high", 0)),
+                    "low": float(row.get("low", 0)),
+                    "open": float(row.get("open", 0)),
+                    "volume": float(row.get("volume", 0)),
+                    "amount": float(row.get("amount", 0)),
+                }
+            logger.info(f"批量获取实时行情成功: {len(quote_dict)}只")
+    except Exception as e:
+        logger.error(f"批量获取实时行情失败: {e}")
+    
+    # 逐个分析股票（使用预获取的K线和行情数据）
+    for code in normalized_codes:
         try:
-            r = analyze_stock(code)
+            kline = kline_dict.get(code)
+            quote = quote_dict.get(code)
+            r = analyze_stock(code, kline=kline, quote=quote)
             results.append(r)
         except Exception as e:
             logger.error(f"分析 {code} 失败: {e}")
             results.append({"code": code, "error": str(e)})
+    
     return results
