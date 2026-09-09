@@ -15,6 +15,24 @@ from backend.config import Config
 
 logger = logging.getLogger(__name__)
 
+# ============ akshare 快速失败机制 ============
+# 如果akshare接口连续失败多次，临时禁用，避免运行超时
+_akshare_failure_count = {
+    "fund_flow": 0,       # 资金流向接口失败次数
+    "financial_abstract": 0,  # 财务摘要接口失败次数
+    "max_failures": 5,    # 最大失败次数，超过后临时禁用
+}
+
+def _is_akshare_disabled(api_name: str) -> bool:
+    """检查akshare接口是否被临时禁用"""
+    return _akshare_failure_count.get(api_name, 0) >= _akshare_failure_count["max_failures"]
+
+def _record_akshare_failure(api_name: str):
+    """记录akshare接口失败"""
+    _akshare_failure_count[api_name] = _akshare_failure_count.get(api_name, 0) + 1
+    if _akshare_failure_count[api_name] == _akshare_failure_count["max_failures"]:
+        logger.warning(f"akshare {api_name} 接口连续失败{_akshare_failure_count['max_failures']}次，临时禁用以避免运行超时")
+
 # ============ 延迟导入数据源 ============
 try:
     import akshare as ak
@@ -514,8 +532,8 @@ class DataCollector:
             except Exception as e:
                 logger.debug(f"Tushare 获取基本面失败 {code}: {e}")
 
-        # fallback akshare 财务摘要
-        if AKSHARE_AVAILABLE and not result:
+        # fallback akshare 财务摘要（快速失败机制：连续失败5次后临时禁用，避免运行超时）
+        if AKSHARE_AVAILABLE and not result and not _is_akshare_disabled("financial_abstract"):
             try:
                 df = ak.stock_financial_abstract_ths(symbol=code, indicator="按年度")
                 if df is not None and not df.empty:
@@ -531,6 +549,7 @@ class DataCollector:
                     })
             except Exception as e:
                 logger.warning(f"akshare 获取财务摘要失败 {code}: {e}")
+                _record_akshare_failure("financial_abstract")
 
         # 补充行情中的 PE/PB/市值/名称
         quote = self.get_realtime_quote(code)
@@ -604,8 +623,8 @@ class DataCollector:
             except Exception as e:
                 logger.debug(f"Tushare 获取资金流向失败 {code}: {e}")
 
-        # fallback akshare
-        if AKSHARE_AVAILABLE:
+        # fallback akshare（快速失败机制：连续失败5次后临时禁用，避免运行超时）
+        if AKSHARE_AVAILABLE and not _is_akshare_disabled("fund_flow"):
             try:
                 df = ak.stock_individual_fund_flow(stock=code, market="sh" if code.startswith("6") else "sz")
                 if df is None or df.empty:
@@ -626,6 +645,7 @@ class DataCollector:
                 return result
             except Exception as e:
                 logger.warning(f"akshare 获取资金流向失败 {code}: {e}")
+                _record_akshare_failure("fund_flow")
         return None
 
     # ============ 概念板块 ============

@@ -15,6 +15,11 @@ on:
         required: false
         default: 'false'
 
+# 并发控制：确保同一时间只有一个每日股票分析工作流运行，避免互相影响
+concurrency:
+  group: daily-analysis
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -22,7 +27,7 @@ jobs:
   analyze:
     if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout

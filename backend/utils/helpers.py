@@ -41,8 +41,8 @@ def load_json(filepath: str) -> Optional[Any]:
         return json.load(f)
 
 
-def retry(max_retries: int = 3, delay: float = 1.0):
-    """重试装饰器"""
+def retry(max_retries: int = 2, delay: float = 0.5):
+    """重试装饰器（优化：减少重试次数和延迟，避免运行超时）"""
     def decorator(func):
         def wrapper(*args, **kwargs):
             for i in range(max_retries):
