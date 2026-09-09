@@ -163,6 +163,42 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
         logger.error(f"自选股分析失败: {e}")
         stock_analyses = []
 
+    # 2.5 我的持有股票分析（独立模块，重点关注买卖信号）
+    hold_analyses = []
+    if Config.HOLD_STOCK_LIST and not is_timeout():
+        logger.info(f"--- 步骤2.5: 我的持有股票分析（{len(Config.HOLD_STOCK_LIST)}只）---")
+        try:
+            # 我的持有股票可能已在自选股分析中，这里单独标记
+            hold_codes = set(Config.HOLD_STOCK_LIST)
+            hold_analyses = [a for a in stock_analyses if a.get("code") in hold_codes]
+            # 如果有持有股票不在自选股分析中，单独分析
+            hold_in_analysis = set(a.get("code") for a in hold_analyses)
+            missing_hold = [c for c in Config.HOLD_STOCK_LIST if c not in hold_in_analysis]
+            if missing_hold and not is_timeout():
+                logger.info(f"补充分析持有股票: {missing_hold}")
+                extra_analyses = analyze_batch(missing_hold)
+                hold_analyses.extend(extra_analyses)
+                stock_analyses.extend(extra_analyses)
+            logger.info(f"我的持有股票分析完成: {len(hold_analyses)}只")
+        except Exception as e:
+            logger.error(f"我的持有股票分析失败: {e}")
+            hold_analyses = []
+
+    # 2.6 反向筛选（空头模式）- 对选股结果进行淘汰筛选
+    reverse_screen_result = None
+    if screener_result and screener_result.get("combined") and not is_timeout():
+        logger.info("--- 步骤2.6: 反向筛选（空头模式）---")
+        try:
+            from backend.screener.reverse_screener import ReverseScreener
+            reverse_screener = ReverseScreener()
+            # 对选股结果进行反向筛选
+            combined = screener_result.get("combined", [])
+            reverse_screen_result = reverse_screener.screen(combined)
+            logger.info(f"反向筛选完成: 淘汰{reverse_screen_result.get('eliminated_count', 0)}只, 降级{reverse_screen_result.get('downgraded_count', 0)}只, 保留{reverse_screen_result.get('kept_count', 0)}只")
+        except Exception as e:
+            logger.error(f"反向筛选失败: {e}")
+            reverse_screen_result = None
+
     # 3. 生成报告（即使超时也要生成报告）
     logger.info("--- 步骤3: 生成报告 ---")
     try:
@@ -170,6 +206,14 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
         # 添加市场择时结果
         if market_timing_result:
             report["json"]["market_timing"] = market_timing_result
+        # 添加我的持有股票分析
+        if hold_analyses:
+            report["json"]["hold_stocks"] = hold_analyses
+            logger.info(f"报告添加我的持有股票: {len(hold_analyses)}只")
+        # 添加反向筛选结果
+        if reverse_screen_result:
+            report["json"]["reverse_screen"] = reverse_screen_result
+            logger.info("报告添加反向筛选结果")
         # 添加超时标记
         if is_timeout():
             report["json"]["timeout_warning"] = "⚠️ 分析超时，部分数据可能不完整"

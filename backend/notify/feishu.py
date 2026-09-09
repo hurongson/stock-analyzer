@@ -86,6 +86,8 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
     analyses = report_data.get("stock_analyses", [])
     screener = report_data.get("screener_result", {})
     market_timing = report_data.get("market_timing", {})
+    hold_stocks = report_data.get("hold_stocks", [])  # 我的持有股票
+    reverse_screen = report_data.get("reverse_screen", {})  # 反向筛选（空头模式）
 
     # 构建卡片内容
     elements = []
@@ -140,6 +142,33 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                     "tag": "lark_md",
                     "content": f"**🎯 今日选股推荐** {summary_str}\n"
                                f"   👇 向下滚动查看详细推荐"
+                }
+            })
+            elements.append({"tag": "hr"})
+
+    # 各类推荐股票（各策略TOP3）- 低价/技术形态/资金流/基本面/概念热点
+    if screener and screener.get("strategies"):
+        strategies = screener["strategies"]
+        strategy_names = {
+            "low_price": ("💰 低价潜力股", "低价+小市值+基本面尚可"),
+            "technical_pattern": ("📊 技术形态股", "均线多头/放量突破/MACD金叉"),
+            "capital_flow": ("💹 资金流入股", "主力资金持续流入+量价配合"),
+            "fundamental": ("📈 基本面优质股", "低估值+高ROE+业绩增长"),
+            "concept_hotspot": ("🔥 概念热点股", "近期热点题材+政策催化"),
+        }
+        strategy_lines = []
+        for key, (name, desc) in strategy_names.items():
+            stocks = strategies.get(key, [])
+            if stocks:
+                top3 = stocks[:3]
+                stocks_str = "、".join([f"{s['name']}({s['code']})" for s in top3])
+                strategy_lines.append(f"**{name}**（{len(stocks)}只）: {stocks_str}")
+        if strategy_lines:
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"**📋 各类推荐股票（各策略TOP3）**\n" + "\n".join(strategy_lines)
                 }
             })
             elements.append({"tag": "hr"})
@@ -566,6 +595,97 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 "content": "\n".join(watch_lines)
             }
         })
+
+    # 我的持有股票（独立模块，重点关注买卖信号）
+    valid_hold = [a for a in hold_stocks if "error" not in a]
+    if valid_hold:
+        elements.append({"tag": "hr"})
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**💼 我的持有股票（{len(valid_hold)}只，重点关注买卖信号）**"
+            }
+        })
+        hold_lines = []
+        for a in valid_hold:
+            ts = a.get("trading_signal", {})
+            signal = ts.get("action", a.get("action", "持有观望"))
+            conf = ts.get("confidence", 0)
+            buy_p = ts.get("buy_price")
+            sell_p = ts.get("sell_price")
+            stop_p = ts.get("stop_loss")
+            target_p = ts.get("target_price")
+            point_info = []
+            if buy_p:
+                point_info.append(f"买{buy_p}")
+            if sell_p:
+                point_info.append(f"卖{sell_p}")
+            if stop_p:
+                point_info.append(f"止损{stop_p}")
+            if target_p:
+                point_info.append(f"目标{target_p}")
+            point_str = f" | {'/'.join(point_info)}" if point_info else ""
+            tl_str = _format_three_locks(a)
+            signal_emoji = "🟩" if "买" in signal else ("🟥" if "卖" in signal else "⬜")
+            hold_lines.append(
+                f"• **{a.get('name','')}**({a.get('code','')}) {a.get('price',0)}元 "
+                f"{a.get('pct_change',0):+.1f}% | 评分{a.get('total_score',0)} | "
+                f"{signal_emoji}{signal}({conf}%){point_str}{tl_str}"
+            )
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": "\n".join(hold_lines)
+            }
+        })
+
+    # 反向筛选（空头模式）- 帮你少犯"什么都想买"的错
+    if reverse_screen and reverse_screen.get("enabled"):
+        elements.append({"tag": "hr"})
+        eliminated_count = reverse_screen.get("eliminated_count", 0)
+        downgraded_count = reverse_screen.get("downgraded_count", 0)
+        kept_count = reverse_screen.get("kept_count", 0)
+        summary = reverse_screen.get("summary", "")
+        elements.append({
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": f"**🔍 反向筛选（空头模式）- 帮你少犯'什么都想买'的错**\n"
+                           f"淘汰{eliminated_count}只 | 降级{downgraded_count}只 | 保留{kept_count}只\n"
+                           f"核心理念：不是帮你发现更多机会，而是帮你学会放弃绝大多数机会"
+            }
+        })
+        # 淘汰原因统计
+        elimination_reasons = reverse_screen.get("elimination_reasons_stats", {})
+        if elimination_reasons:
+            reason_lines = []
+            for reason, count in sorted(elimination_reasons.items(), key=lambda x: x[1], reverse=True)[:5]:
+                reason_lines.append(f"  • {reason}: {count}只")
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"**淘汰原因TOP5：**\n" + "\n".join(reason_lines)
+                }
+            })
+        # 被淘汰股票列表
+        eliminated_stocks = reverse_screen.get("eliminated_stocks", [])
+        if eliminated_stocks:
+            elim_lines = []
+            for s in eliminated_stocks[:5]:
+                name = s.get("name", "")
+                code = s.get("code", "")
+                reasons = "、".join(s.get("elimination_reasons", [])[:2])
+                elim_lines.append(f"  • {name}({code}): {reasons}")
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"**被淘汰股票（前5只）：**\n" + "\n".join(elim_lines)
+                }
+            })
 
     # 底部
     elements.append({"tag": "hr"})

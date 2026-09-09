@@ -20,12 +20,14 @@ def _get_env(key: str, default: str = "") -> str:
 
 class Config:
     # ===== 自选股 =====
-    # 主自选股列表
+    # 主自选股列表（我的关注）
     STOCK_LIST = [s.strip() for s in _get_env("STOCK_LIST", "600519,000001").split(",") if s.strip()]
     # 关注股票列表（flower stock list，用户额外添加的关注股票）
     FLOWER_STOCK_LIST = [s.strip() for s in _get_env("FLOWER_STOCK_LIST", "").split(",") if s.strip()]
+    # 我的持有股票列表（已持仓，需要重点关注买卖信号）
+    HOLD_STOCK_LIST = [s.strip() for s in _get_env("HOLD_STOCK_LIST", "").split(",") if s.strip()]
     # 合并后的自选股列表（去重）
-    ALL_STOCKS = list(dict.fromkeys(STOCK_LIST + FLOWER_STOCK_LIST))
+    ALL_STOCKS = list(dict.fromkeys(STOCK_LIST + FLOWER_STOCK_LIST + HOLD_STOCK_LIST))
 
     # ===== LLM =====
     LLM_API_KEY = _get_env("LLM_API_KEY", "")
