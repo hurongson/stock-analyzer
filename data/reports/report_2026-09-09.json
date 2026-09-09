@@ -1,13 +1,13 @@
 {
   "date": "2026-09-09",
-  "generated_at": "2026-09-09T05:48:06.600813",
+  "generated_at": "2026-09-09T07:28:34.051234",
   "stock_analyses": [
     {
       "code": "000791",
       "name": "甘肃能源",
-      "price": 7.33,
-      "pct_change": 0.964,
-      "analysis_time": "2026-09-09 05:32:41",
+      "price": 7.36,
+      "pct_change": 1.377,
+      "analysis_time": "2026-09-09 07:13:18",
       "total_score": 36,
       "rating": "偏空",
       "action": "减仓",
@@ -146,9 +146,9 @@
     {
       "code": "002131",
       "name": "利欧股份",
-      "price": 4.58,
-      "pct_change": -4.184,
-      "analysis_time": "2026-09-09 05:33:36",
+      "price": 4.61,
+      "pct_change": -3.556,
+      "analysis_time": "2026-09-09 07:14:15",
       "total_score": 42,
       "rating": "偏空",
       "action": "减仓",
@@ -285,9 +285,9 @@
     {
       "code": "002177",
       "name": "御银股份",
-      "price": 5.91,
-      "pct_change": -2.314,
-      "analysis_time": "2026-09-09 05:36:02",
+      "price": 5.93,
+      "pct_change": -1.983,
+      "analysis_time": "2026-09-09 07:15:04",
       "total_score": 44,
       "rating": "偏空",
       "action": "减仓",
@@ -424,9 +424,9 @@
     {
       "code": "601929",
       "name": "吉视传媒",
-      "price": 2.51,
-      "pct_change": -5.639,
-      "analysis_time": "2026-09-09 05:36:55",
+      "price": 2.53,
+      "pct_change": -4.887,
+      "analysis_time": "2026-09-09 07:15:56",
       "total_score": 39,
       "rating": "偏空",
       "action": "减仓",
@@ -470,13 +470,11 @@
         ]
       },
       "concept": {
-        "concepts": [
-          "电视广播Ⅱ"
-        ],
+        "concepts": [],
         "matched_hot": [],
         "score": 45,
         "conclusions": [
-          "所属行业/概念：电视广播Ⅱ",
+          "暂无明确概念标签",
           "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
         ]
       },
@@ -567,9 +565,9 @@
     {
       "code": "002217",
       "name": "ST合力泰",
-      "price": 1.45,
-      "pct_change": -2.027,
-      "analysis_time": "2026-09-09 05:37:47",
+      "price": 1.46,
+      "pct_change": -1.351,
+      "analysis_time": "2026-09-09 07:16:52",
       "total_score": 43,
       "rating": "偏空",
       "action": "减仓",
@@ -706,9 +704,9 @@
     {
       "code": "600505",
       "name": "西昌电力",
-      "price": 10.73,
-      "pct_change": 0.751,
-      "analysis_time": "2026-09-09 05:38:45",
+      "price": 10.76,
+      "pct_change": 1.033,
+      "analysis_time": "2026-09-09 07:17:46",
       "total_score": 41,
       "rating": "偏空",
       "action": "减仓",
@@ -847,9 +845,9 @@
     {
       "code": "000592",
       "name": "平潭发展",
-      "price": 8.29,
-      "pct_change": 4.937,
-      "analysis_time": "2026-09-09 05:39:41",
+      "price": 8.06,
+      "pct_change": 2.025,
+      "analysis_time": "2026-09-09 07:18:39",
       "total_score": 36,
       "rating": "偏空",
       "action": "减仓",
@@ -988,9 +986,9 @@
     {
       "code": "300300",
       "name": "海峡创新",
-      "price": 9.21,
-      "pct_change": 4.186,
-      "analysis_time": "2026-09-09 05:40:36",
+      "price": 9.02,
+      "pct_change": 2.036,
+      "analysis_time": "2026-09-09 07:19:31",
       "total_score": 41,
       "rating": "偏空",
       "action": "减仓",
@@ -1128,10 +1126,10 @@
     },
     {
       "code": "002264",
-      "name": "新 华 都",
-      "price": 7.45,
-      "pct_change": -3.372,
-      "analysis_time": "2026-09-09 05:41:32",
+      "name": "002264",
+      "price": 0,
+      "pct_change": 0,
+      "analysis_time": "2026-09-09 07:22:21",
       "total_score": 42,
       "rating": "偏空",
       "action": "减仓",
@@ -1268,9 +1266,9 @@
     {
       "code": "601566",
       "name": "九牧王",
-      "price": 10.53,
-      "pct_change": -3.128,
-      "analysis_time": "2026-09-09 05:42:25",
+      "price": 10.55,
+      "pct_change": -2.944,
+      "analysis_time": "2026-09-09 07:23:10",
       "total_score": 43,
       "rating": "偏空",
       "action": "减仓",
@@ -1407,9 +1405,9 @@
     {
       "code": "688033",
       "name": "*ST天宜",
-      "price": 7.35,
-      "pct_change": 12.043,
-      "analysis_time": "2026-09-09 05:43:24",
+      "price": 7.36,
+      "pct_change": 12.195,
+      "analysis_time": "2026-09-09 07:23:59",
       "total_score": 38,
       "rating": "偏空",
       "action": "减仓",
@@ -1549,9 +1547,9 @@
     {
       "code": "000006",
       "name": "深振业Ａ",
-      "price": 7.18,
-      "pct_change": -2.446,
-      "analysis_time": "2026-09-09 05:44:27",
+      "price": 7.19,
+      "pct_change": -2.31,
+      "analysis_time": "2026-09-09 07:24:51",
       "total_score": 36,
       "rating": "偏空",
       "action": "减仓",
@@ -1692,7 +1690,7 @@
       "name": "华侨城Ａ",
       "price": 1.85,
       "pct_change": -1.07,
-      "analysis_time": "2026-09-09 05:45:19",
+      "analysis_time": "2026-09-09 07:25:52",
       "total_score": 43,
       "rating": "偏空",
       "action": "减仓",
@@ -1829,9 +1827,9 @@
     {
       "code": "000576",
       "name": "甘化科工",
-      "price": 8.59,
-      "pct_change": -0.116,
-      "analysis_time": "2026-09-09 05:46:13",
+      "price": 8.69,
+      "pct_change": 1.047,
+      "analysis_time": "2026-09-09 07:26:45",
       "total_score": 36,
       "rating": "偏空",
       "action": "减仓",
@@ -1970,9 +1968,9 @@
     {
       "code": "000816",
       "name": "智慧农业",
-      "price": 3.13,
-      "pct_change": -2.492,
-      "analysis_time": "2026-09-09 05:47:04",
+      "price": 3.19,
+      "pct_change": -0.623,
+      "analysis_time": "2026-09-09 07:27:37",
       "total_score": 36,
       "rating": "偏空",
       "action": "减仓",
@@ -2016,13 +2014,11 @@
         ]
       },
       "concept": {
-        "concepts": [
-          "汽车零部件"
-        ],
+        "concepts": [],
         "matched_hot": [],
         "score": 45,
         "conclusions": [
-          "所属行业/概念：汽车零部件",
+          "暂无明确概念标签",
           "当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）"
         ]
       },
@@ -2113,9 +2109,9 @@
     {
       "code": "002852",
       "name": "道道全",
-      "price": 9.29,
-      "pct_change": -3.531,
-      "analysis_time": "2026-09-09 05:48:06",
+      "price": 9.38,
+      "pct_change": -2.596,
+      "analysis_time": "2026-09-09 07:28:34",
       "total_score": 40,
       "rating": "偏空",
       "action": "减仓",
@@ -2267,82 +2263,109 @@
         {
           "code": "sh600691",
           "name": "潞化科技",
-          "price": 3.52,
-          "pct_change": 4.762,
+          "price": 3.56,
+          "pct_change": 5.952,
           "strategy": "low_price",
-          "reason": "股价3.5元（低价）；今日+4.8%（走势稳健）；均线多头排列；量能温和放大（量比1.2）",
+          "reason": "股价3.6元（低价）；今日+6.0%（走势稳健）；均线多头排列；量能温和放大（量比1.2）",
           "score": 89
         },
         {
           "code": "sh601933",
           "name": "永辉超市",
-          "price": 3.33,
-          "pct_change": -0.893,
+          "price": 3.31,
+          "pct_change": -1.488,
           "strategy": "low_price",
-          "reason": "股价3.3元（低价）；今日-0.9%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
+          "reason": "股价3.3元（低价）；今日-1.5%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
           "score": 89
         },
         {
           "code": "sz002385",
           "name": "大北农",
-          "price": 3.59,
-          "pct_change": -0.554,
+          "price": 3.61,
+          "pct_change": 0.0,
           "strategy": "low_price",
-          "reason": "股价3.6元（低价）；今日-0.6%（走势稳健）；均线多头排列；量能温和放大（量比1.3）",
+          "reason": "股价3.6元（低价）；今日+0.0%（走势稳健）；均线多头排列；量能温和放大（量比1.3）",
           "score": 89
         },
         {
           "code": "sh603077",
           "name": "和邦生物",
-          "price": 2.54,
-          "pct_change": 0.395,
+          "price": 2.56,
+          "pct_change": 1.186,
           "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+0.4%（走势稳健）；量能放大（量比2.1）",
+          "reason": "股价2.6元（超低价）；今日+1.2%（走势稳健）；量能放大（量比2.1）",
           "score": 88
+        },
+        {
+          "code": "sh601118",
+          "name": "海南橡胶",
+          "price": 8.1,
+          "pct_change": 2.922,
+          "strategy": "low_price",
+          "reason": "股价8.1元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比1.5）",
+          "score": 85
         },
         {
           "code": "sz000735",
           "name": "罗 牛 山",
-          "price": 7.03,
-          "pct_change": 3.231,
+          "price": 7.01,
+          "pct_change": 2.937,
           "strategy": "low_price",
-          "reason": "股价7.0元（中低价）；今日+3.2%（走势稳健）；均线多头排列；量能放大（量比2.8）",
+          "reason": "股价7.0元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比2.8）",
           "score": 85
         },
         {
           "code": "sz002312",
           "name": "川发龙蟒",
-          "price": 9.61,
-          "pct_change": 2.891,
+          "price": 9.55,
+          "pct_change": 2.248,
           "strategy": "low_price",
-          "reason": "股价9.6元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比1.7）",
+          "reason": "股价9.6元（中低价）；今日+2.2%（走势稳健）；均线多头排列；量能放大（量比1.7）",
           "score": 85
         },
         {
           "code": "sh601975",
           "name": "招商南油",
-          "price": 4.77,
-          "pct_change": 2.361,
+          "price": 4.82,
+          "pct_change": 3.433,
           "strategy": "low_price",
-          "reason": "股价4.8元（低价）；今日+2.4%（走势稳健）；均线多头排列",
+          "reason": "股价4.8元（低价）；今日+3.4%（走势稳健）；均线多头排列",
           "score": 85
+        },
+        {
+          "code": "sz000592",
+          "name": "平潭发展",
+          "price": 8.07,
+          "pct_change": 2.152,
+          "strategy": "low_price",
+          "reason": "股价8.1元（中低价）；今日+2.2%（走势稳健）；均线多头排列；量能温和放大（量比1.2）",
+          "score": 81
         },
         {
           "code": "sz000620",
           "name": "盈新发展",
-          "price": 3.29,
-          "pct_change": -0.904,
+          "price": 3.26,
+          "pct_change": -1.807,
           "strategy": "low_price",
-          "reason": "股价3.3元（低价）；今日-0.9%（走势稳健）；量能放大（量比2.0）",
+          "reason": "股价3.3元（低价）；今日-1.8%（走势稳健）；量能放大（量比2.0）",
           "score": 81
         },
         {
           "code": "sh600256",
           "name": "广汇能源",
-          "price": 7.39,
-          "pct_change": 2.497,
+          "price": 7.43,
+          "pct_change": 3.051,
           "strategy": "low_price",
-          "reason": "股价7.4元（中低价）；今日+2.5%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
+          "reason": "股价7.4元（中低价）；今日+3.1%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
+          "score": 81
+        },
+        {
+          "code": "sz002909",
+          "name": "集泰股份",
+          "price": 8.64,
+          "pct_change": -0.917,
+          "strategy": "low_price",
+          "reason": "股价8.6元（中低价）；今日-0.9%（走势稳健）；均线多头排列；量能温和放大（量比1.5）",
           "score": 81
         },
         {
@@ -2355,31 +2378,22 @@
           "score": 81
         },
         {
-          "code": "sz002059",
-          "name": "云南旅游",
-          "price": 6.36,
-          "pct_change": 1.274,
+          "code": "sz000690",
+          "name": "宝新能源",
+          "price": 5.42,
+          "pct_change": 5.859,
           "strategy": "low_price",
-          "reason": "股价6.4元（中低价）；今日+1.3%（走势稳健）；均线多头排列；量能温和放大（量比1.4）",
+          "reason": "股价5.4元（中低价）；今日+5.9%（走势稳健）；均线多头排列；量能温和放大（量比1.3）",
           "score": 81
         },
         {
-          "code": "sz000998",
-          "name": "隆平高科",
-          "price": 9.95,
-          "pct_change": -1.97,
+          "code": "sh600219",
+          "name": "南山铝业",
+          "price": 5.07,
+          "pct_change": 1.807,
           "strategy": "low_price",
-          "reason": "股价9.9元（中低价）；今日-2.0%（走势稳健）；均线多头排列；量能温和放大（量比1.5）",
+          "reason": "股价5.1元（中低价）；今日+1.8%（走势稳健）；均线多头排列；量能温和放大（量比1.3）",
           "score": 81
-        },
-        {
-          "code": "sh601118",
-          "name": "海南橡胶",
-          "price": 7.54,
-          "pct_change": -4.193,
-          "strategy": "low_price",
-          "reason": "股价7.5元（中低价）；均线多头排列；量能放大（量比1.5）",
-          "score": 80
         },
         {
           "code": "sz000560",
@@ -2393,19 +2407,19 @@
         {
           "code": "sz002702",
           "name": "海欣食品",
-          "price": 6.39,
-          "pct_change": -5.891,
+          "price": 6.44,
+          "pct_change": -5.155,
           "strategy": "low_price",
           "reason": "股价6.4元（中低价）；均线多头排列；量能放大（量比2.6）",
           "score": 80
         },
         {
-          "code": "sh600770",
-          "name": "综艺股份",
-          "price": 5.72,
-          "pct_change": -3.051,
+          "code": "sh601868",
+          "name": "中国能建",
+          "price": 2.51,
+          "pct_change": 0.803,
           "strategy": "low_price",
-          "reason": "股价5.7元（中低价）；均线多头排列；量能放大（量比3.3）",
+          "reason": "股价2.5元（超低价）；今日+0.8%（走势稳健）",
           "score": 80
         },
         {
@@ -2416,24 +2430,6 @@
           "strategy": "low_price",
           "reason": "股价1.6元（超低价）；今日+0.6%（走势稳健）",
           "score": 80
-        },
-        {
-          "code": "sh601868",
-          "name": "中国能建",
-          "price": 2.52,
-          "pct_change": 1.205,
-          "strategy": "low_price",
-          "reason": "股价2.5元（超低价）；今日+1.2%（走势稳健）",
-          "score": 80
-        },
-        {
-          "code": "sz300189",
-          "name": "神农种业",
-          "price": 7.64,
-          "pct_change": -0.521,
-          "strategy": "low_price",
-          "reason": "股价7.6元（中低价）；今日-0.5%（走势稳健）；均线多头排列",
-          "score": 77
         }
       ],
       "technical_pattern": [],
@@ -2442,8 +2438,8 @@
         {
           "code": "sz300308",
           "name": "中际旭创",
-          "price": 911.99,
-          "pct_change": 1.066,
+          "price": 908.95,
+          "pct_change": 0.729,
           "strategy": "fundamental",
           "reason": "ROE=51.3%（优秀）；毛利率48.5%（高毛利）",
           "score": 65
@@ -2451,46 +2447,46 @@
         {
           "code": "sh600487",
           "name": "亨通光电",
-          "price": 66.23,
-          "pct_change": 4.944,
+          "price": 66.62,
+          "pct_change": 5.562,
           "strategy": "fundamental",
           "reason": "ROE=26.4%（优秀）",
           "score": 60
         },
         {
-          "code": "sz300502",
-          "name": "新易盛",
-          "price": 416.36,
-          "pct_change": -0.01,
-          "strategy": "fundamental",
-          "reason": "ROE=38.7%（优秀）",
-          "score": 60
-        },
-        {
           "code": "sz300750",
           "name": "宁德时代",
-          "price": 329.66,
-          "pct_change": -1.738,
+          "price": 336.97,
+          "pct_change": 0.441,
           "strategy": "fundamental",
           "reason": "ROE=23.7%（优秀）",
           "score": 60
         },
         {
-          "code": "sh601869",
-          "name": "长飞光纤",
-          "price": 446.1,
-          "pct_change": 7.017,
+          "code": "sz300502",
+          "name": "新易盛",
+          "price": 415.04,
+          "pct_change": -0.327,
           "strategy": "fundamental",
-          "reason": "ROE=28.5%（优秀）",
+          "reason": "ROE=38.7%（优秀）",
           "score": 60
         },
         {
           "code": "sh600522",
           "name": "中天科技",
-          "price": 34.12,
-          "pct_change": 4.952,
+          "price": 34.11,
+          "pct_change": 4.922,
           "strategy": "fundamental",
           "reason": "ROE=27.8%（优秀）",
+          "score": 60
+        },
+        {
+          "code": "sh601869",
+          "name": "长飞光纤",
+          "price": 442.08,
+          "pct_change": 6.053,
+          "strategy": "fundamental",
+          "reason": "ROE=28.5%（优秀）",
           "score": 60
         }
       ],
@@ -2612,13 +2608,13 @@
       {
         "code": "sh600691",
         "name": "潞化科技",
-        "price": 3.52,
-        "pct_change": 4.762,
+        "price": 3.56,
+        "pct_change": 5.952,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.5元（低价）；今日+4.8%（走势稳健）；均线多头排列；量能温和放大（量比1.2）"
+          "[low_price] 股价3.6元（低价）；今日+6.0%（走势稳健）；均线多头排列；量能温和放大（量比1.2）"
         ],
         "total_score": 89,
         "strategy_count": 1,
@@ -2708,16 +2704,15 @@
         "turnover": 0,
         "turnover_score": 0,
         "turnover_level": "未知",
-        "chen_xiaoqun_score": 40,
+        "chen_xiaoqun_score": 33,
         "chen_xiaoqun_reasons": [
-          "弱转强反包形态（陈小群最擅长）",
+          "主线情绪首板形态",
           "综合评分89分（真龙）"
         ],
-        "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 4,
+        "is_chen_xiaoqun_pick": false,
         "limit_up_score": 26,
         "limit_up_reasons": [
-          "低价3.52元",
+          "低价3.56元",
           "综合评分89.0"
         ],
         "limit_up_probability": 21.0
@@ -2725,13 +2720,13 @@
       {
         "code": "sh601933",
         "name": "永辉超市",
-        "price": 3.33,
-        "pct_change": -0.893,
+        "price": 3.31,
+        "pct_change": -1.488,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.3元（低价）；今日-0.9%（走势稳健）；均线多头排列；量能温和放大（量比1.4）"
+          "[low_price] 股价3.3元（低价）；今日-1.5%（走势稳健）；均线多头排列；量能温和放大（量比1.4）"
         ],
         "total_score": 89,
         "strategy_count": 1,
@@ -2829,7 +2824,7 @@
         "is_chen_xiaoqun_pick": false,
         "limit_up_score": 26,
         "limit_up_reasons": [
-          "低价3.33元",
+          "低价3.31元",
           "综合评分89.0"
         ],
         "limit_up_probability": 21.0
@@ -2837,13 +2832,13 @@
       {
         "code": "sz002385",
         "name": "大北农",
-        "price": 3.59,
-        "pct_change": -0.554,
+        "price": 3.61,
+        "pct_change": 0.0,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.6元（低价）；今日-0.6%（走势稳健）；均线多头排列；量能温和放大（量比1.3）"
+          "[low_price] 股价3.6元（低价）；今日+0.0%（走势稳健）；均线多头排列；量能温和放大（量比1.3）"
         ],
         "total_score": 89,
         "strategy_count": 1,
@@ -2933,15 +2928,16 @@
         "turnover": 0,
         "turnover_score": 0,
         "turnover_level": "未知",
-        "chen_xiaoqun_score": 35,
+        "chen_xiaoqun_score": 40,
         "chen_xiaoqun_reasons": [
-          "首阴反包形态",
+          "弱转强反包形态（陈小群最擅长）",
           "综合评分89分（真龙）"
         ],
-        "is_chen_xiaoqun_pick": false,
+        "is_chen_xiaoqun_pick": true,
+        "chen_xiaoqun_rank": 5,
         "limit_up_score": 26,
         "limit_up_reasons": [
-          "低价3.59元",
+          "低价3.61元",
           "综合评分89.0"
         ],
         "limit_up_probability": 21.0
@@ -2949,13 +2945,13 @@
       {
         "code": "sh603077",
         "name": "和邦生物",
-        "price": 2.54,
-        "pct_change": 0.395,
+        "price": 2.56,
+        "pct_change": 1.186,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+0.4%（走势稳健）；量能放大（量比2.1）"
+          "[low_price] 股价2.6元（超低价）；今日+1.2%（走势稳健）；量能放大（量比2.1）"
         ],
         "total_score": 88,
         "strategy_count": 1,
@@ -3050,25 +3046,24 @@
           "弱转强反包形态（陈小群最擅长）",
           "综合评分88分（真龙）"
         ],
-        "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 5,
+        "is_chen_xiaoqun_pick": false,
         "limit_up_score": 33,
         "limit_up_reasons": [
-          "超低价2.54元（易涨停）",
+          "超低价2.56元（易涨停）",
           "综合评分88.0"
         ],
         "limit_up_probability": 26.0
       },
       {
-        "code": "sz000735",
-        "name": "罗 牛 山",
-        "price": 7.03,
-        "pct_change": 3.231,
+        "code": "sh601118",
+        "name": "海南橡胶",
+        "price": 8.1,
+        "pct_change": 2.922,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价7.0元（中低价）；今日+3.2%（走势稳健）；均线多头排列；量能放大（量比2.8）"
+          "[low_price] 股价8.1元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比1.5）"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -3160,7 +3155,7 @@
         "turnover_level": "未知",
         "chen_xiaoqun_score": 45,
         "chen_xiaoqun_reasons": [
-          "价格7.03元（适中）",
+          "价格8.1元（适中）",
           "弱转强反包形态（陈小群最擅长）",
           "综合评分85分（真龙）"
         ],
@@ -3168,21 +3163,21 @@
         "chen_xiaoqun_rank": 1,
         "limit_up_score": 18,
         "limit_up_reasons": [
-          "中低价7.03元",
+          "中低价8.1元",
           "综合评分85.0"
         ],
         "limit_up_probability": 14.0
       },
       {
-        "code": "sz002312",
-        "name": "川发龙蟒",
-        "price": 9.61,
-        "pct_change": 2.891,
+        "code": "sz000735",
+        "name": "罗 牛 山",
+        "price": 7.01,
+        "pct_change": 2.937,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价9.6元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比1.7）"
+          "[low_price] 股价7.0元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比2.8）"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -3274,7 +3269,7 @@
         "turnover_level": "未知",
         "chen_xiaoqun_score": 45,
         "chen_xiaoqun_reasons": [
-          "价格9.61元（适中）",
+          "价格7.01元（适中）",
           "弱转强反包形态（陈小群最擅长）",
           "综合评分85分（真龙）"
         ],
@@ -3282,7 +3277,121 @@
         "chen_xiaoqun_rank": 2,
         "limit_up_score": 18,
         "limit_up_reasons": [
-          "中低价9.61元",
+          "中低价7.01元",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 14.0
+      },
+      {
+        "code": "sz002312",
+        "name": "川发龙蟒",
+        "price": 9.55,
+        "pct_change": 2.248,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价9.6元（中低价）；今日+2.2%（走势稳健）；均线多头排列；量能放大（量比1.7）"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "hold",
+          "confidence": 0,
+          "reasons": [
+            "数据不足"
+          ],
+          "score": 50
+        },
+        "three_locks": {
+          "trend_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "趋势锁",
+            "icon": "📈"
+          },
+          "activity_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "股性锁",
+            "icon": "⚡"
+          },
+          "capital_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "资金锁",
+            "icon": "💰"
+          },
+          "total_locked": 0,
+          "signal": "数据不足",
+          "signal_strength": 0,
+          "summary": "K线数据不足"
+        },
+        "trend_analysis": {
+          "trend": {
+            "direction": "未知",
+            "strength": "未知",
+            "score": 0,
+            "reasons": [
+              "K线数据不足，需要至少30根K线"
+            ],
+            "description": "K线数据不足，需要至少30根K线"
+          },
+          "support_resistance": {
+            "nearest_support": null,
+            "nearest_resistance": null,
+            "supports": [],
+            "resistances": [],
+            "position_description": "K线数据不足，需要至少30根K线"
+          },
+          "patterns": [],
+          "ma_analysis": {
+            "alignment": "未知",
+            "position": "未知",
+            "above_count": 0
+          },
+          "volume_price": {
+            "relation": "未知",
+            "description": "K线数据不足，需要至少30根K线",
+            "score": 0
+          },
+          "overall_score": 0,
+          "operation_suggestion": "K线数据不足，需要至少30根K线",
+          "key_points": []
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "turnover": 0,
+        "turnover_score": 0,
+        "turnover_level": "未知",
+        "chen_xiaoqun_score": 45,
+        "chen_xiaoqun_reasons": [
+          "价格9.55元（适中）",
+          "弱转强反包形态（陈小群最擅长）",
+          "综合评分85分（真龙）"
+        ],
+        "is_chen_xiaoqun_pick": true,
+        "chen_xiaoqun_rank": 3,
+        "limit_up_score": 18,
+        "limit_up_reasons": [
+          "中低价9.55元",
           "综合评分85.0"
         ],
         "limit_up_probability": 14.0
@@ -3290,13 +3399,13 @@
       {
         "code": "sh601975",
         "name": "招商南油",
-        "price": 4.77,
-        "pct_change": 2.361,
+        "price": 4.82,
+        "pct_change": 3.433,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价4.8元（低价）；今日+2.4%（走势稳健）；均线多头排列"
+          "[low_price] 股价4.8元（低价）；今日+3.4%（走势稳健）；均线多头排列"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -3394,132 +3503,21 @@
         "is_chen_xiaoqun_pick": false,
         "limit_up_score": 26,
         "limit_up_reasons": [
-          "低价4.77元",
+          "低价4.82元",
           "综合评分85.0"
         ],
         "limit_up_probability": 21.0
       },
       {
-        "code": "sz000620",
-        "name": "盈新发展",
-        "price": 3.29,
-        "pct_change": -0.904,
+        "code": "sz000592",
+        "name": "平潭发展",
+        "price": 8.07,
+        "pct_change": 2.152,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.3元（低价）；今日-0.9%（走势稳健）；量能放大（量比2.0）"
-        ],
-        "total_score": 81,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 81.0,
-        "trading_signal": {
-          "signal": "hold",
-          "confidence": 0,
-          "reasons": [
-            "数据不足"
-          ],
-          "score": 50
-        },
-        "three_locks": {
-          "trend_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "趋势锁",
-            "icon": "📈"
-          },
-          "activity_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "股性锁",
-            "icon": "⚡"
-          },
-          "capital_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "资金锁",
-            "icon": "💰"
-          },
-          "total_locked": 0,
-          "signal": "数据不足",
-          "signal_strength": 0,
-          "summary": "K线数据不足"
-        },
-        "trend_analysis": {
-          "trend": {
-            "direction": "未知",
-            "strength": "未知",
-            "score": 0,
-            "reasons": [
-              "K线数据不足，需要至少30根K线"
-            ],
-            "description": "K线数据不足，需要至少30根K线"
-          },
-          "support_resistance": {
-            "nearest_support": null,
-            "nearest_resistance": null,
-            "supports": [],
-            "resistances": [],
-            "position_description": "K线数据不足，需要至少30根K线"
-          },
-          "patterns": [],
-          "ma_analysis": {
-            "alignment": "未知",
-            "position": "未知",
-            "above_count": 0
-          },
-          "volume_price": {
-            "relation": "未知",
-            "description": "K线数据不足，需要至少30根K线",
-            "score": 0
-          },
-          "overall_score": 0,
-          "operation_suggestion": "K线数据不足，需要至少30根K线",
-          "key_points": []
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "turnover": 0,
-        "turnover_score": 0,
-        "turnover_level": "未知",
-        "chen_xiaoqun_score": 35,
-        "chen_xiaoqun_reasons": [
-          "首阴反包形态",
-          "综合评分81分（真龙）"
-        ],
-        "is_chen_xiaoqun_pick": false,
-        "limit_up_score": 18,
-        "limit_up_reasons": [
-          "低价3.29元"
-        ],
-        "limit_up_probability": 14.0
-      },
-      {
-        "code": "sh600256",
-        "name": "广汇能源",
-        "price": 7.39,
-        "pct_change": 2.497,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价7.4元（中低价）；今日+2.5%（走势稳健）；均线多头排列；量能温和放大（量比1.4）"
+          "[low_price] 股价8.1元（中低价）；今日+2.2%（走势稳健）；均线多头排列；量能温和放大（量比1.2）"
         ],
         "total_score": 81,
         "strategy_count": 1,
@@ -3611,15 +3609,15 @@
         "turnover_level": "未知",
         "chen_xiaoqun_score": 45,
         "chen_xiaoqun_reasons": [
-          "价格7.39元（适中）",
+          "价格8.07元（适中）",
           "弱转强反包形态（陈小群最擅长）",
           "综合评分81分（真龙）"
         ],
         "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 3,
+        "chen_xiaoqun_rank": 4,
         "limit_up_score": 10,
         "limit_up_reasons": [
-          "中低价7.39元"
+          "中低价8.07元"
         ],
         "limit_up_probability": 8.0
       }
@@ -3627,15 +3625,15 @@
     "special_picks": [],
     "chen_xiaoqun_picks": [
       {
-        "code": "sz000735",
-        "name": "罗 牛 山",
-        "price": 7.03,
-        "pct_change": 3.231,
+        "code": "sh601118",
+        "name": "海南橡胶",
+        "price": 8.1,
+        "pct_change": 2.922,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价7.0元（中低价）；今日+3.2%（走势稳健）；均线多头排列；量能放大（量比2.8）"
+          "[low_price] 股价8.1元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比1.5）"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -3727,7 +3725,7 @@
         "turnover_level": "未知",
         "chen_xiaoqun_score": 45,
         "chen_xiaoqun_reasons": [
-          "价格7.03元（适中）",
+          "价格8.1元（适中）",
           "弱转强反包形态（陈小群最擅长）",
           "综合评分85分（真龙）"
         ],
@@ -3735,21 +3733,21 @@
         "chen_xiaoqun_rank": 1,
         "limit_up_score": 18,
         "limit_up_reasons": [
-          "中低价7.03元",
+          "中低价8.1元",
           "综合评分85.0"
         ],
         "limit_up_probability": 14.0
       },
       {
-        "code": "sz002312",
-        "name": "川发龙蟒",
-        "price": 9.61,
-        "pct_change": 2.891,
+        "code": "sz000735",
+        "name": "罗 牛 山",
+        "price": 7.01,
+        "pct_change": 2.937,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价9.6元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比1.7）"
+          "[low_price] 股价7.0元（中低价）；今日+2.9%（走势稳健）；均线多头排列；量能放大（量比2.8）"
         ],
         "total_score": 85,
         "strategy_count": 1,
@@ -3841,7 +3839,7 @@
         "turnover_level": "未知",
         "chen_xiaoqun_score": 45,
         "chen_xiaoqun_reasons": [
-          "价格9.61元（适中）",
+          "价格7.01元（适中）",
           "弱转强反包形态（陈小群最擅长）",
           "综合评分85分（真龙）"
         ],
@@ -3849,21 +3847,135 @@
         "chen_xiaoqun_rank": 2,
         "limit_up_score": 18,
         "limit_up_reasons": [
-          "中低价9.61元",
+          "中低价7.01元",
           "综合评分85.0"
         ],
         "limit_up_probability": 14.0
       },
       {
-        "code": "sh600256",
-        "name": "广汇能源",
-        "price": 7.39,
-        "pct_change": 2.497,
+        "code": "sz002312",
+        "name": "川发龙蟒",
+        "price": 9.55,
+        "pct_change": 2.248,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价7.4元（中低价）；今日+2.5%（走势稳健）；均线多头排列；量能温和放大（量比1.4）"
+          "[low_price] 股价9.6元（中低价）；今日+2.2%（走势稳健）；均线多头排列；量能放大（量比1.7）"
+        ],
+        "total_score": 85,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 85.0,
+        "trading_signal": {
+          "signal": "hold",
+          "confidence": 0,
+          "reasons": [
+            "数据不足"
+          ],
+          "score": 50
+        },
+        "three_locks": {
+          "trend_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "趋势锁",
+            "icon": "📈"
+          },
+          "activity_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "股性锁",
+            "icon": "⚡"
+          },
+          "capital_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "资金锁",
+            "icon": "💰"
+          },
+          "total_locked": 0,
+          "signal": "数据不足",
+          "signal_strength": 0,
+          "summary": "K线数据不足"
+        },
+        "trend_analysis": {
+          "trend": {
+            "direction": "未知",
+            "strength": "未知",
+            "score": 0,
+            "reasons": [
+              "K线数据不足，需要至少30根K线"
+            ],
+            "description": "K线数据不足，需要至少30根K线"
+          },
+          "support_resistance": {
+            "nearest_support": null,
+            "nearest_resistance": null,
+            "supports": [],
+            "resistances": [],
+            "position_description": "K线数据不足，需要至少30根K线"
+          },
+          "patterns": [],
+          "ma_analysis": {
+            "alignment": "未知",
+            "position": "未知",
+            "above_count": 0
+          },
+          "volume_price": {
+            "relation": "未知",
+            "description": "K线数据不足，需要至少30根K线",
+            "score": 0
+          },
+          "overall_score": 0,
+          "operation_suggestion": "K线数据不足，需要至少30根K线",
+          "key_points": []
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "turnover": 0,
+        "turnover_score": 0,
+        "turnover_level": "未知",
+        "chen_xiaoqun_score": 45,
+        "chen_xiaoqun_reasons": [
+          "价格9.55元（适中）",
+          "弱转强反包形态（陈小群最擅长）",
+          "综合评分85分（真龙）"
+        ],
+        "is_chen_xiaoqun_pick": true,
+        "chen_xiaoqun_rank": 3,
+        "limit_up_score": 18,
+        "limit_up_reasons": [
+          "中低价9.55元",
+          "综合评分85.0"
+        ],
+        "limit_up_probability": 14.0
+      },
+      {
+        "code": "sz000592",
+        "name": "平潭发展",
+        "price": 8.07,
+        "pct_change": 2.152,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价8.1元（中低价）；今日+2.2%（走势稳健）；均线多头排列；量能温和放大（量比1.2）"
         ],
         "total_score": 81,
         "strategy_count": 1,
@@ -3955,28 +4067,28 @@
         "turnover_level": "未知",
         "chen_xiaoqun_score": 45,
         "chen_xiaoqun_reasons": [
-          "价格7.39元（适中）",
+          "价格8.07元（适中）",
           "弱转强反包形态（陈小群最擅长）",
           "综合评分81分（真龙）"
         ],
         "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 3,
+        "chen_xiaoqun_rank": 4,
         "limit_up_score": 10,
         "limit_up_reasons": [
-          "中低价7.39元"
+          "中低价8.07元"
         ],
         "limit_up_probability": 8.0
       },
       {
-        "code": "sh600691",
-        "name": "潞化科技",
-        "price": 3.52,
-        "pct_change": 4.762,
+        "code": "sz002385",
+        "name": "大北农",
+        "price": 3.61,
+        "pct_change": 0.0,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.5元（低价）；今日+4.8%（走势稳健）；均线多头排列；量能温和放大（量比1.2）"
+          "[low_price] 股价3.6元（低价）；今日+0.0%（走势稳健）；均线多头排列；量能温和放大（量比1.3）"
         ],
         "total_score": 89,
         "strategy_count": 1,
@@ -4072,126 +4184,13 @@
           "综合评分89分（真龙）"
         ],
         "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 4,
+        "chen_xiaoqun_rank": 5,
         "limit_up_score": 26,
         "limit_up_reasons": [
-          "低价3.52元",
+          "低价3.61元",
           "综合评分89.0"
         ],
         "limit_up_probability": 21.0
-      },
-      {
-        "code": "sh603077",
-        "name": "和邦生物",
-        "price": 2.54,
-        "pct_change": 0.395,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+0.4%（走势稳健）；量能放大（量比2.1）"
-        ],
-        "total_score": 88,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 88.0,
-        "trading_signal": {
-          "signal": "hold",
-          "confidence": 0,
-          "reasons": [
-            "数据不足"
-          ],
-          "score": 50
-        },
-        "three_locks": {
-          "trend_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "趋势锁",
-            "icon": "📈"
-          },
-          "activity_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "股性锁",
-            "icon": "⚡"
-          },
-          "capital_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "资金锁",
-            "icon": "💰"
-          },
-          "total_locked": 0,
-          "signal": "数据不足",
-          "signal_strength": 0,
-          "summary": "K线数据不足"
-        },
-        "trend_analysis": {
-          "trend": {
-            "direction": "未知",
-            "strength": "未知",
-            "score": 0,
-            "reasons": [
-              "K线数据不足，需要至少30根K线"
-            ],
-            "description": "K线数据不足，需要至少30根K线"
-          },
-          "support_resistance": {
-            "nearest_support": null,
-            "nearest_resistance": null,
-            "supports": [],
-            "resistances": [],
-            "position_description": "K线数据不足，需要至少30根K线"
-          },
-          "patterns": [],
-          "ma_analysis": {
-            "alignment": "未知",
-            "position": "未知",
-            "above_count": 0
-          },
-          "volume_price": {
-            "relation": "未知",
-            "description": "K线数据不足，需要至少30根K线",
-            "score": 0
-          },
-          "overall_score": 0,
-          "operation_suggestion": "K线数据不足，需要至少30根K线",
-          "key_points": []
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "turnover": 0,
-        "turnover_score": 0,
-        "turnover_level": "未知",
-        "chen_xiaoqun_score": 40,
-        "chen_xiaoqun_reasons": [
-          "弱转强反包形态（陈小群最擅长）",
-          "综合评分88分（真龙）"
-        ],
-        "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 5,
-        "limit_up_score": 33,
-        "limit_up_reasons": [
-          "超低价2.54元（易涨停）",
-          "综合评分88.0"
-        ],
-        "limit_up_probability": 26.0
       }
     ],
     "limit_up_picks": [
@@ -4310,13 +4309,13 @@
       {
         "code": "sh603077",
         "name": "和邦生物",
-        "price": 2.54,
-        "pct_change": 0.395,
+        "price": 2.56,
+        "pct_change": 1.186,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价2.5元（超低价）；今日+0.4%（走势稳健）；量能放大（量比2.1）"
+          "[low_price] 股价2.6元（超低价）；今日+1.2%（走势稳健）；量能放大（量比2.1）"
         ],
         "total_score": 88,
         "strategy_count": 1,
@@ -4411,11 +4410,10 @@
           "弱转强反包形态（陈小群最擅长）",
           "综合评分88分（真龙）"
         ],
-        "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 5,
+        "is_chen_xiaoqun_pick": false,
         "limit_up_score": 33,
         "limit_up_reasons": [
-          "超低价2.54元（易涨停）",
+          "超低价2.56元（易涨停）",
           "综合评分88.0"
         ],
         "limit_up_probability": 26.0
@@ -4423,13 +4421,237 @@
       {
         "code": "sh600691",
         "name": "潞化科技",
-        "price": 3.52,
-        "pct_change": 4.762,
+        "price": 3.56,
+        "pct_change": 5.952,
         "strategies": [
           "low_price"
         ],
         "reasons": [
-          "[low_price] 股价3.5元（低价）；今日+4.8%（走势稳健）；均线多头排列；量能温和放大（量比1.2）"
+          "[low_price] 股价3.6元（低价）；今日+6.0%（走势稳健）；均线多头排列；量能温和放大（量比1.2）"
+        ],
+        "total_score": 89,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 89.0,
+        "trading_signal": {
+          "signal": "hold",
+          "confidence": 0,
+          "reasons": [
+            "数据不足"
+          ],
+          "score": 50
+        },
+        "three_locks": {
+          "trend_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "趋势锁",
+            "icon": "📈"
+          },
+          "activity_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "股性锁",
+            "icon": "⚡"
+          },
+          "capital_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "资金锁",
+            "icon": "💰"
+          },
+          "total_locked": 0,
+          "signal": "数据不足",
+          "signal_strength": 0,
+          "summary": "K线数据不足"
+        },
+        "trend_analysis": {
+          "trend": {
+            "direction": "未知",
+            "strength": "未知",
+            "score": 0,
+            "reasons": [
+              "K线数据不足，需要至少30根K线"
+            ],
+            "description": "K线数据不足，需要至少30根K线"
+          },
+          "support_resistance": {
+            "nearest_support": null,
+            "nearest_resistance": null,
+            "supports": [],
+            "resistances": [],
+            "position_description": "K线数据不足，需要至少30根K线"
+          },
+          "patterns": [],
+          "ma_analysis": {
+            "alignment": "未知",
+            "position": "未知",
+            "above_count": 0
+          },
+          "volume_price": {
+            "relation": "未知",
+            "description": "K线数据不足，需要至少30根K线",
+            "score": 0
+          },
+          "overall_score": 0,
+          "operation_suggestion": "K线数据不足，需要至少30根K线",
+          "key_points": []
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "turnover": 0,
+        "turnover_score": 0,
+        "turnover_level": "未知",
+        "chen_xiaoqun_score": 33,
+        "chen_xiaoqun_reasons": [
+          "主线情绪首板形态",
+          "综合评分89分（真龙）"
+        ],
+        "is_chen_xiaoqun_pick": false,
+        "limit_up_score": 26,
+        "limit_up_reasons": [
+          "低价3.56元",
+          "综合评分89.0"
+        ],
+        "limit_up_probability": 21.0
+      },
+      {
+        "code": "sh601933",
+        "name": "永辉超市",
+        "price": 3.31,
+        "pct_change": -1.488,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.3元（低价）；今日-1.5%（走势稳健）；均线多头排列；量能温和放大（量比1.4）"
+        ],
+        "total_score": 89,
+        "strategy_count": 1,
+        "resonance": false,
+        "avg_score": 89.0,
+        "trading_signal": {
+          "signal": "hold",
+          "confidence": 0,
+          "reasons": [
+            "数据不足"
+          ],
+          "score": 50
+        },
+        "three_locks": {
+          "trend_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "趋势锁",
+            "icon": "📈"
+          },
+          "activity_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "股性锁",
+            "icon": "⚡"
+          },
+          "capital_lock": {
+            "locked": false,
+            "score": 0,
+            "reasons": [],
+            "risks": [
+              "K线数据不足"
+            ],
+            "details": {},
+            "name": "资金锁",
+            "icon": "💰"
+          },
+          "total_locked": 0,
+          "signal": "数据不足",
+          "signal_strength": 0,
+          "summary": "K线数据不足"
+        },
+        "trend_analysis": {
+          "trend": {
+            "direction": "未知",
+            "strength": "未知",
+            "score": 0,
+            "reasons": [
+              "K线数据不足，需要至少30根K线"
+            ],
+            "description": "K线数据不足，需要至少30根K线"
+          },
+          "support_resistance": {
+            "nearest_support": null,
+            "nearest_resistance": null,
+            "supports": [],
+            "resistances": [],
+            "position_description": "K线数据不足，需要至少30根K线"
+          },
+          "patterns": [],
+          "ma_analysis": {
+            "alignment": "未知",
+            "position": "未知",
+            "above_count": 0
+          },
+          "volume_price": {
+            "relation": "未知",
+            "description": "K线数据不足，需要至少30根K线",
+            "score": 0
+          },
+          "overall_score": 0,
+          "operation_suggestion": "K线数据不足，需要至少30根K线",
+          "key_points": []
+        },
+        "strength_score": 0,
+        "strength_reasons": [],
+        "turnover": 0,
+        "turnover_score": 0,
+        "turnover_level": "未知",
+        "chen_xiaoqun_score": 35,
+        "chen_xiaoqun_reasons": [
+          "首阴反包形态",
+          "综合评分89分（真龙）"
+        ],
+        "is_chen_xiaoqun_pick": false,
+        "limit_up_score": 26,
+        "limit_up_reasons": [
+          "低价3.31元",
+          "综合评分89.0"
+        ],
+        "limit_up_probability": 21.0
+      },
+      {
+        "code": "sz002385",
+        "name": "大北农",
+        "price": 3.61,
+        "pct_change": 0.0,
+        "strategies": [
+          "low_price"
+        ],
+        "reasons": [
+          "[low_price] 股价3.6元（低价）；今日+0.0%（走势稳健）；均线多头排列；量能温和放大（量比1.3）"
         ],
         "total_score": 89,
         "strategy_count": 1,
@@ -4525,241 +4747,17 @@
           "综合评分89分（真龙）"
         ],
         "is_chen_xiaoqun_pick": true,
-        "chen_xiaoqun_rank": 4,
+        "chen_xiaoqun_rank": 5,
         "limit_up_score": 26,
         "limit_up_reasons": [
-          "低价3.52元",
-          "综合评分89.0"
-        ],
-        "limit_up_probability": 21.0
-      },
-      {
-        "code": "sh601933",
-        "name": "永辉超市",
-        "price": 3.33,
-        "pct_change": -0.893,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.3元（低价）；今日-0.9%（走势稳健）；均线多头排列；量能温和放大（量比1.4）"
-        ],
-        "total_score": 89,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 89.0,
-        "trading_signal": {
-          "signal": "hold",
-          "confidence": 0,
-          "reasons": [
-            "数据不足"
-          ],
-          "score": 50
-        },
-        "three_locks": {
-          "trend_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "趋势锁",
-            "icon": "📈"
-          },
-          "activity_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "股性锁",
-            "icon": "⚡"
-          },
-          "capital_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "资金锁",
-            "icon": "💰"
-          },
-          "total_locked": 0,
-          "signal": "数据不足",
-          "signal_strength": 0,
-          "summary": "K线数据不足"
-        },
-        "trend_analysis": {
-          "trend": {
-            "direction": "未知",
-            "strength": "未知",
-            "score": 0,
-            "reasons": [
-              "K线数据不足，需要至少30根K线"
-            ],
-            "description": "K线数据不足，需要至少30根K线"
-          },
-          "support_resistance": {
-            "nearest_support": null,
-            "nearest_resistance": null,
-            "supports": [],
-            "resistances": [],
-            "position_description": "K线数据不足，需要至少30根K线"
-          },
-          "patterns": [],
-          "ma_analysis": {
-            "alignment": "未知",
-            "position": "未知",
-            "above_count": 0
-          },
-          "volume_price": {
-            "relation": "未知",
-            "description": "K线数据不足，需要至少30根K线",
-            "score": 0
-          },
-          "overall_score": 0,
-          "operation_suggestion": "K线数据不足，需要至少30根K线",
-          "key_points": []
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "turnover": 0,
-        "turnover_score": 0,
-        "turnover_level": "未知",
-        "chen_xiaoqun_score": 35,
-        "chen_xiaoqun_reasons": [
-          "首阴反包形态",
-          "综合评分89分（真龙）"
-        ],
-        "is_chen_xiaoqun_pick": false,
-        "limit_up_score": 26,
-        "limit_up_reasons": [
-          "低价3.33元",
-          "综合评分89.0"
-        ],
-        "limit_up_probability": 21.0
-      },
-      {
-        "code": "sz002385",
-        "name": "大北农",
-        "price": 3.59,
-        "pct_change": -0.554,
-        "strategies": [
-          "low_price"
-        ],
-        "reasons": [
-          "[low_price] 股价3.6元（低价）；今日-0.6%（走势稳健）；均线多头排列；量能温和放大（量比1.3）"
-        ],
-        "total_score": 89,
-        "strategy_count": 1,
-        "resonance": false,
-        "avg_score": 89.0,
-        "trading_signal": {
-          "signal": "hold",
-          "confidence": 0,
-          "reasons": [
-            "数据不足"
-          ],
-          "score": 50
-        },
-        "three_locks": {
-          "trend_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "趋势锁",
-            "icon": "📈"
-          },
-          "activity_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "股性锁",
-            "icon": "⚡"
-          },
-          "capital_lock": {
-            "locked": false,
-            "score": 0,
-            "reasons": [],
-            "risks": [
-              "K线数据不足"
-            ],
-            "details": {},
-            "name": "资金锁",
-            "icon": "💰"
-          },
-          "total_locked": 0,
-          "signal": "数据不足",
-          "signal_strength": 0,
-          "summary": "K线数据不足"
-        },
-        "trend_analysis": {
-          "trend": {
-            "direction": "未知",
-            "strength": "未知",
-            "score": 0,
-            "reasons": [
-              "K线数据不足，需要至少30根K线"
-            ],
-            "description": "K线数据不足，需要至少30根K线"
-          },
-          "support_resistance": {
-            "nearest_support": null,
-            "nearest_resistance": null,
-            "supports": [],
-            "resistances": [],
-            "position_description": "K线数据不足，需要至少30根K线"
-          },
-          "patterns": [],
-          "ma_analysis": {
-            "alignment": "未知",
-            "position": "未知",
-            "above_count": 0
-          },
-          "volume_price": {
-            "relation": "未知",
-            "description": "K线数据不足，需要至少30根K线",
-            "score": 0
-          },
-          "overall_score": 0,
-          "operation_suggestion": "K线数据不足，需要至少30根K线",
-          "key_points": []
-        },
-        "strength_score": 0,
-        "strength_reasons": [],
-        "turnover": 0,
-        "turnover_score": 0,
-        "turnover_level": "未知",
-        "chen_xiaoqun_score": 35,
-        "chen_xiaoqun_reasons": [
-          "首阴反包形态",
-          "综合评分89分（真龙）"
-        ],
-        "is_chen_xiaoqun_pick": false,
-        "limit_up_score": 26,
-        "limit_up_reasons": [
-          "低价3.59元",
+          "低价3.61元",
           "综合评分89.0"
         ],
         "limit_up_probability": 21.0
       }
     ],
     "summary": {
-      "run_time": "2026-09-09 05:31:03",
+      "run_time": "2026-09-09 07:12:13",
       "total_stocks": 5355,
       "strategy_counts": {
         "low_price": 20,
@@ -4774,7 +4772,7 @@
       "limit_up_picks_count": 5
     }
   },
-  "markdown": "# 📈 股票分析日报 - 2026-09-09\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 甘肃能源(000791) | 7.33 | +0.96% | 36 | 偏空 | 减仓 |\n| 利欧股份(002131) | 4.58 | -4.18% | 42 | 偏空 | 减仓 |\n| 御银股份(002177) | 5.91 | -2.31% | 44 | 偏空 | 减仓 |\n| 吉视传媒(601929) | 2.51 | -5.64% | 39 | 偏空 | 减仓 |\n| ST合力泰(002217) | 1.45 | -2.03% | 43 | 偏空 | 减仓 |\n| 西昌电力(600505) | 10.73 | +0.75% | 41 | 偏空 | 减仓 |\n| 平潭发展(000592) | 8.29 | +4.94% | 36 | 偏空 | 减仓 |\n| 海峡创新(300300) | 9.21 | +4.19% | 41 | 偏空 | 减仓 |\n| 新 华 都(002264) | 7.45 | -3.37% | 42 | 偏空 | 减仓 |\n| 九牧王(601566) | 10.53 | -3.13% | 43 | 偏空 | 减仓 |\n| *ST天宜(688033) | 7.35 | +12.04% | 38 | 偏空 | 减仓 |\n| 深振业Ａ(000006) | 7.18 | -2.45% | 36 | 偏空 | 减仓 |\n| 华侨城Ａ(000069) | 1.85 | -1.07% | 43 | 偏空 | 减仓 |\n| 甘化科工(000576) | 8.59 | -0.12% | 36 | 偏空 | 减仓 |\n| 智慧农业(000816) | 3.13 | -2.49% | 36 | 偏空 | 减仓 |\n| 道道全(002852) | 9.29 | -3.53% | 40 | 偏空 | 减仓 |\n\n## 详细分析\n\n## 甘肃能源(000791)\n**现价**: 7.33 | **涨跌幅**: +0.96% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 利欧股份(002131)\n**现价**: 4.58 | **涨跌幅**: -4.18% | **综合评分**: 42/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 40 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=39.9%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.4%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 御银股份(002177)\n**现价**: 5.91 | **涨跌幅**: -2.31% | **综合评分**: 44/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=32.4%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率60.7%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 吉视传媒(601929)\n**现价**: 2.51 | **涨跌幅**: -5.64% | **综合评分**: 39/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 30 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=5.5%（一般）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率38.5%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 所属行业/概念：电视广播Ⅱ\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## ST合力泰(002217)\n**现价**: 1.45 | **涨跌幅**: -2.03% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=83.8%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率26.1%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 西昌电力(600505)\n**现价**: 10.73 | **涨跌幅**: +0.75% | **综合评分**: 41/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 38 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=15.4%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率43.8%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 平潭发展(000592)\n**现价**: 8.29 | **涨跌幅**: +4.94% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率21.8%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 海峡创新(300300)\n**现价**: 9.21 | **涨跌幅**: +4.19% | **综合评分**: 41/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 38 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=15.2%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率26.0%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 新 华 都(002264)\n**现价**: 7.45 | **涨跌幅**: -3.37% | **综合评分**: 42/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 40 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=33.5%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.8%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 九牧王(601566)\n**现价**: 10.53 | **涨跌幅**: -3.13% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=69.3%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率47.3%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## *ST天宜(688033)\n**现价**: 7.35 | **涨跌幅**: +12.04% | **综合评分**: 38/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 25 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率69.8%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n- 短期涨幅过大，注意回调风险\n\n---\n## 深振业Ａ(000006)\n**现价**: 7.18 | **涨跌幅**: -2.45% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.8%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 华侨城Ａ(000069)\n**现价**: 1.85 | **涨跌幅**: -1.07% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=51.4%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率32.6%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 甘化科工(000576)\n**现价**: 8.59 | **涨跌幅**: -0.12% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 智慧农业(000816)\n**现价**: 3.13 | **涨跌幅**: -2.49% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 所属行业/概念：汽车零部件\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 道道全(002852)\n**现价**: 9.29 | **涨跌幅**: -3.53% | **综合评分**: 40/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 33 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=16.8%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率3.4%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 供销大集(sz000564) | 1.7 | -1.73% | 96 | 股价1.7元（超低价）；今日-1.7%（走势稳健）；均线多头排列；量能温和放大（量比1.2） |\n| 潞化科技(sh600691) | 3.52 | +4.76% | 89 | 股价3.5元（低价）；今日+4.8%（走势稳健）；均线多头排列；量能温和放大（量比1.2） |\n| 永辉超市(sh601933) | 3.33 | -0.89% | 89 | 股价3.3元（低价）；今日-0.9%（走势稳健）；均线多头排列；量能温和放大（量比1.4） |\n| 大北农(sz002385) | 3.59 | -0.55% | 89 | 股价3.6元（低价）；今日-0.6%（走势稳健）；均线多头排列；量能温和放大（量比1.3） |\n| 和邦生物(sh603077) | 2.54 | +0.40% | 88 | 股价2.5元（超低价）；今日+0.4%（走势稳健）；量能放大（量比2.1） |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 中际旭创(sz300308) | 911.99 | +1.07% | 65 | ROE=51.3%（优秀）；毛利率48.5%（高毛利） |\n| 亨通光电(sh600487) | 66.23 | +4.94% | 60 | ROE=26.4%（优秀） |\n| 新易盛(sz300502) | 416.36 | -0.01% | 60 | ROE=38.7%（优秀） |\n| 宁德时代(sz300750) | 329.66 | -1.74% | 60 | ROE=23.7%（优秀） |\n| 长飞光纤(sh601869) | 446.1 | +7.02% | 60 | ROE=28.5%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*",
+  "markdown": "# 📈 股票分析日报 - 2026-09-09\n\n## 自选股分析摘要\n\n| 股票 | 现价 | 涨跌幅 | 评分 | 评级 | 操作建议 |\n|------|------|--------|------|------|----------|\n| 甘肃能源(000791) | 7.36 | +1.38% | 36 | 偏空 | 减仓 |\n| 利欧股份(002131) | 4.61 | -3.56% | 42 | 偏空 | 减仓 |\n| 御银股份(002177) | 5.93 | -1.98% | 44 | 偏空 | 减仓 |\n| 吉视传媒(601929) | 2.53 | -4.89% | 39 | 偏空 | 减仓 |\n| ST合力泰(002217) | 1.46 | -1.35% | 43 | 偏空 | 减仓 |\n| 西昌电力(600505) | 10.76 | +1.03% | 41 | 偏空 | 减仓 |\n| 平潭发展(000592) | 8.06 | +2.02% | 36 | 偏空 | 减仓 |\n| 海峡创新(300300) | 9.02 | +2.04% | 41 | 偏空 | 减仓 |\n| 002264(002264) | 0 | +0.00% | 42 | 偏空 | 减仓 |\n| 九牧王(601566) | 10.55 | -2.94% | 43 | 偏空 | 减仓 |\n| *ST天宜(688033) | 7.36 | +12.20% | 38 | 偏空 | 减仓 |\n| 深振业Ａ(000006) | 7.19 | -2.31% | 36 | 偏空 | 减仓 |\n| 华侨城Ａ(000069) | 1.85 | -1.07% | 43 | 偏空 | 减仓 |\n| 甘化科工(000576) | 8.69 | +1.05% | 36 | 偏空 | 减仓 |\n| 智慧农业(000816) | 3.19 | -0.62% | 36 | 偏空 | 减仓 |\n| 道道全(002852) | 9.38 | -2.60% | 40 | 偏空 | 减仓 |\n\n## 详细分析\n\n## 甘肃能源(000791)\n**现价**: 7.36 | **涨跌幅**: +1.38% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 利欧股份(002131)\n**现价**: 4.61 | **涨跌幅**: -3.56% | **综合评分**: 42/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 40 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=39.9%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.4%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 御银股份(002177)\n**现价**: 5.93 | **涨跌幅**: -1.98% | **综合评分**: 44/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 48 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=32.4%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率60.7%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 吉视传媒(601929)\n**现价**: 2.53 | **涨跌幅**: -4.89% | **综合评分**: 39/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 30 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=5.5%（一般）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率38.5%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## ST合力泰(002217)\n**现价**: 1.46 | **涨跌幅**: -1.35% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=83.8%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率26.1%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 西昌电力(600505)\n**现价**: 10.76 | **涨跌幅**: +1.03% | **综合评分**: 41/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 38 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=15.4%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率43.8%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 平潭发展(000592)\n**现价**: 8.06 | **涨跌幅**: +2.02% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率21.8%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 海峡创新(300300)\n**现价**: 9.02 | **涨跌幅**: +2.04% | **综合评分**: 41/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 38 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=15.2%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率26.0%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 002264(002264)\n**现价**: 0 | **涨跌幅**: +0.00% | **综合评分**: 42/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 40 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=33.5%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.8%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 九牧王(601566)\n**现价**: 10.55 | **涨跌幅**: -2.94% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=69.3%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率47.3%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## *ST天宜(688033)\n**现价**: 7.36 | **涨跌幅**: +12.20% | **综合评分**: 38/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 25 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率69.8%（高毛利）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n- 短期涨幅过大，注意回调风险\n\n---\n## 深振业Ａ(000006)\n**现价**: 7.19 | **涨跌幅**: -2.31% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.8%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 华侨城Ａ(000069)\n**现价**: 1.85 | **涨跌幅**: -1.07% | **综合评分**: 43/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 45 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=51.4%（优秀）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率32.6%（中等）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n---\n## 甘化科工(000576)\n**现价**: 8.69 | **涨跌幅**: +1.05% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率24.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 智慧农业(000816)\n**现价**: 3.19 | **涨跌幅**: -0.62% | **综合评分**: 36/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 17 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=0.0%（偏弱）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率17.1%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 道道全(002852)\n**现价**: 9.38 | **涨跌幅**: -2.60% | **综合评分**: 40/100 | **评级**: 偏空\n**操作建议**: 减仓\n\n### 五维评分\n| 维度 | 评分 |\n|------|------|\n| 技术面 | 50 |\n| 基本面 | 33 |\n| 资金面 | 50 |\n| 概念热点 | 45 |\n\n### 基本面\n- ROE=16.8%（良好）\n- 营收同比0.0%（下滑）\n- 净利润同比0.0%（下滑）\n- 毛利率3.4%（偏低）\n\n### 资金面\n- 资金流向数据暂不可用\n\n### 概念热点\n- 暂无明确概念标签\n- 当前市场热点：阿尔茨海默概念(0.0%)、AI PC(0.0%)、AI手机(0.0%)（该股非核心标的）\n\n### ⚠️ 风险提示\n- 基本面偏弱\n\n---\n## 🎯 选股推荐\n\n### 多策略共振（重点关注）\n### 低价潜力股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 供销大集(sz000564) | 1.7 | -1.73% | 96 | 股价1.7元（超低价）；今日-1.7%（走势稳健）；均线多头排列；量能温和放大（量比1.2） |\n| 潞化科技(sh600691) | 3.56 | +5.95% | 89 | 股价3.6元（低价）；今日+6.0%（走势稳健）；均线多头排列；量能温和放大（量比1.2） |\n| 永辉超市(sh601933) | 3.31 | -1.49% | 89 | 股价3.3元（低价）；今日-1.5%（走势稳健）；均线多头排列；量能温和放大（量比1.4） |\n| 大北农(sz002385) | 3.61 | +0.00% | 89 | 股价3.6元（低价）；今日+0.0%（走势稳健）；均线多头排列；量能温和放大（量比1.3） |\n| 和邦生物(sh603077) | 2.56 | +1.19% | 88 | 股价2.6元（超低价）；今日+1.2%（走势稳健）；量能放大（量比2.1） |\n\n### 基本面选股 TOP5\n| 股票 | 现价 | 涨跌幅 | 评分 | 理由 |\n|------|------|--------|------|------|\n| 中际旭创(sz300308) | 908.95 | +0.73% | 65 | ROE=51.3%（优秀）；毛利率48.5%（高毛利） |\n| 亨通光电(sh600487) | 66.62 | +5.56% | 60 | ROE=26.4%（优秀） |\n| 宁德时代(sz300750) | 336.97 | +0.44% | 60 | ROE=23.7%（优秀） |\n| 新易盛(sz300502) | 415.04 | -0.33% | 60 | ROE=38.7%（优秀） |\n| 中天科技(sh600522) | 34.11 | +4.92% | 60 | ROE=27.8%（优秀） |\n\n---\n*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*",
   "market_timing": {
     "indices": {
       "sh": {
