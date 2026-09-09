@@ -288,11 +288,11 @@ class ScreenerEngine:
             if tl_signal in buy_signals:
                 buy_combined.append(c)
             elif tl_signal in data_insufficient_signals or c.get("three_locks") is None:
-                # K线数据不足，但多策略共振的股票保留
-                if strategy_count >= 2:
+                # K线数据不足，但被策略选中的股票保留（2026-09-09优化：从>=2降低到>=1，因为很多策略因数据源失败选出0只）
+                if strategy_count >= 1:
                     c["data_insufficient_but_resonance"] = True
                     data_insufficient_with_resonance.append(c)
-                    buy_combined.append(c)  # 加入买入列表，因为多策略共振
+                    buy_combined.append(c)  # 加入买入列表，因为被策略选中
                 else:
                     watch_combined.append(c)
             elif tl_signal in sell_signals:
@@ -301,17 +301,18 @@ class ScreenerEngine:
                 # 观望信号
                 watch_combined.append(c)
         
-        logger.info(f"三把锁过滤: 买入信号{len(buy_combined)}只（含数据不足但多策略共振{len(data_insufficient_with_resonance)}只）, 观望/卖出{len(watch_combined)}只")
+        logger.info(f"三把锁过滤: 买入信号{len(buy_combined)}只（含数据不足但被策略选中{len(data_insufficient_with_resonance)}只）, 观望/卖出{len(watch_combined)}只")
         logger.info(f"换手率分布: 活跃{sum(1 for c in combined if c.get('turnover_level')=='活跃')}只, 适度{sum(1 for c in combined if c.get('turnover_level')=='适度')}只, 偏低{sum(1 for c in combined if c.get('turnover_level')=='偏低')}只")
         
-        # 推荐列表：买入信号股票 + 数据不足但多策略共振股票
+        # 推荐列表：买入信号股票 + 数据不足但被策略选中股票
         recommended_combined = buy_combined
         if not recommended_combined:
-            # 如果没有买入信号股票，使用多策略共振的股票（>=2个策略命中）
-            resonance_combined = [c for c in combined if c.get("strategy_count", 0) >= 2 and c.get("three_locks", {}).get("signal", "") not in sell_signals]
-            recommended_combined = resonance_combined[:10] if resonance_combined else []
+            # 2026-09-09优化：如果没有买入信号股票，直接使用各策略选出的股票（按评分排序）
+            # 不要因为三把锁数据不足而过滤掉所有股票
+            strategy_selected = [c for c in combined if c.get("strategy_count", 0) >= 1 and c.get("three_locks", {}).get("signal", "") not in sell_signals]
+            recommended_combined = strategy_selected[:10] if strategy_selected else []
             if recommended_combined:
-                logger.info(f"无三把锁买入信号，使用多策略共振股票: {len(recommended_combined)}只")
+                logger.info(f"无三把锁买入信号，使用各策略选出股票: {len(recommended_combined)}只")
             else:
                 logger.warning("过滤后没有符合条件的推荐股票")
 
