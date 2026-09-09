@@ -15,13 +15,19 @@ on:
     # 14:30 = 6:30 UTC（尾盘前）
     - cron: '30 6 * * 1-5'
   workflow_dispatch:
+
+# 并发控制：确保同一时间只有一个盘中异动监控工作流运行
+concurrency:
+  group: intraday-anomaly
+  cancel-in-progress: false
+
 permissions:
   contents: write
 jobs:
   anomaly-monitor:
     if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4

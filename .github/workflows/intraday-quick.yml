@@ -20,6 +20,11 @@ on:
         required: false
         default: ''
 
+# 并发控制：确保同一时间只有一个盘中快速分析工作流运行
+concurrency:
+  group: intraday-quick
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -27,7 +32,7 @@ jobs:
   quick-analyze:
     if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
