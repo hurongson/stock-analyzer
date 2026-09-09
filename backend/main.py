@@ -140,14 +140,20 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
     else:
         logger.warning("跳过选股引擎（超时保护）")
 
-    # 2. 自选股分析（超时保护：如果超时就只分析部分股票）
+    # 2. 自选股分析（超时保护：如果超时就只分析部分股票，禁用LLM）
     logger.info("--- 步骤2: 自选股分析 ---")
     stock_analyses = []
     try:
         if is_timeout():
-            # 超时保护：只分析前5只股票，确保能完成
-            logger.warning(f"超时保护：只分析前5只股票（共{len(stock_list)}只）")
-            stock_list_partial = stock_list[:5]
+            # 超时保护：只分析前3只股票，禁用LLM，确保能完成
+            logger.warning(f"超时保护：只分析前3只股票，禁用LLM（共{len(stock_list)}只）")
+            stock_list_partial = stock_list[:3]
+            Config.ENABLE_LLM = False
+        elif time.time() - start_time > 40 * 60:
+            # 接近超时（40分钟）：禁用LLM，分析全部股票
+            logger.warning("接近超时（40分钟）：禁用LLM分析以节省时间")
+            stock_list_partial = stock_list
+            Config.ENABLE_LLM = False
         else:
             stock_list_partial = stock_list
 

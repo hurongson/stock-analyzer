@@ -89,6 +89,7 @@ def llm_deep_analyze(stock_info: Dict, technical: Dict, fundamental: Dict,
         client = OpenAI(
             api_key=Config.LLM_API_KEY,
             base_url=Config.LLM_BASE_URL,
+            timeout=30,  # 增加30秒超时，避免长时间等待导致运行超时
         )
 
         user_prompt = build_user_prompt(stock_info, technical, fundamental, capital, concept)
@@ -101,6 +102,7 @@ def llm_deep_analyze(stock_info: Dict, technical: Dict, fundamental: Dict,
             ],
             temperature=0.3,
             max_tokens=800,
+            timeout=30,  # 增加30秒超时
         )
 
         content = response.choices[0].message.content.strip()
