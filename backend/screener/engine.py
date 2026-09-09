@@ -267,27 +267,53 @@ class ScreenerEngine:
         
         combined.sort(key=sort_by_tl_turnover, reverse=True)
         
-        buy_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") in buy_signals]
-        watch_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") not in buy_signals]
+        # 2026-09-09优化：三把锁过滤逻辑优化
+        # 问题：K线数据获取失败时，三把锁信号为"数据不足"或None，导致所有股票被过滤
+        # 解决方案：
+        # 1. 三把锁信号为"强烈买入"或"买入"，直接保留
+        # 2. 三把锁信号为"数据不足"或None，但多策略共振（>=2个策略命中），保留（标记为数据不足但多策略共振）
+        # 3. 三把锁信号为"卖出"或"强烈卖出"，过滤掉
+        buy_signals = ["强烈买入", "买入"]
+        sell_signals = ["强烈卖出", "卖出", "谨慎买入"]
+        data_insufficient_signals = ["数据不足", ""]
         
-        logger.info(f"三把锁过滤: 买入信号{len(buy_combined)}只, 观望/卖出{len(watch_combined)}只")
+        buy_combined = []
+        watch_combined = []
+        data_insufficient_with_resonance = []
+        
+        for c in combined:
+            tl_signal = c.get("three_locks", {}).get("signal", "") if c.get("three_locks") else ""
+            strategy_count = c.get("strategy_count", 0)
+            
+            if tl_signal in buy_signals:
+                buy_combined.append(c)
+            elif tl_signal in data_insufficient_signals or c.get("three_locks") is None:
+                # K线数据不足，但多策略共振的股票保留
+                if strategy_count >= 2:
+                    c["data_insufficient_but_resonance"] = True
+                    data_insufficient_with_resonance.append(c)
+                    buy_combined.append(c)  # 加入买入列表，因为多策略共振
+                else:
+                    watch_combined.append(c)
+            elif tl_signal in sell_signals:
+                watch_combined.append(c)
+            else:
+                # 观望信号
+                watch_combined.append(c)
+        
+        logger.info(f"三把锁过滤: 买入信号{len(buy_combined)}只（含数据不足但多策略共振{len(data_insufficient_with_resonance)}只）, 观望/卖出{len(watch_combined)}只")
         logger.info(f"换手率分布: 活跃{sum(1 for c in combined if c.get('turnover_level')=='活跃')}只, 适度{sum(1 for c in combined if c.get('turnover_level')=='适度')}只, 偏低{sum(1 for c in combined if c.get('turnover_level')=='偏低')}只")
         
-        # 推荐列表只包含买入信号股票，观望股票单独保存供参考
-        # 严重bug修复：如果没有买入信号股票，不要直接取前10只，而是先过滤掉强烈卖出、卖出和谨慎买入信号的股票
-        sell_signals = ["强烈卖出", "卖出", "谨慎买入"]  # 谨慎买入也不进入推荐列表
-        if buy_combined:
-            recommended_combined = buy_combined
-        else:
-            # 过滤掉强烈卖出、卖出和谨慎买入信号的股票
-            filtered_combined = [c for c in combined if c.get("three_locks", {}).get("signal", "") not in sell_signals]
-            # 严重bug修复：即使filtered_combined为空，也不要直接取combined，因为combined可能包含谨慎买入的股票
-            # 如果过滤后没有股票，就返回空列表，而不是返回包含谨慎买入的股票
-            recommended_combined = filtered_combined[:10] if filtered_combined else []
-            if len(filtered_combined) < len(combined):
-                logger.info(f"推荐列表过滤掉强烈卖出/卖出/谨慎买入信号股票: {len(combined) - len(filtered_combined)}只（严重bug修复）")
-            if not recommended_combined:
-                logger.warning("过滤后没有符合条件的推荐股票（所有股票都是强烈卖出/卖出/谨慎买入信号）")
+        # 推荐列表：买入信号股票 + 数据不足但多策略共振股票
+        recommended_combined = buy_combined
+        if not recommended_combined:
+            # 如果没有买入信号股票，使用多策略共振的股票（>=2个策略命中）
+            resonance_combined = [c for c in combined if c.get("strategy_count", 0) >= 2 and c.get("three_locks", {}).get("signal", "") not in sell_signals]
+            recommended_combined = resonance_combined[:10] if resonance_combined else []
+            if recommended_combined:
+                logger.info(f"无三把锁买入信号，使用多策略共振股票: {len(recommended_combined)}只")
+            else:
+                logger.warning("过滤后没有符合条件的推荐股票")
 
         # 特别推荐：综合评分 + 强势度 + 共振 + 三把锁全亮，精选3-5只
         special_picks = self._select_special_picks(recommended_combined)

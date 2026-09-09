@@ -44,7 +44,7 @@ class Config:
 
     # ===== 选股 =====
     LOW_PRICE_THRESHOLD = float(_get_env("LOW_PRICE_THRESHOLD", "10"))
-    SCREENER_MAX_RESULTS = int(_get_env("SCREENER_MAX_RESULTS", "50"))
+    SCREENER_MAX_RESULTS = int(_get_env("SCREENER_MAX_RESULTS", "20"))  # 从50降低到20，减少K线获取数量避免Tushare频率超限
     SCREENER_UNIVERSE = _get_env("SCREENER_UNIVERSE", "all")
 
     # ===== 分析 =====

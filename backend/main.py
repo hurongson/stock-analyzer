@@ -194,7 +194,11 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
             # 对选股结果进行反向筛选
             combined = screener_result.get("combined", [])
             reverse_screen_result = reverse_screener.screen(combined)
-            logger.info(f"反向筛选完成: 淘汰{reverse_screen_result.get('eliminated_count', 0)}只, 降级{reverse_screen_result.get('downgraded_count', 0)}只, 保留{reverse_screen_result.get('kept_count', 0)}只")
+            # 修复：reverse_screener返回的是列表字段，不是count字段
+            eliminated_count = len(reverse_screen_result.get("eliminated", []))
+            downgraded_count = len(reverse_screen_result.get("downgraded", []))
+            kept_count = len(reverse_screen_result.get("kept", []))
+            logger.info(f"反向筛选完成: 淘汰{eliminated_count}只, 降级{downgraded_count}只, 保留{kept_count}只")
         except Exception as e:
             logger.error(f"反向筛选失败: {e}")
             reverse_screen_result = None
