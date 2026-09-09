@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 _akshare_failure_count = {
     "fund_flow": 0,       # 资金流向接口失败次数
     "financial_abstract": 0,  # 财务摘要接口失败次数
+    "kline": 0,           # K线接口失败次数
+    "tushare_kline": 0,   # Tushare K线接口失败次数（频率超限）
     "max_failures": 5,    # 最大失败次数，超过后临时禁用
 }
 
@@ -194,8 +196,8 @@ class DataCollector:
         if cached is not None and not cached.empty:
             return cached
 
-        # 优先 Tushare
-        if TUSHARE_AVAILABLE:
+        # 优先 Tushare（快速失败机制：连续失败5次后临时禁用，避免频率超限浪费时间）
+        if TUSHARE_AVAILABLE and not _is_akshare_disabled("tushare_kline"):
             try:
                 ts_code = to_ts_code(code)
                 start = (pd.Timestamp.now() - pd.Timedelta(days=days * 2)).strftime("%Y%m%d")
@@ -217,9 +219,10 @@ class DataCollector:
                     return df
             except Exception as e:
                 logger.warning(f"Tushare 获取K线失败 {code}: {e}")
+                _record_akshare_failure("tushare_kline")
 
-        # fallback akshare
-        if AKSHARE_AVAILABLE:
+        # fallback akshare（快速失败机制：连续失败5次后临时禁用）
+        if AKSHARE_AVAILABLE and not _is_akshare_disabled("kline"):
             try:
                 df = ak.stock_zh_a_hist(
                     symbol=code, period="daily",
@@ -240,6 +243,7 @@ class DataCollector:
                 return df
             except Exception as e:
                 logger.error(f"akshare 获取K线失败 {code}: {e}")
+                _record_akshare_failure("kline")
 
         return None
 
