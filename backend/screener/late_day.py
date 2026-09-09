@@ -594,12 +594,13 @@ class LateDayScreener:
                         continue
                 stats["amplitude_ok"] += 1
 
-                # 2026-09-09回测优化：昨日涨幅>4.5%的股票追高风险大，排除
-                # 回测发现：金螳螂+4.32%, 中公教育+3.90%, 青山纸业+3.58% 次日都下跌
+                # 2026-09-09回测优化：昨日涨幅>4%的股票追高风险大，排除
+                # 回测发现：金螳螂+4.32%(次日-6.83%), 中公教育+3.90%(次日-2.35%), 青山纸业+3.58%(次日-2.72%)
+                # 涨幅>4%的股票次日大概率回调，降低门槛从4.5%到4%
                 pct_change = stock.get("pct_change", 0)
-                if pct_change > 4.5:
+                if pct_change > 4:
                     if i < 10:
-                        logger.info(f"昨日涨幅过大过滤 {stock['name']}({stock.get('code', '')}): 涨幅{pct_change:.2f}% > 4.5%，追高风险大")
+                        logger.info(f"昨日涨幅过大过滤 {stock['name']}({stock.get('code', '')}): 涨幅{pct_change:.2f}% > 4%，追高风险大")
                     continue
 
                 # 换手率过滤：>1%（大规模回测460只涨停股发现：95.4%涨停股换手率>1%，保持门槛）
@@ -1201,28 +1202,31 @@ class LateDayScreener:
             reasons.append(f"振幅过大({amplitude:.1f}%)，波动剧烈风险高")
             risks.append(f"振幅{amplitude:.1f}%过大，次日波动风险高")
 
-        # 2.6 换手率评分（8分）- 基于2026-09-08回测优化：涨停股平均换手率8.9%，7-15%占42.5%
-        # 换手率高的股票资金关注度高，更容易涨停
-        # 2026-09-09回测优化：罗牛山换手率12%，次日收益+3.08%（最好），高换手率股票表现更好
+        # 2.6 换手率评分（10分）- 基于2026-09-09回测优化：罗牛山换手率12%，次日收益+3.08%（最好）
+        # 换手率高的股票资金关注度高，更容易涨停；低换手率股票表现一般，扣分
+        # 回测发现：大部分推荐股票换手率只有3-4%，表现一般；换手率>8%的股票表现更好
         turnover = stock.get("turnover", 0)
         if turnover >= 15:
-            score += 8
+            score += 10
             reasons.append(f"换手率极高({turnover:.1f}%)，资金关注度极高")
         elif turnover >= 10:
-            score += 8  # 从6分提高到8分，高换手率股票表现更好
+            score += 9  # 从8分提高到9分，高换手率股票表现更好
             reasons.append(f"换手率高({turnover:.1f}%)，资金关注度高")
         elif turnover >= 8:
-            score += 7  # 新增：换手率8-10%也给高分
+            score += 8  # 从7分提高到8分，换手率8-10%也给高分
             reasons.append(f"换手率较高({turnover:.1f}%)，资金关注度较高")
         elif turnover >= 5:
             score += 5
             reasons.append(f"换手率适中({turnover:.1f}%)")
         elif turnover >= 3:
-            score += 3
+            score += 2  # 从3分降低到2分，低换手率股票表现一般
             reasons.append(f"换手率偏低({turnover:.1f}%)")
         elif turnover >= 1:
-            score += 1
+            score += 0  # 从1分降低到0分，换手率太低不加分
             reasons.append(f"换手率低({turnover:.1f}%)，股性不活跃")
+        else:
+            score -= 2  # 无换手率数据或换手率极低，扣分
+            risks.append("无有效换手率数据，股性可能不活跃")
 
         # 2.7 均线多头排列评分（5分）- 深度回测发现：40.1%涨停股均线多头排列
         try:
