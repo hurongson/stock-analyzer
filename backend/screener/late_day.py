@@ -42,23 +42,24 @@ class LateDayScreener:
         logger.info(f"大盘环境: {market_status['status']} (上证指数{market_status['sh_pct']:+.2f}%, 创业板{market_status['cyb_pct']:+.2f}%)")
         
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
-        score_threshold = 50  # 默认评分门槛
+        # 2026-09-17重构：基准分从50降低到30，评分门槛相应降低
+        score_threshold = 40  # 默认评分门槛（从50降低到40）
         min_locks = 0  # 默认三把锁门槛（0=不限制）
         if market_status['sh_pct'] < -1.0:
             self.max_results = 20  # 从30减少到20
-            score_threshold = 55  # 提高评分门槛（从50提高到55）
+            score_threshold = 45  # 提高评分门槛（从55降低到45）
             min_locks = 1  # 至少1/3亮
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，评分门槛提高到55分，三把锁至少1/3亮")
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，评分门槛提高到45分，三把锁至少1/3亮")
         elif market_status['sh_pct'] < -0.5:
             self.max_results = 25  # 从30减少到25
-            score_threshold = 50  # 提高评分门槛（从50提高到50）
+            score_threshold = 42  # 提高评分门槛（从50降低到42）
             min_locks = 1  # 至少1/3亮
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到50分，三把锁至少1/3亮")
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到42分，三把锁至少1/3亮")
         else:
             self.max_results = 30  # 正常情况推荐30只
-            score_threshold = 35  # 正常评分门槛（从40降低到35，基于2026-09-07回测，很多涨停股票评分低于40分）
+            score_threshold = 35  # 正常评分门槛（保持35分，基准分降低后相对门槛提高）
             min_locks = 0  # 不限制三把锁
-            logger.info(f"大盘正常，推荐数量30只，评分门槛35分（基于回测优化，提高涨停股命中率）")
+            logger.info(f"大盘正常，推荐数量30只，评分门槛35分（基准分降低后相对门槛提高）")
 
         # 获取全量股票列表
         if stock_df is None:
@@ -1089,6 +1090,11 @@ class LateDayScreener:
         """
         计算尾盘选股评分（0-100）
         维度：涨幅、成交量、趋势、MACD、KDJ、价格、动量、20日均线
+        2026-09-17重构：基于近两周回测（104只推荐，平均收益-6.74%，上涨率16.3%）
+        - 评分90~100的股票有42只（占40%），但平均收益-8.18%，表现最差
+        - 评分70~80的股票只有11只，平均收益-5.19%，表现最好
+        - 问题：评分项太多（14个），加分太容易，基准分太高（50分），导致评分区分度严重不足
+        - 优化：降低基准分到30分，增加扣分机制，减少加分项，提高评分区分度
         """
         close = kline["close"]
         high = kline["high"]
@@ -1097,31 +1103,30 @@ class LateDayScreener:
         current_price = stock["price"]
         pct_change = stock["pct_change"]
 
-        score = 50  # 基准分
+        score = 30  # 2026-09-17重构：基准分从50降低到30，提高评分区分度
         reasons = []
         risks = []
         vol_ratio = 0
         trend_name = "未知"
 
-        # 1. 涨幅评分（15%）- 基于2026-09-10近几日回测优化
-        # 回测发现（9月7日+8日共22只）：
-        # - 推荐日涨幅 -5%~0%: 平均收益-0.75%（最好）
-        # - 推荐日涨幅 0%~2%: 平均收益-3.48%
-        # - 推荐日涨幅 2%~4%: 平均收益-4.66%
-        # - 推荐日涨幅 4%~10%: 平均收益-5.12%（最差）
-        # 结论：推荐日涨幅越低，后续表现越好。优先选择-4%~0%的股票。
+        # 1. 涨幅评分（20%权重，最重要）- 基于2026-09-17近两周回测优化
+        # 回测发现（104只推荐）：
+        # - 推荐日涨幅 -5%~-2%: 16只, 上涨25%, 平均收益-3.91%（最好）
+        # - 推荐日涨幅 -2%~0%: 14只, 上涨7.1%, 平均收益-10.54%
+        # - 推荐日涨幅 0%~2%: 10只, 上涨20%, 平均收益-6.12%
+        # - 推荐日涨幅 2%~5%: 64只, 上涨15.6%, 平均收益-6.72%
+        # 结论：推荐日涨幅-5%~-2%表现最好，涨幅>2%的股票追高风险大
         pattern = "未知"
         is_lianban = stock.get("is_lianban", False) or pct_change > 5
         
         if is_lianban:
-            # 连板股专门分析（新增）
-            # 昨天已涨停，今天可能继续连板
-            score += 12  # 2026-09-10回测优化：连板股降低评分（从15降到12），追高风险大
-            reasons.append(f"连板股(昨涨{pct_change:.1f}%)，强势延续可能继续涨停")
+            # 连板股：追高风险大，降低评分
+            score += 5  # 2026-09-17重构：连板股从12分降低到5分，追高风险大
+            reasons.append(f"连板股(昨涨{pct_change:.1f}%)，追高风险大")
             pattern = "连板延续型"
+            risks.append(f"连板股追高风险大，回调概率高")
             
             # 连板股风险评估
-            # 连续涨停天数过多，回调风险大
             try:
                 up_days = 0
                 for j in range(1, min(6, len(close))):
@@ -1130,43 +1135,40 @@ class LateDayScreener:
                     else:
                         break
                 if up_days >= 3:
-                    score -= 5
-                    risks.append(f"连续上涨{up_days}天，高位回调风险大")
+                    score -= 10  # 2026-09-17重构：连续上涨3天以上大幅扣分
+                    risks.append(f"连续上涨{up_days}天，高位回调风险极大")
                 elif up_days == 2:
-                    score += 3
-                    reasons.append(f"2连板，强势确立")
+                    score -= 3  # 2026-09-17重构：2连板也扣分
+                    risks.append(f"2连板，追高风险增加")
             except Exception:
                 pass
-        elif -4 <= pct_change < -1:
-            score += 15  # 2026-09-10回测优化：小幅回调给最高分（表现最好）
+        elif -5 <= pct_change < -2:
+            score += 20  # 2026-09-17重构：-5%~-2%给最高分（表现最好）
             reasons.append(f"缩量回调({pct_change:.1f}%)，洗盘后反弹概率高")
             pattern = "回调反弹型"
-        elif -1 <= pct_change < 0:
-            score += 14  # 2026-09-10回测优化：微跌给次高分（表现较好）
+        elif -2 <= pct_change < 0:
+            score += 15  # 2026-09-17重构：-2%~0%给次高分
             reasons.append(f"微跌整理({pct_change:.1f}%)，蓄势待发可能突破")
             pattern = "横盘突破型"
-        elif 0 <= pct_change < 1:
-            score += 13  # 2026-09-10回测优化：横盘整理给第三高分
-            reasons.append(f"横盘整理({pct_change:.1f}%)，蓄势待发可能突破涨停")
+        elif 0 <= pct_change < 2:
+            score += 10  # 2026-09-17重构：0%~2%给中等分
+            reasons.append(f"横盘整理({pct_change:.1f}%)，蓄势待发")
             pattern = "横盘突破型"
-        elif 1 <= pct_change <= 2:
-            score += 10  # 2026-09-10回测优化：温和上涨降低评分（从13降到10），追高风险增加
-            reasons.append(f"温和上涨({pct_change:.1f}%)，稳步推升可能涨停")
+        elif 2 <= pct_change < 5:
+            score += 3  # 2026-09-17重构：2%~5%大幅降低评分（追高风险大）
+            reasons.append(f"温和上涨({pct_change:.1f}%)，追高风险增加")
             pattern = "温和上涨型"
-            risks.append(f"昨日涨幅{pct_change:.1f}%，次日回调风险增加")
-        elif -5 <= pct_change < -4:
-            score += 12  # 大跌反弹，较高分数
-            reasons.append(f"大跌反弹({pct_change:.1f}%)，超跌反弹概率高")
+            risks.append(f"昨日涨幅{pct_change:.1f}%，追高风险大")
+        elif pct_change >= 5:
+            score -= 5  # 2026-09-17重构：涨幅>=5%扣分（追高风险极大）
+            reasons.append(f"涨幅较大({pct_change:.1f}%)，追高风险极大")
+            pattern = "追高风险型"
+            risks.append(f"昨日涨幅{pct_change:.1f}%过高，大概率回调")
+        elif pct_change < -5:
+            score += 5  # 2026-09-17重构：跌幅<-5%给较低分（可能有基本面问题）
+            reasons.append(f"大跌反弹({pct_change:.1f}%)，超跌反弹概率高但风险大")
             pattern = "超跌反弹型"
-        elif -8 <= pct_change < -5:
-            score += 10  # 深度超跌反弹，一定分数
-            reasons.append(f"深度超跌({pct_change:.1f}%)，报复性反弹概率高")
-            pattern = "深度超跌反弹型"
-        elif -10 <= pct_change < -8:
-            score += 8  # 极端超跌反弹，较低分数
-            reasons.append(f"极端超跌({pct_change:.1f}%)，注意风险但反弹空间大")
-            pattern = "极端超跌反弹型"
-            risks.append(f"极端超跌({pct_change:.1f}%)，基本面可能有问题")
+            risks.append(f"昨日跌幅{pct_change:.1f}%过大，可能有基本面问题")
         else:
             risks.append("涨幅异常")
 
@@ -1215,30 +1217,39 @@ class LateDayScreener:
             reasons.append(f"振幅过大({amplitude:.1f}%)，波动剧烈风险高")
             risks.append(f"振幅{amplitude:.1f}%过大，次日波动风险高")
 
-        # 2.6 换手率评分（10分）- 基于2026-09-10近几日回测优化
-        # 回测发现：
-        # - 换手率 0%~3%: 平均收益-6.25%（最差）
-        # - 换手率 3%~5%: 平均收益-2.12%（最好）
-        # - 换手率 5%~8%: 平均收益-4.23%
-        # - 换手率 8%~20%: 平均收益-4.26%
-        # 结论：换手率3%-5%表现最好，换手率太低（<3%）表现很差。
+        # 2.6 换手率评分（15分权重）- 基于2026-09-17近两周回测优化
+        # 回测发现（104只推荐）：
+        # - 换手率 0%~2%: 41只, 上涨17.1%, 平均收益-5.81%
+        # - 换手率 2%~3%: 11只, 上涨9.1%, 平均收益-5.93%
+        # - 换手率 3%~5%: 42只, 上涨16.7%, 平均收益-7.69%
+        # - 换手率 5%~8%: 5只, 上涨40%, 平均收益-6.96%（最好）
+        # - 换手率 8%~15%: 5只, 上涨0%, 平均收益-8.05%
+        # 结论：换手率5%~8%表现最好（但样本少），换手率0%的股票太多（41只占39.4%）可能是数据问题
         turnover = stock.get("turnover", 0)
-        if 3 <= turnover < 5:
-            score += 10  # 2026-09-10回测优化：换手率3-5%给最高分（表现最好）
+        if 5 <= turnover < 8:
+            score += 15  # 2026-09-17重构：换手率5-8%给最高分（表现最好）
             reasons.append(f"换手率适中({turnover:.1f}%)，资金关注度适中，表现最好")
-        elif 5 <= turnover < 8:
-            score += 7  # 换手率5-8%给较高分
-            reasons.append(f"换手率较高({turnover:.1f}%)，资金关注度较高")
+        elif 3 <= turnover < 5:
+            score += 10  # 换手率3-5%给较高分
+            reasons.append(f"换手率适中({turnover:.1f}%)，资金关注度适中")
         elif 8 <= turnover < 15:
             score += 5  # 换手率8-15%给中等分
             reasons.append(f"换手率高({turnover:.1f}%)，资金关注度高")
+        elif 2 <= turnover < 3:
+            score += 3  # 换手率2-3%给较低分
+            reasons.append(f"换手率偏低({turnover:.1f}%)，股性不够活跃")
         elif turnover >= 15:
-            score += 3  # 换手率极高给较低分（可能过热）
+            score += 0  # 换手率极高不给分（可能过热）
             reasons.append(f"换手率极高({turnover:.1f}%)，注意过热风险")
             risks.append(f"换手率{turnover:.1f}%过高，可能过热，回调风险大")
+        elif 0 < turnover < 2:
+            score -= 3  # 2026-09-17重构：换手率0-2%扣分（表现差）
+            reasons.append(f"换手率低({turnover:.1f}%)，股性不活跃")
+            risks.append(f"换手率{turnover:.1f}%过低，股性不活跃")
         else:
-            score += 0  # 换手率<3%不给分（过滤规则已排除，但兜底）
-            risks.append(f"换手率{turnover:.1f}%偏低，股性不活跃")
+            score -= 5  # 2026-09-17重构：换手率0%大幅扣分（可能数据获取失败或股性极差）
+            reasons.append("无换手率数据，股性可能不活跃")
+            risks.append("无换手率数据，可能数据获取失败或股性极差")
 
         # 2.7 均线多头排列评分（5分）- 深度回测发现：40.1%涨停股均线多头排列
         try:
