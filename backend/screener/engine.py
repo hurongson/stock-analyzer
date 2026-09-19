@@ -92,7 +92,10 @@ class ScreenerEngine:
 
         for strategy_name, results in all_results.items():
             for r in results:
+                # 2026-09-19修复：统一股票代码格式（去掉前缀如bj/sh/sz）
+                # 之前不同策略返回的代码格式不一致，导致回测时无法匹配
                 code = r["code"]
+                code = code.replace("bj", "").replace("sh", "").replace("sz", "")
                 if code not in stock_map:
                     stock_map[code] = {
                         "code": code,

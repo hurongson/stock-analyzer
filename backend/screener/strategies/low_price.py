@@ -29,6 +29,21 @@ class LowPriceStrategy(BaseStrategy):
             (df["amount"] > 3e7)
         ].copy()
 
+        # 2026-09-19优化：排除金融板块（银行、证券、保险）
+        # 回测发现金融股表现差，且用户多次要求减少银行占比
+        finance_keywords = ["银行", "证券", "保险", "信托", "期货", "金融"]
+        if "name" in filtered.columns:
+            filtered = filtered[~filtered["name"].apply(lambda x: any(kw in str(x) for kw in finance_keywords))]
+        # 排除常见银行股代码
+        bank_codes = ["601398", "601939", "601288", "601988", "600036", "601166", 
+                      "600000", "601328", "000001", "601818", "600015", "601169",
+                      "601009", "002142", "600919", "600926", "601128", "603323",
+                      "002807", "002839", "601658", "601601", "601318", "601336",
+                      "601628", "601099", "600030", "600837", "600999", "601788",
+                      "601211", "600109", "000776", "000166", "600958", "601375"]
+        if "code" in filtered.columns:
+            filtered = filtered[~filtered["code"].isin(bank_codes)]
+
         if has_turnover:
             filtered = filtered[filtered["turnover"] > 1]  # 从0.3提高到1，确保活跃度
         if has_mv:
