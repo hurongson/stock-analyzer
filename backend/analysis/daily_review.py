@@ -1065,15 +1065,52 @@ class DailyReviewAnalyzer:
     # 辅助方法
     # ========================================================================
     def _load_limit_up_stocks(self, date: str) -> List[Dict]:
-        """加载涨停股票数据"""
+        """加载涨停股票数据（优先从文件加载，文件不存在时自动获取）"""
         limit_up_file = os.path.join(self.data_dir, f"limit_up_{date.replace('-', '')}.json")
         if os.path.exists(limit_up_file):
             try:
                 with open(limit_up_file, "r") as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    if data:
+                        return data
             except Exception as e:
                 logger.error(f"读取涨停股票数据失败: {e}")
-        return []
+        
+        # 文件不存在或为空，自动获取今日涨停数据
+        logger.info(f"涨停数据文件不存在，自动获取{date}涨停数据...")
+        try:
+            import akshare as ak
+            # 获取东方财富涨停板数据
+            df = ak.stock_zt_pool_em(date=date.replace('-', ''))
+            if df is not None and len(df) > 0:
+                limit_up_stocks = []
+                for _, row in df.iterrows():
+                    stock = {
+                        "code": str(row.get("代码", "")).replace("sh", "").replace("sz", "").replace("bj", ""),
+                        "name": row.get("名称", ""),
+                        "price": float(row.get("最新价", 0)),
+                        "pct_change": float(row.get("涨跌幅", 0)),
+                        "amount": float(row.get("成交额", 0)),
+                        "turnover": float(row.get("换手率", 0)),
+                        "lbc": int(row.get("连板数", 1)),  # 连板数
+                        "sector": row.get("所属行业", ""),
+                        "reason": row.get("涨停原因", ""),
+                    }
+                    limit_up_stocks.append(stock)
+                
+                # 保存到文件，供下次使用
+                os.makedirs(self.data_dir, exist_ok=True)
+                with open(limit_up_file, "w", encoding="utf-8") as f:
+                    json.dump(limit_up_stocks, f, ensure_ascii=False, indent=2)
+                
+                logger.info(f"成功获取{len(limit_up_stocks)}只涨停股票数据")
+                return limit_up_stocks
+            else:
+                logger.warning(f"未获取到{date}涨停数据")
+                return []
+        except Exception as e:
+            logger.error(f"自动获取涨停数据失败: {e}")
+            return []
 
     def _get_sector_keywords(self) -> Dict:
         """获取行业关键词映射"""
