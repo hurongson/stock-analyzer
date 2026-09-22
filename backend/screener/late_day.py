@@ -41,6 +41,33 @@ class LateDayScreener:
         market_status = self._analyze_market()
         logger.info(f"大盘环境: {market_status['status']} (上证指数{market_status['sh_pct']:+.2f}%, 创业板{market_status['cyb_pct']:+.2f}%)")
         
+        # 2026-09-22优化：获取今日涨停家数，根据市场情绪（陈小群情绪周期）自适应调整
+        # 陈小群情绪周期四阶段：
+        # - 高潮期（涨停≥80只）：减少选股数量，提高评分门槛（警惕加速见顶）
+        # - 发酵期（涨停50-79只）：正常选股数量（重仓窗口，全年主要盈利来源）
+        # - 启动期（涨停30-49只）：增加选股数量，小仓试错（筛选主线）
+        # - 退潮期（涨停<30只）：减少选股数量，严格筛选（空仓等待）
+        limit_up_count = 0
+        sentiment_phase = "未知"
+        try:
+            from datetime import datetime
+            today_str = datetime.now().strftime('%Y%m%d')
+            import akshare as ak
+            zt_df = ak.stock_zt_pool_em(date=today_str)
+            if zt_df is not None and not zt_df.empty:
+                limit_up_count = len(zt_df)
+                if limit_up_count >= 80:
+                    sentiment_phase = "高潮"
+                elif limit_up_count >= 50:
+                    sentiment_phase = "发酵"
+                elif limit_up_count >= 30:
+                    sentiment_phase = "启动"
+                else:
+                    sentiment_phase = "退潮"
+                logger.info(f"市场情绪（陈小群情绪周期）: {sentiment_phase}期 (今日涨停{limit_up_count}只)")
+        except Exception as e:
+            logger.warning(f"获取涨停家数失败: {e}")
+        
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
         # 2026-09-22优化：基准分从30降低到20，评分门槛相应降低
         score_threshold = 30  # 默认评分门槛（从40降低到30）
@@ -60,6 +87,31 @@ class LateDayScreener:
             score_threshold = 25  # 正常评分门槛（从35降低到25，基准分降低后相对门槛保持）
             min_locks = 0  # 不限制三把锁
             logger.info(f"大盘正常，推荐数量30只，评分门槛25分（基准分降低到20后相对门槛保持）")
+        
+        # 2026-09-22优化：根据市场情绪（涨停家数）自适应调整选股数量和评分门槛
+        # 陈小群情绪周期：高潮期警惕见顶，发酵期重仓，启动期试错，退潮期空仓
+        if sentiment_phase == "高潮":
+            # 高潮期：全线加速、龙头缩量一字，分批止盈，警惕加速见顶，不再新开仓
+            self.max_results = min(self.max_results, 15)  # 减少到15只
+            score_threshold += 5  # 提高评分门槛5分
+            min_locks = max(min_locks, 2)  # 至少2/3锁亮
+            logger.info(f"情绪高潮期（涨停{limit_up_count}只）：警惕加速见顶，推荐数量减少到{self.max_results}只，评分门槛提高到{score_threshold}分，三把锁至少2/3亮")
+        elif sentiment_phase == "发酵":
+            # 发酵期：连板10-15家，板块批量涨停，锁定主线总龙锁仓吃主升，全年主要盈利来源
+            self.max_results = 30  # 正常推荐30只（重仓窗口）
+            score_threshold = min(score_threshold, 25)  # 评分门槛保持25分
+            logger.info(f"情绪发酵期（涨停{limit_up_count}只）：重仓窗口，推荐数量{self.max_results}只，评分门槛{score_threshold}分")
+        elif sentiment_phase == "启动":
+            # 启动期：连板≤3只，新题材首板零星，小仓试错首板/二板，筛选主线，不重仓
+            self.max_results = 25  # 推荐25只（小仓试错）
+            score_threshold = min(score_threshold, 22)  # 降低评分门槛，增加候选
+            logger.info(f"情绪启动期（涨停{limit_up_count}只）：小仓试错，推荐数量{self.max_results}只，评分门槛{score_threshold}分")
+        elif sentiment_phase == "退潮":
+            # 退潮期：高标A杀、天地板频发、炸板潮，禁止抄底、禁止试错，等待冰点结束
+            self.max_results = min(self.max_results, 10)  # 严格减少到10只
+            score_threshold += 10  # 大幅提高评分门槛
+            min_locks = max(min_locks, 2)  # 至少2/3锁亮
+            logger.info(f"情绪退潮期（涨停{limit_up_count}只）：空仓等待，推荐数量严格减少到{self.max_results}只，评分门槛提高到{score_threshold}分，三把锁至少2/3亮")
 
         # 获取全量股票列表
         if stock_df is None:
@@ -258,10 +310,22 @@ class LateDayScreener:
             "total_count": len(all_picks),
             "top_count": len(top_picks),
             "special_count": len(special_picks),
+            "market_sentiment": {
+                "phase": sentiment_phase,  # 市场情绪阶段：高潮/发酵/启动/退潮
+                "limit_up_count": limit_up_count,  # 今日涨停家数
+                "market_status": market_status.get("status", ""),  # 大盘状态
+                "sh_pct": market_status.get("sh_pct", 0),  # 上证指数涨跌幅
+                "cyb_pct": market_status.get("cyb_pct", 0),  # 创业板涨跌幅
+                "max_results": self.max_results,  # 推荐数量
+                "score_threshold": score_threshold,  # 评分门槛
+                "min_locks": min_locks,  # 三把锁门槛
+            },
             "summary": {
                 "total_stocks": len(stock_df),
                 "initial_filtered": len(candidates),
                 "final_picks": len(all_picks),
+                "sentiment_phase": sentiment_phase,
+                "limit_up_count": limit_up_count,
             }
         }
 
