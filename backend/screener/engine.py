@@ -102,16 +102,83 @@ class ScreenerEngine:
                         "name": r["name"],
                         "price": r["price"],
                         "pct_change": r["pct_change"],
+                        "amount": r.get("amount", 0),  # 2026-09-22添加：成交额用于板块龙头识别
                         "strategies": [],
                         "reasons": [],
                         "total_score": 0,
                         "strategy_count": 0,
+                        "sector": r.get("sector", ""),  # 2026-09-22添加：保留板块信息
                     }
                 stock_map[code]["strategies"].append(strategy_name)
                 stock_map[code]["reasons"].append(f"[{strategy_name}] {r['reason']}")
                 stock_map[code]["total_score"] += r["score"]
                 stock_map[code]["strategy_count"] += 1
+                # 2026-09-22添加：如果有板块信息，更新板块（优先使用非空板块）
+                if r.get("sector") and not stock_map[code].get("sector"):
+                    stock_map[code]["sector"] = r["sector"]
 
+        # 2026-09-22优化：板块分类（基于股票名称关键词）
+        # 之前所有推荐股票的板块都是"未设置"，导致板块龙头识别完全失效
+        sector_keywords = {
+            "科技半导体": ["科技", "半导体", "芯片", "集成", "电路", "电子", "软件", "信息", "通信", "5G", "人工智能", "AI", "大数据", "云计算", "物联网", "区块链", "量子", "机器人", "智能", "光电", "射频", "传感", "精密", "微", "数字", "网络", "互联", "数据", "计算", "存储", "显示", "光学", "激光", "京东方", "TCL", "风华", "共进", "永鼎"],
+            "农业食品": ["农", "粮", "种", "牧", "渔", "食", "酒", "饮", "奶", "肉", "蛋", "糖", "盐", "油", "面", "米", "果", "菜", "茶", "烟", "饲", "肥", "农药", "养殖", "屠宰", "食品", "农业", "种业", "牧业", "渔业", "顺灏"],
+            "医药医疗": ["药", "医", "疗", "健", "康", "生物", "制药", "药业", "医疗", "医院", "诊所", "疫苗", "检测", "器械", "耗材", "健康", "保健", "西陇"],
+            "新能源": ["新能", "光伏", "风电", "锂电", "电池", "储能", "氢能", "充电", "新能源", "太阳能", "风能", "核能", "碳中和", "碳交易", "天顺", "吉鑫", "露笑"],
+            "汽车交通": ["汽车", "车", "交通", "运输", "物流", "快递", "航运", "航空", "机场", "港口", "铁路", "公路", "公交", "出租", "网约车", "新能源汽车", "电动车", "智能驾驶", "众泰"],
+            "房地产建筑": ["地产", "房", "建筑", "建材", "水泥", "钢铁", "玻璃", "陶瓷", "涂料", "防水", "装修", "装饰", "物业", "园林", "环保", "节能", "平潭", "山子"],
+            "传媒娱乐": ["传媒", "娱乐", "影视", "电影", "电视", "广播", "出版", "游戏", "动漫", "音乐", "体育", "旅游", "酒店", "餐饮", "免税", "彩票", "桂林", "海峡"],
+            "化工材料": ["化工", "化学", "材料", "塑料", "橡胶", "纤维", "涂料", "染料", "颜料", "化肥", "农药", "医药中间体", "新材料", "石墨烯", "碳纤维", "稀土", "有色", "金属", "黄金", "白银", "铜", "铝", "锌", "镍", "钴", "锂", "精达", "中超", "太阳"],
+            "电力能源": ["电力", "能源", "火电", "水电", "核电", "风电", "光伏", "生物质", "地热", "潮汐", "煤炭", "石油", "天然气", "燃气", "油品", "加油"],
+            "商业零售": ["商业", "零售", "百货", "超市", "商场", "购物", "电商", "网购", "直播", "带货", "连锁", "加盟", "批发", "贸易", "外贸", "跨境", "跨境通"],
+            "军工国防": ["军工", "国防", "航天", "航空", "兵器", "船舶", "核工业", "军事", "武器", "装备", "雷达", "导弹", "卫星", "飞船", "航母", "潜艇", "坦克", "中电鑫龙"],
+            "网络安全": ["安全", "防护", "加密", "防火墙", "入侵检测", "天融信"],
+        }
+        
+        # 为没有板块信息的股票进行板块分类
+        for code, stock in stock_map.items():
+            if not stock.get("sector"):
+                name = stock.get("name", "")
+                matched_sectors = []
+                for sector, keywords in sector_keywords.items():
+                    if any(kw in name for kw in keywords):
+                        matched_sectors.append(sector)
+                if matched_sectors:
+                    # 科技半导体优先
+                    if "科技半导体" in matched_sectors:
+                        stock["sector"] = "科技半导体"
+                    else:
+                        stock["sector"] = matched_sectors[0]
+                else:
+                    stock["sector"] = "其他"
+        
+        # 2026-09-22优化：板块龙头识别
+        # 中军龙头：板块内成交额最大的股票
+        # 领涨龙头：板块内涨幅最大的股票
+        sector_stocks = {}
+        for code, stock in stock_map.items():
+            sector = stock.get("sector", "其他")
+            if sector not in sector_stocks:
+                sector_stocks[sector] = []
+            sector_stocks[sector].append(stock)
+        
+        for sector, stocks in sector_stocks.items():
+            if len(stocks) < 2:
+                continue
+            
+            # 中军龙头：成交额最大
+            sorted_by_amount = sorted(stocks, key=lambda x: x.get("amount", 0), reverse=True)
+            zhongjun_code = sorted_by_amount[0]["code"]
+            
+            # 领涨龙头：涨幅最大
+            sorted_by_pct = sorted(stocks, key=lambda x: x.get("pct_change", 0), reverse=True)
+            lingzhang_code = sorted_by_pct[0]["code"]
+            
+            # 标记龙头
+            for stock in stocks:
+                stock["is_zhongjun_leader"] = (stock["code"] == zhongjun_code)
+                stock["is_lingzhang_leader"] = (stock["code"] == lingzhang_code)
+                stock["sector_stock_count"] = len(stocks)
+        
         # 多策略命中额外加分
         combined = list(stock_map.values())
         for item in combined:
