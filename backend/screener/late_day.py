@@ -466,6 +466,41 @@ class LateDayScreener:
         hot_sector_names = [s[0] for s in hot_sectors if s[1] >= 2]  # 至少2只股票才算热门板块
         if hot_sector_names:
             logger.info(f"热门板块识别: {', '.join([f'{s}({sector_count[s]}只)' for s in hot_sector_names])}")
+        
+        # 2026-09-22优化：板块龙头识别（基于陈小群"只做真龙"思路）
+        # 龙头标准：板块内成交额最大 + 涨幅靠前 + 能带动板块
+        # 中军龙头：成交额>20亿的板块内最大成交额股票
+        # 领涨龙头：板块内涨幅最大的股票
+        sector_stocks = {}  # 按板块分组
+        for stock in candidates:
+            code = stock.get("code", "")
+            sector = stock_sector.get(code, "其他")
+            if sector not in sector_stocks:
+                sector_stocks[sector] = []
+            sector_stocks[sector].append(stock)
+        
+        sector_leaders = {}  # 板块龙头映射
+        for sector, stocks in sector_stocks.items():
+            if len(stocks) < 2:
+                continue  # 板块内至少2只股票才识别龙头
+            
+            # 按成交额排序（中军龙头）
+            sorted_by_amount = sorted(stocks, key=lambda x: x.get("amount", 0), reverse=True)
+            zhongjun_leader = sorted_by_amount[0]  # 成交额最大的是中军龙头
+            
+            # 按涨幅排序（领涨龙头）
+            sorted_by_pct = sorted(stocks, key=lambda x: x.get("pct_change", 0), reverse=True)
+            lingzhang_leader = sorted_by_pct[0]  # 涨幅最大的是领涨龙头
+            
+            sector_leaders[sector] = {
+                "zhongjun": zhongjun_leader.get("code", ""),
+                "lingzhang": lingzhang_leader.get("code", ""),
+                "count": len(stocks),
+                "avg_amount": sum(s.get("amount", 0) for s in stocks) / len(stocks),
+            }
+            
+            if len(stocks) >= 3:
+                logger.info(f"板块龙头识别 [{sector}]: 中军={zhongjun_leader.get('name','')}({zhongjun_leader.get('amount',0)/100000000:.1f}亿), 领涨={lingzhang_leader.get('name','')}({lingzhang_leader.get('pct_change',0):.1f}%), 共{len(stocks)}只")
 
         # 统计计数器：排查推荐0只股票的问题
         stats = {"total": 0, "kline_ok": 0, "amplitude_ok": 0, "turnover_ok": 0, "ma20_ok": 0, "score_ok": 0, "errors": 0}
@@ -664,8 +699,31 @@ class LateDayScreener:
                     # 科技半导体板块作为热门板块时额外加分
                     if stock_main_sector == "科技半导体":
                         sector_bonus += 3  # 科技半导体热门板块额外加3分
+                
+                # 2026-09-22优化：板块龙头加分（基于陈小群"只做真龙"思路）
+                # 中军龙头：板块内成交额最大的股票，+8分
+                # 领涨龙头：板块内涨幅最大的股票，+5分
+                # 板块合力：板块内≥3只股票时，所有股票+3分（板块联动效应）
+                is_zhongjun_leader = False
+                is_lingzhang_leader = False
+                if stock_main_sector in sector_leaders:
+                    leader_info = sector_leaders[stock_main_sector]
+                    if code == leader_info.get("zhongjun", ""):
+                        is_zhongjun_leader = True
+                        sector_bonus += 8  # 中军龙头加8分
+                        reasons_leader = "中军龙头（板块成交额最大）"
+                    if code == leader_info.get("lingzhang", ""):
+                        is_lingzhang_leader = True
+                        sector_bonus += 5  # 领涨龙头加5分
+                        reasons_leader = "领涨龙头（板块涨幅最大）"
+                    # 板块合力加分：板块内≥3只股票时，所有股票+3分
+                    if leader_info.get("count", 0) >= 3:
+                        sector_bonus += 3  # 板块合力加3分
+                
                 stock["sector_bonus"] = sector_bonus
                 stock["sector"] = stock_main_sector
+                stock["is_zhongjun_leader"] = is_zhongjun_leader
+                stock["is_lingzhang_leader"] = is_lingzhang_leader
                 
                 # 计算技术指标
                 score, analysis = self._calc_late_day_score(kline, stock)
@@ -767,6 +825,10 @@ class LateDayScreener:
                         "trend_analysis": trend_analysis,
                         "news_impact": stock.get("news_impact", {}),
                         "concept_analysis": stock.get("concept_analysis", {}),
+                        "sector": stock.get("sector", ""),
+                        "sector_bonus": stock.get("sector_bonus", 0),
+                        "is_zhongjun_leader": stock.get("is_zhongjun_leader", False),
+                        "is_lingzhang_leader": stock.get("is_lingzhang_leader", False),
                         # 基本面评分（先初始化为0，后面计算完成后更新）
                         "fundamental_score": 0,
                         "fundamental": {
@@ -935,6 +997,18 @@ class LateDayScreener:
                 elif sector_bonus >= 3:
                     special_score += 10
                     special_reasons.append("板块有一定合力")
+                
+                # 2026-09-22优化：板块龙头优先选择（陈小群"只做真龙"核心思路）
+                # 中军龙头：板块内成交额最大的股票，+15分
+                # 领涨龙头：板块内涨幅最大的股票，+10分
+                is_zhongjun = stock.get("is_zhongjun_leader", False)
+                is_lingzhang = stock.get("is_lingzhang_leader", False)
+                if is_zhongjun:
+                    special_score += 15
+                    special_reasons.append("中军龙头（板块成交额最大，陈小群只做真龙）")
+                if is_lingzhang:
+                    special_score += 10
+                    special_reasons.append("领涨龙头（板块涨幅最大，带动板块效应）")
                 
                 # 科技/电子/新能源等主线板块加分（陈小群死守主线）
                 main_sectors = ["科技半导体", "新能源", "医药医疗", "汽车交通", "传媒娱乐"]
