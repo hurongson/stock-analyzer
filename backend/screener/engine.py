@@ -100,11 +100,78 @@ class ScreenerEngine:
             
             logger.info(f"市场情绪: {market_sentiment['sentiment']} (涨停{market_sentiment['limit_up_count']}只, 跌停{market_sentiment['limit_down_count']}只)")
             
+            # 2026-09-22优化：获取最近5天涨停数据，分析板块轮动规律
+            # 基于陈小群"板块轮动"思路：连续涨停的板块持续性强，新兴板块有爆发力
+            sector_rotation = {}  # 板块 -> {连续天数, 总涨停数, 平均涨停数, 趋势}
+            try:
+                from datetime import datetime, timedelta
+                recent_dates = []
+                for i in range(7):
+                    d = datetime.now() - timedelta(days=i)
+                    if d.weekday() < 5:  # 只取工作日
+                        recent_dates.append(d.strftime('%Y%m%d'))
+                    if len(recent_dates) >= 5:
+                        break
+                
+                # 获取每天的涨停板块数据
+                sector_history = {}  # 板块 -> {日期: 涨停数}
+                for hist_date in recent_dates:
+                    try:
+                        hist_zt = ak.stock_zt_pool_em(date=hist_date)
+                        if hist_zt is not None and not hist_zt.empty:
+                            if '所属行业' in hist_zt.columns:
+                                for _, row in hist_zt.iterrows():
+                                    sector = row.get('所属行业', '其他')
+                                    if sector not in sector_history:
+                                        sector_history[sector] = {}
+                                    sector_history[sector][hist_date] = sector_history[sector].get(hist_date, 0) + 1
+                    except Exception:
+                        pass
+                
+                # 分析板块轮动
+                for sector, date_counts in sector_history.items():
+                    if len(date_counts) >= 2:  # 至少2天数据才分析
+                        total = sum(date_counts.values())
+                        avg = total / len(date_counts)
+                        # 计算趋势：最近1天 vs 前1天
+                        sorted_dates = sorted(date_counts.keys())
+                        latest_count = date_counts.get(sorted_dates[-1], 0)
+                        prev_count = date_counts.get(sorted_dates[-2], 0) if len(sorted_dates) >= 2 else 0
+                        trend = "上升" if latest_count > prev_count else ("下降" if latest_count < prev_count else "持平")
+                        
+                        sector_rotation[sector] = {
+                            "continuous_days": len(date_counts),
+                            "total": total,
+                            "avg": avg,
+                            "latest": latest_count,
+                            "prev": prev_count,
+                            "trend": trend,
+                            "increase": latest_count - prev_count,
+                        }
+                
+                # 找出持续性强的板块（连续≥3天涨停）
+                continuous_sectors = {s: d for s, d in sector_rotation.items() if d["continuous_days"] >= 3}
+                # 找出新兴板块（最近1天涨停增加≥2只）
+                emerging_sectors = {s: d for s, d in sector_rotation.items() if d["increase"] >= 2 and d["latest"] >= 2}
+                
+                logger.info(f"板块轮动分析: 持续性板块{len(continuous_sectors)}个, 新兴板块{len(emerging_sectors)}个")
+                if continuous_sectors:
+                    top_continuous = sorted(continuous_sectors.items(), key=lambda x: x[1]["avg"], reverse=True)[:5]
+                    continuous_str = ', '.join([f"{s}({d['continuous_days']}天,平均{d['avg']:.1f}只)" for s, d in top_continuous])
+                    logger.info(f"  持续性板块: {continuous_str}")
+                if emerging_sectors:
+                    top_emerging = sorted(emerging_sectors.items(), key=lambda x: x[1]["increase"], reverse=True)[:5]
+                    emerging_str = ', '.join([f"{s}({d['prev']}→{d['latest']}只, +{d['increase']})" for s, d in top_emerging])
+                    logger.info(f"  新兴板块: {emerging_str}")
+                
+            except Exception as e:
+                logger.warning(f"板块轮动分析失败: {e}")
+            
         except Exception as e:
             logger.warning(f"获取涨停数据失败: {e}")
 
-        # 合并去重 + 综合排序（传入涨停板块数据用于板块合力加分）
-        combined, special_picks, chen_xiaoqun_picks = self._merge_results(all_results, limit_up_sectors, market_sentiment)
+        # 合并去重 + 综合排序（传入涨停板块数据和板块轮动数据）
+        combined, special_picks, chen_xiaoqun_picks = self._merge_results(all_results, limit_up_sectors, market_sentiment, sector_rotation)
 
         # 涨停预测
         limit_up_picks = self._predict_limit_up(combined)
@@ -131,18 +198,21 @@ class ScreenerEngine:
             "summary": summary,
         }
 
-    def _merge_results(self, all_results: Dict[str, List[Dict]], limit_up_sectors: Dict = None, market_sentiment: Dict = None) -> List[Dict]:
+    def _merge_results(self, all_results: Dict[str, List[Dict]], limit_up_sectors: Dict = None, market_sentiment: Dict = None, sector_rotation: Dict = None) -> List[Dict]:
         """合并各策略结果，去重，多策略命中加分
         
         Args:
             all_results: 各策略结果
             limit_up_sectors: 板块涨停家数映射 {板块名: 涨停家数}
             market_sentiment: 市场情绪信息 {limit_up_count, limit_down_count, sentiment}
+            sector_rotation: 板块轮动信息 {板块名: {continuous_days, total, avg, latest, prev, trend, increase}}
         """
         if limit_up_sectors is None:
             limit_up_sectors = {}
         if market_sentiment is None:
             market_sentiment = {"limit_up_count": 0, "limit_down_count": 0, "sentiment": "中性"}
+        if sector_rotation is None:
+            sector_rotation = {}
         stock_map = {}
 
         for strategy_name, results in all_results.items():
@@ -286,6 +356,65 @@ class ScreenerEngine:
         for code, stock in stock_map.items():
             stock["market_sentiment"] = market_sentiment.get("sentiment", "中性")
             stock["market_limit_up_count"] = market_sentiment.get("limit_up_count", 0)
+        
+        # 2026-09-22优化：板块轮动加分（陈小群"板块轮动"思路）
+        # 持续性板块：连续≥3天涨停，说明板块有持续性，+10分
+        # 新兴板块：最近1天涨停增加≥2只，说明板块正在启动，+8分
+        # 上升趋势：最近1天涨停比前1天增加，+5分
+        for code, stock in stock_map.items():
+            sector = stock.get("sector", "其他")
+            rotation_bonus = 0
+            rotation_info = {}
+            
+            # 查找该板块对应的东方财富行业分类
+            matched_em_sectors = []
+            for our_sector, em_sectors in sector_mapping.items():
+                if our_sector == sector:
+                    matched_em_sectors = em_sectors
+                    break
+            
+            # 检查每个对应的东方财富行业分类的轮动情况
+            max_continuous_days = 0
+            max_increase = 0
+            is_emerging = False
+            is_continuous = False
+            is_rising = False
+            
+            for em_sector in matched_em_sectors:
+                if em_sector in sector_rotation:
+                    info = sector_rotation[em_sector]
+                    max_continuous_days = max(max_continuous_days, info["continuous_days"])
+                    max_increase = max(max_increase, info["increase"])
+                    if info["continuous_days"] >= 3:
+                        is_continuous = True
+                    if info["increase"] >= 2 and info["latest"] >= 2:
+                        is_emerging = True
+                    if info["trend"] == "上升":
+                        is_rising = True
+            
+            # 持续性板块加分
+            if is_continuous:
+                rotation_bonus += 10
+                rotation_info["continuous"] = True
+                rotation_info["continuous_days"] = max_continuous_days
+            
+            # 新兴板块加分
+            if is_emerging:
+                rotation_bonus += 8
+                rotation_info["emerging"] = True
+                rotation_info["increase"] = max_increase
+            
+            # 上升趋势加分
+            if is_rising and not is_emerging:
+                rotation_bonus += 5
+                rotation_info["rising"] = True
+            
+            if rotation_bonus > 0:
+                stock["total_score"] += rotation_bonus
+                stock["sector_rotation_bonus"] = rotation_bonus
+                stock["sector_rotation_info"] = rotation_info
+            else:
+                stock["sector_rotation_bonus"] = 0
         
         # 多策略命中额外加分
         combined = list(stock_map.values())
