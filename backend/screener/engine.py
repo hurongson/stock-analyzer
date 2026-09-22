@@ -58,8 +58,53 @@ class ScreenerEngine:
                 logger.error(f"策略 {name} 运行失败: {e}")
                 all_results[name] = []
 
-        # 合并去重 + 综合排序
-        combined, special_picks, chen_xiaoqun_picks = self._merge_results(all_results)
+        # 2026-09-22优化：获取今日涨停股票数据，统计板块涨停家数
+        # 基于陈小群"板块合力"思路：涨停家数多的板块合力强，优先选择
+        limit_up_sectors = {}  # 板块 -> 涨停家数
+        market_sentiment = {"limit_up_count": 0, "limit_down_count": 0, "sentiment": "中性"}
+        try:
+            from datetime import datetime
+            today = datetime.now().strftime('%Y%m%d')
+            import akshare as ak
+            zt_df = ak.stock_zt_pool_em(date=today)
+            if zt_df is not None and not zt_df.empty:
+                market_sentiment["limit_up_count"] = len(zt_df)
+                # 统计各行业涨停家数
+                if '所属行业' in zt_df.columns:
+                    for _, row in zt_df.iterrows():
+                        sector = row.get('所属行业', '其他')
+                        limit_up_sectors[sector] = limit_up_sectors.get(sector, 0) + 1
+                
+                # 按涨停家数排序
+                sorted_sectors = sorted(limit_up_sectors.items(), key=lambda x: x[1], reverse=True)
+                top_sectors = sorted_sectors[:5]
+                logger.info(f"今日涨停{len(zt_df)}只，热门板块: {', '.join([f'{s}({c}只)' for s, c in top_sectors])}")
+            
+            # 获取跌停股票数据
+            try:
+                dt_df = ak.stock_zt_pool_dtgc_em(date=today)
+                if dt_df is not None and not dt_df.empty:
+                    market_sentiment["limit_down_count"] = len(dt_df)
+            except Exception:
+                pass
+            
+            # 市场情绪判断
+            if market_sentiment["limit_up_count"] >= 80:
+                market_sentiment["sentiment"] = "高潮"
+            elif market_sentiment["limit_up_count"] >= 50:
+                market_sentiment["sentiment"] = "发酵"
+            elif market_sentiment["limit_up_count"] >= 30:
+                market_sentiment["sentiment"] = "启动"
+            else:
+                market_sentiment["sentiment"] = "退潮"
+            
+            logger.info(f"市场情绪: {market_sentiment['sentiment']} (涨停{market_sentiment['limit_up_count']}只, 跌停{market_sentiment['limit_down_count']}只)")
+            
+        except Exception as e:
+            logger.warning(f"获取涨停数据失败: {e}")
+
+        # 合并去重 + 综合排序（传入涨停板块数据用于板块合力加分）
+        combined, special_picks, chen_xiaoqun_picks = self._merge_results(all_results, limit_up_sectors, market_sentiment)
 
         # 涨停预测
         limit_up_picks = self._predict_limit_up(combined)
@@ -86,8 +131,18 @@ class ScreenerEngine:
             "summary": summary,
         }
 
-    def _merge_results(self, all_results: Dict[str, List[Dict]]) -> List[Dict]:
-        """合并各策略结果，去重，多策略命中加分"""
+    def _merge_results(self, all_results: Dict[str, List[Dict]], limit_up_sectors: Dict = None, market_sentiment: Dict = None) -> List[Dict]:
+        """合并各策略结果，去重，多策略命中加分
+        
+        Args:
+            all_results: 各策略结果
+            limit_up_sectors: 板块涨停家数映射 {板块名: 涨停家数}
+            market_sentiment: 市场情绪信息 {limit_up_count, limit_down_count, sentiment}
+        """
+        if limit_up_sectors is None:
+            limit_up_sectors = {}
+        if market_sentiment is None:
+            market_sentiment = {"limit_up_count": 0, "limit_down_count": 0, "sentiment": "中性"}
         stock_map = {}
 
         for strategy_name, results in all_results.items():
@@ -178,6 +233,59 @@ class ScreenerEngine:
                 stock["is_zhongjun_leader"] = (stock["code"] == zhongjun_code)
                 stock["is_lingzhang_leader"] = (stock["code"] == lingzhang_code)
                 stock["sector_stock_count"] = len(stocks)
+        
+        # 2026-09-22优化：根据今日涨停家数给板块加分（陈小群"板块合力"核心思路）
+        # 涨停家数多的板块合力强，资金关注度高，优先选择
+        # 板块映射：将我们的板块分类映射到东方财富行业分类
+        sector_mapping = {
+            "科技半导体": ["半导体", "元件", "光学光电", "IT服务Ⅱ", "软件开发", "计算机设", "通信服务", "通信设备", "电子化学", "自动化设"],
+            "农业食品": ["饮料乳品", "化学制品", "文娱用品"],
+            "医药医疗": ["化学制药", "医疗服务", "医疗器械", "中药Ⅱ"],
+            "新能源": ["电力", "煤炭开采"],
+            "汽车交通": ["汽车零部", "商用车", "铁路公路"],
+            "房地产建筑": ["房地产服", "房地产开", "专业工程", "工程机械", "环境治理"],
+            "传媒娱乐": ["出版", "广告营销", "电视广播", "综合Ⅱ"],
+            "化工材料": ["塑料", "家电零部", "其他家电", "家居用品", "包装印刷", "服装家纺", "燃气Ⅱ"],
+            "电力能源": ["电力", "煤炭开采"],
+            "商业零售": ["服装家纺"],
+            "军工国防": ["专用设备"],
+            "网络安全": ["IT服务Ⅱ", "软件开发"],
+        }
+        
+        # 计算每个我们的板块分类对应的涨停家数
+        our_sector_limit_up = {}
+        for our_sector, em_sectors in sector_mapping.items():
+            total = 0
+            for em_sector in em_sectors:
+                total += limit_up_sectors.get(em_sector, 0)
+            our_sector_limit_up[our_sector] = total
+        
+        # 根据涨停家数给股票加分
+        for code, stock in stock_map.items():
+            sector = stock.get("sector", "其他")
+            limit_up_count = our_sector_limit_up.get(sector, 0)
+            stock["sector_limit_up_count"] = limit_up_count
+            
+            # 涨停家数加分：≥5只+15分，3-4只+10分，2只+5分，1只+2分，0只0分
+            if limit_up_count >= 5:
+                stock["total_score"] += 15
+                stock["sector_limit_up_bonus"] = 15
+            elif limit_up_count >= 3:
+                stock["total_score"] += 10
+                stock["sector_limit_up_bonus"] = 10
+            elif limit_up_count >= 2:
+                stock["total_score"] += 5
+                stock["sector_limit_up_bonus"] = 5
+            elif limit_up_count >= 1:
+                stock["total_score"] += 2
+                stock["sector_limit_up_bonus"] = 2
+            else:
+                stock["sector_limit_up_bonus"] = 0
+        
+        # 记录市场情绪
+        for code, stock in stock_map.items():
+            stock["market_sentiment"] = market_sentiment.get("sentiment", "中性")
+            stock["market_limit_up_count"] = market_sentiment.get("limit_up_count", 0)
         
         # 多策略命中额外加分
         combined = list(stock_map.values())
