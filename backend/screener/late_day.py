@@ -42,24 +42,24 @@ class LateDayScreener:
         logger.info(f"大盘环境: {market_status['status']} (上证指数{market_status['sh_pct']:+.2f}%, 创业板{market_status['cyb_pct']:+.2f}%)")
         
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
-        # 2026-09-17重构：基准分从50降低到30，评分门槛相应降低
-        score_threshold = 40  # 默认评分门槛（从50降低到40）
+        # 2026-09-22优化：基准分从30降低到20，评分门槛相应降低
+        score_threshold = 30  # 默认评分门槛（从40降低到30）
         min_locks = 0  # 默认三把锁门槛（0=不限制）
         if market_status['sh_pct'] < -1.0:
             self.max_results = 20  # 从30减少到20
-            score_threshold = 45  # 提高评分门槛（从55降低到45）
+            score_threshold = 35  # 提高评分门槛（从45降低到35）
             min_locks = 1  # 至少1/3亮
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，评分门槛提高到45分，三把锁至少1/3亮")
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到20只，评分门槛提高到35分，三把锁至少1/3亮")
         elif market_status['sh_pct'] < -0.5:
             self.max_results = 25  # 从30减少到25
-            score_threshold = 42  # 提高评分门槛（从50降低到42）
+            score_threshold = 32  # 提高评分门槛（从42降低到32）
             min_locks = 1  # 至少1/3亮
-            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到42分，三把锁至少1/3亮")
+            logger.info(f"大盘下跌{market_status['sh_pct']:.2f}%，推荐数量减少到25只，评分门槛提高到32分，三把锁至少1/3亮")
         else:
             self.max_results = 30  # 正常情况推荐30只
-            score_threshold = 35  # 正常评分门槛（保持35分，基准分降低后相对门槛提高）
+            score_threshold = 25  # 正常评分门槛（从35降低到25，基准分降低后相对门槛保持）
             min_locks = 0  # 不限制三把锁
-            logger.info(f"大盘正常，推荐数量30只，评分门槛35分（基准分降低后相对门槛提高）")
+            logger.info(f"大盘正常，推荐数量30只，评分门槛25分（基准分降低到20后相对门槛保持）")
 
         # 获取全量股票列表
         if stock_df is None:
@@ -358,9 +358,10 @@ class LateDayScreener:
                 # 2026-09-03回测发现：59%涨停股昨天是下跌的，超跌反弹往往更容易涨停
                 if pct_change < -10 or pct_change > 10:
                     continue
-                # 价格 2-200元（优化：从50元扩大到200元，2026-09-07回测发现21.5%涨停股>50元，科技股价格较高）
-                # 2026-09-04回测发现84.2%涨停股<20元，但市场环境变化，不能只关注低价股
-                if price < 2 or price > 200:
+                # 价格 2-10元（严格低价股策略，用户明确要求低价潜力股）
+                # 2026-09-22修复：之前是2-200元，太宽松，导致出现46.72元、59.25元的高价股
+                # 回测发现：低价股（<10元）涨停概率更高，弹性更大
+                if price < 2 or price > 10:
                     continue
                 # 成交额过滤（优化：从0.5-50亿扩大到0.5-100亿，2026-09-07回测发现30.1%涨停股>10亿）
                 # 成交额太小（<0.5亿）流动性差，太大（>100亿）难涨停
@@ -1103,7 +1104,7 @@ class LateDayScreener:
         current_price = stock["price"]
         pct_change = stock["pct_change"]
 
-        score = 30  # 2026-09-17重构：基准分从50降低到30，提高评分区分度
+        score = 20  # 2026-09-22优化：基准分从30降低到20，解决评分区分度不足问题（之前评分78-95，平均88.9）
         reasons = []
         risks = []
         vol_ratio = 0
