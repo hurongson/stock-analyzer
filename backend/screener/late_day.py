@@ -948,6 +948,9 @@ class LateDayScreener:
                 # 2026-09-23优化：今日涨停家数加分（陈小群板块合力，最重要）
                 # 同板块今日涨停家数越多，板块合力越强，后续溢价越高
                 sector_zt_count = today_zt_sectors.get(stock_main_sector, 0)
+                # 调试日志：诊断涨停加分为0的问题（前3只输出）
+                if i < 3:
+                    logger.info(f"涨停加分调试 {stock.get('name','')}: stock_main_sector='{stock_main_sector}', today_zt_sectors={today_zt_sectors}, sector_zt_count={sector_zt_count}")
                 if sector_zt_count >= 5:
                     sector_bonus += 15
                     stock["sector_limit_up_count"] = sector_zt_count
