@@ -859,7 +859,7 @@ class DataCollector:
         缓存到 data/cache/industry_map.json，每天刷新；Tushare 失败时读旧缓存兜底。
         用于替代"靠股票名称猜板块"，确保每只股票都有真实所属行业。
         """
-        cache_path = os.path.join(Config.CACHE_DIR, "industry_map.json")
+        cache_path = os.path.join(Config.DATA_DIR, "industry_map.json")  # 放data/下可被git跟踪（cache目录被ignore）
         # 当天缓存直接用
         if not force_refresh and os.path.exists(cache_path):
             try:

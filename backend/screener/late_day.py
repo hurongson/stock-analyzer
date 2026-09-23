@@ -1253,12 +1253,17 @@ class LateDayScreener:
                 fade_status = fade_info.get("status", "")
                 fade_bonus = 0
                 if fade_status == "一日游退潮":
-                    sector_bonus = min(sector_bonus, 0) - 15  # 清零加分再-15
-                    fade_bonus = -15
-                    # 严重退潮（昨日涨停股今日平均溢价≤-3%）：直接排除
+                    # 陈小群"退潮板块不做杂毛，只做真龙"：
+                    # 严重退潮（昨日涨停股今日平均溢价≤-3%）：全部排除
                     if fade_info.get("avg_premium", 0) <= -3:
                         stats["fade_excluded"] = stats.get("fade_excluded", 0) + 1
                         continue
+                    # 普通退潮：只保留中军/领涨龙头（真龙），其余杂毛排除
+                    if not (is_zhongjun_leader or is_lingzhang_leader):
+                        stats["fade_excluded"] = stats.get("fade_excluded", 0) + 1
+                        continue
+                    sector_bonus = min(sector_bonus, 0) - 15  # 真龙也清零板块加分再重扣
+                    fade_bonus = -15
                 elif fade_status == "持续主线":
                     sector_bonus += 10  # 资金真实接力，加分
                     fade_bonus = 10
