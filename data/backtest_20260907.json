@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-07",
+  "total_zt": 93,
+  "total_recommended": 63,
+  "hit_count": 2,
+  "miss_count": 61,
+  "hit_rate": 3.1746031746031744,
+  "hit_stocks": [
+    {
+      "code": "001296",
+      "name": "长江材料",
+      "dates": [
+        "2026-08-31"
+      ]
+    },
+    {
+      "code": "600103",
+      "name": "青山纸业",
+      "dates": [
+        "2026-09-04",
+        "2026-09-05"
+      ]
+    }
+  ],
+  "missed_zt_count": 91,
+  "missed_zt_analysis": {
+    "avg_price": 39.61681318681319,
+    "avg_amount": 10.35679999021978
+  }
+}

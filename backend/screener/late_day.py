@@ -244,6 +244,29 @@ class LateDayScreener:
             logger.warning(f"获取涨停数据失败: {e}")
         logger.info(f"涨停数据获取阶段完成 {_elapsed()}")
 
+        # 2026-09-23新增：板块一日游 / 持续性识别（昨日涨停股今日接力验证）
+        sector_fade_data = self._analyze_sector_fade(zt_data_date, sector_em_mapping)
+        if sector_fade_data:
+            _fade_lines = [
+                f"{s}{d['status']}(红盘率{int(d['red_rate']*100)}%,溢价{d['avg_premium']}%)"
+                for s, d in sector_fade_data.items()
+            ]
+            logger.info(f"板块持续性识别: {'; '.join(_fade_lines)}")
+
+        # 2026-09-23新增：运行时段感知（短板一：盘前运行情绪滞后）
+        from datetime import datetime as _dn, timedelta as _tdn
+        _bjnow = _dn.utcnow() + _tdn(hours=8)
+        _hm = _bjnow.hour + _bjnow.minute / 60
+        if _hm < 9.5:
+            run_timing, stale_warning = "盘前", "盘前运行，情绪基于上一交易日存在滞后；尾盘买入请以14:30结果为准"
+        elif _hm < 11.6 or (13 <= _hm < 14.5):
+            run_timing, stale_warning = "盘中", ""
+        elif 14.5 <= _hm <= 15.1:
+            run_timing, stale_warning = "尾盘", ""
+        else:
+            run_timing, stale_warning = "盘后", ""
+        logger.info(f"运行时段: {run_timing}(北京{_bjnow.strftime('%H:%M')}) {stale_warning}")
+
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
         # 2026-09-22优化：基准分从30降低到20，评分门槛相应降低
         score_threshold = 30  # 默认评分门槛（从40降低到30）
@@ -460,7 +483,7 @@ class LateDayScreener:
         # 第四步：深度分析（获取K线数据，计算技术指标）
         # 传递批量获取的K线数据和大盘环境参数，避免重复获取
         # 注意：换手率数据通过量比估算（Tushare daily_basic频率限制1次/小时无法使用）
-        deep_result = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks, today_zt_sectors, sector_rotation_data)
+        deep_result = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks, today_zt_sectors, sector_rotation_data, sector_fade_data)
         
         # 从_deep_analyze返回的字典中获取all_picks、top_picks和special_picks
         # 兼容_deep_analyze返回字典或列表的情况
@@ -497,6 +520,8 @@ class LateDayScreener:
                 "max_results": self.max_results,  # 推荐数量
                 "score_threshold": score_threshold,  # 评分门槛
                 "min_locks": min_locks,  # 三把锁门槛
+                "run_timing": run_timing,  # 运行时段：盘前/盘中/尾盘/盘后
+                "stale_warning": stale_warning,  # 盘前情绪滞后警告
             },
             "summary": {
                 "total_stocks": len(stock_df),
@@ -570,6 +595,108 @@ class LateDayScreener:
                 "sz_pct": 0,
                 "cyb_pct": 0,
             }
+
+    def _analyze_sector_fade(self, zt_data_date: str, sector_em_mapping: Dict) -> Dict:
+        """
+        板块一日游 / 持续性识别（陈小群等游资复盘法）
+        核心原理：昨日涨停股今日的整体表现，是板块情绪最真实的指标。
+        - 持续主线：昨日涨停股今日红盘率≥60%、平均溢价≥1%、且有连板晋级 → 资金接力
+        - 分歧分化：红盘率40%-60%
+        - 一日游退潮：红盘率<40% 或 平均溢价≤-1% → 追高亏钱效应，不可再碰
+
+        仅在尾盘（当日实时行情可验证昨日涨停股）时有效。
+        返回 {our_sector: {status, red_rate, avg_premium, promote_rate, sample, fade_bonus}}
+        """
+        from datetime import datetime as _dt, timedelta as _td
+        result = {}
+        try:
+            import akshare as ak
+            from concurrent.futures import ThreadPoolExecutor
+
+            base_dt = _dt.strptime(zt_data_date, '%Y%m%d')
+            # 找基准日的前一个交易日（跳过周末）
+            prev_date = None
+            for d_back in range(1, 10):
+                dt0 = base_dt - _td(days=d_back)
+                if dt0.weekday() >= 5:
+                    continue
+                prev_date = dt0.strftime('%Y%m%d')
+                break
+            if not prev_date:
+                return result
+
+            # 获取前一交易日涨停板（单次25秒超时）
+            _ex = ThreadPoolExecutor(max_workers=1)
+            try:
+                prev_zt = _ex.submit(ak.stock_zt_pool_em, date=prev_date).result(timeout=25)
+            except Exception:
+                prev_zt = None
+            _ex.shutdown(wait=False)
+            if prev_zt is None or prev_zt.empty or '所属行业' not in prev_zt.columns:
+                return result
+
+            # 当日（最新）全市场行情，用于验证昨日涨停股今日表现
+            spot = collector.get_all_stocks()
+            if spot is None or spot.empty:
+                return result
+            spot_map = {}
+            for _, r in spot.iterrows():
+                c = str(r.get('code', ''))[-6:].zfill(6)
+                try:
+                    spot_map[c] = float(r.get('pct_change', 0) or 0)
+                except Exception:
+                    pass
+
+            # 东方财富行业 -> 我方板块 反向映射
+            em_to_our = {}
+            for our, ems in sector_em_mapping.items():
+                for e in ems:
+                    em_to_our[e] = our
+
+            code_col = '代码' if '代码' in prev_zt.columns else prev_zt.columns[1]
+            prev_zt = prev_zt.copy()
+            prev_zt['code6'] = prev_zt[code_col].astype(str).str.zfill(6).str[-6:]
+
+            sector_pcts = {}
+            for _, row in prev_zt.iterrows():
+                our = em_to_our.get(row.get('所属行业', ''))
+                if not our:
+                    continue
+                today_pct = spot_map.get(row['code6'])
+                if today_pct is None:
+                    continue
+                sector_pcts.setdefault(our, []).append(today_pct)
+
+            for our, pcts in sector_pcts.items():
+                n = len(pcts)
+                if n == 0:
+                    continue
+                red_rate = sum(1 for p in pcts if p > 0) / n
+                avg_premium = sum(pcts) / n
+                promoted_n = sum(1 for p in pcts if p >= 9.8)
+                promote_rate = promoted_n / n
+
+                # 持续主线：红盘率≥60%、平均溢价≥1%、且至少1只连板晋级（资金真实接力）
+                if red_rate >= 0.6 and avg_premium >= 1 and promoted_n >= 1:
+                    status, fade_bonus = "持续主线", 10
+                elif red_rate < 0.4 or avg_premium <= -1:
+                    status = "一日游退潮"
+                    fade_bonus = -15 if avg_premium <= -3 else -12
+                else:
+                    status, fade_bonus = "分歧分化", 0
+
+                result[our] = {
+                    "status": status,
+                    "red_rate": round(red_rate, 2),
+                    "avg_premium": round(avg_premium, 2),
+                    "promote_rate": round(promote_rate, 2),
+                    "sample": n,
+                    "prev_date": prev_date,
+                    "fade_bonus": fade_bonus,
+                }
+        except Exception as e:
+            logger.warning(f"板块一日游分析失败: {e}")
+        return result
 
     def _initial_filter(self, stock_df: pd.DataFrame) -> List[Dict]:
         """
@@ -646,7 +773,7 @@ class LateDayScreener:
 
         return candidates
 
-    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, score_threshold: int = 50, min_locks: int = 0, today_zt_sectors: Dict = None, sector_rotation_data: Dict = None) -> List[Dict]:
+    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, score_threshold: int = 50, min_locks: int = 0, today_zt_sectors: Dict = None, sector_rotation_data: Dict = None, sector_fade_data: Dict = None) -> List[Dict]:
         """
         深度分析：获取K线数据，计算技术指标，评分排序
         买卖点位逻辑（参照公开尾盘买入法）：
@@ -783,6 +910,8 @@ class LateDayScreener:
             today_zt_sectors = {}
         if sector_rotation_data is None:
             sector_rotation_data = {}
+        if sector_fade_data is None:
+            sector_fade_data = {}
 
         # 统计计数器：排查推荐0只股票的问题
         stats = {"total": 0, "kline_ok": 0, "amplitude_ok": 0, "turnover_ok": 0, "ma20_ok": 0, "score_ok": 0, "errors": 0}
@@ -1049,7 +1178,15 @@ class LateDayScreener:
                 sector_bonus += rotation_bonus
                 stock["sector_rotation_bonus"] = rotation_bonus
                 stock["sector_rotation_info"] = rotation_info
-                
+
+                # 2026-09-23新增：板块一日游 / 持续性加减分（短板二）
+                # 昨日涨停股今日若集体大跌（一日游退潮），该板块股票大幅扣分；持续主线则加分
+                fade_info = sector_fade_data.get(stock_main_sector, {})
+                fade_bonus = fade_info.get("fade_bonus", 0)
+                sector_bonus += fade_bonus
+                stock["sector_fade_bonus"] = fade_bonus
+                stock["sector_fade_status"] = fade_info.get("status", "")
+
                 stock["sector_bonus"] = sector_bonus
                 stock["sector"] = stock_main_sector
                 stock["is_zhongjun_leader"] = is_zhongjun_leader

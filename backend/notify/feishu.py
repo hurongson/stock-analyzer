@@ -817,6 +817,18 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         })
         elements.append({"tag": "hr"})
 
+    # 2026-09-23新增：运行时段与盘前滞后警告（短板一）
+    market_sentiment = late_day_data.get("market_sentiment", {})
+    run_timing = market_sentiment.get("run_timing", "")
+    stale_warning = market_sentiment.get("stale_warning", "")
+    if run_timing:
+        _timing_emoji = {"盘前": "🔴", "盘中": "🟡", "尾盘": "🟢", "盘后": "⚪"}.get(run_timing, "")
+        _timing_content = f"**⏰ 运行时段** {_timing_emoji}{run_timing}"
+        if stale_warning:
+            _timing_content += f"\n   ⚠️ {stale_warning}"
+        elements.append({"tag": "div", "text": {"tag": "lark_md", "content": _timing_content}})
+        elements.append({"tag": "hr"})
+
     # 陈小群风格特别推荐5支（新增：结合陈小群选股方式）
     if special_picks:
         elements.append({"tag": "hr"})

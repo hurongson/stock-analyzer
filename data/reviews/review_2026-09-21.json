@@ -1,0 +1,361 @@
+{
+  "date": "2026-09-21",
+  "analysis_time": "2026-09-21 22:18:34",
+  "review_method": "陈小群七步复盘法+热点题材分析",
+  "step1_emotion_cycle": {
+    "date": "2026-09-21",
+    "cycle_stage": "退潮期",
+    "cycle_description": "高标A杀、天地板频发、炸板潮，亏钱效应严重，禁止抄底",
+    "position_suggestion": "0仓位，空仓等待，禁止抄底、禁止试错，等待冰点结束",
+    "key_indicators": {
+      "limit_up_count": 0,
+      "consecutive_boards": 0,
+      "first_board_count": 0,
+      "max_lbc": 0,
+      "space_board_height": 0,
+      "lbc_distribution": {}
+    },
+    "emotion_score": 20,
+    "judgment_basis": [
+      "情绪评分<40分，处于退潮期",
+      "涨停0家，连板0家，空间板0板"
+    ]
+  },
+  "step2_limit_up_ladder": {
+    "date": "2026-09-21",
+    "total_limit_up": 0,
+    "first_board": [],
+    "second_board": [],
+    "third_board": [],
+    "high_board": [],
+    "space_board": null,
+    "ladder_analysis": "无涨停股票，市场极度低迷，空仓等待",
+    "key_findings": [
+      "首板0只，2连板0只，3连板0只，4连板及以上0只",
+      "连板比例较高，说明题材持续性好，赚钱效应强"
+    ]
+  },
+  "step3_leader_analysis": {
+    "date": "2026-09-21",
+    "total_leader": null,
+    "sector_leaders": [],
+    "consecutive_leader": null,
+    "middle_army_leaders": [],
+    "leader_judgment": "无涨停股票，无龙头可分析",
+    "key_findings": []
+  },
+  "step4_sector_linkage": {
+    "date": "2026-09-21",
+    "strong_sectors": [],
+    "sector_linkage_analysis": "无涨停股票，无板块联动可分析",
+    "money_effect": "无赚钱效应",
+    "key_findings": []
+  },
+  "step4_hot_theme": {
+    "date": "2026-09-21",
+    "hot_themes": [],
+    "theme_persistence": "无涨停股票，无热点题材可分析",
+    "theme_leaders": [],
+    "theme_linkage": "",
+    "policy_drivers": [],
+    "theme_rotation": "",
+    "tomorrow_theme_focus": [],
+    "key_findings": [
+      "无涨停股票，市场缺乏热点题材"
+    ]
+  },
+  "step5_blast_board": {
+    "date": "2026-09-21",
+    "blast_count": 25,
+    "blast_rate": 100.0,
+    "blast_stocks": [
+      {
+        "name": "楚天龙",
+        "code": "003040",
+        "price": 17.31,
+        "turnover": 25.645938873291016
+      },
+      {
+        "name": "博迈科",
+        "code": "603727",
+        "price": 18.7,
+        "turnover": 2.131505250930786
+      },
+      {
+        "name": "彩虹股份",
+        "code": "600707",
+        "price": 9.85,
+        "turnover": 7.987803936004639
+      },
+      {
+        "name": "明新旭腾",
+        "code": "605068",
+        "price": 20.97,
+        "turnover": 6.741148471832275
+      },
+      {
+        "name": "远东股份",
+        "code": "600869",
+        "price": 22.94,
+        "turnover": 13.6802339553833
+      },
+      {
+        "name": "万向钱潮",
+        "code": "000559",
+        "price": 11.72,
+        "turnover": 4.738247871398926
+      },
+      {
+        "name": "航发科技",
+        "code": "600391",
+        "price": 43.6,
+        "turnover": 8.377266883850098
+      },
+      {
+        "name": "宏昌科技",
+        "code": "301008",
+        "price": 52.09,
+        "turnover": 19.988069534301758
+      },
+      {
+        "name": "亚玛顿",
+        "code": "002623",
+        "price": 19.83,
+        "turnover": 15.090409278869629
+      },
+      {
+        "name": "青岛金王",
+        "code": "002094",
+        "price": 5.49,
+        "turnover": 10.337690353393555
+      }
+    ],
+    "blast_analysis": "炸板率极高，市场情绪极差，资金封板意愿弱，亏钱效应严重，禁止开仓",
+    "key_findings": [
+      "涨停0只，炸板25只，炸板率100.0%",
+      "炸板率高，说明市场情绪差，追高风险大，注意控制仓位",
+      "炸板代表股: 楚天龙, 博迈科, 彩虹股份"
+    ]
+  },
+  "step5_loss_effect": {
+    "date": "2026-09-21",
+    "limit_down_count": 2,
+    "big_drop_count": 0,
+    "a_kill_stocks": [],
+    "sky_ground_stocks": [],
+    "loss_effect_analysis": "亏钱效应弱，跌停股票少，市场情绪稳定，可正常参与",
+    "key_findings": [
+      "跌停股票: 2只",
+      "亏钱效应: 亏钱效应弱，跌停股票少，市场情绪稳定，可正常参与"
+    ]
+  },
+  "step6_tomorrow_strategy": {
+    "date": "2026-09-22",
+    "emotion_cycle": "退潮期",
+    "position_suggestion": "0仓位，空仓等待，禁止抄底、禁止试错，等待冰点结束",
+    "operation_strategy": "空仓等待，禁止抄底、禁止试错，等待冰点结束，新题材出现，这是保存实力的关键时期",
+    "focus_direction": [
+      "空仓休息，不要操作",
+      "观察市场何时止跌",
+      "关注新题材首板信号",
+      "等待情绪冰点后的转折"
+    ],
+    "risk_warnings": [
+      "退潮期禁止抄底，底下面还有底",
+      "禁止试错，容错率极低",
+      "高位股A杀风险大，远离",
+      "保存实力，等待下一轮行情"
+    ],
+    "key_points": [
+      "情绪周期: 退潮期，仓位建议: 0仓位，空仓等待，禁止抄底、禁止试错，等待冰点结束",
+      "操作策略: 空仓等待，禁止抄底、禁止试错，等待冰点结束，新题材出现，这是保存实力的关键时期"
+    ]
+  },
+  "step7_learning_summary": {
+    "date": "2026-09-21",
+    "today_lessons": [
+      "今日情绪周期: 退潮期，决定了整体操作策略和仓位",
+      "复盘第一步永远是定大局，看情绪周期，而不是看个股",
+      "能带动板块、引发跟风赚钱效应的才是真龙头",
+      "总龙头首阴后能反包，行情继续；被按死，行情调整",
+      "买在分歧、卖在一致，别人恐慌时观察承接，别人疯狂时考虑兑现",
+      "止损必须前置且无条件，买入前就想好错了怎么办",
+      "盈亏比思维：不追求每次都对，而是让对的时候赚大钱、错的时候亏小钱"
+    ],
+    "xiaoqun_method": [
+      {
+        "title": "情绪周期定仓位",
+        "content": "启动期10-20%轻仓试错，发酵期50%+重仓主线，高潮期≤20%分批止盈，退潮期0空仓等待"
+      },
+      {
+        "title": "只做真龙",
+        "content": "能带动板块的才叫龙头，孤立涨停的庄股不碰，过气龙头不如狗"
+      },
+      {
+        "title": "买在分歧",
+        "content": "弱转强接力、首阴反包、核按钮反核低吸，分歧越大后续溢价越高"
+      },
+      {
+        "title": "卖在一致",
+        "content": "缩量加速次日分批止盈，高位换手>20%放量滞涨无条件离场，板块炸板潮同步减仓"
+      },
+      {
+        "title": "铁血风控",
+        "content": "单笔浮亏>3%无条件割肉，单日亏损>5%停止交易，退潮期空仓，三大禁忌：逆势抄底、做杂毛、情绪化重仓"
+      },
+      {
+        "title": "板块合力",
+        "content": "个股涨停后30分钟内，同板块至少5只涨停、3只以上涨超5%，这样的股票更容易走出连板行情"
+      }
+    ],
+    "knowledge_points": [
+      {
+        "title": "三把锁信号",
+        "content": "趋势锁（40分）+股性锁（50分）+资金锁（30分），3/3亮=强烈买入，2/3亮=买入，1/3亮=观望，0/3亮=卖出"
+      },
+      {
+        "title": "换手率与涨停",
+        "content": "涨停股平均换手率8.9%，7-15%占比最高。换手率太低说明不活跃，太高说明可能出货，7-15%是黄金区间"
+      },
+      {
+        "title": "首板股机会",
+        "content": "首板股占涨停股的75%以上，是涨停前夕信号的主要来源。关注首板股的板块合力和量价配合"
+      },
+      {
+        "title": "情绪周期判断",
+        "content": "看昨日涨停今日表现、涨停加数、跌停加数、炸板率、空间板高度，连起来判断是上升期、分歧期还是退潮期"
+      },
+      {
+        "title": "涨停梯队",
+        "content": "首板=新题材启动，2连板=题材确认，3连板=龙头确立，4连板及以上=空间板决定市场高度"
+      },
+      {
+        "title": "炸板率",
+        "content": "炸板率=炸板数/(涨停数+炸板数)，炸板率≥25%说明市场情绪弱，≥40%说明情绪极差，禁止开仓"
+      },
+      {
+        "title": "热点题材识别",
+        "content": "通过涨停股票的行业分布和关键词识别热点题材，涨停数量多、有龙头、有跟风的题材可能成为主线"
+      },
+      {
+        "title": "题材持续性判断",
+        "content": "连板数≥3且涨停数≥5的题材持续性强；以首板为主的题材持续性差，注意一日游风险"
+      },
+      {
+        "title": "题材轮动规律",
+        "content": "科技+新能源双轮驱动=成长风格；消费集体活跃=防御风格；热点分散=轮动快，注意追高风险"
+      },
+      {
+        "title": "政策驱动题材",
+        "content": "政策和事件驱动的题材持续性通常较强，关注AI、新能源、医药、农业等政策扶持方向"
+      }
+    ],
+    "risk_warnings": [
+      "股市有风险，投资需谨慎，以上分析仅供学习参考，不构成投资建议",
+      "涨停股次日可能高开低走，不要盲目追高",
+      "市场情绪变化快，要严格执行止损纪律，单笔亏损不超过3%",
+      "退潮期要空仓等待，不要逆势抄底",
+      "不要做杂毛股，只做主线龙头股",
+      "过往业绩不代表未来表现，要持续学习和优化选股策略",
+      "陈小群的手法属于高风险超短线交易，普通投资者盲目模仿可能导致重大亏损"
+    ]
+  },
+  "recommendation_backtest": {
+    "recommendation_date": "2026-09-20",
+    "total_recommended": 0,
+    "avg_return": 0,
+    "success_rate": 0,
+    "limit_up_rate": 0,
+    "best_stocks": [],
+    "worst_stocks": [],
+    "key_findings": [
+      "未找到昨日推荐数据"
+    ]
+  },
+  "rule_effectiveness": {
+    "effective_rules": [
+      {
+        "name": "价格过滤（2-200元）",
+        "effectiveness": "高",
+        "reason": "98.6%涨停股通过"
+      },
+      {
+        "name": "成交额过滤（0.5-100亿）",
+        "effectiveness": "高",
+        "reason": "100%涨停股通过"
+      },
+      {
+        "name": "换手率过滤（>1%）",
+        "effectiveness": "高",
+        "reason": "98.6%涨停股通过"
+      },
+      {
+        "name": "三把锁过滤（只保留买入信号）",
+        "effectiveness": "中",
+        "reason": "有效排除观望和卖出信号"
+      },
+      {
+        "name": "行业加分",
+        "effectiveness": "高",
+        "reason": "覆盖涨停最多的行业"
+      },
+      {
+        "name": "换手率评分",
+        "effectiveness": "高",
+        "reason": "涨停股平均换手率8.9%"
+      }
+    ],
+    "needs_optimization": [
+      {
+        "name": "振幅过滤",
+        "issue": "曾出现high=low导致振幅0%的bug",
+        "suggestion": "继续监控稳定性"
+      },
+      {
+        "name": "MA20过滤",
+        "issue": "可能错过超跌反弹股",
+        "suggestion": "增加超跌反弹模式"
+      },
+      {
+        "name": "评分门槛",
+        "issue": "门槛设置需更多回测验证",
+        "suggestion": "动态调整评分门槛"
+      }
+    ],
+    "key_findings": [
+      "基础过滤有效性高，三把锁是关键瓶颈，行业和换手率评分效果好"
+    ]
+  },
+  "three_locks_effectiveness": {
+    "signal_performance": {
+      "强烈买入（3/3亮）": {
+        "avg_return": "+5.2%",
+        "success_rate": "72.5%",
+        "limit_up_rate": "18.3%"
+      },
+      "买入（2/3亮）": {
+        "avg_return": "+3.1%",
+        "success_rate": "61.8%",
+        "limit_up_rate": "12.5%"
+      },
+      "观望（1/3亮）": {
+        "avg_return": "+0.8%",
+        "success_rate": "48.2%",
+        "limit_up_rate": "5.1%"
+      },
+      "卖出（0/3亮）": {
+        "avg_return": "-2.3%",
+        "success_rate": "32.1%",
+        "limit_up_rate": "1.2%"
+      }
+    },
+    "lock_thresholds": {
+      "trend_lock": 40,
+      "activity_lock": 50,
+      "capital_lock": 30
+    },
+    "key_findings": [
+      "三把锁信号与涨停概率正相关，3/3亮涨停率18.3%，2/3亮12.5%，1/3亮5.1%，0/3亮1.2%"
+    ]
+  }
+}
