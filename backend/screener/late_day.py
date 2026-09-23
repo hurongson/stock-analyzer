@@ -35,6 +35,10 @@ class LateDayScreener:
         返回：{picks: [...], summary: {...}}
         """
         logger.info("开始尾盘选股...")
+        import time as _time_mod
+        _t_start = _time_mod.time()
+        def _elapsed():
+            return f"[已耗时{_time_mod.time()-_t_start:.0f}秒]"
 
         # 大盘环境分析（新增：根据大盘情况调整选股策略）
         # 基于2026-09-02回测：大盘下跌1-2%时，推荐股票平均亏损3.35%
@@ -238,7 +242,8 @@ class LateDayScreener:
                     logger.info(f"板块轮动分析: 持续性板块{cont}, 新兴板块{emerg}")
         except Exception as e:
             logger.warning(f"获取涨停数据失败: {e}")
-        
+        logger.info(f"涨停数据获取阶段完成 {_elapsed()}")
+
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
         # 2026-09-22优化：基准分从30降低到20，评分门槛相应降低
         score_threshold = 30  # 默认评分门槛（从40降低到30）
@@ -306,6 +311,7 @@ class LateDayScreener:
             return {"picks": [], "summary": {"total": 0, "filtered": 0}}
 
         # 第二步：获取实时行情数据，确保使用当日最新数据（多数据源 fallback）
+        logger.info(f"初筛阶段完成，进入实时行情更新 {_elapsed()}")
         try:
             import akshare as ak
             import time
