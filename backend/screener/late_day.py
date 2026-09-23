@@ -845,6 +845,19 @@ class LateDayScreener:
                          "石油石化", "环境治理"],
             "商业零售": ["商业连锁", "百货", "超市", "专业市场", "贸易", "零售"],
         }
+        # 补充：首次运行发现的未映射真实行业
+        _extra_ind = {
+            "科技半导体": ["互联网", "化工机械", "电信运营", "纺织机械"],
+            "房地产建筑": ["全国地产", "区域地产", "房产服务", "玻璃"],
+            "医药医疗": ["医疗保健"],
+            "电力能源": ["新型电力", "火力发电", "煤炭开采"],
+            "汽车交通": ["空运", "运输设备"],
+            "农业食品": ["红黄酒"],
+            "化工材料": ["铜", "铝", "造纸"],
+        }
+        for _o, _xs in _extra_ind.items():
+            tushare_ind_mapping[_o] = tushare_ind_mapping.get(_o, []) + _xs
+
         ts_ind_to_our = {}
         for _our, _inds in tushare_ind_mapping.items():
             for _x in _inds:
@@ -1234,12 +1247,23 @@ class LateDayScreener:
                 stock["sector_rotation_info"] = rotation_info
 
                 # 2026-09-23新增：板块一日游 / 持续性加减分（短板二）
-                # 昨日涨停股今日若集体大跌（一日游退潮），该板块股票大幅扣分；持续主线则加分
+                # 陈小群"退潮板块不做"：昨日涨停股今日若集体退潮，取消该板块此前累积的所有
+                # 板块加分（不再因今日仍有零星涨停而获加分），再重扣；严重退潮直接排除。
                 fade_info = sector_fade_data.get(stock_main_sector, {})
-                fade_bonus = fade_info.get("fade_bonus", 0)
-                sector_bonus += fade_bonus
+                fade_status = fade_info.get("status", "")
+                fade_bonus = 0
+                if fade_status == "一日游退潮":
+                    sector_bonus = min(sector_bonus, 0) - 15  # 清零加分再-15
+                    fade_bonus = -15
+                    # 严重退潮（昨日涨停股今日平均溢价≤-3%）：直接排除
+                    if fade_info.get("avg_premium", 0) <= -3:
+                        stats["fade_excluded"] = stats.get("fade_excluded", 0) + 1
+                        continue
+                elif fade_status == "持续主线":
+                    sector_bonus += 10  # 资金真实接力，加分
+                    fade_bonus = 10
                 stock["sector_fade_bonus"] = fade_bonus
-                stock["sector_fade_status"] = fade_info.get("status", "")
+                stock["sector_fade_status"] = fade_status
 
                 stock["sector_bonus"] = sector_bonus
                 stock["sector"] = stock_main_sector
@@ -1348,6 +1372,8 @@ class LateDayScreener:
                         "concept_analysis": stock.get("concept_analysis", {}),
                         "sector": stock.get("sector", ""),
                         "sector_bonus": stock.get("sector_bonus", 0),
+                        "sector_fade_status": stock.get("sector_fade_status", ""),
+                        "sector_fade_bonus": stock.get("sector_fade_bonus", 0),
                         "is_zhongjun_leader": stock.get("is_zhongjun_leader", False),
                         "is_lingzhang_leader": stock.get("is_lingzhang_leader", False),
                         # 基本面评分（先初始化为0，后面计算完成后更新）
