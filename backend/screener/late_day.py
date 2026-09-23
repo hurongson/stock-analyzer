@@ -853,7 +853,7 @@ class LateDayScreener:
             "电力能源": ["新型电力", "火力发电", "煤炭开采"],
             "汽车交通": ["空运", "运输设备"],
             "农业食品": ["红黄酒"],
-            "化工材料": ["铜", "铝", "造纸"],
+            "化工材料": ["铜", "铝", "造纸", "普钢"],
         }
         for _o, _xs in _extra_ind.items():
             tushare_ind_mapping[_o] = tushare_ind_mapping.get(_o, []) + _xs
