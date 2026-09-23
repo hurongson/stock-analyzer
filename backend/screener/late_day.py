@@ -86,6 +86,17 @@ class LateDayScreener:
             # 2026-09-23修复：使用北京时间（UTC+8），GitHub Actions默认UTC导致日期偏差
             beijing_now = datetime.utcnow() + timedelta(hours=8)
             
+            # 2026-09-23优化：给涨停数据获取加超时保护，避免akshare请求挂起导致工作流卡住
+            from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeout
+            _executor = ThreadPoolExecutor(max_workers=2)
+            def _fetch_zt(date_str, timeout_sec=25):
+                """带超时的涨停数据获取，超时返回None"""
+                try:
+                    fut = _executor.submit(ak.stock_zt_pool_em, date=date_str)
+                    return fut.result(timeout=timeout_sec)
+                except Exception:
+                    return None
+            
             # 自动查找最近一个有涨停数据的交易日（盘前/周末/节假日今日数据为空时回退）
             zt_df = None
             for d_back in range(0, 12):
@@ -93,14 +104,12 @@ class LateDayScreener:
                 if check_dt.weekday() >= 5:  # 跳过周末
                     continue
                 check_date = check_dt.strftime('%Y%m%d')
-                try:
-                    candidate_df = ak.stock_zt_pool_em(date=check_date)
-                    if candidate_df is not None and not candidate_df.empty:
-                        zt_df = candidate_df
-                        zt_data_date = check_date
-                        break
-                except Exception:
-                    continue
+                candidate_df = _fetch_zt(check_date)
+                if candidate_df is not None and not candidate_df.empty:
+                    zt_df = candidate_df
+                    zt_data_date = check_date
+                    break
+            _executor.shutdown(wait=False)
             
             if zt_df is not None and not zt_df.empty:
                 limit_up_count = len(zt_df)
@@ -127,13 +136,15 @@ class LateDayScreener:
                 base_dt = datetime.strptime(zt_data_date, '%Y%m%d')
                 zt_history = {}
                 trade_days = []
+                _hist_executor = ThreadPoolExecutor(max_workers=2)
                 for d_back in range(1, 15):
                     check_dt = base_dt - timedelta(days=d_back)
                     if check_dt.weekday() >= 5:
                         continue
                     check_date = check_dt.strftime('%Y%m%d')
                     try:
-                        zt_check = ak.stock_zt_pool_em(date=check_date)
+                        fut = _hist_executor.submit(ak.stock_zt_pool_em, date=check_date)
+                        zt_check = fut.result(timeout=25)  # 单次25秒超时
                         if zt_check is not None and not zt_check.empty and '所属行业' in zt_check.columns:
                             trade_days.append(check_date)
                             em_count = zt_check['所属行业'].value_counts().to_dict()
@@ -145,6 +156,7 @@ class LateDayScreener:
                         continue
                     if len(trade_days) >= 5:
                         break
+                _hist_executor.shutdown(wait=False)
                 
                 # 加入基准日当天数据，分析板块轮动（按时间正序）
                 all_rotation_days = sorted(trade_days) + [zt_data_date]
@@ -948,9 +960,6 @@ class LateDayScreener:
                 # 2026-09-23优化：今日涨停家数加分（陈小群板块合力，最重要）
                 # 同板块今日涨停家数越多，板块合力越强，后续溢价越高
                 sector_zt_count = today_zt_sectors.get(stock_main_sector, 0)
-                # 调试日志：诊断涨停加分为0的问题（前3只输出）
-                if i < 3:
-                    logger.info(f"涨停加分调试 {stock.get('name','')}: stock_main_sector='{stock_main_sector}', today_zt_sectors={today_zt_sectors}, sector_zt_count={sector_zt_count}")
                 if sector_zt_count >= 5:
                     sector_bonus += 15
                     stock["sector_limit_up_count"] = sector_zt_count
