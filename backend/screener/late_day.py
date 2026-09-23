@@ -133,29 +133,55 @@ class LateDayScreener:
                     logger.info(f"涨停板块分布（映射后）: {today_zt_sectors}")
                 
                 # 获取基准日之前5个交易日的涨停数据，分析板块轮动
+                # 2026-09-23优化：使用本地缓存，每天只新增1天数据，避免每次重复获取5天导致运行缓慢
+                import json as _json
+                import os as _os
+                from backend.config import Config
                 base_dt = datetime.strptime(zt_data_date, '%Y%m%d')
-                zt_history = {}
-                trade_days = []
-                _hist_executor = ThreadPoolExecutor(max_workers=2)
+
+                # 计算需要的历史交易日（基准日前5个交易日，跳过周末）
+                needed_hist_days = []
                 for d_back in range(1, 15):
                     check_dt = base_dt - timedelta(days=d_back)
                     if check_dt.weekday() >= 5:
                         continue
-                    check_date = check_dt.strftime('%Y%m%d')
-                    try:
-                        fut = _hist_executor.submit(ak.stock_zt_pool_em, date=check_date)
-                        zt_check = fut.result(timeout=25)  # 单次25秒超时
-                        if zt_check is not None and not zt_check.empty and '所属行业' in zt_check.columns:
-                            trade_days.append(check_date)
-                            em_count = zt_check['所属行业'].value_counts().to_dict()
-                            for em_sector, count in em_count.items():
-                                if em_sector not in zt_history:
-                                    zt_history[em_sector] = {}
-                                zt_history[em_sector][check_date] = count
-                    except Exception:
-                        continue
-                    if len(trade_days) >= 5:
+                    needed_hist_days.append(check_dt.strftime('%Y%m%d'))
+                    if len(needed_hist_days) >= 5:
                         break
+
+                # 读取涨停板块缓存 {date: {em_sector: count}}
+                _cache_path = _os.path.join(Config.DATA_DIR, 'zt_sector_history.json')
+                zt_cache = {}
+                try:
+                    with open(_cache_path, 'r') as _cf:
+                        zt_cache = _json.load(_cf)
+                except Exception:
+                    zt_cache = {}
+
+                zt_history = {}
+                trade_days = []
+                _hist_executor = ThreadPoolExecutor(max_workers=2)
+                _cache_changed = False
+                for check_date in needed_hist_days:
+                    day_data = None
+                    # 优先用缓存
+                    if zt_cache.get(check_date):
+                        day_data = zt_cache[check_date]
+                    else:
+                        # 缓存缺失才请求（单次25秒超时）
+                        try:
+                            fut = _hist_executor.submit(ak.stock_zt_pool_em, date=check_date)
+                            zt_check = fut.result(timeout=25)
+                            if zt_check is not None and not zt_check.empty and '所属行业' in zt_check.columns:
+                                day_data = zt_check['所属行业'].value_counts().to_dict()
+                                zt_cache[check_date] = day_data
+                                _cache_changed = True
+                        except Exception:
+                            day_data = None
+                    if day_data:
+                        trade_days.append(check_date)
+                        for em_sector, count in day_data.items():
+                            zt_history.setdefault(em_sector, {})[check_date] = count
                 _hist_executor.shutdown(wait=False)
                 
                 # 加入基准日当天数据，分析板块轮动（按时间正序）
@@ -163,9 +189,22 @@ class LateDayScreener:
                 if '所属行业' in zt_df.columns:
                     base_em_count = zt_df['所属行业'].value_counts().to_dict()
                     for em_sector, count in base_em_count.items():
-                        if em_sector not in zt_history:
-                            zt_history[em_sector] = {}
-                        zt_history[em_sector][zt_data_date] = count
+                        zt_history.setdefault(em_sector, {})[zt_data_date] = count
+                    zt_cache[zt_data_date] = base_em_count
+                    _cache_changed = True
+
+                # 保存缓存（只保留最近30个交易日，避免文件无限增大）
+                if _cache_changed:
+                    try:
+                        _all_dates = sorted(zt_cache.keys())
+                        if len(_all_dates) > 30:
+                            for _old in _all_dates[:-30]:
+                                zt_cache.pop(_old, None)
+                        _os.makedirs(_os.path.dirname(_cache_path), exist_ok=True)
+                        with open(_cache_path, 'w') as _cf:
+                            _json.dump(zt_cache, _cf, ensure_ascii=False)
+                    except Exception as _ce:
+                        logger.warning(f"保存涨停板块缓存失败: {_ce}")
                 
                 # 分析板块轮动
                 for our_sector, em_sectors in sector_em_mapping.items():
