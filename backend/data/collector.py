@@ -147,6 +147,8 @@ class DataCollector:
             
             # 分批获取（每批50只股票，避免单次请求过大）
             batch_size = 50
+            import time
+            total_batches = (len(codes) + batch_size - 1) // batch_size
             for i in range(0, len(codes), batch_size):
                 batch_codes = codes[i:i + batch_size]
                 ts_codes = ",".join([to_ts_code(code) for code in batch_codes])
@@ -180,9 +182,12 @@ class DataCollector:
                 except Exception as e:
                     logger.warning(f"批量获取K线失败（批次{i//batch_size+1}）: {str(e)[:80]}")
                 
-                # 批次之间等待61秒，避免频率超限（Tushare daily_basic频率限制1次/分钟）
-                import time
-                time.sleep(61)
+                # 2026-09-23优化：批次间仅等待2秒
+                # 说明：pro.daily接口120积分限50次/分钟，每次批量请求算1次调用，
+                # 120只分3批仅3次调用，远低于限制；之前误按daily_basic(1次/分钟)等待61秒，浪费3分钟
+                batch_idx = i // batch_size
+                if batch_idx < total_batches - 1:
+                    time.sleep(2)
             
         except Exception as e:
             logger.error(f"批量获取K线异常: {e}")

@@ -796,7 +796,11 @@ class LateDayScreener:
                         elif isinstance(kline, dict):
                             kline = pd.DataFrame(kline)
                 else:
-                    # 批量获取失败时，使用单只获取
+                    # 2026-09-23优化：批量K线启用时，缺失的股票直接跳过
+                    # 避免逐个get_daily_kline无超时挂起，导致整体运行25分钟
+                    if use_batch_kline:
+                        continue
+                    # 未使用批量K线时，才逐个获取
                     kline = collector.get_daily_kline(code, days=60)
                 
                 if kline is None or len(kline) < 20:
