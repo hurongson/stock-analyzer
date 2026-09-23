@@ -430,12 +430,16 @@ def run_late_day_screener(enable_push: bool = True):
         "picks": all_picks,  # 全部推荐
         "all_picks": all_picks,  # 全部30支
         "top_picks": top_picks,  # 精选10支
+        "special_picks": result.get("special_picks", []),  # 陈小群风格特别推荐5支
         "total_count": len(all_picks),
         "top_count": len(top_picks),
+        "special_count": len(result.get("special_picks", [])),
+        "market_sentiment": result.get("market_sentiment", {}),  # 市场情绪信息
         "summary": result.get("summary", {}),
     }
     save_json(save_result, path)
     logger.info(f"尾盘选股结果已保存: {path}")
+    logger.info(f"陈小群特别推荐: {len(save_result['special_picks'])}只, 市场情绪: {save_result['market_sentiment'].get('phase', '未知')}")
 
     # 推送飞书
     if enable_push and Config.FEISHU_WEBHOOK_URL and picks:

@@ -510,18 +510,51 @@ class LateDayScreener:
         # 统计候选股票的板块分布
         sector_count = {}
         stock_sector = {}
+        
+        # 2026-09-23优化：具体股票名称到板块的映射（解决名称关键词匹配不到的问题）
+        stock_name_sector = {
+            # 科技半导体
+            "京东方A": "科技半导体", "京东方B": "科技半导体", "TCL科技": "科技半导体",
+            "彩虹股份": "科技半导体", "胜利精密": "科技半导体", "露笑科技": "科技半导体",
+            "风华高科": "科技半导体", "共进股份": "科技半导体", "永鼎股份": "科技半导体",
+            "太阳电缆": "科技半导体", "中超控股": "科技半导体", "精达股份": "科技半导体",
+            # 房地产建筑
+            "世联行": "房地产建筑", "金螳螂": "房地产建筑", "金地集团": "房地产建筑",
+            "深振业A": "房地产建筑", "华侨城A": "房地产建筑", "平潭发展": "房地产建筑",
+            "山子高科": "房地产建筑", "华夏幸福": "房地产建筑", "万科A": "房地产建筑",
+            # 农业食品
+            "华英农业": "农业食品", "金正大": "农业食品", "智慧农业": "农业食品",
+            "道道全": "农业食品", "甘化科工": "农业食品",
+            # 医药医疗
+            "瑞康医药": "医药医疗", "神奇制药": "医药医疗", "海南海药": "医药医疗",
+            "誉衡药业": "医药医疗", "吉视传媒": "传媒娱乐",
+            # 商业零售
+            "新华都": "商业零售", "跨境通": "商业零售", "利欧股份": "传媒娱乐",
+            # 化工材料
+            "西陇科学": "化工材料", "吉鑫科技": "电力能源",
+        }
+        
         for stock in candidates:
             name = stock.get("name", "")
-            matched_sectors = []
-            for sector, keywords in sector_keywords.items():
-                if any(kw in name for kw in keywords):
-                    matched_sectors.append(sector)
-            if matched_sectors:
-                # 科技半导体优先（回测显示科技/电子类涨停最多）
-                if "科技半导体" in matched_sectors:
-                    main_sector = "科技半导体"
-                else:
-                    main_sector = matched_sectors[0]
+            main_sector = ""
+            
+            # 优先使用具体股票名称映射
+            if name in stock_name_sector:
+                main_sector = stock_name_sector[name]
+            else:
+                # 关键词匹配
+                matched_sectors = []
+                for sector, keywords in sector_keywords.items():
+                    if any(kw in name for kw in keywords):
+                        matched_sectors.append(sector)
+                if matched_sectors:
+                    # 科技半导体优先（回测显示科技/电子类涨停最多）
+                    if "科技半导体" in matched_sectors:
+                        main_sector = "科技半导体"
+                    else:
+                        main_sector = matched_sectors[0]
+            
+            if main_sector:
                 stock_sector[stock["code"]] = main_sector
                 sector_count[main_sector] = sector_count.get(main_sector, 0) + 1
         
@@ -565,6 +598,103 @@ class LateDayScreener:
             
             if len(stocks) >= 3:
                 logger.info(f"板块龙头识别 [{sector}]: 中军={zhongjun_leader.get('name','')}({zhongjun_leader.get('amount',0)/100000000:.1f}亿), 领涨={lingzhang_leader.get('name','')}({lingzhang_leader.get('pct_change',0):.1f}%), 共{len(stocks)}只")
+
+        # 2026-09-23优化：获取今日涨停板块分布+板块轮动数据（陈小群板块合力+板块轮动思路）
+        # 将我们的板块分类映射到东方财富行业分类
+        sector_em_mapping = {
+            "科技半导体": ["半导体", "元件", "光学光电子", "通信设备", "计算机设备", "软件开发", "消费电子", "电子化学"],
+            "医药医疗": ["化学制药", "中药", "生物制品", "医疗器械", "医疗服务", "医药商业"],
+            "农业食品": ["种植业", "养殖业", "农产品加工", "食品饮料", "酿酒", "饲料", "渔业", "农业综合"],
+            "新能源": ["电池", "光伏设备", "风电设备", "能源金属", "电网设备", "储能"],
+            "汽车交通": ["汽车整车", "汽车零部件", "汽车服务", "物流", "航运港口", "铁路公路", "航空机场"],
+            "房地产建筑": ["房地产开发", "房地产服务", "建筑装饰", "建筑材料", "水泥", "装修装饰", "工程咨询"],
+            "传媒娱乐": ["出版", "广告营销", "影视院线", "游戏", "数字媒体", "广播电视", "旅游酒店", "餐饮"],
+            "化工材料": ["化学制品", "化学原料", "塑料", "橡胶", "化纤", "非金属材料", "有色金属", "钢铁"],
+            "电力能源": ["电力", "煤炭", "石油", "燃气", "环保", "环境治理"],
+            "商业零售": ["商业百货", "超市", "专业市场", "跨境电商", "贸易"],
+            "军工国防": ["航天航空", "船舶制造", "兵器兵装", "军工电子"],
+        }
+        
+        # 获取今日涨停板块分布
+        today_zt_sectors = {}  # {我们的板块: 涨停家数}
+        sector_rotation_data = {}  # {我们的板块: 轮动信息}
+        try:
+            import akshare as ak
+            from datetime import datetime, timedelta
+            
+            today_str_zt = datetime.now().strftime('%Y%m%d')
+            zt_today = ak.stock_zt_pool_em(date=today_str_zt)
+            if zt_today is not None and not zt_today.empty and '所属行业' in zt_today.columns:
+                em_zt_count = zt_today['所属行业'].value_counts().to_dict()
+                # 映射到我们的板块分类
+                for our_sector, em_sectors in sector_em_mapping.items():
+                    total = sum(em_zt_count.get(em_s, 0) for em_s in em_sectors)
+                    if total > 0:
+                        today_zt_sectors[our_sector] = total
+                logger.info(f"今日涨停板块分布（映射后）: {today_zt_sectors}")
+            
+            # 获取最近5个交易日涨停数据，分析板块轮动
+            zt_history = {}  # {东方财富板块: [每天涨停数]}
+            trade_days = []
+            for d_back in range(1, 10):
+                check_date = (datetime.now() - timedelta(days=d_back)).strftime('%Y%m%d')
+                check_weekday = (datetime.now() - timedelta(days=d_back)).weekday()
+                if check_weekday >= 5:
+                    continue
+                try:
+                    zt_check = ak.stock_zt_pool_em(date=check_date)
+                    if zt_check is not None and not zt_check.empty and '所属行业' in zt_check.columns:
+                        trade_days.append(check_date)
+                        em_count = zt_check['所属行业'].value_counts().to_dict()
+                        for em_sector, count in em_count.items():
+                            if em_sector not in zt_history:
+                                zt_history[em_sector] = {}
+                            zt_history[em_sector][check_date] = count
+                except Exception:
+                    continue
+                if len(trade_days) >= 5:
+                    break
+            
+            # 分析每个我们的板块的轮动情况
+            for our_sector, em_sectors in sector_em_mapping.items():
+                # 汇总该板块每天的涨停数
+                daily_counts = []
+                for td in sorted(trade_days):
+                    day_total = 0
+                    for em_s in em_sectors:
+                        day_total += zt_history.get(em_s, {}).get(td, 0)
+                    daily_counts.append(day_total)
+                
+                if len(daily_counts) >= 2 and sum(daily_counts) > 0:
+                    # 计算连续涨停天数（从最近一天往前）
+                    continuous = 0
+                    for c in reversed(daily_counts):
+                        if c >= 1:
+                            continuous += 1
+                        else:
+                            break
+                    
+                    latest = daily_counts[-1]
+                    prev = daily_counts[-2] if len(daily_counts) >= 2 else 0
+                    increase = latest - prev
+                    avg = sum(daily_counts) / len(daily_counts)
+                    
+                    sector_rotation_data[our_sector] = {
+                        "continuous_days": continuous,
+                        "latest": latest,
+                        "prev": prev,
+                        "increase": increase,
+                        "avg": round(avg, 1),
+                        "daily_counts": daily_counts,
+                    }
+            
+            if sector_rotation_data:
+                continuous_sectors = {s: d for s, d in sector_rotation_data.items() if d["continuous_days"] >= 3}
+                emerging_sectors = {s: d for s, d in sector_rotation_data.items() if d["increase"] >= 2 and d["latest"] >= 2}
+                logger.info(f"板块轮动: 持续性板块{list(continuous_sectors.keys())}, 新兴板块{list(emerging_sectors.keys())}")
+                
+        except Exception as e:
+            logger.warning(f"获取涨停板块/轮动数据失败: {e}")
 
         # 统计计数器：排查推荐0只股票的问题
         stats = {"total": 0, "kline_ok": 0, "amplitude_ok": 0, "turnover_ok": 0, "ma20_ok": 0, "score_ok": 0, "errors": 0}
@@ -783,6 +913,50 @@ class LateDayScreener:
                     # 板块合力加分：板块内≥3只股票时，所有股票+3分
                     if leader_info.get("count", 0) >= 3:
                         sector_bonus += 3  # 板块合力加3分
+                
+                # 2026-09-23优化：今日涨停家数加分（陈小群板块合力，最重要）
+                # 同板块今日涨停家数越多，板块合力越强，后续溢价越高
+                sector_zt_count = today_zt_sectors.get(stock_main_sector, 0)
+                if sector_zt_count >= 5:
+                    sector_bonus += 15
+                    stock["sector_limit_up_count"] = sector_zt_count
+                    stock["sector_limit_up_bonus"] = 15
+                elif sector_zt_count >= 3:
+                    sector_bonus += 10
+                    stock["sector_limit_up_count"] = sector_zt_count
+                    stock["sector_limit_up_bonus"] = 10
+                elif sector_zt_count >= 2:
+                    sector_bonus += 5
+                    stock["sector_limit_up_count"] = sector_zt_count
+                    stock["sector_limit_up_bonus"] = 5
+                elif sector_zt_count >= 1:
+                    sector_bonus += 2
+                    stock["sector_limit_up_count"] = sector_zt_count
+                    stock["sector_limit_up_bonus"] = 2
+                else:
+                    stock["sector_limit_up_count"] = 0
+                    stock["sector_limit_up_bonus"] = 0
+                
+                # 2026-09-23优化：板块轮动加分（陈小群板块轮动思路）
+                # 持续性板块（连续≥3天涨停）+10分，新兴板块（增加≥2只）+8分，上升趋势+5分
+                rotation = sector_rotation_data.get(stock_main_sector, {})
+                rotation_bonus = 0
+                rotation_info = {}
+                if rotation:
+                    if rotation.get("continuous_days", 0) >= 3:
+                        rotation_bonus += 10
+                        rotation_info["continuous"] = True
+                        rotation_info["continuous_days"] = rotation["continuous_days"]
+                    if rotation.get("increase", 0) >= 2 and rotation.get("latest", 0) >= 2:
+                        rotation_bonus += 8
+                        rotation_info["emerging"] = True
+                        rotation_info["increase"] = rotation["increase"]
+                    elif rotation.get("increase", 0) > 0:
+                        rotation_bonus += 5
+                        rotation_info["rising"] = True
+                sector_bonus += rotation_bonus
+                stock["sector_rotation_bonus"] = rotation_bonus
+                stock["sector_rotation_info"] = rotation_info
                 
                 stock["sector_bonus"] = sector_bonus
                 stock["sector"] = stock_main_sector
