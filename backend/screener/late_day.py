@@ -49,8 +49,27 @@ class LateDayScreener:
         # - 退潮期（涨停<30只）：减少选股数量，严格筛选（空仓等待）
         limit_up_count = 0
         sentiment_phase = "未知"
+        
+        # 板块分类到东方财富行业分类的映射（在screen中统一获取，传递给_deep_analyze）
+        sector_em_mapping = {
+            "科技半导体": ["半导体", "元件", "光学光电子", "通信设备", "计算机设备", "软件开发", "消费电子", "电子化学"],
+            "医药医疗": ["化学制药", "中药", "生物制品", "医疗器械", "医疗服务", "医药商业"],
+            "农业食品": ["种植业", "养殖业", "农产品加工", "食品饮料", "酿酒", "饲料", "渔业", "农业综合", "种植业与林业"],
+            "新能源": ["电池", "光伏设备", "风电设备", "能源金属", "电网设备", "储能"],
+            "汽车交通": ["汽车整车", "汽车零部件", "汽车服务", "物流", "航运港口", "铁路公路", "航空机场", "交通运输"],
+            "房地产建筑": ["房地产开发", "房地产服务", "建筑装饰", "建筑材料", "水泥", "装修装饰", "工程咨询", "家居用品"],
+            "传媒娱乐": ["出版", "广告营销", "影视院线", "游戏", "数字媒体", "广播电视", "旅游酒店", "餐饮", "传媒"],
+            "化工材料": ["化学制品", "化学原料", "塑料", "橡胶", "化纤", "非金属材料", "有色金属", "钢铁", "小金属"],
+            "电力能源": ["电力", "煤炭", "石油", "燃气", "环保", "环境治理", "石油行业", "电力行业"],
+            "商业零售": ["商业百货", "超市", "专业市场", "跨境电商", "贸易", "零售"],
+            "军工国防": ["航天航空", "船舶制造", "兵器兵装", "军工电子"],
+        }
+        
+        today_zt_sectors = {}  # 今日涨停板块分布（映射后）
+        sector_rotation_data = {}  # 板块轮动数据
+        
         try:
-            from datetime import datetime
+            from datetime import datetime, timedelta
             today_str = datetime.now().strftime('%Y%m%d')
             import akshare as ak
             zt_df = ak.stock_zt_pool_em(date=today_str)
@@ -65,8 +84,69 @@ class LateDayScreener:
                 else:
                     sentiment_phase = "退潮"
                 logger.info(f"市场情绪（陈小群情绪周期）: {sentiment_phase}期 (今日涨停{limit_up_count}只)")
+                
+                # 统计今日涨停板块分布
+                if '所属行业' in zt_df.columns:
+                    em_zt_count = zt_df['所属行业'].value_counts().to_dict()
+                    for our_sector, em_sectors in sector_em_mapping.items():
+                        total = sum(em_zt_count.get(em_s, 0) for em_s in em_sectors)
+                        if total > 0:
+                            today_zt_sectors[our_sector] = total
+                    logger.info(f"今日涨停板块分布（映射后）: {today_zt_sectors}")
+                
+                # 获取最近5个交易日涨停数据，分析板块轮动
+                zt_history = {}
+                trade_days = []
+                for d_back in range(1, 10):
+                    check_date = (datetime.now() - timedelta(days=d_back)).strftime('%Y%m%d')
+                    check_weekday = (datetime.now() - timedelta(days=d_back)).weekday()
+                    if check_weekday >= 5:
+                        continue
+                    try:
+                        zt_check = ak.stock_zt_pool_em(date=check_date)
+                        if zt_check is not None and not zt_check.empty and '所属行业' in zt_check.columns:
+                            trade_days.append(check_date)
+                            em_count = zt_check['所属行业'].value_counts().to_dict()
+                            for em_sector, count in em_count.items():
+                                if em_sector not in zt_history:
+                                    zt_history[em_sector] = {}
+                                zt_history[em_sector][check_date] = count
+                    except Exception:
+                        continue
+                    if len(trade_days) >= 5:
+                        break
+                
+                # 分析板块轮动
+                for our_sector, em_sectors in sector_em_mapping.items():
+                    daily_counts = []
+                    for td in sorted(trade_days):
+                        day_total = sum(zt_history.get(em_s, {}).get(td, 0) for em_s in em_sectors)
+                        daily_counts.append(day_total)
+                    
+                    if len(daily_counts) >= 2 and sum(daily_counts) > 0:
+                        continuous = 0
+                        for c in reversed(daily_counts):
+                            if c >= 1:
+                                continuous += 1
+                            else:
+                                break
+                        latest = daily_counts[-1]
+                        prev = daily_counts[-2] if len(daily_counts) >= 2 else 0
+                        sector_rotation_data[our_sector] = {
+                            "continuous_days": continuous,
+                            "latest": latest,
+                            "prev": prev,
+                            "increase": latest - prev,
+                            "avg": round(sum(daily_counts) / len(daily_counts), 1),
+                            "daily_counts": daily_counts,
+                        }
+                
+                if sector_rotation_data:
+                    cont = [s for s, d in sector_rotation_data.items() if d["continuous_days"] >= 3]
+                    emerg = [s for s, d in sector_rotation_data.items() if d["increase"] >= 2 and d["latest"] >= 2]
+                    logger.info(f"板块轮动分析: 持续性板块{cont}, 新兴板块{emerg}")
         except Exception as e:
-            logger.warning(f"获取涨停家数失败: {e}")
+            logger.warning(f"获取涨停数据失败: {e}")
         
         # 大盘下跌超过1%时，减少推荐数量，提高选股门槛
         # 2026-09-22优化：基准分从30降低到20，评分门槛相应降低
@@ -283,7 +363,7 @@ class LateDayScreener:
         # 第四步：深度分析（获取K线数据，计算技术指标）
         # 传递批量获取的K线数据和大盘环境参数，避免重复获取
         # 注意：换手率数据通过量比估算（Tushare daily_basic频率限制1次/小时无法使用）
-        deep_result = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks)
+        deep_result = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks, today_zt_sectors, sector_rotation_data)
         
         # 从_deep_analyze返回的字典中获取all_picks、top_picks和special_picks
         # 兼容_deep_analyze返回字典或列表的情况
@@ -468,7 +548,7 @@ class LateDayScreener:
 
         return candidates
 
-    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, score_threshold: int = 50, min_locks: int = 0) -> List[Dict]:
+    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, score_threshold: int = 50, min_locks: int = 0, today_zt_sectors: Dict = None, sector_rotation_data: Dict = None) -> List[Dict]:
         """
         深度分析：获取K线数据，计算技术指标，评分排序
         买卖点位逻辑（参照公开尾盘买入法）：
@@ -532,6 +612,7 @@ class LateDayScreener:
             "新华都": "商业零售", "跨境通": "商业零售", "利欧股份": "传媒娱乐",
             # 化工材料
             "西陇科学": "化工材料", "吉鑫科技": "电力能源",
+            "中国石化": "电力能源", "中国石油": "电力能源", "中国海油": "电力能源",
         }
         
         for stock in candidates:
@@ -599,102 +680,11 @@ class LateDayScreener:
             if len(stocks) >= 3:
                 logger.info(f"板块龙头识别 [{sector}]: 中军={zhongjun_leader.get('name','')}({zhongjun_leader.get('amount',0)/100000000:.1f}亿), 领涨={lingzhang_leader.get('name','')}({lingzhang_leader.get('pct_change',0):.1f}%), 共{len(stocks)}只")
 
-        # 2026-09-23优化：获取今日涨停板块分布+板块轮动数据（陈小群板块合力+板块轮动思路）
-        # 将我们的板块分类映射到东方财富行业分类
-        sector_em_mapping = {
-            "科技半导体": ["半导体", "元件", "光学光电子", "通信设备", "计算机设备", "软件开发", "消费电子", "电子化学"],
-            "医药医疗": ["化学制药", "中药", "生物制品", "医疗器械", "医疗服务", "医药商业"],
-            "农业食品": ["种植业", "养殖业", "农产品加工", "食品饮料", "酿酒", "饲料", "渔业", "农业综合"],
-            "新能源": ["电池", "光伏设备", "风电设备", "能源金属", "电网设备", "储能"],
-            "汽车交通": ["汽车整车", "汽车零部件", "汽车服务", "物流", "航运港口", "铁路公路", "航空机场"],
-            "房地产建筑": ["房地产开发", "房地产服务", "建筑装饰", "建筑材料", "水泥", "装修装饰", "工程咨询"],
-            "传媒娱乐": ["出版", "广告营销", "影视院线", "游戏", "数字媒体", "广播电视", "旅游酒店", "餐饮"],
-            "化工材料": ["化学制品", "化学原料", "塑料", "橡胶", "化纤", "非金属材料", "有色金属", "钢铁"],
-            "电力能源": ["电力", "煤炭", "石油", "燃气", "环保", "环境治理"],
-            "商业零售": ["商业百货", "超市", "专业市场", "跨境电商", "贸易"],
-            "军工国防": ["航天航空", "船舶制造", "兵器兵装", "军工电子"],
-        }
-        
-        # 获取今日涨停板块分布
-        today_zt_sectors = {}  # {我们的板块: 涨停家数}
-        sector_rotation_data = {}  # {我们的板块: 轮动信息}
-        try:
-            import akshare as ak
-            from datetime import datetime, timedelta
-            
-            today_str_zt = datetime.now().strftime('%Y%m%d')
-            zt_today = ak.stock_zt_pool_em(date=today_str_zt)
-            if zt_today is not None and not zt_today.empty and '所属行业' in zt_today.columns:
-                em_zt_count = zt_today['所属行业'].value_counts().to_dict()
-                # 映射到我们的板块分类
-                for our_sector, em_sectors in sector_em_mapping.items():
-                    total = sum(em_zt_count.get(em_s, 0) for em_s in em_sectors)
-                    if total > 0:
-                        today_zt_sectors[our_sector] = total
-                logger.info(f"今日涨停板块分布（映射后）: {today_zt_sectors}")
-            
-            # 获取最近5个交易日涨停数据，分析板块轮动
-            zt_history = {}  # {东方财富板块: [每天涨停数]}
-            trade_days = []
-            for d_back in range(1, 10):
-                check_date = (datetime.now() - timedelta(days=d_back)).strftime('%Y%m%d')
-                check_weekday = (datetime.now() - timedelta(days=d_back)).weekday()
-                if check_weekday >= 5:
-                    continue
-                try:
-                    zt_check = ak.stock_zt_pool_em(date=check_date)
-                    if zt_check is not None and not zt_check.empty and '所属行业' in zt_check.columns:
-                        trade_days.append(check_date)
-                        em_count = zt_check['所属行业'].value_counts().to_dict()
-                        for em_sector, count in em_count.items():
-                            if em_sector not in zt_history:
-                                zt_history[em_sector] = {}
-                            zt_history[em_sector][check_date] = count
-                except Exception:
-                    continue
-                if len(trade_days) >= 5:
-                    break
-            
-            # 分析每个我们的板块的轮动情况
-            for our_sector, em_sectors in sector_em_mapping.items():
-                # 汇总该板块每天的涨停数
-                daily_counts = []
-                for td in sorted(trade_days):
-                    day_total = 0
-                    for em_s in em_sectors:
-                        day_total += zt_history.get(em_s, {}).get(td, 0)
-                    daily_counts.append(day_total)
-                
-                if len(daily_counts) >= 2 and sum(daily_counts) > 0:
-                    # 计算连续涨停天数（从最近一天往前）
-                    continuous = 0
-                    for c in reversed(daily_counts):
-                        if c >= 1:
-                            continuous += 1
-                        else:
-                            break
-                    
-                    latest = daily_counts[-1]
-                    prev = daily_counts[-2] if len(daily_counts) >= 2 else 0
-                    increase = latest - prev
-                    avg = sum(daily_counts) / len(daily_counts)
-                    
-                    sector_rotation_data[our_sector] = {
-                        "continuous_days": continuous,
-                        "latest": latest,
-                        "prev": prev,
-                        "increase": increase,
-                        "avg": round(avg, 1),
-                        "daily_counts": daily_counts,
-                    }
-            
-            if sector_rotation_data:
-                continuous_sectors = {s: d for s, d in sector_rotation_data.items() if d["continuous_days"] >= 3}
-                emerging_sectors = {s: d for s, d in sector_rotation_data.items() if d["increase"] >= 2 and d["latest"] >= 2}
-                logger.info(f"板块轮动: 持续性板块{list(continuous_sectors.keys())}, 新兴板块{list(emerging_sectors.keys())}")
-                
-        except Exception as e:
-            logger.warning(f"获取涨停板块/轮动数据失败: {e}")
+        # 2026-09-23优化：板块涨停分布和轮动数据由screen方法统一获取后传入（避免重复获取失败）
+        if today_zt_sectors is None:
+            today_zt_sectors = {}
+        if sector_rotation_data is None:
+            sector_rotation_data = {}
 
         # 统计计数器：排查推荐0只股票的问题
         stats = {"total": 0, "kline_ok": 0, "amplitude_ok": 0, "turnover_ok": 0, "ma20_ok": 0, "score_ok": 0, "errors": 0}
