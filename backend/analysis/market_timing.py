@@ -31,7 +31,7 @@ INDEX_NAMES = {
 def analyze_index(index_code: str, days: int = 120) -> Optional[Dict]:
     """分析单个指数"""
     try:
-        df = collector.get_daily_kline(index_code, days=days)
+        df = collector.get_index_kline(index_code, days=days)  # 指数专用接口（带超时，避免挂死）
         if df is None or df.empty or len(df) < 30:
             return None
 

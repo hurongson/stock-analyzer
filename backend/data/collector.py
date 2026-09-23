@@ -252,6 +252,74 @@ class DataCollector:
 
         return None
 
+    def get_index_kline(self, index_code: str, days: int = 120) -> Optional[pd.DataFrame]:
+        """
+        获取指数K线（专用指数接口，区别于个股 get_daily_kline）
+        Tushare pro.index_daily 优先，akshare stock_zh_index_daily 兜底；均带25秒超时。
+        修复：用个股接口取指数在网络波动时会无限挂死（2026-09-23尾盘运行卡30分钟）。
+        """
+        index_code = normalize_stock_code(index_code)
+        key = f"idxkline_{index_code}_{days}"
+        cached = cache.get_dataframe("kline", key)
+        if cached is not None and not cached.empty:
+            return cached
+
+        # 指数 ts_code / akshare symbol
+        if index_code.startswith("399"):
+            ts_idx, ak_sym = f"{index_code}.SZ", f"sz{index_code}"
+        else:
+            ts_idx, ak_sym = f"{index_code}.SH", f"sh{index_code}"
+        start = (pd.Timestamp.now() - pd.Timedelta(days=days * 2)).strftime("%Y%m%d")
+        from concurrent.futures import ThreadPoolExecutor
+
+        # 1) Tushare index_daily
+        if TUSHARE_AVAILABLE:
+            _ex = ThreadPoolExecutor(max_workers=1)
+            try:
+                df = _ex.submit(pro.index_daily, ts_code=ts_idx, start_date=start,
+                                end_date=today_str("%Y%m%d")).result(timeout=25)
+                if df is not None and not df.empty:
+                    df = df.rename(columns={"trade_date": "date", "vol": "volume",
+                                           "pct_chg": "pct_change"})
+                    df["date"] = pd.to_datetime(df["date"])
+                    df = df.sort_values("date").tail(days).reset_index(drop=True)
+                    df["volume"] = df["volume"] * 100
+                    for col in ["open", "high", "low", "close", "volume", "amount",
+                                "pct_change", "change"]:
+                        if col not in df.columns:
+                            df[col] = 0
+                    cache.set_dataframe("kline", key, df)
+                    return df
+            except Exception as e:
+                logger.warning(f"Tushare 指数K线失败 {index_code}: {e}")
+            finally:
+                _ex.shutdown(wait=False)
+
+        # 2) akshare 指数
+        if AKSHARE_AVAILABLE:
+            _ex = ThreadPoolExecutor(max_workers=1)
+            try:
+                df = _ex.submit(ak.stock_zh_index_daily, symbol=ak_sym).result(timeout=25)
+                if df is not None and not df.empty:
+                    df = df.copy()
+                    if "volume" not in df.columns and "Volume" in df.columns:
+                        df = df.rename(columns={"Volume": "volume"})
+                    df["date"] = pd.to_datetime(df["date"])
+                    df = df.sort_values("date").tail(days).reset_index(drop=True)
+                    if "pct_change" not in df.columns:
+                        df["pct_change"] = df["close"].pct_change() * 100
+                    for col in ["open", "high", "low", "close", "volume", "amount",
+                                "pct_change", "change"]:
+                        if col not in df.columns:
+                            df[col] = 0
+                    cache.set_dataframe("kline", key, df)
+                    return df
+            except Exception as e:
+                logger.warning(f"akshare 指数K线失败 {index_code}: {e}")
+            finally:
+                _ex.shutdown(wait=False)
+        return None
+
     # ============ 实时/最新行情 ============
     # 常见股票名称映射（stock_basic 接口频率受限，用此兜底）
     DEFAULT_STOCK_NAME_MAP = {
@@ -805,8 +873,13 @@ class DataCollector:
         industry_map: Dict[str, str] = {}
         if TUSHARE_AVAILABLE:
             try:
-                df = pro.stock_basic(exchange="", list_status="L",
-                                     fields="ts_code,name,industry")
+                from concurrent.futures import ThreadPoolExecutor
+                _ex0 = ThreadPoolExecutor(max_workers=1)
+                try:
+                    df = _ex0.submit(pro.stock_basic, exchange="", list_status="L",
+                                     fields="ts_code,name,industry").result(timeout=25)
+                finally:
+                    _ex0.shutdown(wait=False)
                 for _, r in df.iterrows():
                     industry_map[from_ts_code(r["ts_code"])] = str(r.get("industry", "") or "")
                 os.makedirs(Config.CACHE_DIR, exist_ok=True)
