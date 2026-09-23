@@ -785,6 +785,46 @@ class DataCollector:
         return None
 
     # ============ 全量股票列表 ============
+    def get_industry_map(self, force_refresh: bool = False) -> Dict[str, str]:
+        """
+        获取全市场 code -> 行业（Tushare stock_basic，单次请求，基础接口不超限）
+        缓存到 data/cache/industry_map.json，每天刷新；Tushare 失败时读旧缓存兜底。
+        用于替代"靠股票名称猜板块"，确保每只股票都有真实所属行业。
+        """
+        cache_path = os.path.join(Config.CACHE_DIR, "industry_map.json")
+        # 当天缓存直接用
+        if not force_refresh and os.path.exists(cache_path):
+            try:
+                with open(cache_path, encoding="utf-8") as f:
+                    cached = json.load(f)
+                if cached.get("date") == today_str():
+                    return cached.get("map", {})
+            except Exception:
+                pass
+
+        industry_map: Dict[str, str] = {}
+        if TUSHARE_AVAILABLE:
+            try:
+                df = pro.stock_basic(exchange="", list_status="L",
+                                     fields="ts_code,name,industry")
+                for _, r in df.iterrows():
+                    industry_map[from_ts_code(r["ts_code"])] = str(r.get("industry", "") or "")
+                os.makedirs(Config.CACHE_DIR, exist_ok=True)
+                with open(cache_path, "w", encoding="utf-8") as f:
+                    json.dump({"date": today_str(), "map": industry_map}, f, ensure_ascii=False)
+                logger.info(f"Tushare stock_basic 行业映射已缓存，共{len(industry_map)}只")
+            except Exception as e:
+                logger.warning(f"Tushare stock_basic 获取行业失败: {e}")
+
+        # Tushare 失败/无token，读旧缓存兜底
+        if not industry_map and os.path.exists(cache_path):
+            try:
+                with open(cache_path, encoding="utf-8") as f:
+                    industry_map = json.load(f).get("map", {})
+            except Exception:
+                pass
+        return industry_map
+
     def get_all_stocks(self) -> Optional[pd.DataFrame]:
         key = "all_stocks"
         # 交易时段使用5分钟缓存过期，确保数据实时；非交易时段使用按天缓存

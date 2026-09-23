@@ -815,7 +815,46 @@ class LateDayScreener:
         # 统计候选股票的板块分布
         sector_count = {}
         stock_sector = {}
-        
+
+        # 2026-09-23新增：Tushare(同花顺)真实行业名 -> 我方板块 映射
+        # 配合 collector.get_industry_map() 使用，替代"靠名称猜板块"，保证fade扣分能落到每只股票
+        tushare_ind_mapping = {
+            "科技半导体": ["半导体", "元器件", "通信设备", "通信服务", "计算机设备", "软件服务",
+                          "IT服务", "消费电子", "电子设备", "仪器仪表", "计算机应用", "电子",
+                          "光学光电子", "航天军工", "国防军工", "军工", "航天航空"],
+            "医药医疗": ["化学制药", "中成药", "中药", "生物制品", "医疗器械", "医药商业",
+                         "医疗服务", "保健用品", "生物医药", "制药", "医药"],
+            "农业食品": ["食品加工", "饮料", "乳制品", "白酒", "啤酒", "饲料", "农业综合",
+                         "种植业", "养殖业", "农产品加工", "渔业", "纺织服装", "食品饮料", "农业",
+                         "牧业", "林业", "服装", "食品"],
+            "新能源": ["电气设备", "电池", "光伏", "风电", "新能源", "储能", "电源设备",
+                       "能源金属", "电网设备"],
+            "汽车交通": ["汽车整车", "汽车配件", "汽车服务", "商用车", "汽车零部件",
+                         "物流", "水运", "港口", "公路", "铁路", "航空", "公交", "航运",
+                         "交通运输", "机场"],
+            "房地产建筑": ["房地产开发", "房地产服务", "建筑工程", "装修装饰", "建筑材料", "家居",
+                          "家用电器", "工程机械", "园林", "房地产", "建筑", "装修", "物业",
+                          "家居用品", "家电"],
+            "传媒娱乐": ["出版", "广告包装", "影视音像", "动漫游戏", "文化传媒", "广播电视",
+                         "游戏", "影视", "广告", "包装印刷", "数字媒体", "旅游景点", "酒店餐饮",
+                         "旅游", "酒店", "餐饮"],
+            "化工材料": ["化工原料", "化工化纤", "塑料", "橡胶", "农药化肥", "精细化工",
+                         "有色金属", "小金属", "钢铁", "金属制品", "化学制品", "化学原料",
+                         "化工", "化纤"],
+            "电力能源": ["电力", "煤炭", "石油开采", "石油加工", "燃气", "环保", "石油",
+                         "石油石化", "环境治理"],
+            "商业零售": ["商业连锁", "百货", "超市", "专业市场", "贸易", "零售"],
+        }
+        ts_ind_to_our = {}
+        for _our, _inds in tushare_ind_mapping.items():
+            for _x in _inds:
+                ts_ind_to_our[_x] = _our
+
+        # 全市场真实行业映射（Tushare，有缓存；本地无token时读仓库缓存）
+        industry_map = collector.get_industry_map()
+        if industry_map:
+            logger.info(f"真实行业映射已加载，覆盖{len(industry_map)}只")
+
         # 2026-09-23优化：具体股票名称到板块的映射（解决名称关键词匹配不到的问题）
         stock_name_sector = {
             # 科技半导体
@@ -841,14 +880,21 @@ class LateDayScreener:
         }
         
         for stock in candidates:
+            code0 = stock.get("code", "")
             name = stock.get("name", "")
             main_sector = ""
-            
-            # 优先使用具体股票名称映射
-            if name in stock_name_sector:
+
+            # 1) 真实行业（Tushare stock_basic）优先——最可靠
+            real_ind = industry_map.get(code0, "")
+            if real_ind and real_ind in ts_ind_to_our:
+                main_sector = ts_ind_to_our[real_ind]
+
+            # 2) 具体股票名称映射
+            if not main_sector and name in stock_name_sector:
                 main_sector = stock_name_sector[name]
-            else:
-                # 关键词匹配
+
+            # 3) 名称关键词兜底
+            if not main_sector:
                 matched_sectors = []
                 for sector, keywords in sector_keywords.items():
                     if any(kw in name for kw in keywords):
@@ -859,10 +905,18 @@ class LateDayScreener:
                         main_sector = "科技半导体"
                     else:
                         main_sector = matched_sectors[0]
-            
+
             if main_sector:
                 stock_sector[stock["code"]] = main_sector
                 sector_count[main_sector] = sector_count.get(main_sector, 0) + 1
+
+        # 排查：候选股里真实行业未被映射的（用于补全 tushare_ind_mapping）
+        if industry_map:
+            _cand_codes = {s.get("code", "") for s in candidates}
+            _unmapped = sorted({industry_map[c] for c in _cand_codes
+                                if industry_map.get(c) and industry_map[c] not in ts_ind_to_our})
+            if _unmapped:
+                logger.info(f"候选股中未映射的真实行业: {_unmapped}")
         
         # 识别热门板块（候选股票数量最多的前3个板块）
         hot_sectors = sorted(sector_count.items(), key=lambda x: x[1], reverse=True)[:3]
