@@ -24,7 +24,7 @@ from backend.analysis.market_timing import market_timing_instance
 from backend.screener.engine import screener
 from backend.screener.late_day import late_day_screener
 from backend.report.generator import generate_daily_report, save_report
-from backend.notify.feishu import push_daily_report, push_late_day_picks
+from backend.notify.feishu import push_daily_report, push_late_day_picks, push_standstill_notice
 
 logging.basicConfig(
     level=logging.INFO,
@@ -442,9 +442,14 @@ def run_late_day_screener(enable_push: bool = True):
     logger.info(f"陈小群特别推荐: {len(save_result['special_picks'])}只, 市场情绪: {save_result['market_sentiment'].get('phase', '未知')}")
 
     # 推送飞书
+    _ms = save_result.get("market_sentiment", {})
     if enable_push and Config.FEISHU_WEBHOOK_URL and picks:
         logger.info("--- 推送飞书尾盘选股 ---")
         push_late_day_picks(save_result)
+    elif enable_push and Config.FEISHU_WEBHOOK_URL and _ms.get("standstill"):
+        # 退潮空仓也推送提示（告知今日为何无推荐，避免误以为程序出错）
+        logger.info("--- 推送飞书尾盘空仓提示 ---")
+        push_standstill_notice(_ms)
     else:
         logger.info("跳过飞书推送（未配置 Webhook 或无推荐股票）")
 

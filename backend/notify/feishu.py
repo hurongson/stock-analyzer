@@ -743,6 +743,24 @@ def push_daily_report(report_data: Dict) -> bool:
     return success
 
 
+def push_standstill_notice(market_sentiment: Dict, webhook_url: str = None) -> bool:
+    """退潮空仓提示：尾盘无推荐时也推送，告知今日为何空仓（避免用户误以为程序出错）"""
+    try:
+        from datetime import datetime
+        ms = market_sentiment or {}
+        note = ms.get("note", "情绪退潮，今日尾盘空仓观望，等待冰点")
+        content = (
+            f"【尾盘空仓提示】{datetime.now().strftime('%Y-%m-%d')}\n"
+            f"今日尾盘不做任何买入推荐，建议空仓观望。\n"
+            f"判定原因：{note}\n"
+            f"——陈小群：退潮期空仓等待冰点，不逆势抄底、不试错。"
+        )
+        return send_feishu_text(content, webhook_url)
+    except Exception as e:
+        logging.getLogger(__name__).warning(f"空仓提示推送失败: {e}")
+        return False
+
+
 def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
     """
     推送尾盘选股结果（14:30）

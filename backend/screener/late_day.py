@@ -53,6 +53,12 @@ class LateDayScreener:
         # - 退潮期（涨停<30只）：减少选股数量，严格筛选（空仓等待）
         limit_up_count = 0
         sentiment_phase = "未知"
+        # 2026-09-24新增：多因子复合情绪闸门（修复单看涨停家数在见顶初期钝化、仍追主线的问题）
+        risk_regime = "健康"      # 健康 / 分歧 / 退潮
+        zhaban_count = 0         # 炸板家数
+        dieting_count = 0        # 跌停家数
+        zhaban_rate = 0.0        # 炸板率%
+        idx_weak_pct = 0.0       # 深证/创业板当日最弱涨跌%
         
         # 板块分类到东方财富行业分类的映射（在screen中统一获取，传递给_deep_analyze）
         # 注意：东方财富板块名存在4字截断（房地产服/光学光电/计算机设/汽车零部）和Ⅱ后缀变体
@@ -126,7 +132,45 @@ class LateDayScreener:
                 else:
                     sentiment_phase = "退潮"
                 logger.info(f"市场情绪（陈小群情绪周期）: {sentiment_phase}期 (涨停数据日{zt_data_date}, {limit_up_count}只)")
-                
+
+                # ===== 2026-09-24新增：多因子复合情绪闸门 =====
+                # 单看涨停家数在指数见顶下跌初期会钝化（仍有补涨/防御涨停，总数还在50+），
+                # 陈小群判断退潮靠更敏感的：炸板率（封不住）、跌停数（亏钱效应）、指数放量下跌。
+                try:
+                    _re2 = ThreadPoolExecutor(max_workers=2)
+                    try:
+                        zb_df = _re2.submit(ak.stock_zt_pool_zbgc_em, date=zt_data_date).result(timeout=20)
+                        dt_df = _re2.submit(ak.stock_zt_pool_dtgc_em, date=zt_data_date).result(timeout=20)
+                    finally:
+                        _re2.shutdown(wait=False)
+                    zhaban_count = 0 if zb_df is None else len(zb_df)
+                    dieting_count = 0 if dt_df is None else len(dt_df)
+                    _denom = limit_up_count + zhaban_count
+                    zhaban_rate = zhaban_count / _denom * 100 if _denom else 0.0
+
+                    # 深证、创业板当日涨跌（新浪指数，取最后两日），用最弱一个
+                    def _idx_pct(sym):
+                        _d = ak.stock_zh_index_daily(symbol=sym).sort_values('date').tail(2)['close'].values
+                        return (_d[1] - _d[0]) / _d[0] * 100
+                    _re3 = ThreadPoolExecutor(max_workers=2)
+                    try:
+                        sz_p = _re3.submit(_idx_pct, 'sz399001').result(timeout=20)
+                        cy_p = _re3.submit(_idx_pct, 'sz399006').result(timeout=20)
+                    finally:
+                        _re3.shutdown(wait=False)
+                    idx_weak_pct = min(sz_p, cy_p)
+
+                    # 复合判定（阈值经9/07、9/22-24回测验证）
+                    if zhaban_rate >= 30 or dieting_count >= 10 or idx_weak_pct <= -1.5:
+                        risk_regime = "退潮"
+                    elif zhaban_rate >= 22 or dieting_count >= 5 or idx_weak_pct <= -0.8:
+                        risk_regime = "分歧"
+                    logger.info(f"复合情绪闸门: 【{risk_regime}】 炸板{zhaban_count}({zhaban_rate:.0f}%) "
+                                f"跌停{dieting_count} 最弱指数{idx_weak_pct:.2f}%")
+                except Exception as _re:
+                    logger.warning(f"复合情绪闸门计算失败，回退涨停家数判断: {str(_re)[:80]}")
+
+
                 # 统计当前涨停板块分布
                 if '所属行业' in zt_df.columns:
                     em_zt_count = zt_df['所属行业'].value_counts().to_dict()
@@ -311,6 +355,34 @@ class LateDayScreener:
             score_threshold += 10  # 大幅提高评分门槛
             min_locks = max(min_locks, 2)  # 至少2/3锁亮
             logger.info(f"情绪退潮期（涨停{limit_up_count}只）：空仓等待，推荐数量严格减少到{self.max_results}只，评分门槛提高到{score_threshold}分，三把锁至少2/3亮")
+
+        # ===== 2026-09-24：复合闸门覆盖（优先级高于单看涨停家数）=====
+        if risk_regime == "分歧":
+            self.max_results = min(self.max_results, 12)
+            score_threshold += 8
+            min_locks = max(min_locks, 2)
+            logger.info(f"【复合闸门】情绪分歧：收紧到{self.max_results}只、门槛{score_threshold}、至少2锁")
+
+        # 退潮空仓：直接返回，不浪费时间取K线（陈小群：退潮期空仓等待冰点结束）
+        if risk_regime == "退潮":
+            logger.info("【复合闸门】情绪退潮确认：尾盘空仓，不做任何推荐")
+            _standstill = {
+                "phase": sentiment_phase,
+                "risk_regime": "退潮",
+                "limit_up_count": limit_up_count,
+                "zhaban_count": zhaban_count,
+                "zhaban_rate": round(zhaban_rate, 1),
+                "dieting_count": dieting_count,
+                "idx_weak_pct": round(idx_weak_pct, 2),
+                "standstill": True,
+                "note": (f"炸板率{zhaban_rate:.0f}%、跌停{dieting_count}只、最弱指数"
+                         f"{idx_weak_pct:.2f}%，情绪退潮，今日尾盘空仓观望，等待冰点"),
+            }
+            return {
+                "all_picks": [], "top_picks": [], "special_picks": [],
+                "market_sentiment": _standstill,
+                "summary": {"total": 0, "note": "情绪退潮确认，尾盘空仓，不做推荐"},
+            }
 
         # 获取全量股票列表
         if stock_df is None:
@@ -512,6 +584,11 @@ class LateDayScreener:
             "special_count": len(special_picks),
             "market_sentiment": {
                 "phase": sentiment_phase,  # 市场情绪阶段：高潮/发酵/启动/退潮
+                "risk_regime": risk_regime,  # 复合闸门：健康/分歧/退潮
+                "zhaban_count": zhaban_count,  # 炸板家数
+                "zhaban_rate": round(zhaban_rate, 1),  # 炸板率%
+                "dieting_count": dieting_count,  # 跌停家数
+                "idx_weak_pct": round(idx_weak_pct, 2),  # 最弱指数涨跌%
                 "limit_up_count": limit_up_count,  # 涨停家数
                 "zt_data_date": zt_data_date,  # 实际使用的涨停数据日期（盘前回退到最近交易日）
                 "market_status": market_status.get("status", ""),  # 大盘状态
