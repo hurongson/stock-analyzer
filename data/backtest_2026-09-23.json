@@ -1,0 +1,119 @@
+[
+  {
+    "code": "002285",
+    "name": "世联行",
+    "rec_price": 3.2,
+    "close": 3.17,
+    "today_pct": -0.938,
+    "ret_vs_rec": -0.9375000000000078,
+    "special": false
+  },
+  {
+    "code": "002589",
+    "name": "瑞康医药",
+    "rec_price": 3.59,
+    "close": 3.38,
+    "today_pct": -5.85,
+    "ret_vs_rec": -5.849582172701949,
+    "special": true
+  },
+  {
+    "code": "000566",
+    "name": "海南海药",
+    "rec_price": 4.98,
+    "close": 4.8,
+    "today_pct": -3.614,
+    "ret_vs_rec": -3.614457831325313,
+    "special": true
+  },
+  {
+    "code": "000725",
+    "name": "京东方A",
+    "rec_price": 6.0,
+    "close": 6.02,
+    "today_pct": 0.333,
+    "ret_vs_rec": 0.33333333333332626,
+    "special": true
+  },
+  {
+    "code": "600383",
+    "name": "金地集团",
+    "rec_price": 2.5,
+    "close": 2.51,
+    "today_pct": 0.4,
+    "ret_vs_rec": 0.39999999999999153,
+    "special": false
+  },
+  {
+    "code": "002617",
+    "name": "露笑科技",
+    "rec_price": 6.94,
+    "close": 6.95,
+    "today_pct": 0.144,
+    "ret_vs_rec": 0.14409221902016983,
+    "special": false
+  },
+  {
+    "code": "002081",
+    "name": "金螳螂",
+    "rec_price": 5.23,
+    "close": 5.32,
+    "today_pct": 1.721,
+    "ret_vs_rec": 1.7208413001912017,
+    "special": false
+  },
+  {
+    "code": "600707",
+    "name": "彩虹股份",
+    "rec_price": 9.55,
+    "close": 9.8,
+    "today_pct": 2.618,
+    "ret_vs_rec": 2.6178010471204183,
+    "special": false
+  },
+  {
+    "code": "002437",
+    "name": "誉衡药业",
+    "rec_price": 3.78,
+    "close": 3.64,
+    "today_pct": -3.704,
+    "ret_vs_rec": -3.7037037037036953,
+    "special": false
+  },
+  {
+    "code": "600613",
+    "name": "神奇制药",
+    "rec_price": 9.43,
+    "close": 8.66,
+    "today_pct": -8.165,
+    "ret_vs_rec": -8.165429480381755,
+    "special": true
+  },
+  {
+    "code": "002470",
+    "name": "金正大",
+    "rec_price": 2.13,
+    "close": 2.04,
+    "today_pct": -4.225,
+    "ret_vs_rec": -4.22535211267605,
+    "special": false
+  },
+  {
+    "code": "002321",
+    "name": "华英农业",
+    "rec_price": 2.22,
+    "close": 2.06,
+    "today_pct": -7.207,
+    "ret_vs_rec": -7.207207207207213,
+    "special": false
+  },
+  {
+    "code": "002426",
+    "name": "胜利精密",
+    "rec_price": 2.69,
+    "close": 2.96,
+    "today_pct": 10.037,
+    "ret_vs_rec": 10.037174721189592,
+    "special": true
+  }
+]

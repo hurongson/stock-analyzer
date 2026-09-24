@@ -1,0 +1,314 @@
+{
+  "backtest_date": "2026-09-21",
+  "total": 28,
+  "up_count": 20,
+  "down_count": 8,
+  "flat_count": 0,
+  "avg_return": 2.775882082352266,
+  "daily_stats": [
+    {
+      "date": "2026-09-17",
+      "count": 14,
+      "up_count": 10,
+      "down_count": 4,
+      "flat_count": 0,
+      "avg_return": 2.775882082352266,
+      "max_return": 16.548223350253817,
+      "min_return": -5.507955936352511,
+      "up_rate": 71.42857142857143
+    },
+    {
+      "date": "2026-09-18",
+      "count": 14,
+      "up_count": 10,
+      "down_count": 4,
+      "flat_count": 0,
+      "avg_return": 2.775882082352266,
+      "max_return": 16.548223350253817,
+      "min_return": -5.507955936352511,
+      "up_rate": 71.42857142857143
+    }
+  ],
+  "results": [
+    {
+      "code": "600059",
+      "name": "古越龙山",
+      "rec_date": "2026-09-17",
+      "rec_price": 9.85,
+      "rec_pct": 0.8188,
+      "today_price": 11.48,
+      "today_pct": 7.29,
+      "total_return": 16.548223350253817
+    },
+    {
+      "code": "600059",
+      "name": "古越龙山",
+      "rec_date": "2026-09-18",
+      "rec_price": 9.85,
+      "rec_pct": 0.8188,
+      "today_price": 11.48,
+      "today_pct": 7.29,
+      "total_return": 16.548223350253817
+    },
+    {
+      "code": "600707",
+      "name": "彩虹股份",
+      "rec_date": "2026-09-17",
+      "rec_price": 9.24,
+      "rec_pct": 1.3158,
+      "today_price": 9.85,
+      "today_pct": 6.602,
+      "total_return": 6.601731601731596
+    },
+    {
+      "code": "600707",
+      "name": "彩虹股份",
+      "rec_date": "2026-09-18",
+      "rec_price": 9.24,
+      "rec_pct": 1.3158,
+      "today_price": 9.85,
+      "today_pct": 6.602,
+      "total_return": 6.601731601731596
+    },
+    {
+      "code": "000978",
+      "name": "桂林旅游",
+      "rec_date": "2026-09-17",
+      "rec_price": 7.97,
+      "rec_pct": -9.3288,
+      "today_price": 8.39,
+      "today_pct": 0.359,
+      "total_return": 5.269761606022596
+    },
+    {
+      "code": "000978",
+      "name": "桂林旅游",
+      "rec_date": "2026-09-18",
+      "rec_price": 7.97,
+      "rec_pct": -9.3288,
+      "today_price": 8.39,
+      "today_pct": 0.359,
+      "total_return": 5.269761606022596
+    },
+    {
+      "code": "000100",
+      "name": "TCL科技",
+      "rec_date": "2026-09-17",
+      "rec_price": 4.83,
+      "rec_pct": 1.4706,
+      "today_price": 5.08,
+      "today_pct": 1.804,
+      "total_return": 5.175983436853001
+    },
+    {
+      "code": "000100",
+      "name": "TCL科技",
+      "rec_date": "2026-09-18",
+      "rec_price": 4.83,
+      "rec_pct": 1.4706,
+      "today_price": 5.08,
+      "today_pct": 1.804,
+      "total_return": 5.175983436853001
+    },
+    {
+      "code": "600488",
+      "name": "津药药业",
+      "rec_date": "2026-09-17",
+      "rec_price": 5.99,
+      "rec_pct": -0.4983,
+      "today_price": 6.29,
+      "today_pct": 3.115,
+      "total_return": 5.008347245409012
+    },
+    {
+      "code": "600488",
+      "name": "津药药业",
+      "rec_date": "2026-09-18",
+      "rec_price": 5.99,
+      "rec_pct": -0.4983,
+      "today_price": 6.29,
+      "today_pct": 3.115,
+      "total_return": 5.008347245409012
+    },
+    {
+      "code": "002617",
+      "name": "露笑科技",
+      "rec_date": "2026-09-17",
+      "rec_price": 6.9,
+      "rec_pct": -1.7094,
+      "today_price": 7.16,
+      "today_pct": 2.579,
+      "total_return": 3.7681159420289823
+    },
+    {
+      "code": "002617",
+      "name": "露笑科技",
+      "rec_date": "2026-09-18",
+      "rec_price": 6.9,
+      "rec_pct": -1.7094,
+      "today_price": 7.16,
+      "today_pct": 2.579,
+      "total_return": 3.7681159420289823
+    },
+    {
+      "code": "002584",
+      "name": "西陇科学",
+      "rec_date": "2026-09-17",
+      "rec_price": 9.52,
+      "rec_pct": -0.3141,
+      "today_price": 9.76,
+      "today_pct": 0.103,
+      "total_return": 2.521008403361347
+    },
+    {
+      "code": "002584",
+      "name": "西陇科学",
+      "rec_date": "2026-09-18",
+      "rec_price": 9.52,
+      "rec_pct": -0.3141,
+      "today_price": 9.76,
+      "today_pct": 0.103,
+      "total_return": 2.521008403361347
+    },
+    {
+      "code": "002212",
+      "name": "天融信",
+      "rec_date": "2026-09-17",
+      "rec_price": 7.14,
+      "rec_pct": 2.1459,
+      "today_price": 7.28,
+      "today_pct": 2.97,
+      "total_return": 1.960784313725498
+    },
+    {
+      "code": "002212",
+      "name": "天融信",
+      "rec_date": "2026-09-18",
+      "rec_price": 7.14,
+      "rec_pct": 2.1459,
+      "today_price": 7.28,
+      "today_pct": 2.97,
+      "total_return": 1.960784313725498
+    },
+    {
+      "code": "002137",
+      "name": "实益达",
+      "rec_date": "2026-09-17",
+      "rec_price": 8.55,
+      "rec_pct": 4.2683,
+      "today_price": 8.6,
+      "today_pct": -0.807,
+      "total_return": 0.5847953216374144
+    },
+    {
+      "code": "002137",
+      "name": "实益达",
+      "rec_date": "2026-09-18",
+      "rec_price": 8.55,
+      "rec_pct": 4.2683,
+      "today_price": 8.6,
+      "today_pct": -0.807,
+      "total_return": 0.5847953216374144
+    },
+    {
+      "code": "600545",
+      "name": "卓郎智能",
+      "rec_date": "2026-09-17",
+      "rec_price": 4.57,
+      "rec_pct": -3.178,
+      "today_price": 4.58,
+      "today_pct": 0.659,
+      "total_return": 0.2188183807439778
+    },
+    {
+      "code": "600545",
+      "name": "卓郎智能",
+      "rec_date": "2026-09-18",
+      "rec_price": 4.57,
+      "rec_pct": -3.178,
+      "today_price": 4.58,
+      "today_pct": 0.659,
+      "total_return": 0.2188183807439778
+    },
+    {
+      "code": "601398",
+      "name": "工商银行",
+      "rec_date": "2026-09-17",
+      "rec_price": 8.14,
+      "rec_pct": 0.3699,
+      "today_price": 8.11,
+      "today_pct": 0.496,
+      "total_return": -0.3685503685503825
+    },
+    {
+      "code": "601398",
+      "name": "工商银行",
+      "rec_date": "2026-09-18",
+      "rec_price": 8.14,
+      "rec_pct": 0.3699,
+      "today_price": 8.11,
+      "today_pct": 0.496,
+      "total_return": -0.3685503685503825
+    },
+    {
+      "code": "601328",
+      "name": "交通银行",
+      "rec_date": "2026-09-17",
+      "rec_price": 7.58,
+      "rec_pct": 0.0,
+      "today_price": 7.55,
+      "today_pct": 1.206,
+      "total_return": -0.39577836411609824
+    },
+    {
+      "code": "601328",
+      "name": "交通银行",
+      "rec_date": "2026-09-18",
+      "rec_price": 7.58,
+      "rec_pct": 0.0,
+      "today_price": 7.55,
+      "today_pct": 1.206,
+      "total_return": -0.39577836411609824
+    },
+    {
+      "code": "000572",
+      "name": "海马汽车",
+      "rec_date": "2026-09-17",
+      "rec_price": 4.36,
+      "rec_pct": 7.9208,
+      "today_price": 4.25,
+      "today_pct": -1.392,
+      "total_return": -2.522935779816521
+    },
+    {
+      "code": "000572",
+      "name": "海马汽车",
+      "rec_date": "2026-09-18",
+      "rec_price": 4.36,
+      "rec_pct": 7.9208,
+      "today_price": 4.25,
+      "today_pct": -1.392,
+      "total_return": -2.522935779816521
+    },
+    {
+      "code": "002531",
+      "name": "天顺风能",
+      "rec_date": "2026-09-17",
+      "rec_price": 8.17,
+      "rec_pct": 4.4757,
+      "today_price": 7.72,
+      "today_pct": 0.13,
+      "total_return": -5.507955936352511
+    },
+    {
+      "code": "002531",
+      "name": "天顺风能",
+      "rec_date": "2026-09-18",
+      "rec_price": 8.17,
+      "rec_pct": 4.4757,
+      "today_price": 7.72,
+      "today_pct": 0.13,
+      "total_return": -5.507955936352511
+    }
+  ]
+}

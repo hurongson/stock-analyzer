@@ -1,0 +1,156 @@
+{
+  "date": "2026-09-09",
+  "recommend_date": "2026-09-08",
+  "total": 13,
+  "up_count": 6,
+  "down_count": 6,
+  "flat_count": 1,
+  "avg_return": -0.2771233600183275,
+  "max_return": 3.083700440528634,
+  "min_return": -6.834532374100719,
+  "results": [
+    {
+      "code": "000735",
+      "name": "罗 牛 山",
+      "price_9_8": 6.81,
+      "price_today": 7.02,
+      "pct_change_today": 3.084,
+      "actual_return": 3.083700440528634,
+      "turnover_9_8": 12.0,
+      "score_9_8": 95,
+      "pct_change_9_8": 1.039
+    },
+    {
+      "code": "600172",
+      "name": "黄河旋风",
+      "price_9_8": 16.5,
+      "price_today": 16.93,
+      "pct_change_today": 2.606,
+      "actual_return": 2.6060606060606046,
+      "turnover_9_8": 3.0,
+      "score_9_8": 95,
+      "pct_change_9_8": 3.839
+    },
+    {
+      "code": "000592",
+      "name": "平潭发展",
+      "price_9_8": 7.9,
+      "price_today": 8.06,
+      "pct_change_today": 2.025,
+      "actual_return": 2.0253164556962044,
+      "turnover_9_8": 4.0,
+      "score_9_8": 95,
+      "pct_change_9_8": 0.381
+    },
+    {
+      "code": "300189",
+      "name": "神农种业",
+      "price_9_8": 7.68,
+      "price_today": 7.78,
+      "pct_change_today": 1.302,
+      "actual_return": 1.3020833333333404,
+      "turnover_9_8": 3.0,
+      "score_9_8": 95,
+      "pct_change_9_8": -0.518
+    },
+    {
+      "code": "600601",
+      "name": "方正科技",
+      "price_9_8": 14.48,
+      "price_today": 14.62,
+      "pct_change_today": 0.967,
+      "actual_return": 0.9668508287292734,
+      "turnover_9_8": 4.0,
+      "score_9_8": 95,
+      "pct_change_9_8": 3.651
+    },
+    {
+      "code": "600028",
+      "name": "中国石化",
+      "price_9_8": 5.59,
+      "price_today": 5.61,
+      "pct_change_today": 0.358,
+      "actual_return": 0.3577817531305986,
+      "turnover_9_8": 4.0,
+      "score_9_8": 93,
+      "pct_change_9_8": 4.097
+    },
+    {
+      "code": "002124",
+      "name": "天邦食品",
+      "price_9_8": 2.52,
+      "price_today": 2.52,
+      "pct_change_today": 0.0,
+      "actual_return": 0.0,
+      "turnover_9_8": 4.0,
+      "score_9_8": 95,
+      "pct_change_9_8": -0.787
+    },
+    {
+      "code": "002385",
+      "name": "大北农",
+      "price_9_8": 3.61,
+      "price_today": 3.6,
+      "pct_change_today": -0.277,
+      "actual_return": -0.27700831024930156,
+      "turnover_9_8": 4.0,
+      "score_9_8": 95,
+      "pct_change_9_8": 3.143
+    },
+    {
+      "code": "601212",
+      "name": "白银有色",
+      "price_9_8": 7.11,
+      "price_today": 7.09,
+      "pct_change_today": -0.281,
+      "actual_return": -0.2812939521800346,
+      "turnover_9_8": 3.0,
+      "score_9_8": 95,
+      "pct_change_9_8": 1.571
+    },
+    {
+      "code": "601933",
+      "name": "永辉超市",
+      "price_9_8": 3.36,
+      "price_today": 3.31,
+      "pct_change_today": -1.488,
+      "actual_return": -1.4880952380952328,
+      "turnover_9_8": 4.0,
+      "score_9_8": 95,
+      "pct_change_9_8": 2.128
+    },
+    {
+      "code": "002607",
+      "name": "中公教育",
+      "price_9_8": 2.13,
+      "price_today": 2.08,
+      "pct_change_today": -2.347,
+      "actual_return": -2.3474178403755785,
+      "turnover_9_8": 6.0,
+      "score_9_8": 90,
+      "pct_change_9_8": 3.902
+    },
+    {
+      "code": "600103",
+      "name": "青山纸业",
+      "price_9_8": 4.05,
+      "price_today": 3.94,
+      "pct_change_today": -2.716,
+      "actual_return": -2.716049382716047,
+      "turnover_9_8": 3.0,
+      "score_9_8": 93,
+      "pct_change_9_8": 3.581
+    },
+    {
+      "code": "002081",
+      "name": "金 螳 螂",
+      "price_9_8": 5.56,
+      "price_today": 5.18,
+      "pct_change_today": -6.835,
+      "actual_return": -6.834532374100719,
+      "turnover_9_8": 3.0,
+      "score_9_8": 83,
+      "pct_change_9_8": 4.315
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "date": "2026-09-22",
+  "recommend_0921": {
+    "total": 16,
+    "details": [
+      {
+        "code": "002640",
+        "name": "跨境通",
+        "rec_price": 3.79,
+        "current_price": 3.75,
+        "pct_change": -1.055,
+        "profit": -1.0554089709762544,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "000981",
+        "name": "山子高科",
+        "rec_price": 2.95,
+        "current_price": 2.88,
+        "pct_change": -2.373,
+        "profit": -2.3728813559322126,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "601218",
+        "name": "吉鑫科技",
+        "rec_price": 5.45,
+        "current_price": 5.26,
+        "pct_change": -3.309,
+        "profit": -3.486238532110099,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002298",
+        "name": "中电鑫龙",
+        "rec_price": 9.2,
+        "current_price": 8.97,
+        "pct_change": -2.5,
+        "profit": -2.499999999999986,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002212",
+        "name": "天融信",
+        "rec_price": 7.28,
+        "current_price": 7.32,
+        "pct_change": 0.549,
+        "profit": 0.5494505494505499,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002531",
+        "name": "天顺风能",
+        "rec_price": 7.72,
+        "current_price": 7.34,
+        "pct_change": -4.922,
+        "profit": -4.922279792746113,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "000980",
+        "name": "众泰汽车",
+        "rec_price": 2.24,
+        "current_price": 2.18,
+        "pct_change": -2.679,
+        "profit": -2.678571428571431,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002584",
+        "name": "西陇科学",
+        "rec_price": 9.77,
+        "current_price": 9.36,
+        "pct_change": -4.098,
+        "profit": -4.196519959058344,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "000978",
+        "name": "桂林旅游",
+        "rec_price": 8.39,
+        "current_price": 8.4,
+        "pct_change": 0.119,
+        "profit": 0.11918951132300103,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "000725",
+        "name": "京东方Ａ",
+        "rec_price": 6.07,
+        "current_price": 6.0,
+        "pct_change": -1.153,
+        "profit": -1.1532125205930852,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "000100",
+        "name": "TCL科技",
+        "rec_price": 5.08,
+        "current_price": 5.03,
+        "pct_change": -0.984,
+        "profit": -0.9842519685039335,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "600577",
+        "name": "精达股份",
+        "rec_price": 8.98,
+        "current_price": 8.9,
+        "pct_change": -0.891,
+        "profit": -0.8908685968819607,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "000592",
+        "name": "平潭发展",
+        "rec_price": 8.51,
+        "current_price": 8.6,
+        "pct_change": 1.176,
+        "profit": 1.057579318448882,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002617",
+        "name": "露笑科技",
+        "rec_price": 7.16,
+        "current_price": 6.94,
+        "pct_change": -3.073,
+        "profit": -3.0726256983240186,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "300300",
+        "name": "海峡创新",
+        "rec_price": 9.3,
+        "current_price": 9.45,
+        "pct_change": 1.722,
+        "profit": 1.6129032258064364,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002565",
+        "name": "顺灏股份",
+        "rec_price": 9.19,
+        "current_price": 9.08,
+        "pct_change": -1.197,
+        "profit": -1.1969532100108753,
+        "score": 0,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      }
+    ]
+  },
+  "recommend_0922": {
+    "total": 7,
+    "details": [
+      {
+        "code": "002471",
+        "name": "中超控股",
+        "rec_price": 5.95,
+        "current_price": 5.75,
+        "pct_change": -3.361,
+        "profit": -3.3613445378151288,
+        "score": 95,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002584",
+        "name": "西陇科学",
+        "rec_price": 9.76,
+        "current_price": 9.36,
+        "pct_change": -4.098,
+        "profit": -4.098360655737709,
+        "score": 94,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "603118",
+        "name": "共进股份",
+        "rec_price": 18.65,
+        "current_price": 18.2,
+        "pct_change": -2.413,
+        "profit": -2.412868632707771,
+        "score": 94,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "002300",
+        "name": "太阳电缆",
+        "rec_price": 8.72,
+        "current_price": 8.31,
+        "pct_change": -4.702,
+        "profit": -4.701834862385322,
+        "score": 87,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "600105",
+        "name": "永鼎股份",
+        "rec_price": 46.72,
+        "current_price": 45.41,
+        "pct_change": -2.804,
+        "profit": -2.8039383561643887,
+        "score": 79,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "601218",
+        "name": "吉鑫科技",
+        "rec_price": 5.44,
+        "current_price": 5.26,
+        "pct_change": -3.309,
+        "profit": -3.308823529411776,
+        "score": 95,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      },
+      {
+        "code": "000636",
+        "name": "风华高科",
+        "rec_price": 59.25,
+        "current_price": 57.75,
+        "pct_change": -2.532,
+        "profit": -2.5316455696202533,
+        "score": 78,
+        "sector": "",
+        "is_zhongjun": false,
+        "is_lingzhang": false
+      }
+    ]
+  }
+}
