@@ -2,11 +2,15 @@ name: 尾盘选股推荐
 
 on:
   schedule:
-    # 北京时间 14:30 = UTC 06:30（主触发，尾盘选股当日买入次日卖出）
-    - cron: '30 6 * * 1-5'
-    # 北京时间 14:50 = UTC 06:50（补偿触发：GitHub 免费版 schedule 可能延迟甚至丢触发，
-    # 主触发未成功时由本次兜底；脚本对定时触发做幂等，今日已成功则自动跳过）
-    - cron: '50 6 * * 1-5'
+    # GitHub 免费版 schedule 不保证准点，整点/半点高峰易延迟甚至丢触发。
+    # 策略：全部错峰到非整点分钟 + 尾盘窗口多点补偿 + 收盘兜底；
+    # 脚本对定时触发做幂等（--skip-if-done），当天首个成功的触发推送，其余自动跳过，不会重复。
+    # 以下均为 UTC，北京时间 = UTC+8。
+    - cron: '32 6 * * 1-5'   # 北京 14:32 主触发（尾盘买入窗口）
+    - cron: '41 6 * * 1-5'   # 北京 14:41 补偿1
+    - cron: '49 6 * * 1-5'   # 北京 14:49 补偿2
+    - cron: '57 6 * * 1-5'   # 北京 14:57 补偿3（收盘前最后窗口）
+    - cron: '12 7 * * 1-5'   # 北京 15:12 收盘兜底（确保当日一定有结果，用于复盘/次日参考）
   workflow_dispatch:
     inputs:
       no_push:
@@ -59,11 +63,12 @@ jobs:
         run: |
           cd backend
           echo "=== 尾盘选股开始（触发方式: ${{ github.event_name }}）==="
-          # 定时触发（主+补偿）做幂等：今日已成功则跳过，避免重复推送；手动触发可重跑覆盖
+          # 定时触发（主+补偿+兜底）：不带 --force，节假日由 is_trading_day() 自动跳过；
+          # --skip-if-done 做幂等，当天首个成功的触发推送，其余自动跳过；手动触发带 --force 可重跑覆盖。
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             python main.py --late-day --force
           else
-            python main.py --late-day --force --skip-if-done
+            python main.py --late-day --skip-if-done
           fi
           echo "=== 尾盘选股完成 ==="
 

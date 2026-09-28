@@ -17,9 +17,27 @@ def now_str(fmt: str = "%Y-%m-%d %H:%M:%S") -> str:
     return datetime.now().strftime(fmt)
 
 
-def is_trading_day() -> bool:
-    """简易判断是否为交易日（周一至周五，不含节假日判断）"""
-    return datetime.now().weekday() < 5
+_TRADE_DATE_SET = None
+
+
+def is_trading_day(date=None) -> bool:
+    """判断是否为交易日：周一至周五 且 非法定节假日。
+
+    节假日通过 akshare 新浪交易日历校验（进程内只请求一次）；
+    取不到日历时保守回退到“周一至周五即交易日”，避免因接口故障漏跑。
+    """
+    d = date or datetime.now()
+    if d.weekday() >= 5:  # 周六周日
+        return False
+    global _TRADE_DATE_SET
+    try:
+        if _TRADE_DATE_SET is None:
+            import akshare as ak
+            df = ak.tool_trade_date_hist_sina()
+            _TRADE_DATE_SET = set(df["trade_date"].astype(str).str[:10])
+        return d.strftime("%Y-%m-%d") in _TRADE_DATE_SET
+    except Exception:
+        return True  # 日历接口失败时保守按交易日处理（宁跑勿漏）
 
 
 def cache_key(*args) -> str:
