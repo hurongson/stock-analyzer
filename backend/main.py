@@ -507,6 +507,8 @@ def main():
     parser.add_argument("--no-llm", action="store_true", help="禁用 LLM 分析")
     parser.add_argument("--dry-run", action="store_true", help="试运行（不保存不推送）")
     parser.add_argument("--force", action="store_true", help="非交易日也强制运行")
+    parser.add_argument("--skip-if-done", action="store_true",
+                        help="今日尾盘结果已存在则跳过（用于定时补偿触发，避免重复选股/推送；手动触发不加此参数可重跑）")
     args = parser.parse_args()
 
     # 交易日判断
@@ -526,6 +528,14 @@ def main():
         push = not args.no_push and not args.dry_run
         run_anomaly_monitor(enable_push=push)
     elif args.late_day:
+        # 定时补偿触发的幂等：今日结果已生成则跳过，避免重复选股/推送
+        # （手动 workflow_dispatch 不带 --skip-if-done，可重跑覆盖）
+        if args.skip_if_done and not args.dry_run:
+            _done = os.path.join(Config.DATA_DIR, f"late_day_{today_str()}.json")
+            if os.path.exists(_done):
+                logger.info(f"今日尾盘结果已存在（{_done}），补偿触发跳过，避免重复推送")
+                print(f"今日尾盘结果已存在，补偿触发跳过：{_done}")
+                return
         push = not args.no_push and not args.dry_run
         run_late_day_screener(enable_push=push)
     else:

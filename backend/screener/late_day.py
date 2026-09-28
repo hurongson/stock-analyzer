@@ -148,17 +148,43 @@ class LateDayScreener:
                     _denom = limit_up_count + zhaban_count
                     zhaban_rate = zhaban_count / _denom * 100 if _denom else 0.0
 
-                    # 深证、创业板当日涨跌（新浪指数，取最后两日），用最弱一个
-                    def _idx_pct(sym):
-                        _d = ak.stock_zh_index_daily(symbol=sym).sort_values('date').tail(2)['close'].values
-                        return (_d[1] - _d[0]) / _d[0] * 100
-                    _re3 = ThreadPoolExecutor(max_workers=2)
-                    try:
-                        sz_p = _re3.submit(_idx_pct, 'sz399001').result(timeout=20)
-                        cy_p = _re3.submit(_idx_pct, 'sz399006').result(timeout=20)
-                    finally:
-                        _re3.shutdown(wait=False)
+                    # 深证、创业板【当日实时】涨跌，用最弱一个。
+                    # 尾盘14:30运行时日线接口取不到当天K线、且盘后可能滞后，故用实时指数为准、日线兜底。
+                    def _idx_realtime_pct():
+                        # 首选：akshare 新浪指数实时（盘中/盘后均为当日值）
+                        try:
+                            _sp = ak.stock_zh_index_spot_sina()
+                            _sz = _sp[_sp['代码'] == 'sz399001']
+                            _cy = _sp[_sp['代码'] == 'sz399006']
+                            if len(_sz) and len(_cy):
+                                return float(_sz.iloc[0]['涨跌幅']), float(_cy.iloc[0]['涨跌幅']), '实时'
+                        except Exception:
+                            pass
+                        # 兜底1：新浪行情接口
+                        try:
+                            import requests as _rq, re as _re_mod
+                            _u = 'http://hq.sinajs.cn/list=sz399001,sz399006'
+                            _r = _rq.get(_u, headers={'Referer': 'https://finance.sina.com.cn'}, timeout=8)
+                            _r.encoding = 'gbk'
+                            vals = {}
+                            for _line in _r.text.strip().split('\n'):
+                                _m = _re_mod.search(r'hq_str_(\w+)=="([^"]*)"', _line)
+                                if _m and _m.group(2):
+                                    _a = _m.group(2).split(',')
+                                    _cur, _pre = float(_a[3]), float(_a[2])
+                                    vals[_m.group(1)] = (_cur - _pre) / _pre * 100 if _pre else 0.0
+                            if 'sz399001' in vals and 'sz399006' in vals:
+                                return vals['sz399001'], vals['sz399006'], '实时'
+                        except Exception:
+                            pass
+                        # 兜底2：日线最后两日（可能滞后，仅防完全取不到）
+                        def _daily(sym):
+                            _d = ak.stock_zh_index_daily(symbol=sym).sort_values('date').tail(2)['close'].values
+                            return (_d[1] - _d[0]) / _d[0] * 100
+                        return _daily('sz399001'), _daily('sz399006'), '日线兜底'
+                    sz_p, cy_p, _idxsrc = _idx_realtime_pct()
                     idx_weak_pct = min(sz_p, cy_p)
+                    logger.info(f"指数涨跌来源【{_idxsrc}】 深证{sz_p:+.2f}% 创业板{cy_p:+.2f}%")
 
                     # 复合判定（阈值经9/07、9/22-24回测验证）
                     if zhaban_rate >= 30 or dieting_count >= 10 or idx_weak_pct <= -1.5:
