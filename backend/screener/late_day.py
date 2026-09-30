@@ -59,7 +59,10 @@ class LateDayScreener:
         dieting_count = 0        # 跌停家数
         zhaban_rate = 0.0        # 炸板率%
         idx_weak_pct = 0.0       # 深证/创业板当日最弱涨跌%
-        
+        max_lb = 0               # 当日涨停股最高连板高度
+        lb_count = 0             # 当日连板（≥2板）家数
+        dragon_alive = False     # 龙头赚钱效应是否仍在（高板带队+连板梯队完整）
+
         # 板块分类到东方财富行业分类的映射（在screen中统一获取，传递给_deep_analyze）
         # 注意：东方财富板块名存在4字截断（房地产服/光学光电/计算机设/汽车零部）和Ⅱ后缀变体
         sector_em_mapping = {
@@ -186,13 +189,32 @@ class LateDayScreener:
                     idx_weak_pct = min(sz_p, cy_p)
                     logger.info(f"指数涨跌来源【{_idxsrc}】 深证{sz_p:+.2f}% 创业板{cy_p:+.2f}%")
 
-                    # 复合判定（阈值经9/07、9/22-24回测验证）
-                    if zhaban_rate >= 30 or dieting_count >= 10 or idx_weak_pct <= -1.5:
+                    # 龙头赚钱效应（陈小群"只做真龙"）：当日最高连板高度与连板梯队
+                    max_lb, lb_count = 0, 0
+                    try:
+                        if zt_df is not None and '连板数' in zt_df.columns:
+                            _lb = pd.to_numeric(zt_df['连板数'], errors='coerce').fillna(1)
+                            max_lb = int(_lb.max())
+                            lb_count = int((_lb >= 2).sum())
+                    except Exception:
+                        pass
+                    dragon_alive = (max_lb >= 4 and lb_count >= 3)
+
+                    # 复合判定（阈值经 9/07、9/22-24、9/28-29 回测验证）
+                    # 2026-09-30 回测优化：退潮须多信号共振，避免"孤立跌停数"在分化日误杀。
+                    #  - 9/28：指数-4.53%+跌停56 = 系统性退潮，空仓正确（旧规则命中）；
+                    #  - 9/29：跌停恰好10只但全是分散的低位弱势股补跌、炸板率仅12%、指数微红、
+                    #    新华传媒6板带队（10只连板股次日平均+3.69%），一刀切空仓错过真龙，
+                    #    应降为"分歧·只做真龙"而非"退潮·空仓"。
+                    hard_crash = (zhaban_rate >= 30) or (idx_weak_pct <= -1.5)          # 全局硬信号：炸板潮/指数暴跌
+                    dt_collapse = (dieting_count >= 10) and (zhaban_rate >= 20 or idx_weak_pct <= -0.8)  # 跌停扩散须共振
+                    if hard_crash or dt_collapse:
                         risk_regime = "退潮"
                     elif zhaban_rate >= 22 or dieting_count >= 5 or idx_weak_pct <= -0.8:
                         risk_regime = "分歧"
                     logger.info(f"复合情绪闸门: 【{risk_regime}】 炸板{zhaban_count}({zhaban_rate:.0f}%) "
-                                f"跌停{dieting_count} 最弱指数{idx_weak_pct:.2f}%")
+                                f"跌停{dieting_count} 最弱指数{idx_weak_pct:.2f}% 最高板{max_lb} 连板{lb_count}只"
+                                f"{' 龙头带队' if dragon_alive else ''}")
                 except Exception as _re:
                     logger.warning(f"复合情绪闸门计算失败，回退涨停家数判断: {str(_re)[:80]}")
 
@@ -384,10 +406,19 @@ class LateDayScreener:
 
         # ===== 2026-09-24：复合闸门覆盖（优先级高于单看涨停家数）=====
         if risk_regime == "分歧":
-            self.max_results = min(self.max_results, 12)
             score_threshold += 8
             min_locks = max(min_locks, 2)
-            logger.info(f"【复合闸门】情绪分歧：收紧到{self.max_results}只、门槛{score_threshold}、至少2锁")
+            if dragon_alive:
+                # 陈小群"分歧只做真龙"：高标带队、连板梯队完整时，聚焦主线龙头，保留少量精选
+                self.max_results = min(self.max_results, 10)
+                logger.info(f"【复合闸门】情绪分歧但龙头带队（最高{max_lb}板、{lb_count}只连板）："
+                            f"只做主线真龙，收紧到{self.max_results}只、门槛{score_threshold}、至少2锁")
+            else:
+                # 无龙头带队的分歧更危险（亏钱效应扩散且无主线），进一步收紧
+                self.max_results = min(self.max_results, 8)
+                score_threshold += 3
+                logger.info(f"【复合闸门】情绪分歧且无龙头带队：进一步收紧到{self.max_results}只、"
+                            f"门槛{score_threshold}、至少2锁")
 
         # 退潮空仓：直接返回，不浪费时间取K线（陈小群：退潮期空仓等待冰点结束）
         if risk_regime == "退潮":
@@ -400,6 +431,8 @@ class LateDayScreener:
                 "zhaban_rate": round(zhaban_rate, 1),
                 "dieting_count": dieting_count,
                 "idx_weak_pct": round(idx_weak_pct, 2),
+                "max_limit_board": max_lb,
+                "lianban_count": lb_count,
                 "standstill": True,
                 "note": (f"炸板率{zhaban_rate:.0f}%、跌停{dieting_count}只、最弱指数"
                          f"{idx_weak_pct:.2f}%，情绪退潮，今日尾盘空仓观望，等待冰点"),
@@ -616,6 +649,9 @@ class LateDayScreener:
                 "dieting_count": dieting_count,  # 跌停家数
                 "idx_weak_pct": round(idx_weak_pct, 2),  # 最弱指数涨跌%
                 "limit_up_count": limit_up_count,  # 涨停家数
+                "max_limit_board": max_lb,  # 最高连板高度
+                "lianban_count": lb_count,  # 连板（≥2板）家数
+                "dragon_alive": dragon_alive,  # 龙头赚钱效应是否仍在
                 "zt_data_date": zt_data_date,  # 实际使用的涨停数据日期（盘前回退到最近交易日）
                 "market_status": market_status.get("status", ""),  # 大盘状态
                 "sh_pct": market_status.get("sh_pct", 0),  # 上证指数涨跌幅
