@@ -17,6 +17,11 @@ on:
         description: '禁用飞书推送（true/false）'
         required: false
         default: 'false'
+  # 外部准点 cron（如 cron-job.org）通过 GitHub API 即时触发，绕开 GitHub schedule 队列延迟。
+  # 调用：POST /repos/hurongson/stock-analyzer/dispatches  {"event_type":"late-day-screener"}
+  # 走幂等+节假日跳过，与 schedule 兜底互不重复推送。
+  repository_dispatch:
+    types: [late-day-screener]
 
 permissions:
   contents: write
