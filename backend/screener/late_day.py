@@ -631,7 +631,7 @@ class LateDayScreener:
         # 第四步：深度分析（获取K线数据，计算技术指标）
         # 传递批量获取的K线数据和大盘环境参数，避免重复获取
         # 注意：换手率数据通过量比估算（Tushare daily_basic频率限制1次/小时无法使用）
-        deep_result = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks, today_zt_sectors, sector_rotation_data, sector_fade_data)
+        deep_result = self._deep_analyze(candidates, batch_kline_data, score_threshold, min_locks, today_zt_sectors, sector_rotation_data, sector_fade_data, risk_regime)
         
         # 从_deep_analyze返回的字典中获取all_picks、top_picks和special_picks
         # 兼容_deep_analyze返回字典或列表的情况
@@ -929,7 +929,7 @@ class LateDayScreener:
 
         return candidates
 
-    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, score_threshold: int = 50, min_locks: int = 0, today_zt_sectors: Dict = None, sector_rotation_data: Dict = None, sector_fade_data: Dict = None) -> List[Dict]:
+    def _deep_analyze(self, candidates: List[Dict], batch_kline_data: Dict = None, score_threshold: int = 50, min_locks: int = 0, today_zt_sectors: Dict = None, sector_rotation_data: Dict = None, sector_fade_data: Dict = None, risk_regime: str = "健康") -> List[Dict]:
         """
         深度分析：获取K线数据，计算技术指标，评分排序
         买卖点位逻辑（参照公开尾盘买入法）：
@@ -1433,7 +1433,7 @@ class LateDayScreener:
                 stock["is_lingzhang_leader"] = is_lingzhang_leader
                 
                 # 计算技术指标
-                score, analysis = self._calc_late_day_score(kline, stock)
+                score, analysis = self._calc_late_day_score(kline, stock, risk_regime)
                 # 加上板块效应加分
                 score = score + sector_bonus
                 
@@ -1870,7 +1870,7 @@ class LateDayScreener:
             "core_rule": "无论盈亏，次日10:30前必卖，绝不延长持仓",
         }
 
-    def _calc_late_day_score(self, kline: pd.DataFrame, stock: Dict) -> tuple:
+    def _calc_late_day_score(self, kline: pd.DataFrame, stock: Dict, risk_regime: str = "健康") -> tuple:
         """
         计算尾盘选股评分（0-100）
         维度：涨幅、成交量、趋势、MACD、KDJ、价格、动量、20日均线
@@ -1981,6 +1981,36 @@ class LateDayScreener:
             elif vol_ratio < 0.5:
                 score -= 3  # 极度缩量才少量扣分
                 risks.append("成交量极度萎缩，需关注是否有资金关注")
+        except Exception:
+            pass
+
+        # ===== 2026-10-13 近一个月回测：强势模式C + 位置因子随市切换（优化A/B） =====
+        # 回测172只首板股：91%首板前5日已上涨、81%涨超5%（均+10.9%），34%涨停前夕放量走强(+1~6%)。
+        # 旧评分在强势市仍把"上涨/放量走强"当追高扣分，误杀真龙。仅在【健康】档切换为强势思维。
+        strong_market = (risk_regime == "健康")
+        # B · 模式C：当日放量走强（涨2~6%、量比≥1.5）= 资金抢筹、趋势加速，翻"温和上涨被压分"的案
+        if strong_market and 2 < pct_change <= 6 and vol_ratio >= 1.5:
+            pattern = "强势放量型"
+            risks[:] = [x for x in risks if "追高" not in x]   # 移除弱势思维加的追高提示
+            score += 13
+            reasons.append(f"放量走强(涨{pct_change:.1f}%、量比{vol_ratio:.1f})，资金抢筹趋势加速")
+        # A · 前5日位置因子随市场状态切换
+        try:
+            if len(close) >= 6:
+                pre5_pct = (close.iloc[-1] / close.iloc[-6] - 1) * 100
+                if strong_market:
+                    if 3 <= pre5_pct <= 18:
+                        score += 8
+                        reasons.append(f"前5日上行{pre5_pct:.0f}%，趋势确认(强势市强者恒强)")
+                    elif pre5_pct > 25:
+                        score -= 5
+                        risks.append(f"前5日暴涨{pre5_pct:.0f}%，短线过热")
+                else:
+                    if pre5_pct >= 12:
+                        score -= 8
+                        risks.append(f"弱势市前5日已涨{pre5_pct:.0f}%，高位回调风险")
+                    elif pre5_pct >= 6:
+                        score -= 4
         except Exception:
             pass
 
