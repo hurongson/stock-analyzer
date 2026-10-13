@@ -200,17 +200,23 @@ class LateDayScreener:
                         pass
                     dragon_alive = (max_lb >= 4 and lb_count >= 3)
 
-                    # 复合判定（阈值经 9/07、9/22-24、9/28-29 回测验证）
-                    # 2026-09-30 回测优化：退潮须多信号共振，避免"孤立跌停数"在分化日误杀。
-                    #  - 9/28：指数-4.53%+跌停56 = 系统性退潮，空仓正确（旧规则命中）；
-                    #  - 9/29：跌停恰好10只但全是分散的低位弱势股补跌、炸板率仅12%、指数微红、
-                    #    新华传媒6板带队（10只连板股次日平均+3.69%），一刀切空仓错过真龙，
-                    #    应降为"分歧·只做真龙"而非"退潮·空仓"。
+                    # 复合判定（阈值经 9/07、9/22-24、9/28-30、10/8-13 回测验证）
+                    # 演进：①9/30 退潮须共振，避免孤立跌停误杀分化日；
+                    # ②10/13 近一个月回测：3个推荐日(9/22、9/23、10/9)次日全跌(均-3.16%、胜率6%)，
+                    #   根因是在"高潮/强分歧"窗口仍开仓——陈小群"卖在一致、高潮不追"，补两档：
+                    #   - 高潮末端：最高板≥7 且已开始分化(炸板≥15%或跌停≥8)，不新开仓、宜止盈；
+                    #   - 强分歧：炸板率≥22%（封板成功率明显下降），不新开仓。
                     hard_crash = (zhaban_rate >= 30) or (idx_weak_pct <= -1.5)          # 全局硬信号：炸板潮/指数暴跌
                     dt_collapse = (dieting_count >= 10) and (zhaban_rate >= 20 or idx_weak_pct <= -0.8)  # 跌停扩散须共振
+                    climax = (max_lb >= 7) and (zhaban_rate >= 15 or dieting_count >= 8)  # 高潮末端
+                    strong_div = (zhaban_rate >= 22)                                      # 强分歧
                     if hard_crash or dt_collapse:
                         risk_regime = "退潮"
-                    elif zhaban_rate >= 22 or dieting_count >= 5 or idx_weak_pct <= -0.8:
+                    elif climax:
+                        risk_regime = "高潮"
+                    elif strong_div:
+                        risk_regime = "强分歧"
+                    elif zhaban_rate >= 15 or dieting_count >= 5 or idx_weak_pct <= -0.8:
                         risk_regime = "分歧"
                     logger.info(f"复合情绪闸门: 【{risk_regime}】 炸板{zhaban_count}({zhaban_rate:.0f}%) "
                                 f"跌停{dieting_count} 最弱指数{idx_weak_pct:.2f}% 最高板{max_lb} 连板{lb_count}只"
@@ -420,12 +426,22 @@ class LateDayScreener:
                 logger.info(f"【复合闸门】情绪分歧且无龙头带队：进一步收紧到{self.max_results}只、"
                             f"门槛{score_threshold}、至少2锁")
 
-        # 退潮空仓：直接返回，不浪费时间取K线（陈小群：退潮期空仓等待冰点结束）
-        if risk_regime == "退潮":
-            logger.info("【复合闸门】情绪退潮确认：尾盘空仓，不做任何推荐")
+        # 不新开仓档位：退潮 / 高潮末端 / 强分歧，直接返回、不浪费时间取K线
+        # 陈小群：退潮空仓等冰点；高潮"卖在一致"、不追、宜止盈；强分歧封板率下降不新买。
+        if risk_regime in ("退潮", "高潮", "强分歧"):
+            _no_buy_notes = {
+                "退潮": (f"炸板率{zhaban_rate:.0f}%、跌停{dieting_count}只、最弱指数{idx_weak_pct:.2f}%，"
+                         f"情绪退潮，尾盘空仓观望，等待冰点"),
+                "高潮": (f"最高{max_lb}板、炸板率{zhaban_rate:.0f}%、跌停{dieting_count}只，情绪打到高位并开始分化，"
+                         f"卖在一致：尾盘不追高新买，持有票宜分批止盈"),
+                "强分歧": (f"炸板率{zhaban_rate:.0f}%（封板成功率明显下降）、跌停{dieting_count}只，"
+                          f"情绪强分歧，尾盘不新开仓，等待分歧转一致"),
+            }
+            _log_tips = {"退潮": "空仓等待冰点", "高潮": "不追高、宜止盈", "强分歧": "不新开仓等转一致"}
+            logger.info(f"【复合闸门】{risk_regime}：{_log_tips[risk_regime]}，尾盘不做买入推荐")
             _standstill = {
                 "phase": sentiment_phase,
-                "risk_regime": "退潮",
+                "risk_regime": risk_regime,
                 "limit_up_count": limit_up_count,
                 "zhaban_count": zhaban_count,
                 "zhaban_rate": round(zhaban_rate, 1),
@@ -433,14 +449,15 @@ class LateDayScreener:
                 "idx_weak_pct": round(idx_weak_pct, 2),
                 "max_limit_board": max_lb,
                 "lianban_count": lb_count,
+                "dragon_alive": dragon_alive,
                 "standstill": True,
-                "note": (f"炸板率{zhaban_rate:.0f}%、跌停{dieting_count}只、最弱指数"
-                         f"{idx_weak_pct:.2f}%，情绪退潮，今日尾盘空仓观望，等待冰点"),
+                "no_new_buy": True,
+                "note": _no_buy_notes[risk_regime],
             }
             return {
                 "all_picks": [], "top_picks": [], "special_picks": [],
                 "market_sentiment": _standstill,
-                "summary": {"total": 0, "note": "情绪退潮确认，尾盘空仓，不做推荐"},
+                "summary": {"total": 0, "note": f"情绪{risk_regime}，尾盘不做买入推荐"},
             }
 
         # 获取全量股票列表
