@@ -649,9 +649,25 @@ class LateDayScreener:
         
         logger.info(f"尾盘选股完成，共推荐 {len(all_picks)} 只")
         logger.info(f"陈小群风格特别推荐: {len(special_picks)}只")
-        
+
+        # ===== 尾盘自动核查（人工"看热力图+K线"闭环自动化；硬项剔除、软项标记，结果用于飞书报警）=====
+        auto_check = self._auto_check_picks(all_picks, batch_kline_data, today_zt_sectors, sector_rotation_data, risk_regime)
+        rejected_codes = {it["code"] for it in auto_check["rejected_items"]}
+        if rejected_codes:
+            all_picks = [p for p in all_picks if p.get("code") not in rejected_codes]
+            picks = [p for p in picks if p.get("code") not in rejected_codes]
+            top_picks = [p for p in top_picks if p.get("code") not in rejected_codes]
+            special_picks = [p for p in special_picks if p.get("code") not in rejected_codes]
+            logger.warning(f"自动核查剔除 {len(rejected_codes)} 只: {sorted(rejected_codes)}")
+        _ac_map = {it["code"]: it for it in auto_check["items"]}
+        for p in all_picks:
+            it = _ac_map.get(p.get("code"))
+            if it:
+                p["auto_check"] = {"overall": it["overall"], "marks": it["marks"]}
+
         return {
             "picks": picks,
+            "auto_check": auto_check,
             "all_picks": all_picks,  # 全部30支
             "top_picks": top_picks,  # 精选10支
             "special_picks": special_picks,  # 陈小群风格特别推荐5支
@@ -2718,6 +2734,216 @@ class LateDayScreener:
         }
 
         return score, analysis
+
+    # ===================== 尾盘自动核查（人工闭环自动化 + 飞书报警）=====================
+    @staticmethod
+    def _kline_to_df(kline):
+        if kline is None:
+            return None
+        if isinstance(kline, pd.DataFrame):
+            return kline
+        if isinstance(kline, dict):
+            try:
+                return pd.DataFrame(kline)
+            except Exception:
+                return None
+        return None
+
+    @staticmethod
+    def _macd_top_divergence(df, lookback=35):
+        """保守的 MACD 顶背离：近 lookback 根内价格后高≥前高，但 DIF 后峰明显低于前峰（两峰均为正）。无法明确判定返回 False。"""
+        try:
+            close = pd.to_numeric(df["close"], errors="coerce")
+            high = pd.to_numeric(df["high"], errors="coerce")
+            if len(close) < 20:
+                return False
+            if len(close) < lookback:
+                lookback = len(close)
+            c = close.iloc[-lookback:]
+            h = high.iloc[-lookback:]
+            dif = c.ewm(span=12, adjust=False).mean() - c.ewm(span=26, adjust=False).mean()
+            dv = dif.values
+            peaks = []
+            for i in range(2, len(dv) - 2):
+                if dv[i] > 0 and dv[i] >= dv[i-1] and dv[i] >= dv[i+1] and dv[i] >= dv[i-2] and dv[i] >= dv[i+2]:
+                    peaks.append(i)
+            if len(peaks) < 2:
+                return False
+            i1, i2 = peaks[-2], peaks[-1]
+            if i2 - i1 < 5:
+                return False
+            p1 = h.iloc[i1-2:i1+3].max()
+            p2 = h.iloc[i2-2:i2+3].max()
+            return bool(p2 >= p1 * 0.995 and dv[i2] < dv[i1] * 0.9)
+        except Exception:
+            return False
+
+    def _auto_check_picks(self, picks, batch_kline_data, today_zt_sectors, sector_rotation_data, risk_regime):
+        """
+        尾盘自动核查：对每只推荐核查 ①主线共振 ②量价配合 ③位置/背离。
+        硬项不过 -> reject（移出推荐并报警）；软项不达标 -> warn（保留并标记）。
+        涨停/板块数据缺失时主线项不参与硬判，避免数据不足误杀。
+        """
+        strong_market = (risk_regime == "健康")
+        zt_sec = today_zt_sectors if isinstance(today_zt_sectors, dict) else {}
+        sector_data_ok = len(zt_sec) > 0
+
+        # 持续主线名单（板块轮动，结构做容错，取不到即空，不影响硬判）
+        persistent = set()
+        if isinstance(sector_rotation_data, dict):
+            for k, v in sector_rotation_data.items():
+                try:
+                    if isinstance(v, dict) and (v.get("persistent") or v.get("sustained") or v.get("continue_days", 0) >= 2):
+                        persistent.add(k)
+                except Exception:
+                    pass
+
+        def _zt_n_for(sector):
+            n = int(zt_sec.get(sector, 0))
+            for k, v in zt_sec.items():
+                if sector and k and (sector in k or k in sector):
+                    n = max(n, int(v))
+            return n
+
+        def _in_persist(sector):
+            return any(sector and k and (sector in k or k in sector) for k in persistent)
+
+        items = []
+        for p in picks:
+            if not isinstance(p, dict):
+                continue
+            code = p.get("code", "")
+            sector = p.get("sector", "") or ""
+            is_leader = bool(p.get("is_zhongjun_leader") or p.get("is_lingzhang_leader"))
+            hard_reasons, warn_reasons = [], []
+
+            # ---- ① 主线共振 ----
+            if not sector_data_ok:
+                main_status, main_detail = "skip", "涨停板块数据缺失，主线项未核查"
+            else:
+                zt_n = _zt_n_for(sector)
+                if is_leader:
+                    main_status, main_detail = "pass", f"陈小群龙头/领涨，{sector}为核心"
+                elif zt_n >= 3:
+                    main_status, main_detail = "pass", f"{sector}当日涨停{zt_n}只，强主线共振"
+                elif zt_n == 2 or _in_persist(sector):
+                    main_status, main_detail = "pass", f"{sector}涨停{zt_n}只" + ("，板块持续" if _in_persist(sector) else "")
+                else:
+                    main_status, main_detail = "fail", f"{sector}当日涨停仅{zt_n}只、无共振，单兵突进"
+                    hard_reasons.append("无主线/板块共振")
+
+            # ---- K线 ----
+            df = self._kline_to_df(batch_kline_data.get(code)) if isinstance(batch_kline_data, dict) else None
+            vol_ratio = float(p.get("volume_ratio") or 0)
+
+            # ---- ② 量价配合 ----
+            vp_status, vp_detail = "pass", ""
+            if df is not None and len(df) >= 6:
+                try:
+                    close = pd.to_numeric(df["close"], errors="coerce")
+                    high = pd.to_numeric(df["high"], errors="coerce")
+                    low = pd.to_numeric(df["low"], errors="coerce")
+                    vol = pd.to_numeric(df["volume"], errors="coerce")
+                    c0, h0, l0 = close.iloc[-1], high.iloc[-1], low.iloc[-1]
+                    pct = float(p.get("pct_change", 0))
+                    if vol.iloc[-6:-1].mean() > 0:
+                        vol_ratio = vol.iloc[-1] / vol.iloc[-6:-1].mean()
+                    pos_in_range = (c0 - l0) / (h0 - l0) if h0 > l0 else 0.5
+                    if vol_ratio >= 3 and pos_in_range < 0.35 and (h0 - c0) > 0:
+                        vp_status, vp_detail = "fail", f"量比{vol_ratio:.1f}巨量但收在低位({pos_in_range*100:.0f}%)，冲高回落/爆量见顶"
+                        hard_reasons.append("巨量冲高回落")
+                    elif pct >= 0 and vol_ratio < 0.7:
+                        vp_status, vp_detail = "warn", f"价涨但量比仅{vol_ratio:.1f}，无量空涨"
+                        warn_reasons.append("无量空涨")
+                    elif vol_ratio >= 2.5 and pos_in_range < 0.5:
+                        vp_status, vp_detail = "warn", f"放量{vol_ratio:.1f}但收盘偏下，放量滞涨"
+                        warn_reasons.append("放量滞涨")
+                    elif -3 <= pct <= 0.5 and 0.6 <= vol_ratio <= 1.2:
+                        vp_status, vp_detail = "pass", "缩量/平量回调整理，量价健康"
+                    else:
+                        vp_status, vp_detail = "pass", f"量比{vol_ratio:.1f}，量价配合"
+                except Exception:
+                    vp_status, vp_detail = "skip", "量价数据异常"
+            else:
+                vp_status, vp_detail = "skip", "K线不足，量价未核查"
+
+            # ---- ③ 位置 / 背离 ----
+            pos_status, pos_detail = "pass", ""
+            if df is not None and len(df) >= 21:
+                try:
+                    close = pd.to_numeric(df["close"], errors="coerce")
+                    high = pd.to_numeric(df["high"], errors="coerce")
+                    c0 = close.iloc[-1]
+                    pre5 = (c0 / close.iloc[-6] - 1) * 100
+                    hi20 = high.iloc[-20:].max()
+                    dist_hi = (c0 / hi20 - 1) * 100
+                    ma5 = close.iloc[-5:].mean(); ma10 = close.iloc[-10:].mean(); ma20 = close.iloc[-20:].mean()
+                    bull_align = ma5 >= ma10 >= ma20
+                    div = self._macd_top_divergence(df)
+                    if not strong_market:
+                        if pre5 >= 18 and dist_hi > -3 and div:
+                            pos_status, pos_detail = "fail", f"弱势市前5日+{pre5:.0f}%、贴20日高点({dist_hi:.0f}%)且MACD顶背离"
+                            hard_reasons.append("弱势高位+顶背离")
+                        elif pre5 >= 12 or dist_hi > -2:
+                            pos_status, pos_detail = "warn", f"前5日+{pre5:.0f}%、距高点{dist_hi:.0f}%，弱势市追高风险"
+                            warn_reasons.append("弱势位置偏高")
+                        elif (not bull_align) and c0 < ma20:
+                            pos_status, pos_detail = "warn", "均线空头、价在MA20下方反弹，防下跌中继"
+                            warn_reasons.append("下跌中继风险")
+                        elif div:
+                            pos_status, pos_detail = "warn", "MACD顶背离"
+                            warn_reasons.append("顶背离")
+                        else:
+                            pos_status, pos_detail = "pass", f"前5日{pre5:+.0f}%、距高点{dist_hi:.0f}%"
+                    else:
+                        if div and pre5 > 20 and dist_hi > -2:
+                            pos_status, pos_detail = "warn", f"前5日+{pre5:.0f}%贴高点且顶背离，注意分歧"
+                            warn_reasons.append("强势高位+背离")
+                        elif div:
+                            pos_status, pos_detail = "warn", "MACD顶背离（强势市可能钝化）"
+                            warn_reasons.append("顶背离")
+                        else:
+                            pos_status, pos_detail = "pass", f"前5日{pre5:+.0f}%、均线{'多头' if bull_align else '一般'}，趋势确认"
+                except Exception:
+                    pos_status, pos_detail = "skip", "位置数据异常"
+            else:
+                pos_status, pos_detail = "skip", "K线不足，位置未核查"
+
+            if main_status == "fail" or vp_status == "fail" or pos_status == "fail":
+                overall = "reject"
+            elif warn_reasons or "warn" in (main_status, vp_status, pos_status):
+                overall = "warn"
+            else:
+                overall = "pass"
+
+            items.append({
+                "code": code, "name": p.get("name", ""), "sector": sector,
+                "overall": overall, "marks": warn_reasons, "hard_reasons": hard_reasons,
+                "blocks": {
+                    "mainline": {"status": main_status, "detail": main_detail},
+                    "volprice": {"status": vp_status, "detail": vp_detail},
+                    "position": {"status": pos_status, "detail": pos_detail},
+                },
+            })
+
+        rejected_items = [it for it in items if it["overall"] == "reject"]
+        warned_items = [it for it in items if it["overall"] == "warn"]
+        passed_items = [it for it in items if it["overall"] == "pass"]
+        n = len(items)
+        return {
+            "enabled": True,
+            "checked": n,
+            "passed": len(passed_items),
+            "warned": len(warned_items),
+            "rejected": len(rejected_items),
+            "items": items,
+            "rejected_items": rejected_items,
+            "warned_items": warned_items,
+            "sector_data_skipped": not sector_data_ok,
+            "alert": len(rejected_items) > 0,
+            "all_rejected": n > 0 and len(rejected_items) == n,
+            "all_pass": n > 0 and len(passed_items) == n,
+        }
 
 
 # 全局单例

@@ -794,28 +794,87 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         logger.warning(f"picks不是列表，类型: {type(picks)}，转换为空列表")
         picks = []
     
+    # 尾盘自动核查结果（人工闭环自动化）
+    auto_check = late_day_data.get("auto_check", {}) or {}
+    ac_block = bool(auto_check.get("all_rejected"))  # 候选全部被核查剔除，仍需推送报警
+
     market_timing = late_day_data.get("market_timing", {})
 
     # 如果没有top_picks，从all_picks中取前10只
     if not top_picks and all_picks:
         top_picks = all_picks[:10]
 
-    if not all_picks:
+    if not all_picks and not ac_block:
         logger.info("无尾盘选股推荐，跳过推送")
         return False
+    if ac_block:
+        logger.warning("尾盘候选经自动核查全部剔除，推送不通过报警")
 
     elements = []
 
     # 标题
+    if ac_block:
+        _title_md = (f"**🛑 尾盘自动核查·全部不通过 - {date} 14:30**\n"
+                     f"当日 {auto_check.get('checked', 0)} 只候选经 主线/量价/位置 核查后全部剔除\n"
+                     f"**今日不建议买入，空仓观望**")
+    else:
+        _title_md = (f"**🎯 尾盘选股推荐 - {date} 14:30**\n"
+                     f"当日买入，次日冲高卖出（T+1短线）\n"
+                     f"共推荐{len(all_picks)}只，精选{len(top_picks)}只，陈小群风格特别推荐{len(special_picks)}只")
     elements.append({
         "tag": "div",
         "text": {
             "tag": "lark_md",
-            "content": f"**🎯 尾盘选股推荐 - {date} 14:30**\n"
-                       f"当日买入，次日冲高卖出（T+1短线）\n"
-                       f"共推荐{len(all_picks)}只，精选{len(top_picks)}只，陈小群风格特别推荐{len(special_picks)}只"
+            "content": _title_md
         }
     })
+
+    # ===== 尾盘自动核查结果（主线共振 / 量价 / 位置·背离；异常报警）=====
+    if auto_check and auto_check.get("checked", 0) > 0:
+        _n = auto_check["checked"]
+        _np = auto_check.get("passed", 0)
+        _nw = auto_check.get("warned", 0)
+        _nr = auto_check.get("rejected", 0)
+        if auto_check.get("all_rejected"):
+            _sumicon = "🛑"
+        elif _nr > 0:
+            _sumicon = "⚠️"
+        elif auto_check.get("all_pass"):
+            _sumicon = "✅"
+        else:
+            _sumicon = "🛡️"
+        _sum = (f"**{_sumicon} 尾盘自动核查（主线共振·量价配合·位置/背离）**\n"
+                f"   核查{_n}只：✅通过{_np}、🟡警告{_nw}、⛔剔除{_nr}")
+        if auto_check.get("sector_data_skipped"):
+            _sum += "\n   ⚠️ 涨停板块数据缺失，主线项未参与硬判（仅量价/位置核查）"
+        if auto_check.get("all_rejected"):
+            _sum += "\n   **🛑 全部候选未通过核查，今日不建议买入、空仓观望！**"
+        elements.append({"tag": "div", "text": {"tag": "lark_md", "content": _sum}})
+
+        # 剔除明细（硬伤原因）
+        for it in auto_check.get("rejected_items", [])[:12]:
+            _why = "、".join(it.get("hard_reasons", []))
+            if not _why:
+                _d = [b.get("detail", "") for b in it.get("blocks", {}).values() if b.get("status") == "fail"]
+                _why = "；".join([x for x in _d if x])
+            elements.append({
+                "tag": "div",
+                "text": {"tag": "lark_md",
+                         "content": f"⛔ **{it.get('name', '')}({it.get('code', '')})** {_why}"}
+            })
+
+        # 警告汇总（保留，需人工确认）
+        _wlines = []
+        for it in auto_check.get("warned_items", [])[:15]:
+            _m = "、".join(it.get("marks", [])) or "形态/量价需留意"
+            _wlines.append(f"{it.get('name', '')}({_m})")
+        if _wlines:
+            elements.append({
+                "tag": "div",
+                "text": {"tag": "lark_md",
+                         "content": "🟡 **警告（保留，需人工确认）**: " + "；".join(_wlines)}
+            })
+        elements.append({"tag": "hr"})
 
     # 市场择时
     if market_timing and market_timing.get("sentiment"):
@@ -1152,15 +1211,24 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         }]
     })
 
+    if ac_block:
+        _htpl, _htitle = "red", f"🛑 尾盘核查全部不通过 {date} 14:30"
+    elif auto_check.get("rejected", 0) > 0:
+        _htpl, _htitle = "orange", f"⚠️ 尾盘选股推荐（{auto_check.get('rejected', 0)}只未过） {date} 14:30"
+    elif auto_check.get("all_pass"):
+        _htpl, _htitle = "green", f"✅ 尾盘选股推荐（核查通过） {date} 14:30"
+    else:
+        _htpl, _htitle = "orange", f"🎯 尾盘选股推荐 {date} 14:30"
+
     payload = {
         "msg_type": "interactive",
         "card": {
             "header": {
                 "title": {
                     "tag": "plain_text",
-                    "content": f"🎯 尾盘选股推荐 {date} 14:30"
+                    "content": _htitle
                 },
-                "template": "orange"
+                "template": _htpl
             },
             "elements": elements
         }

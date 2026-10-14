@@ -435,6 +435,7 @@ def run_late_day_screener(enable_push: bool = True):
         "top_count": len(top_picks),
         "special_count": len(result.get("special_picks", [])),
         "market_sentiment": result.get("market_sentiment", {}),  # 市场情绪信息
+        "auto_check": result.get("auto_check", {}),  # 尾盘自动核查（主线/量价/位置）
         "summary": result.get("summary", {}),
     }
     save_json(save_result, path)
@@ -443,8 +444,9 @@ def run_late_day_screener(enable_push: bool = True):
 
     # 推送飞书
     _ms = save_result.get("market_sentiment", {})
-    if enable_push and Config.FEISHU_WEBHOOK_URL and picks:
-        logger.info("--- 推送飞书尾盘选股 ---")
+    _ac_block = bool(save_result.get("auto_check", {}).get("all_rejected"))
+    if enable_push and Config.FEISHU_WEBHOOK_URL and (picks or _ac_block):
+        logger.info("--- 推送飞书尾盘选股/核查报警 ---")
         push_late_day_picks(save_result)
     elif enable_push and Config.FEISHU_WEBHOOK_URL and _ms.get("standstill"):
         # 退潮空仓也推送提示（告知今日为何无推荐，避免误以为程序出错）
