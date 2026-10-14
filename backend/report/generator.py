@@ -91,7 +91,19 @@ def generate_stock_report(analysis: Dict) -> str:
     return "\n".join(lines)
 
 
-def generate_daily_report(stock_analyses: List[Dict], screener_result: Dict = None) -> Dict:
+def _format_points(c: Dict) -> str:
+    """取 trading_signal 中的买入/卖出/止损/目标价，拼成 markdown 片段（与飞书同源）"""
+    ts = c.get("trading_signal") or {}
+    seg = []
+    for label, key in (("买", "buy_price"), ("卖", "sell_price"),
+                       ("止损", "stop_loss"), ("目标", "target_price")):
+        if ts.get(key) is not None:
+            seg.append(f"{label}{ts[key]}")
+    return " / ".join(seg)
+
+
+def generate_daily_report(stock_analyses: List[Dict], screener_result: Dict = None,
+                          reverse_screen_result: Dict = None) -> Dict:
     """
     生成每日综合报告
     返回包含 markdown 和 json 的字典
@@ -162,6 +174,84 @@ def generate_daily_report(stock_analyses: List[Dict], screener_result: Dict = No
                             f"{r['pct_change']:+.2f}% | {r['score']} | {reason_short} |"
                         )
                     lines.append("")
+
+        # 特别推荐（重点关注）
+        if screener_result.get("special_picks"):
+            lines.append("### ⭐ 特别推荐（重点关注）")
+            for i, c in enumerate(screener_result["special_picks"], 1):
+                lines.append(
+                    f"{i}. **{c['name']}**({c['code']}) {c['price']}元 "
+                    f"{c['pct_change']:+.2f}% | 评分{c.get('avg_score', 0)} | {_format_points(c)}"
+                )
+                if c.get("special_reasons"):
+                    lines.append(f"   - 原因: {'、'.join(c['special_reasons'][:3])}")
+            lines.append("")
+
+        # 陈小群风格特别推荐
+        if screener_result.get("chen_xiaoqun_picks"):
+            lines.append("### 🔥 陈小群风格特别推荐（板块合力+量价市值+四类有效涨停）")
+            lines.append("> 买在分歧、卖在一致、死守主线、只做真龙")
+            for i, c in enumerate(screener_result["chen_xiaoqun_picks"], 1):
+                lines.append(
+                    f"{i}. 🔥 **{c['name']}**({c['code']}) {c['price']}元 "
+                    f"{c['pct_change']:+.2f}% | 陈小群评分{c.get('chen_xiaoqun_score', 0)} | {_format_points(c)}"
+                )
+                if c.get("chen_xiaoqun_reasons"):
+                    lines.append(f"   - 理由: {'、'.join(c['chen_xiaoqun_reasons'][:3])}")
+            lines.append("")
+
+        # 涨停预测
+        if screener_result.get("limit_up_picks"):
+            lines.append("### 🔥 涨停预测（未来1-3天关注）")
+            for i, c in enumerate(screener_result["limit_up_picks"], 1):
+                prob = c.get("limit_up_probability", 0)
+                prob_s = f"{prob:.0f}%" if isinstance(prob, (int, float)) else str(prob)
+                lines.append(
+                    f"{i}. **{c['name']}**({c['code']}) {c['price']}元 "
+                    f"{c['pct_change']:+.2f}% | 涨停概率{prob_s} | {_format_points(c)}"
+                )
+                if c.get("limit_up_reasons"):
+                    lines.append(f"   - 理由: {'、'.join(c['limit_up_reasons'][:3])}")
+            lines.append("")
+
+    # 反向筛选（空头模式）
+    if reverse_screen_result and reverse_screen_result.get("total_candidates"):
+        n_elim = len(reverse_screen_result.get("eliminated", []))
+        n_down = len(reverse_screen_result.get("downgraded", []))
+        n_kept = len(reverse_screen_result.get("kept", []))
+        lines.append("## 🔍 反向筛选（空头模式）")
+        lines.append(
+            f"候选{reverse_screen_result.get('total_candidates')}只 | "
+            f"淘汰{n_elim}只 | 降级{n_down}只 | 保留{n_kept}只"
+        )
+        if reverse_screen_result.get("summary"):
+            lines.append(f"> {reverse_screen_result['summary']}")
+        stats = reverse_screen_result.get("elimination_reasons", {})
+        if stats:
+            lines.append("")
+            lines.append("**淘汰原因：**")
+            for reason, count in sorted(stats.items(), key=lambda x: x[1], reverse=True)[:5]:
+                lines.append(f"- {reason}: {count}只")
+        est = reverse_screen_result.get("eliminated", [])
+        if est:
+            lines.append("")
+            lines.append("**被淘汰股票：**")
+            for s in est[:8]:
+                lines.append(f"- {s.get('name')}({s.get('code')})")
+        funnel = reverse_screen_result.get("three_level_funnel", {})
+        if funnel:
+            lines.append("")
+            lines.append(
+                f"**三级漏斗：** 观察池{len(funnel.get('observation_pool', []))}只 / "
+                f"研究池{len(funnel.get('research_pool', []))}只 / "
+                f"核心池{len(funnel.get('core_pool', []))}只"
+            )
+            core = funnel.get("core_pool", [])
+            if core:
+                lines.append("")
+                lines.append("**核心池：** " + "、".join(
+                    f"{s.get('name')}({s.get('code')})" for s in core))
+        lines.append("")
 
     lines.append("---")
     lines.append("*本报告由 AI 自动生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。*")

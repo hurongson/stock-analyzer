@@ -206,7 +206,7 @@ def run_full_analysis(stocks: list = None, enable_push: bool = True, enable_llm:
     # 3. 生成报告（即使超时也要生成报告）
     logger.info("--- 步骤3: 生成报告 ---")
     try:
-        report = generate_daily_report(stock_analyses, screener_result)
+        report = generate_daily_report(stock_analyses, screener_result, reverse_screen_result)
         # 添加市场择时结果
         if market_timing_result:
             report["json"]["market_timing"] = market_timing_result

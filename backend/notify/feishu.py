@@ -642,23 +642,23 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
         })
 
     # 反向筛选（空头模式）- 帮你少犯"什么都想买"的错
-    if reverse_screen and reverse_screen.get("enabled"):
+    if reverse_screen and reverse_screen.get("total_candidates"):
         elements.append({"tag": "hr"})
-        eliminated_count = reverse_screen.get("eliminated_count", 0)
-        downgraded_count = reverse_screen.get("downgraded_count", 0)
-        kept_count = reverse_screen.get("kept_count", 0)
-        summary = reverse_screen.get("summary", "")
+        eliminated_count = len(reverse_screen.get("eliminated", []))
+        downgraded_count = len(reverse_screen.get("downgraded", []))
+        kept_count = len(reverse_screen.get("kept", []))
         elements.append({
             "tag": "div",
             "text": {
                 "tag": "lark_md",
                 "content": f"**🔍 反向筛选（空头模式）- 帮你少犯'什么都想买'的错**\n"
-                           f"淘汰{eliminated_count}只 | 降级{downgraded_count}只 | 保留{kept_count}只\n"
+                           f"候选{reverse_screen.get('total_candidates')}只 | 淘汰{eliminated_count}只 | "
+                           f"降级{downgraded_count}只 | 保留{kept_count}只\n"
                            f"核心理念：不是帮你发现更多机会，而是帮你学会放弃绝大多数机会"
             }
         })
         # 淘汰原因统计
-        elimination_reasons = reverse_screen.get("elimination_reasons_stats", {})
+        elimination_reasons = reverse_screen.get("elimination_reasons", {})
         if elimination_reasons:
             reason_lines = []
             for reason, count in sorted(elimination_reasons.items(), key=lambda x: x[1], reverse=True)[:5]:
@@ -667,18 +667,29 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                 "tag": "div",
                 "text": {
                     "tag": "lark_md",
-                    "content": f"**淘汰原因TOP5：**\n" + "\n".join(reason_lines)
+                    "content": f"**淘汰原因：**\n" + "\n".join(reason_lines)
+                }
+            })
+        # 三级漏斗 + 核心池
+        funnel = reverse_screen.get("three_level_funnel", {})
+        if funnel:
+            core = funnel.get("core_pool", [])
+            core_str = "、".join(f"{s.get('name')}({s.get('code')})" for s in core)
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": f"**三级漏斗：** 观察池{len(funnel.get('observation_pool', []))} / "
+                               f"研究池{len(funnel.get('research_pool', []))} / 核心池{len(core)}\n"
+                               f"**核心池：** {core_str}"
                 }
             })
         # 被淘汰股票列表
-        eliminated_stocks = reverse_screen.get("eliminated_stocks", [])
+        eliminated_stocks = reverse_screen.get("eliminated", [])
         if eliminated_stocks:
             elim_lines = []
             for s in eliminated_stocks[:5]:
-                name = s.get("name", "")
-                code = s.get("code", "")
-                reasons = "、".join(s.get("elimination_reasons", [])[:2])
-                elim_lines.append(f"  • {name}({code}): {reasons}")
+                elim_lines.append(f"  • {s.get('name')}({s.get('code')})")
             elements.append({
                 "tag": "div",
                 "text": {
