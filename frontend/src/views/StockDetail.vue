@@ -39,6 +39,12 @@
         </div>
       </div>
 
+      <!-- 专业 K 线（TradingView） -->
+      <div class="card">
+        <div class="card-title">📈 专业 K 线（TradingView）</div>
+        <div ref="tvChart" style="width: 100%; height: 520px;"></div>
+      </div>
+
       <!-- 五维评分雷达图 -->
       <div class="card">
         <div class="card-title">📊 五维评分</div>
@@ -216,20 +222,33 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import * as echarts from 'echarts'
 import { fetchLatestReport, formatNumber, getChangeClass, getScoreClass, getRatingClass } from '../utils/data'
+import { mountAdvancedChart } from '../utils/tradingview'
 
 const route = useRoute()
 const loading = ref(true)
 const stockData = ref(null)
 const radarChart = ref(null)
+const tvChart = ref(null)
 
 let chartInstance = null
+let resizeObserver = null
 
 function formatLLM(text) {
   return text.replace(/\n/g, '<br>')
+}
+
+// 三把锁信号标签配色（A股：买入红、卖出绿、观望黄）
+function getLockSignalClass(sig) {
+  const s = sig || ''
+  if (s.includes('强烈买入')) return 'lb-strongbuy'
+  if (s.includes('买入')) return 'lb-buy'
+  if (s.includes('强烈卖出')) return 'lb-strongsell'
+  if (s.includes('卖出')) return 'lb-sell'
+  return 'lb-wait'
 }
 
 function initRadarChart() {
@@ -269,6 +288,13 @@ function initRadarChart() {
       }]
     }]
   })
+
+  // 容器布局稳定后自动纠正图表尺寸（修复移动端初始化时序导致 canvas 固定过宽、横向溢出）
+  if (resizeObserver) resizeObserver.disconnect()
+  resizeObserver = new ResizeObserver(() => {
+    if (chartInstance) chartInstance.resize()
+  })
+  resizeObserver.observe(radarChart.value)
 }
 
 async function loadData() {
@@ -281,10 +307,16 @@ async function loadData() {
   loading.value = false
   await nextTick()
   initRadarChart()
+  if (stockData.value && tvChart.value) mountAdvancedChart(tvChart.value, code)
 }
 
 watch(() => route.params.code, loadData)
 onMounted(loadData)
+
+onUnmounted(() => {
+  if (resizeObserver) resizeObserver.disconnect()
+  if (chartInstance) chartInstance.dispose()
+})
 </script>
 
 <style scoped>
@@ -393,4 +425,19 @@ onMounted(loadData)
 .risk-card {
   border-left: 4px solid #e6a23c;
 }
+
+.signal-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.lb-strongbuy { background: #fde2e2; color: #e5484d; }
+.lb-buy { background: #fef0f0; color: #f56c6c; }
+.lb-wait { background: #fdf6ec; color: #e6a23c; }
+.lb-sell { background: #f0f9eb; color: #5daf34; }
+.lb-strongsell { background: #e2f5d8; color: #3f9e26; }
 </style>

@@ -51,6 +51,18 @@
         </div>
       </div>
 
+      <!-- 市场热力图（TradingView） -->
+      <div class="card">
+        <div class="card-title">
+          🌡️ 市场热力图（TradingView）
+          <span class="heat-tabs">
+            <button :class="{ active: heatDs === 'SSE' }" @click="switchMarket('SSE')">沪市</button>
+            <button :class="{ active: heatDs === 'SZSE' }" @click="switchMarket('SZSE')">深市</button>
+          </span>
+        </div>
+        <div ref="tvHeatmap" style="width: 100%; height: 560px;"></div>
+      </div>
+
       <!-- 自选股分析 -->
       <div class="card">
         <div class="card-title">📋 自选股分析</div>
@@ -175,11 +187,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { fetchLatestReport, formatNumber, getChangeClass, getScoreClass, getRatingClass } from '../utils/data'
+import { mountHeatmap } from '../utils/tradingview'
 
 const loading = ref(true)
 const report = ref(null)
+const tvHeatmap = ref(null)
+const heatDs = ref('SSE')
+
+function switchMarket(ds) {
+  heatDs.value = ds
+  if (tvHeatmap.value) mountHeatmap(tvHeatmap.value, ds)
+}
 
 const strategyNames = {
   low_price: '💰 低价潜力股',
@@ -207,6 +227,8 @@ const strategyResults = computed(() => screenerResult.value.strategies || {})
 onMounted(async () => {
   report.value = await fetchLatestReport()
   loading.value = false
+  await nextTick()
+  if (report.value && tvHeatmap.value) mountHeatmap(tvHeatmap.value, heatDs.value)
 })
 </script>
 
@@ -237,5 +259,27 @@ onMounted(async () => {
 
 .table-wrapper {
   overflow-x: auto;
+}
+
+.heat-tabs {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.heat-tabs button {
+  font-size: 12px;
+  padding: 3px 12px;
+  border: 1px solid #dcdfe6;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #606266;
+}
+
+.heat-tabs button.active {
+  background: #409eff;
+  border-color: #409eff;
+  color: #fff;
 }
 </style>
