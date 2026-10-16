@@ -139,6 +139,20 @@ def generate_daily_report(stock_analyses: List[Dict], screener_result: Dict = No
     if screener_result and "combined" in screener_result:
         lines.append("## 🎯 选股推荐")
         lines.append("")
+
+        # 复合情绪闸门：退潮/高潮日无买入推荐，给醒目提示，避免误以为程序出错
+        gate = screener_result.get("market_gate") or {}
+        if gate.get("enabled") and gate.get("blocked"):
+            lines.append(f"### ⛔ 情绪【{gate.get('risk_regime', '')}】 · 陈小群纪律：空仓等待，今日无买入推荐")
+            lines.append("")
+            lines.append(f"> {gate.get('note', '')}")
+            lines.append(
+                f"> （炸板率{gate.get('zhaban_rate', 0)}%、跌停{gate.get('dieting_count', 0)}只、"
+                f"最弱指数{gate.get('idx_weak_pct', 0)}%、最高{gate.get('max_lb', 0)}板）"
+            )
+            lines.append("> 下方综合池/策略名单仅为观察与研究对象，不构成买入建议；空头反向筛选照常提供。")
+            lines.append("")
+
         combined = screener_result["combined"]
         if combined:
             lines.append("### 多策略共振（重点关注）")

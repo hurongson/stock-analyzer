@@ -14,6 +14,7 @@ from backend.screener.strategies.concept_hotspot import ConceptHotspotStrategy
 from backend.analysis.signals import generate_trading_signal
 from backend.analysis.three_locks import three_locks_analyzer
 from backend.analysis.trend_analysis import trend_analyzer
+from backend.analysis.sentiment_gate import assess_market_regime
 from backend.utils.helpers import now_str
 
 logger = logging.getLogger(__name__)
@@ -62,6 +63,9 @@ class ScreenerEngine:
         # 基于陈小群"板块合力"思路：涨停家数多的板块合力强，优先选择
         limit_up_sectors = {}  # 板块 -> 涨停家数
         market_sentiment = {"limit_up_count": 0, "limit_down_count": 0, "sentiment": "中性"}
+        # 复合情绪闸门（与尾盘一致）：退潮/高潮日清空进攻型买入名单；数据不足时默认不拦截
+        market_gate = {"risk_regime": "未知", "enabled": False, "blocked": False,
+                       "note": "情绪闸门未执行"}
         try:
             from datetime import datetime
             today = datetime.now().strftime('%Y%m%d')
@@ -99,7 +103,22 @@ class ScreenerEngine:
                 market_sentiment["sentiment"] = "退潮"
             
             logger.info(f"市场情绪: {market_sentiment['sentiment']} (涨停{market_sentiment['limit_up_count']}只, 跌停{market_sentiment['limit_down_count']}只)")
-            
+
+            # 复合情绪闸门（与尾盘 late_day 同一套阈值）：补上炸板率/跌停/指数/最高连板，
+            # 识别"退潮/高潮"，避免只看涨停家数在退潮日仍出反包票（10-14 教训）
+            try:
+                from datetime import timedelta as _td
+                _bj_today = (datetime.utcnow() + _td(hours=8)).strftime('%Y%m%d')
+                market_gate = assess_market_regime(
+                    zt_df=zt_df,
+                    dt_df=locals().get("dt_df"),
+                    data_date=_bj_today,
+                )
+                market_sentiment["risk_regime"] = market_gate.get("risk_regime")
+                market_sentiment["zhaban_rate"] = market_gate.get("zhaban_rate")
+            except Exception as _ge:
+                logger.warning(f"复合情绪闸门调用失败（不拦截）: {str(_ge)[:80]}")
+
             # 2026-09-22优化：获取最近5天涨停数据，分析板块轮动规律
             # 基于陈小群"板块轮动"思路：连续涨停的板块持续性强，新兴板块有爆发力
             sector_rotation = {}  # 板块 -> {连续天数, 总涨停数, 平均涨停数, 趋势}
@@ -176,6 +195,16 @@ class ScreenerEngine:
         # 涨停预测
         limit_up_picks = self._predict_limit_up(combined)
 
+        # 复合情绪闸门：退潮/高潮日清空进攻型买入推荐（陈小群/特别/涨停预测），
+        # 保留 combined 综合观察池（供反向筛选与学习），但不再给出买入名单。
+        if market_gate.get("enabled") and market_gate.get("blocked"):
+            _reg = market_gate.get("risk_regime")
+            logger.info(f"情绪【{_reg}】拦截：清空陈小群/特别/涨停预测买入名单，保留综合观察池。"
+                        f"{market_gate.get('note', '')}")
+            chen_xiaoqun_picks = []
+            special_picks = []
+            limit_up_picks = []
+
         # 统计
         summary = {
             "run_time": now_str(),
@@ -185,6 +214,8 @@ class ScreenerEngine:
             "special_picks_count": len(special_picks),
             "chen_xiaoqun_picks_count": len(chen_xiaoqun_picks),
             "limit_up_picks_count": len(limit_up_picks),
+            "risk_regime": market_gate.get("risk_regime"),
+            "buy_blocked": bool(market_gate.get("enabled") and market_gate.get("blocked")),
         }
 
         logger.info(f"选股完成，合并后共 {len(combined)} 只股票，特别推荐 {len(special_picks)} 只，陈小群风格推荐 {len(chen_xiaoqun_picks)} 只，涨停预测 {len(limit_up_picks)} 只")
@@ -195,6 +226,7 @@ class ScreenerEngine:
             "special_picks": special_picks,
             "chen_xiaoqun_picks": chen_xiaoqun_picks,
             "limit_up_picks": limit_up_picks,
+            "market_gate": market_gate,
             "summary": summary,
         }
 

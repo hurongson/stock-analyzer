@@ -126,25 +126,41 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
         chen_xiaoqun_count = len(screener.get("chen_xiaoqun_picks", []))
         limit_up_count = len(screener.get("limit_up_picks", []))
         if combined_count > 0 or special_count > 0 or chen_xiaoqun_count > 0 or limit_up_count > 0:
-            summary_parts = []
-            if special_count > 0:
-                summary_parts.append(f"⭐特别推荐{special_count}只")
-            if chen_xiaoqun_count > 0:
-                summary_parts.append(f"🔥陈小群{chen_xiaoqun_count}只")
-            if limit_up_count > 0:
-                summary_parts.append(f"⚡涨停预测{limit_up_count}只")
-            if combined_count > 0:
-                summary_parts.append(f"🏆综合选股{combined_count}只")
-            summary_str = " | ".join(summary_parts)
-            elements.append({
-                "tag": "div",
-                "text": {
-                    "tag": "lark_md",
-                    "content": f"**🎯 今日选股推荐** {summary_str}\n"
-                               f"   👇 向下滚动查看详细推荐"
-                }
-            })
-            elements.append({"tag": "hr"})
+            gate = screener.get("market_gate") or {}
+            blocked = bool(gate.get("enabled") and gate.get("blocked"))
+            if blocked:
+                # 退潮/高潮：顶部状态条，明确无买入推荐，综合池仅观察
+                elements.append({
+                    "tag": "div",
+                    "text": {
+                        "tag": "lark_md",
+                        "content": (
+                            f"**⛔ 情绪【{gate.get('risk_regime', '')}】 · 陈小群纪律：空仓等待，今日无买入推荐**\n"
+                            f"   综合观察池{combined_count}只仅供研究，不构成买入建议；空头反向筛选照常"
+                        )
+                    }
+                })
+                elements.append({"tag": "hr"})
+            else:
+                summary_parts = []
+                if special_count > 0:
+                    summary_parts.append(f"⭐特别推荐{special_count}只")
+                if chen_xiaoqun_count > 0:
+                    summary_parts.append(f"🔥陈小群{chen_xiaoqun_count}只")
+                if limit_up_count > 0:
+                    summary_parts.append(f"⚡涨停预测{limit_up_count}只")
+                if combined_count > 0:
+                    summary_parts.append(f"🏆综合选股{combined_count}只")
+                summary_str = " | ".join(summary_parts)
+                elements.append({
+                    "tag": "div",
+                    "text": {
+                        "tag": "lark_md",
+                        "content": f"**🎯 今日选股推荐** {summary_str}\n"
+                                   f"   👇 向下滚动查看详细推荐"
+                    }
+                })
+                elements.append({"tag": "hr"})
 
     # 各类推荐股票（各策略TOP3）- 低价/技术形态/资金流/基本面/概念热点
     if screener and screener.get("strategies"):
@@ -288,6 +304,25 @@ def send_feishu_card(report_data: Dict, webhook_url: str = None) -> bool:
                         "content": f"**🟥 卖出信号（{len(sell_list)}只）**\n" + "\n".join(sell_lines)
                     }
                 })
+
+    # 复合情绪闸门：退潮/高潮日无买入推荐，醒目提示（避免误以为程序出错）
+    if screener and screener.get("market_gate"):
+        gate = screener["market_gate"]
+        if gate.get("enabled") and gate.get("blocked"):
+            elements.append({"tag": "hr"})
+            elements.append({
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": (
+                        f"**⛔ 情绪【{gate.get('risk_regime', '')}】 · 陈小群纪律：空仓等待，今日无买入推荐**\n"
+                        f"{gate.get('note', '')}\n"
+                        f"（炸板率{gate.get('zhaban_rate', 0)}%、跌停{gate.get('dieting_count', 0)}只、"
+                        f"最弱指数{gate.get('idx_weak_pct', 0)}%、最高{gate.get('max_lb', 0)}板）\n"
+                        f"下方综合/策略名单仅为观察研究对象，不构成买入建议；空头反向筛选照常。"
+                    )
+                }
+            })
 
     # 选股推荐 - 特别推荐（重点关注）
     if screener and screener.get("special_picks"):
