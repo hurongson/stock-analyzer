@@ -1,7 +1,17 @@
 {
-  "has_anomaly": false,
-  "anomaly_count": 0,
-  "anomalies": [],
-  "summary": "盘中无异动，保持静默",
-  "check_time": "2026-10-16 10:27:14"
+  "has_anomaly": true,
+  "anomaly_count": 1,
+  "anomalies": [
+    {
+      "type": "板块扩散明显下降",
+      "level": "high",
+      "up_count": 417,
+      "down_count": 4919,
+      "diffusion_ratio": 0.08,
+      "reason": "上涨417只，下跌4919只，涨跌比0.08，市场情绪偏弱",
+      "description": "上涨417只，下跌4919只，涨跌比0.08"
+    }
+  ],
+  "summary": "板块扩散明显下降1起",
+  "check_time": "2026-10-16 11:47:36"
 }
