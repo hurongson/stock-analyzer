@@ -1299,6 +1299,122 @@ def push_late_day_picks(late_day_data: Dict, webhook_url: str = None) -> bool:
         return False
 
 
+def push_auction_picks(auction_data: Dict, webhook_url: str = None) -> bool:
+    """
+    推送竞价擒牛结果（交易日 9:25 集合竞价结束后）。
+
+    auction_data: AuctionScreener.screen() 的返回
+      {date, mode, snapshot_time, in_auction_window, prev_regime,
+       candidate_count, top_picks: [...], groups}
+    实时模式：含量能，按竞价开盘价附近介入。
+    回测模式（非竞价窗口）：明确标注非实时，仅供学习，不做买入推荐。
+    """
+    url = webhook_url or Config.FEISHU_WEBHOOK_URL
+    if not url:
+        logger.warning("飞书 Webhook 未配置，跳过推送")
+        return False
+    if auction_data.get("error"):
+        logger.warning(f"竞价擒牛出错，不推送：{auction_data['error']}")
+        return False
+
+    date = auction_data.get("date", "")
+    live = bool(auction_data.get("in_auction_window"))
+    mode = auction_data.get("mode", "实时竞价" if live else "回测模式")
+    prev_regime = auction_data.get("prev_regime", "未知")
+    top_picks = auction_data.get("top_picks", []) or []
+    if not isinstance(top_picks, list):
+        top_picks = []
+
+    elements = []
+
+    # 标题区
+    if live:
+        head = (f"**🐂 竞价擒牛（实时） - {date} 9:25**\n"
+                f"集合竞价结束，按竞价开盘价附近介入，不追高\n"
+                f"候选 {auction_data.get('candidate_count', 0)} 只，"
+                f"上榜 {len(top_picks)} 只 | 昨日情绪：{prev_regime}")
+    else:
+        head = (f"**📗 竞价擒牛（回测模式） - {date}**\n"
+                f"快照时间 {auction_data.get('snapshot_time', '')}，"
+                f"**非竞价窗口、非实时，量能因子未参与，仅供学习**\n"
+                f"候选 {auction_data.get('candidate_count', 0)} 只，"
+                f"上榜 {len(top_picks)} 只 | 昨日情绪：{prev_regime}")
+    elements.append({"tag": "div", "text": {"tag": "lark_md", "content": head}})
+
+    if not top_picks:
+        empty = (f"**今日综合擒牛榜无标的**\n"
+                 f"原因：竞价高开/价格/量能不达标，或昨日 {prev_regime} 已收紧。"
+                 f"空仓观望，等待弱转强。" if live else
+                 f"**回测模式下无符合日线策略的标的**，可对照涨停池复盘。")
+        elements.append({"tag": "hr"})
+        elements.append({"tag": "div",
+                         "text": {"tag": "lark_md", "content": empty}})
+    else:
+        elements.append({"tag": "hr"})
+        for i, p in enumerate(top_picks):
+            if not isinstance(p, dict):
+                continue
+            points = (f"买入{p.get('buy_price')}元 | 止盈{p.get('sell_price')}元"
+                      f" | 目标{p.get('target_price')}元"
+                      f" | 止损{p.get('stop_loss')}元"
+                      f" | 盈亏比{p.get('risk_reward_ratio')}")
+            vr = p.get("auction_vol_ratio")
+            vr_str = f"竞价量占昨日 {vr}%" if vr is not None else "量能未验证"
+            strats = "、".join(p.get("strategies", []))
+            reasons = p.get("analysis", {}).get("reasons", [])
+            risks = p.get("analysis", {}).get("risks", [])
+            content = (f"{i+1}. **{p.get('name','')}({p.get('code','')})** "
+                       f"高开 {p.get('open_pct')}% | {vr_str} | "
+                       f"评分 {p.get('score')}\n"
+                       f"   {points}\n"
+                       f"   策略：{strats}\n"
+                       f"   理由：{'、'.join(reasons[:3])}\n"
+                       f"   风险：{'、'.join(risks[:2])}")
+            elements.append({"tag": "div",
+                             "text": {"tag": "lark_md", "content": content}})
+
+    # 底部
+    elements.append({"tag": "hr"})
+    elements.append({"tag": "note", "elements": [{
+        "tag": "plain_text",
+        "content": "⚠️ 竞价擒牛为短线研究工具，仅供参考，不构成投资建议。股市有风险，投资需谨慎。"
+    }]})
+
+    if live:
+        htpl, htitle = "green", f"🐂 竞价擒牛（实时）{date} 上榜{len(top_picks)}只"
+    else:
+        htpl, htitle = "blue", f"📗 竞价擒牛（回测）{date}"
+    if live and not top_picks:
+        htpl = "grey"
+
+    payload = {
+        "msg_type": "interactive",
+        "card": {
+            "header": {
+                "title": {"tag": "plain_text", "content": htitle},
+                "template": htpl,
+            },
+            "elements": elements,
+        },
+    }
+    if Config.FEISHU_SECRET:
+        timestamp = int(time.time())
+        payload["timestamp"] = str(timestamp)
+        payload["sign"] = gen_sign(Config.FEISHU_SECRET, timestamp)
+
+    try:
+        resp = requests.post(url, json=payload, timeout=15)
+        rj = resp.json()
+        if rj.get("code") == 0 or rj.get("StatusCode") == 0:
+            logger.info(f"竞价擒牛飞书推送成功，上榜{len(top_picks)}只")
+            return True
+        logger.error(f"竞价擒牛飞书推送失败: {rj}")
+        return False
+    except Exception as e:
+        logger.error(f"竞价擒牛飞书推送异常: {e}")
+        return False
+
+
 def push_intraday_anomaly(anomaly_data: Dict, webhook_url: str = None) -> bool:
     """
     推送盘中异动提醒（表2）

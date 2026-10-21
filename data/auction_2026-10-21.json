@@ -1,0 +1,3379 @@
+{
+  "date": "2026-10-21",
+  "snapshot_time": "15:30:01",
+  "in_auction_window": false,
+  "prev_regime": "退潮",
+  "candidate_count": 119,
+  "mode": "回测模式",
+  "picks": [
+    {
+      "code": "300006",
+      "name": "莱美药业",
+      "price": 8.14,
+      "buy_price": 8.14,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.55,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.95,
+      "stop_loss": 7.9,
+      "risk_reward_ratio": 1.71,
+      "score": 58.9,
+      "score_detail": {
+        "竞价强度": 34.9,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 10
+      },
+      "open_pct": 5.03,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 3,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 5.03%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603880",
+      "name": "南卫股份",
+      "price": 8.27,
+      "buy_price": 8.27,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.68,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 9.1,
+      "stop_loss": 8.02,
+      "risk_reward_ratio": 1.64,
+      "score": 42.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.1,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 3,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.1%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002141",
+      "name": "贤丰控股",
+      "price": 5.65,
+      "buy_price": 5.65,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.93,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.22,
+      "stop_loss": 5.48,
+      "risk_reward_ratio": 1.65,
+      "score": 36.9,
+      "score_detail": {
+        "竞价强度": 27.9,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.99,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 3,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "688096",
+      "name": "京源环保",
+      "price": 7.8,
+      "buy_price": 7.8,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.19,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.58,
+      "stop_loss": 7.57,
+      "risk_reward_ratio": 1.7,
+      "score": 54.7,
+      "score_detail": {
+        "竞价强度": 32.7,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 4.0,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 4.0%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002086",
+      "name": "东方海洋",
+      "price": 2.22,
+      "buy_price": 2.22,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.33,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 2.44,
+      "stop_loss": 2.15,
+      "risk_reward_ratio": 1.57,
+      "score": 54.7,
+      "score_detail": {
+        "竞价强度": 28.7,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 2.3,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "上影突破"
+      ],
+      "strategy_count": 2,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.3%，资金抢筹",
+          "均线多头排列，趋势向上",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002565",
+      "name": "顺灏股份",
+      "price": 8.03,
+      "buy_price": 8.03,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.43,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.83,
+      "stop_loss": 7.79,
+      "risk_reward_ratio": 1.67,
+      "score": 53.0,
+      "score_detail": {
+        "竞价强度": 33.0,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 6,
+        "板块共振": 10
+      },
+      "open_pct": 4.15,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 4.15%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002591",
+      "name": "恒大高新",
+      "price": 6.38,
+      "buy_price": 6.38,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.7,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.02,
+      "stop_loss": 6.19,
+      "risk_reward_ratio": 1.68,
+      "score": 52.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 10
+      },
+      "open_pct": 2.08,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.08%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603366",
+      "name": "日出东方",
+      "price": 7.99,
+      "buy_price": 7.99,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.39,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.79,
+      "stop_loss": 7.75,
+      "risk_reward_ratio": 1.67,
+      "score": 51.7,
+      "score_detail": {
+        "竞价强度": 26.7,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.91,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "均线多头排列，趋势向上",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300120",
+      "name": "经纬辉开",
+      "price": 7.99,
+      "buy_price": 7.99,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.39,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.79,
+      "stop_loss": 7.75,
+      "risk_reward_ratio": 1.67,
+      "score": 49.9,
+      "score_detail": {
+        "竞价强度": 24.9,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.78,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "均线多头排列，趋势向上",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002238",
+      "name": "天威视讯",
+      "price": 7.06,
+      "buy_price": 7.06,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.41,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.77,
+      "stop_loss": 6.85,
+      "risk_reward_ratio": 1.67,
+      "score": 47.0,
+      "score_detail": {
+        "竞价强度": 28.0,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 5
+      },
+      "open_pct": 2.02,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.02%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603385",
+      "name": "惠达卫浴",
+      "price": 5.42,
+      "buy_price": 5.42,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.69,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.96,
+      "stop_loss": 5.26,
+      "risk_reward_ratio": 1.69,
+      "score": 42.6,
+      "score_detail": {
+        "竞价强度": 28.6,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.26,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.26%，资金抢筹",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002235",
+      "name": "安妮股份",
+      "price": 7.36,
+      "buy_price": 7.36,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.73,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.1,
+      "stop_loss": 7.14,
+      "risk_reward_ratio": 1.68,
+      "score": 42.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.08,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.08%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600252",
+      "name": "中恒集团",
+      "price": 2.2,
+      "buy_price": 2.2,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.31,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 2.42,
+      "stop_loss": 2.13,
+      "risk_reward_ratio": 1.57,
+      "score": 40.9,
+      "score_detail": {
+        "竞价强度": 25.9,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 6,
+        "板块共振": 5
+      },
+      "open_pct": 1.85,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "昨日涨停，具备龙头基因",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002030",
+      "name": "达安基因",
+      "price": 5.61,
+      "buy_price": 5.61,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.89,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.17,
+      "stop_loss": 5.44,
+      "risk_reward_ratio": 1.65,
+      "score": 40.8,
+      "score_detail": {
+        "竞价强度": 22.8,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.63,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600888",
+      "name": "新疆众和",
+      "price": 8.92,
+      "buy_price": 8.92,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 9.37,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 9.81,
+      "stop_loss": 8.65,
+      "risk_reward_ratio": 1.67,
+      "score": 36.2,
+      "score_detail": {
+        "竞价强度": 27.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.94,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600664",
+      "name": "哈药股份",
+      "price": 5.95,
+      "buy_price": 5.95,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.25,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.55,
+      "stop_loss": 5.77,
+      "risk_reward_ratio": 1.67,
+      "score": 35.6,
+      "score_detail": {
+        "竞价强度": 21.6,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.54,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300343",
+      "name": "联创股份",
+      "price": 4.9,
+      "buy_price": 4.9,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.15,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.39,
+      "stop_loss": 4.75,
+      "risk_reward_ratio": 1.67,
+      "score": 34.3,
+      "score_detail": {
+        "竞价强度": 20.3,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.45,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600791",
+      "name": "京能置业",
+      "price": 6.14,
+      "buy_price": 6.14,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.45,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.75,
+      "stop_loss": 5.96,
+      "risk_reward_ratio": 1.72,
+      "score": 32.2,
+      "score_detail": {
+        "竞价强度": 23.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.66,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603058",
+      "name": "永吉股份",
+      "price": 9.88,
+      "buy_price": 9.88,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.37,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 10.87,
+      "stop_loss": 9.58,
+      "risk_reward_ratio": 1.63,
+      "score": 56.0,
+      "score_detail": {
+        "竞价强度": 26.0,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.86,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "均线多头排列，趋势向上",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002303",
+      "name": "美盈森",
+      "price": 5.67,
+      "buy_price": 5.67,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.95,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.24,
+      "stop_loss": 5.5,
+      "risk_reward_ratio": 1.65,
+      "score": 51.4,
+      "score_detail": {
+        "竞价强度": 28.4,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 5,
+        "板块共振": 10
+      },
+      "open_pct": 2.16,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.16%，资金抢筹",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "601999",
+      "name": "出版传媒",
+      "price": 7.39,
+      "buy_price": 7.39,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.76,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.13,
+      "stop_loss": 7.17,
+      "risk_reward_ratio": 1.68,
+      "score": 47.2,
+      "score_detail": {
+        "竞价强度": 33.2,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 4.23,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 4.23%，资金抢筹",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000892",
+      "name": "欢瑞世纪",
+      "price": 4.82,
+      "buy_price": 4.82,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.06,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.3,
+      "stop_loss": 4.68,
+      "risk_reward_ratio": 1.71,
+      "score": 44.6,
+      "score_detail": {
+        "竞价强度": 26.6,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 5,
+        "板块共振": 5
+      },
+      "open_pct": 1.9,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002479",
+      "name": "富春环保",
+      "price": 6.24,
+      "buy_price": 6.24,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.55,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.86,
+      "stop_loss": 5.79,
+      "risk_reward_ratio": 0.69,
+      "score": 44.3,
+      "score_detail": {
+        "竞价强度": 32.3,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 3.83,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.83%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600308",
+      "name": "华泰股份",
+      "price": 3.2,
+      "buy_price": 3.2,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.36,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.52,
+      "stop_loss": 3.1,
+      "risk_reward_ratio": 1.6,
+      "score": 43.3,
+      "score_detail": {
+        "竞价强度": 29.3,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.56,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.56%，资金抢筹",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000659",
+      "name": "珠海中富",
+      "price": 2.73,
+      "buy_price": 2.73,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.87,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.0,
+      "stop_loss": 2.65,
+      "risk_reward_ratio": 1.75,
+      "score": 42.9,
+      "score_detail": {
+        "竞价强度": 20.9,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.49,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "301277",
+      "name": "新天地",
+      "price": 10.1,
+      "buy_price": 10.1,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.61,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 11.11,
+      "stop_loss": 9.8,
+      "risk_reward_ratio": 1.7,
+      "score": 42.5,
+      "score_detail": {
+        "竞价强度": 28.5,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.23,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.23%，资金抢筹",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300640",
+      "name": "德艺文创",
+      "price": 5.9,
+      "buy_price": 5.9,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.2,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.49,
+      "stop_loss": 5.72,
+      "risk_reward_ratio": 1.67,
+      "score": 42.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.08,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.08%，资金抢筹",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600165",
+      "name": "宁科生物",
+      "price": 3.08,
+      "buy_price": 3.08,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.23,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.39,
+      "stop_loss": 2.99,
+      "risk_reward_ratio": 1.67,
+      "score": 41.1,
+      "score_detail": {
+        "竞价强度": 23.1,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.65,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603326",
+      "name": "我乐家居",
+      "price": 7.38,
+      "buy_price": 7.38,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.75,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.12,
+      "stop_loss": 7.06,
+      "risk_reward_ratio": 1.16,
+      "score": 41.1,
+      "score_detail": {
+        "竞价强度": 23.1,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.65,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603601",
+      "name": "再升科技",
+      "price": 8.43,
+      "buy_price": 8.43,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.85,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 9.27,
+      "stop_loss": 8.18,
+      "risk_reward_ratio": 1.68,
+      "score": 40.9,
+      "score_detail": {
+        "竞价强度": 31.9,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 3.69,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.69%，资金抢筹",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300412",
+      "name": "迦南科技",
+      "price": 4.31,
+      "buy_price": 4.31,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 4.53,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 4.74,
+      "stop_loss": 4.18,
+      "risk_reward_ratio": 1.69,
+      "score": 40.5,
+      "score_detail": {
+        "竞价强度": 26.5,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.89,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600613",
+      "name": "神奇制药",
+      "price": 7.49,
+      "buy_price": 7.49,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.86,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.24,
+      "stop_loss": 7.27,
+      "risk_reward_ratio": 1.68,
+      "score": 40.1,
+      "score_detail": {
+        "竞价强度": 31.1,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 3.31,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.31%，资金抢筹",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300614",
+      "name": "百川畅银",
+      "price": 9.67,
+      "buy_price": 9.67,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.15,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 10.64,
+      "stop_loss": 9.38,
+      "risk_reward_ratio": 1.66,
+      "score": 39.1,
+      "score_detail": {
+        "竞价强度": 25.1,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.79,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600595",
+      "name": "中孚实业",
+      "price": 5.68,
+      "buy_price": 5.68,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.96,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.25,
+      "stop_loss": 5.51,
+      "risk_reward_ratio": 1.65,
+      "score": 38.7,
+      "score_detail": {
+        "竞价强度": 29.7,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 2.71,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.71%，资金抢筹",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "301062",
+      "name": "上海艾录",
+      "price": 6.48,
+      "buy_price": 6.48,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.8,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.13,
+      "stop_loss": 6.29,
+      "risk_reward_ratio": 1.68,
+      "score": 38.2,
+      "score_detail": {
+        "竞价强度": 24.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.73,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300448",
+      "name": "浩云科技",
+      "price": 5.52,
+      "buy_price": 5.52,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.8,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.07,
+      "stop_loss": 5.35,
+      "risk_reward_ratio": 1.65,
+      "score": 37.6,
+      "score_detail": {
+        "竞价强度": 20.6,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.47,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600892",
+      "name": "大晟文化",
+      "price": 4.29,
+      "buy_price": 4.29,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 4.5,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 4.72,
+      "stop_loss": 4.16,
+      "risk_reward_ratio": 1.62,
+      "score": 36.3,
+      "score_detail": {
+        "竞价强度": 28.3,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 2.14,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.14%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600746",
+      "name": "江苏索普",
+      "price": 6.66,
+      "buy_price": 6.66,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.99,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.33,
+      "stop_loss": 6.46,
+      "risk_reward_ratio": 1.65,
+      "score": 35.3,
+      "score_detail": {
+        "竞价强度": 21.3,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.52,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002420",
+      "name": "毅昌科技",
+      "price": 5.9,
+      "buy_price": 5.9,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.2,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.49,
+      "stop_loss": 5.72,
+      "risk_reward_ratio": 1.67,
+      "score": 34.7,
+      "score_detail": {
+        "竞价强度": 21.7,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.55,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002201",
+      "name": "九鼎新材",
+      "price": 8.61,
+      "buy_price": 8.61,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 9.04,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 9.47,
+      "stop_loss": 8.35,
+      "risk_reward_ratio": 1.65,
+      "score": 33.8,
+      "score_detail": {
+        "竞价强度": 24.8,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.77,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000608",
+      "name": "阳光股份",
+      "price": 6.55,
+      "buy_price": 6.55,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.88,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.21,
+      "stop_loss": 6.26,
+      "risk_reward_ratio": 1.14,
+      "score": 32.8,
+      "score_detail": {
+        "竞价强度": 28.8,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 2.34,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.34%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300324",
+      "name": "旋极信息",
+      "price": 3.62,
+      "buy_price": 3.62,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.8,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.98,
+      "stop_loss": 3.51,
+      "risk_reward_ratio": 1.64,
+      "score": 32.7,
+      "score_detail": {
+        "竞价强度": 23.7,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.69,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600162",
+      "name": "香江控股",
+      "price": 3.61,
+      "buy_price": 3.61,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.79,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.97,
+      "stop_loss": 3.5,
+      "risk_reward_ratio": 1.64,
+      "score": 32.7,
+      "score_detail": {
+        "竞价强度": 23.7,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.69,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000889",
+      "name": "中嘉博创",
+      "price": 3.34,
+      "buy_price": 3.34,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.51,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.67,
+      "stop_loss": 3.24,
+      "risk_reward_ratio": 1.7,
+      "score": 30.3,
+      "score_detail": {
+        "竞价强度": 21.3,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 5,
+        "板块共振": 0
+      },
+      "open_pct": 1.52,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002083",
+      "name": "孚日股份",
+      "price": 9.5,
+      "buy_price": 9.5,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 9.97,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 10.45,
+      "stop_loss": 9.21,
+      "risk_reward_ratio": 1.62,
+      "score": 29.5,
+      "score_detail": {
+        "竞价强度": 25.5,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 1.82,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002652",
+      "name": "扬子新材",
+      "price": 3.97,
+      "buy_price": 3.97,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 4.17,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 4.37,
+      "stop_loss": 3.85,
+      "risk_reward_ratio": 1.67,
+      "score": 25.4,
+      "score_detail": {
+        "竞价强度": 21.4,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 1.53,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "周线 MACD 二次金叉，主升启动"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002535",
+      "name": "林州重机",
+      "price": 2.49,
+      "buy_price": 2.49,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.61,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 2.74,
+      "stop_loss": 2.42,
+      "risk_reward_ratio": 1.71,
+      "score": 49.1,
+      "score_detail": {
+        "竞价强度": 29.1,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 2.47,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.47%，资金抢筹",
+          "均线多头排列，趋势向上"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600281",
+      "name": "华阳新材",
+      "price": 5.32,
+      "buy_price": 5.32,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.59,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.85,
+      "stop_loss": 5.16,
+      "risk_reward_ratio": 1.69,
+      "score": 47.5,
+      "score_detail": {
+        "竞价强度": 31.5,
+        "竞价量能": 0,
+        "日线趋势": 16,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 3.5,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.5%，资金抢筹",
+          "均线多头排列，趋势向上"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600215",
+      "name": "派斯林",
+      "price": 6.09,
+      "buy_price": 6.09,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.39,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.7,
+      "stop_loss": 5.84,
+      "risk_reward_ratio": 1.2,
+      "score": 45.8,
+      "score_detail": {
+        "竞价强度": 28.8,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 5,
+        "板块共振": 0
+      },
+      "open_pct": 2.35,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.35%，资金抢筹"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603028",
+      "name": "赛福天",
+      "price": 7.28,
+      "buy_price": 7.28,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.64,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.01,
+      "stop_loss": 6.98,
+      "risk_reward_ratio": 1.2,
+      "score": 44.7,
+      "score_detail": {
+        "竞价强度": 32.7,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 4.0,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 4.0%，资金抢筹"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "688528",
+      "name": "秦川物联",
+      "price": 9.7,
+      "buy_price": 9.7,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.19,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 10.67,
+      "stop_loss": 9.41,
+      "risk_reward_ratio": 1.69,
+      "score": 36.0,
+      "score_detail": {
+        "竞价强度": 28.0,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 2.0,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.0%，资金抢筹"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600969",
+      "name": "郴电国际",
+      "price": 8.95,
+      "buy_price": 8.95,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 9.4,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 9.85,
+      "stop_loss": 8.68,
+      "risk_reward_ratio": 1.67,
+      "score": 33.2,
+      "score_detail": {
+        "竞价强度": 29.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 2.52,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.52%，资金抢筹"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000978",
+      "name": "桂林旅游",
+      "price": 6.49,
+      "buy_price": 6.49,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.81,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.14,
+      "stop_loss": 6.3,
+      "risk_reward_ratio": 1.68,
+      "score": 33.1,
+      "score_detail": {
+        "竞价强度": 24.1,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 5,
+        "板块共振": 0
+      },
+      "open_pct": 1.72,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600883",
+      "name": "博闻科技",
+      "price": 7.53,
+      "buy_price": 7.53,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.91,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.28,
+      "stop_loss": 7.3,
+      "risk_reward_ratio": 1.65,
+      "score": 32.7,
+      "score_detail": {
+        "竞价强度": 28.7,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 2.31,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.31%，资金抢筹"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300048",
+      "name": "合康新能",
+      "price": 4.8,
+      "buy_price": 4.8,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.04,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.28,
+      "stop_loss": 4.66,
+      "risk_reward_ratio": 1.71,
+      "score": 32.7,
+      "score_detail": {
+        "竞价强度": 20.7,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 1.48,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000761",
+      "name": "本钢板材",
+      "price": 2.28,
+      "buy_price": 2.28,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.39,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 2.51,
+      "stop_loss": 2.21,
+      "risk_reward_ratio": 1.57,
+      "score": 32.6,
+      "score_detail": {
+        "竞价强度": 28.6,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 2.24,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.24%，资金抢筹"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603787",
+      "name": "新日股份",
+      "price": 10.13,
+      "buy_price": 10.13,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.64,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 11.14,
+      "stop_loss": 9.83,
+      "risk_reward_ratio": 1.7,
+      "score": 30.4,
+      "score_detail": {
+        "竞价强度": 22.4,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 1.6,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603158",
+      "name": "腾龙股份",
+      "price": 9.57,
+      "buy_price": 9.57,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.05,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 10.53,
+      "stop_loss": 9.28,
+      "risk_reward_ratio": 1.66,
+      "score": 29.3,
+      "score_detail": {
+        "竞价强度": 25.3,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 1.81,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000702",
+      "name": "正虹科技",
+      "price": 5.49,
+      "buy_price": 5.49,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.76,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.04,
+      "stop_loss": 5.33,
+      "risk_reward_ratio": 1.69,
+      "score": 27.4,
+      "score_detail": {
+        "竞价强度": 23.4,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 1.67,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "605138",
+      "name": "盛泰集团",
+      "price": 5.86,
+      "buy_price": 5.86,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.15,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.45,
+      "stop_loss": 5.68,
+      "risk_reward_ratio": 1.61,
+      "score": 25.8,
+      "score_detail": {
+        "竞价强度": 21.8,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 1.56,
+      "auction_vol_ratio": null,
+      "strategies": [],
+      "strategy_count": 0,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    }
+  ],
+  "top_picks": [
+    {
+      "code": "300006",
+      "name": "莱美药业",
+      "price": 8.14,
+      "buy_price": 8.14,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.55,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.95,
+      "stop_loss": 7.9,
+      "risk_reward_ratio": 1.71,
+      "score": 58.9,
+      "score_detail": {
+        "竞价强度": 34.9,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 10
+      },
+      "open_pct": 5.03,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 3,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 5.03%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603880",
+      "name": "南卫股份",
+      "price": 8.27,
+      "buy_price": 8.27,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.68,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 9.1,
+      "stop_loss": 8.02,
+      "risk_reward_ratio": 1.64,
+      "score": 42.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.1,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 3,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.1%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "688096",
+      "name": "京源环保",
+      "price": 7.8,
+      "buy_price": 7.8,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.19,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.58,
+      "stop_loss": 7.57,
+      "risk_reward_ratio": 1.7,
+      "score": 54.7,
+      "score_detail": {
+        "竞价强度": 32.7,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 4.0,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 4.0%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002086",
+      "name": "东方海洋",
+      "price": 2.22,
+      "buy_price": 2.22,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.33,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 2.44,
+      "stop_loss": 2.15,
+      "risk_reward_ratio": 1.57,
+      "score": 54.7,
+      "score_detail": {
+        "竞价强度": 28.7,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 2.3,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "上影突破"
+      ],
+      "strategy_count": 2,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.3%，资金抢筹",
+          "均线多头排列，趋势向上",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002565",
+      "name": "顺灏股份",
+      "price": 8.03,
+      "buy_price": 8.03,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.43,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.83,
+      "stop_loss": 7.79,
+      "risk_reward_ratio": 1.67,
+      "score": 53.0,
+      "score_detail": {
+        "竞价强度": 33.0,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 6,
+        "板块共振": 10
+      },
+      "open_pct": 4.15,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 4.15%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002591",
+      "name": "恒大高新",
+      "price": 6.38,
+      "buy_price": 6.38,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.7,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.02,
+      "stop_loss": 6.19,
+      "risk_reward_ratio": 1.68,
+      "score": 52.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 10
+      },
+      "open_pct": 2.08,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.08%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603366",
+      "name": "日出东方",
+      "price": 7.99,
+      "buy_price": 7.99,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.39,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.79,
+      "stop_loss": 7.75,
+      "risk_reward_ratio": 1.67,
+      "score": 51.7,
+      "score_detail": {
+        "竞价强度": 26.7,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.91,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "均线多头排列，趋势向上",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300120",
+      "name": "经纬辉开",
+      "price": 7.99,
+      "buy_price": 7.99,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.39,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.79,
+      "stop_loss": 7.75,
+      "risk_reward_ratio": 1.67,
+      "score": 49.9,
+      "score_detail": {
+        "竞价强度": 24.9,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 1.78,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "均线多头排列，趋势向上",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002238",
+      "name": "天威视讯",
+      "price": 7.06,
+      "buy_price": 7.06,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.41,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 7.77,
+      "stop_loss": 6.85,
+      "risk_reward_ratio": 1.67,
+      "score": 47.0,
+      "score_detail": {
+        "竞价强度": 28.0,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 5
+      },
+      "open_pct": 2.02,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.02%，资金抢筹",
+          "昨日涨停，具备龙头基因",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603385",
+      "name": "惠达卫浴",
+      "price": 5.42,
+      "buy_price": 5.42,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.69,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.96,
+      "stop_loss": 5.26,
+      "risk_reward_ratio": 1.69,
+      "score": 42.6,
+      "score_detail": {
+        "竞价强度": 28.6,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.26,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.26%，资金抢筹",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002235",
+      "name": "安妮股份",
+      "price": 7.36,
+      "buy_price": 7.36,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.73,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.1,
+      "stop_loss": 7.14,
+      "risk_reward_ratio": 1.68,
+      "score": 42.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.08,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.08%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600252",
+      "name": "中恒集团",
+      "price": 2.2,
+      "buy_price": 2.2,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.31,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 2.42,
+      "stop_loss": 2.13,
+      "risk_reward_ratio": 1.57,
+      "score": 40.9,
+      "score_detail": {
+        "竞价强度": 25.9,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 6,
+        "板块共振": 5
+      },
+      "open_pct": 1.85,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "昨日涨停，具备龙头基因",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002030",
+      "name": "达安基因",
+      "price": 5.61,
+      "buy_price": 5.61,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.89,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.17,
+      "stop_loss": 5.44,
+      "risk_reward_ratio": 1.65,
+      "score": 40.8,
+      "score_detail": {
+        "竞价强度": 22.8,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.63,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "上影突破",
+        "板块掘金"
+      ],
+      "strategy_count": 2,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603058",
+      "name": "永吉股份",
+      "price": 9.88,
+      "buy_price": 9.88,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.37,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 10.87,
+      "stop_loss": 9.58,
+      "risk_reward_ratio": 1.63,
+      "score": 56.0,
+      "score_detail": {
+        "竞价强度": 26.0,
+        "竞价量能": 0,
+        "日线趋势": 20,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.86,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "均线多头排列，趋势向上",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002303",
+      "name": "美盈森",
+      "price": 5.67,
+      "buy_price": 5.67,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.95,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.24,
+      "stop_loss": 5.5,
+      "risk_reward_ratio": 1.65,
+      "score": 51.4,
+      "score_detail": {
+        "竞价强度": 28.4,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 5,
+        "板块共振": 10
+      },
+      "open_pct": 2.16,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.16%，资金抢筹",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "601999",
+      "name": "出版传媒",
+      "price": 7.39,
+      "buy_price": 7.39,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.76,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.13,
+      "stop_loss": 7.17,
+      "risk_reward_ratio": 1.68,
+      "score": 47.2,
+      "score_detail": {
+        "竞价强度": 33.2,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 4.23,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "昨日涨停接力"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 4.23%，资金抢筹",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000892",
+      "name": "欢瑞世纪",
+      "price": 4.82,
+      "buy_price": 4.82,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 5.06,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.3,
+      "stop_loss": 4.68,
+      "risk_reward_ratio": 1.71,
+      "score": 44.6,
+      "score_detail": {
+        "竞价强度": 26.6,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 5,
+        "板块共振": 5
+      },
+      "open_pct": 1.9,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "002479",
+      "name": "富春环保",
+      "price": 6.24,
+      "buy_price": 6.24,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.55,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.86,
+      "stop_loss": 5.79,
+      "risk_reward_ratio": 0.69,
+      "score": 44.3,
+      "score_detail": {
+        "竞价强度": 32.3,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 0
+      },
+      "open_pct": 3.83,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "周线二次金叉"
+      ],
+      "strategy_count": 1,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.83%，资金抢筹",
+          "周线 MACD 二次金叉，主升启动"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600308",
+      "name": "华泰股份",
+      "price": 3.2,
+      "buy_price": 3.2,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.36,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.52,
+      "stop_loss": 3.1,
+      "risk_reward_ratio": 1.6,
+      "score": 43.3,
+      "score_detail": {
+        "竞价强度": 29.3,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.56,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 4,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.56%，资金抢筹",
+          "同板块 4 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "000659",
+      "name": "珠海中富",
+      "price": 2.73,
+      "buy_price": 2.73,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 2.87,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.0,
+      "stop_loss": 2.65,
+      "risk_reward_ratio": 1.75,
+      "score": 42.9,
+      "score_detail": {
+        "竞价强度": 20.9,
+        "竞价量能": 0,
+        "日线趋势": 12,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.49,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "301277",
+      "name": "新天地",
+      "price": 10.1,
+      "buy_price": 10.1,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 10.61,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 11.11,
+      "stop_loss": 9.8,
+      "risk_reward_ratio": 1.7,
+      "score": 42.5,
+      "score_detail": {
+        "竞价强度": 28.5,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.23,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.23%，资金抢筹",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300640",
+      "name": "德艺文创",
+      "price": 5.9,
+      "buy_price": 5.9,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 6.2,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 6.49,
+      "stop_loss": 5.72,
+      "risk_reward_ratio": 1.67,
+      "score": 42.2,
+      "score_detail": {
+        "竞价强度": 28.2,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 2.08,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.08%，资金抢筹",
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600165",
+      "name": "宁科生物",
+      "price": 3.08,
+      "buy_price": 3.08,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.23,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.39,
+      "stop_loss": 2.99,
+      "risk_reward_ratio": 1.67,
+      "score": 41.1,
+      "score_detail": {
+        "竞价强度": 23.1,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.65,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603326",
+      "name": "我乐家居",
+      "price": 7.38,
+      "buy_price": 7.38,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.75,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.12,
+      "stop_loss": 7.06,
+      "risk_reward_ratio": 1.16,
+      "score": 41.1,
+      "score_detail": {
+        "竞价强度": 23.1,
+        "竞价量能": 0,
+        "日线趋势": 8,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.65,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "603601",
+      "name": "再升科技",
+      "price": 8.43,
+      "buy_price": 8.43,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 8.85,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 9.27,
+      "stop_loss": 8.18,
+      "risk_reward_ratio": 1.68,
+      "score": 40.9,
+      "score_detail": {
+        "竞价强度": 31.9,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 3.69,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.69%，资金抢筹",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "300412",
+      "name": "迦南科技",
+      "price": 4.31,
+      "buy_price": 4.31,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 4.53,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 4.74,
+      "stop_loss": 4.18,
+      "risk_reward_ratio": 1.69,
+      "score": 40.5,
+      "score_detail": {
+        "竞价强度": 26.5,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 10
+      },
+      "open_pct": 1.89,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 3,
+      "analysis": {
+        "reasons": [
+          "同板块 3 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    },
+    {
+      "code": "600613",
+      "name": "神奇制药",
+      "price": 7.49,
+      "buy_price": 7.49,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 7.86,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 8.24,
+      "stop_loss": 7.27,
+      "risk_reward_ratio": 1.68,
+      "score": 40.1,
+      "score_detail": {
+        "竞价强度": 31.1,
+        "竞价量能": 0,
+        "日线趋势": 4,
+        "涨停基因": 0,
+        "板块共振": 5
+      },
+      "open_pct": 3.31,
+      "auction_vol_ratio": null,
+      "strategies": [
+        "板块掘金"
+      ],
+      "strategy_count": 1,
+      "sector_n": 2,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.31%，资金抢筹",
+          "同板块 2 只竞价强势，板块共振"
+        ],
+        "risks": [
+          "非竞价窗口，竞价量能未验证",
+          "昨日情绪退潮，需弱转强确认"
+        ]
+      },
+      "mode": "回测模式"
+    }
+  ],
+  "groups": {
+    "昨日涨停接力": [
+      "300006",
+      "601999",
+      "002565",
+      "002086",
+      "002591",
+      "002238",
+      "600252"
+    ],
+    "周线二次金叉": [
+      "300006",
+      "688096",
+      "002479",
+      "000608",
+      "600892",
+      "603880",
+      "002235",
+      "002141",
+      "600888",
+      "002083",
+      "300120",
+      "600791",
+      "600664",
+      "002652",
+      "000889",
+      "300343"
+    ],
+    "板块掘金": [
+      "300006",
+      "002565",
+      "688096",
+      "603601",
+      "600613",
+      "600595",
+      "600308",
+      "603385",
+      "301277",
+      "002303",
+      "603880",
+      "002591",
+      "002235",
+      "300640",
+      "002238",
+      "002141",
+      "600888",
+      "603366",
+      "000892",
+      "300412",
+      "603058",
+      "600252",
+      "300614",
+      "300120",
+      "002201",
+      "301062",
+      "300324",
+      "600162",
+      "600791",
+      "600165",
+      "603326",
+      "002030",
+      "002420",
+      "600664",
+      "600746",
+      "000659",
+      "300448",
+      "300343"
+    ],
+    "上影突破": [
+      "002086",
+      "603385",
+      "603880",
+      "002141",
+      "603366",
+      "002030"
+    ]
+  },
+  "total_count": 60,
+  "top_count": 27,
+  "elapsed": 15.3
+}

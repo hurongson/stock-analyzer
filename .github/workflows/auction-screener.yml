@@ -1,0 +1,91 @@
+name: 竞价擒牛
+
+# 集合竞价强时效：仅在交易日 9:25 竞价结束后 ~ 9:30 开盘前有效。
+# GitHub Actions 的 schedule 延迟可达数小时，对竞价毫无意义，因此本工作流
+# 【不使用 schedule】，只通过以下两种方式触发：
+#   1. 外部准点 cron（cron-job.org / 服务器 crontab）在 9:25-9:26 调用
+#      GitHub API 即时触发（repository_dispatch），绕开 GitHub 队列：
+#      POST /repos/hurongson/stock-analyzer/dispatches
+#      Header: Authorization: Bearer <GITHUB_TOKEN>
+#      Body: {"event_type":"auction-screener"}
+#   2. 手动 workflow_dispatch：非竞价窗口运行，结果自动标注"回测模式"
+#      （量能因子不参与，仅供学习）。
+on:
+  workflow_dispatch:
+    inputs:
+      no_push:
+        description: '禁用飞书推送（true/false）'
+        required: false
+        default: 'false'
+  repository_dispatch:
+    types: [auction-screener]
+
+permissions:
+  contents: write
+
+jobs:
+  auction-screener:
+    if: ${{ vars.ENABLE_CLOUD_MONITOR != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate stock name map
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+        run: |
+          cd backend
+          python scripts/generate_stock_name_map.py || echo "生成映射表失败，使用默认映射表"
+
+      - name: Run auction screener
+        env:
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          STOCK_LIST: ${{ vars.STOCK_LIST }}
+        run: |
+          cd backend
+          echo "=== 竞价擒牛开始（触发方式: ${{ github.event_name }}）==="
+          # 外部准点触发（9:25-9:26）：实时竞价模式，非交易日由 is_trading_day 跳过。
+          # 手动触发：若非竞价窗口，引擎自动标注"回测模式"，量能不参与。
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python main.py --auction --force
+          else
+            python main.py --auction
+          fi
+          echo "=== 竞价擒牛完成 ==="
+
+      - name: Upload Excel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: auction-excel-${{ github.run_id }}
+          path: data/auction_*.xlsx
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/auction_*.json data/auction_*.xlsx || true
+          git commit -m "竞价擒牛结果 $(date +'%Y-%m-%d %H:%M')" || echo "无新数据提交"
+          git push || echo "推送失败，可能无新数据"

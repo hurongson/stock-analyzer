@@ -23,8 +23,10 @@ from backend.analysis.engine import analyze_batch
 from backend.analysis.market_timing import market_timing_instance
 from backend.screener.engine import screener
 from backend.screener.late_day import late_day_screener
+from backend.screener.auction import auction_screener
 from backend.report.generator import generate_daily_report, save_report
-from backend.notify.feishu import push_daily_report, push_late_day_picks, push_standstill_notice
+from backend.notify.feishu import (push_daily_report, push_late_day_picks,
+                                   push_standstill_notice, push_auction_picks)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -475,6 +477,59 @@ def run_late_day_screener(enable_push: bool = True):
     return save_result
 
 
+def run_auction_screener(enable_push: bool = True):
+    """竞价擒牛（交易日 9:25 集合竞价结束后运行，强时效，需外部准点触发）"""
+    Config.ensure_dirs()
+    Config.ENABLE_LLM = False  # 竞价禁用LLM，速度优先
+    logger.info("===== 竞价擒牛（9:25）=====")
+
+    date = today_str()
+    excel_path = os.path.join(Config.DATA_DIR, f"auction_{date}.xlsx")
+    try:
+        result = auction_screener.screen(export_path=excel_path)
+    except Exception as e:
+        logger.error(f"竞价擒牛失败: {e}")
+        result = {"error": str(e), "top_picks": [], "picks": []}
+
+    if result.get("error"):
+        print(f"\n竞价擒牛失败：{result['error']}")
+        return result
+
+    # 保存 JSON（picks 不含完整明细时也能回溯）
+    from backend.utils.helpers import save_json
+    json_path = os.path.join(Config.DATA_DIR, f"auction_{date}.json")
+    save_json(result, json_path)
+    logger.info(f"竞价擒牛结果已保存：{json_path}")
+
+    # 推送飞书（实时 / 回测 / 空榜均推送，便于确认运行状态）
+    if enable_push and Config.FEISHU_WEBHOOK_URL:
+        logger.info("--- 推送飞书竞价擒牛 ---")
+        push_auction_picks(result)
+    else:
+        logger.info("跳过飞书推送（未配置 Webook）")
+
+    # 控制台输出
+    print("\n" + "="*60)
+    print(f"🐂 竞价擒牛 - {date} | 模式：{result.get('mode')}")
+    print(f"快照 {result.get('snapshot_time')} | 昨日情绪：{result.get('prev_regime')}")
+    print("="*60)
+    for i, p in enumerate(result.get("top_picks", [])):
+        print(f"\n{i+1}. {p['name']}({p['code']}) 高开{p['open_pct']}% | 评分{p['score']}")
+        print(f"   买入: {p['buy_price']} | 止盈: {p['sell_price']} | "
+              f"目标: {p['target_price']} | 止损: {p['stop_loss']} | "
+              f"盈亏比: {p.get('risk_reward_ratio')}")
+        print(f"   策略: {'、'.join(p['strategies'])}")
+        if p.get('analysis', {}).get('reasons'):
+            print(f"   理由: {'、'.join(p['analysis']['reasons'][:3])}")
+        if p.get('analysis', {}).get('risks'):
+            print(f"   风险: {'、'.join(p['analysis']['risks'][:2])}")
+    if not result.get("top_picks"):
+        print("\n今日综合擒牛榜无标的，空仓观望。")
+    print("\n" + "="*60)
+    logger.info("===== 竞价擒牛完成 =====")
+    return result
+
+
 def run_analyze_only(codes: list):
     """仅分析指定股票"""
     Config.ensure_dirs()
@@ -505,6 +560,7 @@ def main():
     parser.add_argument("--quick", action="store_true", help="快速盘中分析（只分析自选股，不选股，重点买卖信号）")
     parser.add_argument("--anomaly", action="store_true", help="盘中异动监控（默认静默，只有异动时推送）")
     parser.add_argument("--late-day", action="store_true", help="尾盘选股（14:30运行，推荐当日买入次日卖出）")
+    parser.add_argument("--auction", action="store_true", help="竞价擒牛（9:25集合竞价结束后运行，强时效，需外部准点触发）")
     parser.add_argument("--no-push", action="store_true", help="禁用飞书推送")
     parser.add_argument("--no-llm", action="store_true", help="禁用 LLM 分析")
     parser.add_argument("--dry-run", action="store_true", help="试运行（不保存不推送）")
@@ -540,6 +596,9 @@ def main():
                 return
         push = not args.no_push and not args.dry_run
         run_late_day_screener(enable_push=push)
+    elif args.auction:
+        push = not args.no_push and not args.dry_run
+        run_auction_screener(enable_push=push)
     else:
         push = not args.no_push and not args.dry_run
         llm = not args.no_llm
