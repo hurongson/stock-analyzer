@@ -493,7 +493,8 @@ def run_auction_screener(enable_push: bool = True):
 
     if result.get("error"):
         print(f"\n竞价擒牛失败：{result['error']}")
-        return result
+        # 让工作流标红（红色失败），避免绿色对勾掩盖"实际无数据"的问题
+        sys.exit(1)
 
     # 保存 JSON（picks 不含完整明细时也能回溯）
     from backend.utils.helpers import save_json

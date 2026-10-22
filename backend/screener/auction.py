@@ -24,6 +24,7 @@ import os
 import time
 import logging
 import warnings
+import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Optional
 
@@ -83,6 +84,99 @@ def is_auction_window(ts: str) -> bool:
         return "0925" <= hhmm <= "0931"
     except Exception:
         return False
+
+
+# =============================================================================
+# 实时行情批量接口（新浪 hq.sinajs.cn，0.3s 稳定，开盘高峰也可用）
+# =============================================================================
+def parse_sina_batch(text: str) -> List[Dict]:
+    """解析 hq.sinajs.cn 批量返回文本 -> 标准 quote 列表。"""
+    quotes = []
+    for line in text.strip().split("\n"):
+        if "=" not in line or '"' not in line:
+            continue
+        try:
+            head = line.split("=", 1)[0]
+            sym = head.replace("var hq_str_", "").strip()
+            body = line.split('"', 1)[1].rsplit('"', 1)[0]
+            f = body.split(",")
+            if len(f) < 32:
+                continue
+            quotes.append({
+                "code": to_plain_code(sym),
+                "name": f[0],
+                "open": float(f[1]),
+                "yest_close": float(f[2]),
+                "price": float(f[3]),
+                "high": float(f[4]),
+                "low": float(f[5]),
+                "volume": float(f[8]),
+                "amount": float(f[9]),
+                "date": f[30],
+                "time": f[31],
+            })
+        except Exception:
+            continue
+    return quotes
+
+
+def fetch_batch_quotes(codes: List[str], batch_size: int = 80) -> List[Dict]:
+    """分批（每批80只）拉取实时行情，3 次重试。"""
+    quotes: List[Dict] = []
+    syms = [to_sina_symbol(c) for c in codes]
+    for i in range(0, len(syms), batch_size):
+        chunk = syms[i:i + batch_size]
+        for attempt in range(3):
+            try:
+                r = requests.get("https://hq.sinajs.cn/list=" + ",".join(chunk),
+                                 headers={"Referer":
+                                          "https://finance.sina.com.cn"},
+                                 timeout=8)
+                r.encoding = "gbk"
+                quotes.extend(parse_sina_batch(r.text))
+                break
+            except Exception:
+                if attempt == 2:
+                    break
+                time.sleep(0.8)
+    return quotes
+
+
+def build_candidate_codes(lookback_days: int = 5) -> List[str]:
+    """
+    构建竞价候选池：
+      - 自选股（STOCK_LIST + FLOWER_STOCK_LIST + HOLD_STOCK_LIST）
+      - 近 N 个交易日涨停池（含昨日涨停，龙头接力）
+    """
+    codes = set()
+    try:
+        from backend.config import Config
+        codes.update(Config.ALL_STOCKS)
+    except Exception:
+        pass
+    if AKSHARE_AVAILABLE:
+        try:
+            now = pd.Timestamp.now()
+            got = 0
+            for k in range(1, 14):  # 从昨天往前
+                day = now - pd.Timedelta(days=k)
+                if day.weekday() >= 5:
+                    continue
+                ds = day.strftime("%Y%m%d")
+                try:
+                    zt = ak.stock_zt_pool_em(date=ds)
+                except Exception:
+                    zt = None
+                if zt is not None and not zt.empty:
+                    for c in zt["代码"].astype(str):
+                        codes.add(str(c).zfill(6))
+                    got += 1
+                if got >= lookback_days:
+                    break
+        except Exception:
+            pass
+    return list(codes)
+
 
 
 # =============================================================================
@@ -239,47 +333,74 @@ class AuctionScreener:
         self.in_auction_window = False
 
     # ------------------------------------------------------------------
-    # 1. 全市场竞价快照
+    # 1. 竞价快照（全市场短超时；失败回退候选池批量）
     # ------------------------------------------------------------------
-    def get_snapshot(self) -> Optional[pd.DataFrame]:
-        if not AKSHARE_AVAILABLE:
-            logger.error("akshare 不可用，无法获取竞价快照")
-            return None
-        for attempt in range(3):
+    def get_quotes(self) -> Optional[List[Dict]]:
+        # 优先：全市场快照，强制 25 秒超时（akshare 内部无超时，
+        # 开盘高峰会长时间挂起，必须主动放弃）。
+        if AKSHARE_AVAILABLE:
             try:
-                df = ak.stock_zh_a_spot()
+                with ThreadPoolExecutor(max_workers=1) as ex:
+                    fut = ex.submit(ak.stock_zh_a_spot)
+                    df = fut.result(timeout=25)
                 if df is not None and not df.empty:
                     ts = str(df["时间戳"].iloc[0])
+                    quotes = []
+                    for _, r in df.iterrows():
+                        sym = str(r["代码"])
+                        if sym.lower().startswith("bj"):
+                            continue
+                        quotes.append({
+                            "code": to_plain_code(sym),
+                            "name": str(r["名称"]),
+                            "open": float(r["今开"]),
+                            "yest_close": float(r["昨收"]),
+                            "price": float(r["最新价"]),
+                            "high": float(r["最高"]),
+                            "low": float(r["最低"]),
+                            "volume": float(r["成交量"]),
+                            "amount": float(r["成交额"]),
+                            "time": ts,
+                        })
                     self.snapshot_time = ts
                     self.in_auction_window = is_auction_window(ts)
-                    logger.info(f"竞价快照 {len(df)} 行，时间 {ts}，"
+                    self.source = "全市场"
+                    logger.info(f"全市场快照 {len(quotes)} 行，时间 {ts}，"
                                 f"竞价窗口={self.in_auction_window}")
-                    return df
+                    return quotes
             except Exception as e:
-                logger.warning(f"获取竞价快照失败({attempt+1}): {str(e)[:80]}")
-                time.sleep(1.2)
-        return None
+                logger.warning(f"全市场快照未取到（{str(e)[:60]}），"
+                               f"回退候选池批量")
+
+        # 回退：候选池（昨日/近5日涨停 + 自选）批量实时
+        codes = build_candidate_codes()
+        logger.info(f"候选池（近5日涨停+自选）{len(codes)} 只，批量拉取")
+        quotes = fetch_batch_quotes(codes)
+        if quotes:
+            ts = quotes[0].get("time", "")
+            self.snapshot_time = ts
+            self.in_auction_window = is_auction_window(ts)
+            self.source = "龙头候选池"
+            logger.info(f"候选池批量 {len(quotes)} 只，时间 {ts}，"
+                        f"竞价窗口={self.in_auction_window}")
+        return quotes if quotes else None
 
     # ------------------------------------------------------------------
-    # 2. 初筛 universe + 竞价因子
+    # 2. 初筛 + 竞价因子（接收标准 quote 列表）
     # ------------------------------------------------------------------
-    def build_candidates(self, df: pd.DataFrame) -> List[Dict]:
+    def build_candidates(self, quotes: List[Dict]) -> List[Dict]:
         cands = []
-        for _, r in df.iterrows():
-            code = to_plain_code(r["代码"])
-            name = str(r["名称"])
-            # 排除北交所（沪深为主）
-            if str(r["代码"]).lower().startswith("bj"):
-                continue
+        for r in quotes:
+            name = r["name"]
             # 排除 ST / 退市
             if "ST" in name.upper() or "退" in name:
                 continue
             try:
-                open_p = float(r["今开"])
-                yest = float(r["昨收"])
-                price = float(r["最新价"])
-                vol = float(r["成交量"])
-                amount = float(r["成交额"])
+                open_p = float(r["open"])
+                yest = float(r["yest_close"])
+                price = float(r["price"])
+                vol = float(r["volume"])
+                amount = float(r["amount"])
             except Exception:
                 continue
             # 停牌 / 无竞价
@@ -293,7 +414,7 @@ class AuctionScreener:
             if not (self.OPEN_MIN <= open_pct <= self.OPEN_MAX):
                 continue
             cands.append({
-                "code": code,
+                "code": r["code"],
                 "name": name,
                 "price": round(price, 2),
                 "open_price": round(open_p, 2),
@@ -545,7 +666,7 @@ class AuctionScreener:
     # ------------------------------------------------------------------
     def screen(self, export_path: Optional[str] = None) -> Dict:
         t0 = time.time()
-        snap = self.get_snapshot()
+        snap = self.get_quotes()
         if snap is None:
             return {"error": "无法获取竞价快照", "picks": [], "top_picks": []}
         cands = self.build_candidates(snap)
@@ -555,6 +676,7 @@ class AuctionScreener:
         result = {
             "date": time.strftime("%Y-%m-%d"),
             "snapshot_time": self.snapshot_time,
+            "data_source": self.source,
             "in_auction_window": self.in_auction_window,
             "prev_regime": prev_regime,
             "candidate_count": len(cands),
