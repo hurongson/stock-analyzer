@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-23",
+  "snapshot_time": "09:13:18",
+  "data_source": "龙头候选池",
+  "in_auction_window": false,
+  "prev_regime": "退潮",
+  "candidate_count": 0,
+  "picks": [],
+  "top_picks": [],
+  "note": "竞价无符合条件标的（高开/价格/量能不达标）"
+}
