@@ -1,0 +1,304 @@
+{
+  "date": "2026-10-26",
+  "snapshot_time": "09:25:00",
+  "data_source": "龙头候选池",
+  "in_auction_window": true,
+  "prev_regime": "分歧",
+  "candidate_count": 4,
+  "mode": "实时竞价",
+  "picks": [
+    {
+      "code": "002535",
+      "name": "林州重机",
+      "price": 3.12,
+      "buy_price": 3.12,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.28,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.43,
+      "stop_loss": 3.03,
+      "risk_reward_ratio": 1.78,
+      "score": 72.3,
+      "score_detail": {
+        "竞价强度": 30.3,
+        "竞价量能": 20,
+        "日线趋势": 16,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 2.97,
+      "auction_vol_ratio": 22.52,
+      "strategies": [
+        "竞价擒牛",
+        "昨日涨停接力",
+        "上影突破"
+      ],
+      "strategy_count": 3,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.97%，资金抢筹",
+          "竞价量达昨日 22.52%，明显放量",
+          "均线多头排列，趋势向上",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": []
+      },
+      "mode": "实时竞价"
+    },
+    {
+      "code": "002421",
+      "name": "达实智能",
+      "price": 3.62,
+      "buy_price": 3.62,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.8,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.98,
+      "stop_loss": 3.4,
+      "risk_reward_ratio": 0.82,
+      "score": 67.5,
+      "score_detail": {
+        "竞价强度": 32.8,
+        "竞价量能": 8.7,
+        "日线趋势": 20,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 5.54,
+      "auction_vol_ratio": 4.6,
+      "strategies": [
+        "竞价擒牛",
+        "昨日涨停接力",
+        "上影突破"
+      ],
+      "strategy_count": 3,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 5.54%，资金抢筹",
+          "竞价量达昨日 4.6%，明显放量",
+          "均线多头排列，趋势向上",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": [
+          "高开偏多，开盘易被砸"
+        ]
+      },
+      "mode": "实时竞价"
+    },
+    {
+      "code": "000972",
+      "name": "中基健康",
+      "price": 4.16,
+      "buy_price": 4.16,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 4.37,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 4.58,
+      "stop_loss": 4.04,
+      "risk_reward_ratio": 1.75,
+      "score": 57.1,
+      "score_detail": {
+        "竞价强度": 29.1,
+        "竞价量能": 6.0,
+        "日线趋势": 16,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 2.46,
+      "auction_vol_ratio": 3.81,
+      "strategies": [
+        "竞价擒牛",
+        "昨日涨停接力"
+      ],
+      "strategy_count": 2,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.46%，资金抢筹",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": []
+      },
+      "mode": "实时竞价"
+    },
+    {
+      "code": "600094",
+      "name": "大名城",
+      "price": 4.56,
+      "buy_price": 4.56,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 4.79,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 5.02,
+      "stop_loss": 4.35,
+      "risk_reward_ratio": 1.1,
+      "score": 53.6,
+      "score_detail": {
+        "竞价强度": 32.4,
+        "竞价量能": 3.3,
+        "日线趋势": 12,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 3.87,
+      "auction_vol_ratio": 2.98,
+      "strategies": [
+        "竞价擒牛",
+        "昨日涨停接力"
+      ],
+      "strategy_count": 2,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 3.87%，资金抢筹",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": [
+          "竞价量能偏弱，承接不足"
+        ]
+      },
+      "mode": "实时竞价"
+    }
+  ],
+  "top_picks": [
+    {
+      "code": "002535",
+      "name": "林州重机",
+      "price": 3.12,
+      "buy_price": 3.12,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.28,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.43,
+      "stop_loss": 3.03,
+      "risk_reward_ratio": 1.78,
+      "score": 72.3,
+      "score_detail": {
+        "竞价强度": 30.3,
+        "竞价量能": 20,
+        "日线趋势": 16,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 2.97,
+      "auction_vol_ratio": 22.52,
+      "strategies": [
+        "竞价擒牛",
+        "昨日涨停接力",
+        "上影突破"
+      ],
+      "strategy_count": 3,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.97%，资金抢筹",
+          "竞价量达昨日 22.52%，明显放量",
+          "均线多头排列，趋势向上",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": []
+      },
+      "mode": "实时竞价"
+    },
+    {
+      "code": "002421",
+      "name": "达实智能",
+      "price": 3.62,
+      "buy_price": 3.62,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 3.8,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 3.98,
+      "stop_loss": 3.4,
+      "risk_reward_ratio": 0.82,
+      "score": 67.5,
+      "score_detail": {
+        "竞价强度": 32.8,
+        "竞价量能": 8.7,
+        "日线趋势": 20,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 5.54,
+      "auction_vol_ratio": 4.6,
+      "strategies": [
+        "竞价擒牛",
+        "昨日涨停接力",
+        "上影突破"
+      ],
+      "strategy_count": 3,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 5.54%，资金抢筹",
+          "竞价量达昨日 4.6%，明显放量",
+          "均线多头排列，趋势向上",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": [
+          "高开偏多，开盘易被砸"
+        ]
+      },
+      "mode": "实时竞价"
+    },
+    {
+      "code": "000972",
+      "name": "中基健康",
+      "price": 4.16,
+      "buy_price": 4.16,
+      "buy_price_note": "以竞价开盘价附近介入，不追高",
+      "sell_price": 4.37,
+      "sell_price_note": "冲高 5% 先止盈",
+      "target_price": 4.58,
+      "stop_loss": 4.04,
+      "risk_reward_ratio": 1.75,
+      "score": 57.1,
+      "score_detail": {
+        "竞价强度": 29.1,
+        "竞价量能": 6.0,
+        "日线趋势": 16,
+        "涨停基因": 6,
+        "板块共振": 0
+      },
+      "open_pct": 2.46,
+      "auction_vol_ratio": 3.81,
+      "strategies": [
+        "竞价擒牛",
+        "昨日涨停接力"
+      ],
+      "strategy_count": 2,
+      "sector_n": 1,
+      "analysis": {
+        "reasons": [
+          "竞价高开 2.46%，资金抢筹",
+          "昨日涨停，具备龙头基因"
+        ],
+        "risks": []
+      },
+      "mode": "实时竞价"
+    }
+  ],
+  "groups": {
+    "竞价擒牛": [
+      "002421",
+      "600094",
+      "002535",
+      "000972"
+    ],
+    "昨日涨停接力": [
+      "002421",
+      "600094",
+      "002535",
+      "000972"
+    ],
+    "上影突破": [
+      "002421",
+      "002535"
+    ]
+  },
+  "total_count": 4,
+  "top_count": 3,
+  "elapsed": 48.1
+}
