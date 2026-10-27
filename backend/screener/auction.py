@@ -120,25 +120,78 @@ def parse_sina_batch(text: str) -> List[Dict]:
     return quotes
 
 
+def parse_tencent_batch(text: str) -> List[Dict]:
+    """解析 qt.gtimg.cn 批量返回文本 -> 标准 quote 列表。"""
+    quotes = []
+    for line in text.strip().split("\n"):
+        if "=" not in line or "~" not in line:
+            continue
+        try:
+            head = line.split("=", 1)[0]
+            sym = head.replace("v_", "").strip()
+            body = line.split('"', 1)[1].rsplit('"', 1)[0]
+            f = body.split("~")
+            if len(f) < 38:
+                continue
+            raw_t = f[30]  # YYYYMMDDHHMMSS
+            hhmmss = raw_t[8:10] + ":" + raw_t[10:12] + ":" + raw_t[12:14]
+            quotes.append({
+                "code": to_plain_code(f[2] or sym),
+                "name": f[1],
+                "open": float(f[5]),
+                "yest_close": float(f[4]),
+                "price": float(f[3]),
+                "high": float(f[33]),
+                "low": float(f[34]),
+                "volume": float(f[6]) * 100,       # 手 -> 股
+                "amount": float(f[37]) * 10000,    # 万元 -> 元
+                "date": raw_t[:8],
+                "time": hhmmss,
+            })
+        except Exception:
+            continue
+    return quotes
+
+
+def _http_get(url: str, headers: Dict, timeout: int = 8) -> requests.Response:
+    h = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                       "AppleWebKit/537.36 (KHTML, like Gecko) "
+                       "Chrome/120.0 Safari/537.36"}
+    h.update(headers)
+    return requests.get(url, headers=h, timeout=timeout)
+
+
 def fetch_batch_quotes(codes: List[str], batch_size: int = 80) -> List[Dict]:
-    """分批（每批80只）拉取实时行情，3 次重试。"""
+    """
+    分批（每批80只）拉取实时行情，新浪优先、腾讯兜底，3 次重试。
+    新浪偶发 403/超时，腾讯接口可稳定返回。
+    """
     quotes: List[Dict] = []
     syms = [to_sina_symbol(c) for c in codes]
     for i in range(0, len(syms), batch_size):
         chunk = syms[i:i + batch_size]
+        got: List[Dict] = []
         for attempt in range(3):
             try:
-                r = requests.get("https://hq.sinajs.cn/list=" + ",".join(chunk),
-                                 headers={"Referer":
-                                          "https://finance.sina.com.cn"},
-                                 timeout=8)
+                r = _http_get("https://hq.sinajs.cn/list=" + ",".join(chunk),
+                              {"Referer": "https://finance.sina.com.cn"})
                 r.encoding = "gbk"
-                quotes.extend(parse_sina_batch(r.text))
-                break
+                if r.status_code == 200:
+                    got = parse_sina_batch(r.text)
+                    if got:
+                        break
+                # 新浪 403/空 -> 立即试腾讯
+                rt = _http_get("https://qt.gtimg.cn/q=" + ",".join(chunk),
+                               {"Referer": "https://gu.qq.com"})
+                rt.encoding = "gbk"
+                got = parse_tencent_batch(rt.text)
+                if got:
+                    break
             except Exception:
                 if attempt == 2:
                     break
                 time.sleep(0.8)
+        quotes.extend(got)
     return quotes
 
 
@@ -628,6 +681,98 @@ class AuctionScreener:
         return "未知"
 
     # ------------------------------------------------------------------
+    # 持仓隔夜反馈：核对前一日尾盘买入/推荐名单的次日竞价表现
+    # ------------------------------------------------------------------
+    def _data_dir(self) -> str:
+        return os.path.join(os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data")
+
+    def get_prev_holdings(self) -> List[Dict]:
+        """读取最近一个尾盘 JSON 的实际买入/推荐名单（top_picks + special_picks）。"""
+        try:
+            data_dir = self._data_dir()
+            files = sorted([f for f in os.listdir(data_dir)
+                            if f.startswith("late_day_") and f.endswith(".json")])
+            if not files:
+                return []
+            import json
+            d = json.load(open(os.path.join(data_dir, files[-1])))
+            holdings: Dict[str, Dict] = {}
+            for p in d.get("top_picks", []) or []:
+                holdings[p["code"]] = p
+            for p in d.get("special_picks", []) or []:
+                if p["code"] not in holdings:
+                    holdings[p["code"]] = p
+            return list(holdings.values())
+        except Exception:
+            return []
+
+    @staticmethod
+    def _holding_status(open_pct: float, price: float,
+                        stop: Optional[float]) -> tuple:
+        """返回（状态，操作建议）。"""
+        if stop and price <= stop:
+            return "触及止损", "严格执行止损，不抱侥幸"
+        if open_pct >= 3:
+            return "强势高开", "弱转强，可继续持有，冲高分批止盈"
+        if open_pct >= 0:
+            return "小幅高开", "符合预期，观察能否放量站稳"
+        if open_pct > -2:
+            return "小幅低开", "不及预期，保持警惕、设好止损"
+        return "明显低开", "弱转强失败，考虑减仓或离场"
+
+    def check_holdings_overnight(self) -> Dict:
+        """拉取前一日持仓的次日竞价行情，逐只给出隔夜反馈。"""
+        holdings = self.get_prev_holdings()
+        if not holdings:
+            return {"count": 0, "items": []}
+        codes = [h["code"] for h in holdings]
+        quotes = fetch_batch_quotes(codes)
+        qmap = {q["code"]: q for q in quotes}
+        # 取日线算竞价量比
+        klines: Dict[str, pd.DataFrame] = {}
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            futs = {ex.submit(fetch_daily, c): c for c in codes}
+            for f in as_completed(futs):
+                code = futs[f]
+                try:
+                    klines[code] = f.result()
+                except Exception:
+                    klines[code] = None
+        items = []
+        for h in holdings:
+            code = h["code"]
+            q = qmap.get(code)
+            if not q or q["yest_close"] <= 0:
+                continue
+            open_p = q["open"]
+            yest = q["yest_close"]
+            price = q["price"]
+            open_pct = (open_p / yest - 1) * 100
+            df = klines.get(code)
+            vol_ratio = None
+            if df is not None and len(df) >= 2:
+                yest_vol = float(df["volume"].iloc[-1])
+                if yest_vol > 0:
+                    vol_ratio = q["volume"] / yest_vol * 100
+            stop = h.get("stop_loss")
+            target = h.get("target_price")
+            status, action = self._holding_status(open_pct, price, stop)
+            items.append({
+                "code": code,
+                "name": h["name"],
+                "open_pct": round(open_pct, 2),
+                "price": round(price, 2),
+                "stop_loss": stop,
+                "target": target,
+                "vol_ratio": round(vol_ratio, 2) if vol_ratio else None,
+                "status": status,
+                "action": action,
+            })
+        items.sort(key=lambda x: x["open_pct"], reverse=True)
+        return {"count": len(items), "items": items}
+
+    # ------------------------------------------------------------------
     # 8. 导出 Excel
     # ------------------------------------------------------------------
     def export_excel(self, picks: List[Dict], path: str):
@@ -673,6 +818,11 @@ class AuctionScreener:
         prev_regime = self.get_prev_regime()
         logger.info(f"昨日情绪：{prev_regime}")
 
+        # 持仓隔夜反馈（独立于候选，即使无候选也要核对前一日持仓）
+        holdings_feedback = self.check_holdings_overnight()
+        if holdings_feedback["count"]:
+            logger.info(f"持仓隔夜反馈：{holdings_feedback['count']} 只")
+
         result = {
             "date": time.strftime("%Y-%m-%d"),
             "snapshot_time": self.snapshot_time,
@@ -680,6 +830,7 @@ class AuctionScreener:
             "in_auction_window": self.in_auction_window,
             "prev_regime": prev_regime,
             "candidate_count": len(cands),
+            "holdings_feedback": holdings_feedback,
         }
         if not cands:
             result.update({"picks": [], "top_picks": [],

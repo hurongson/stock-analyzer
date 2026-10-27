@@ -26,7 +26,8 @@ from backend.screener.late_day import late_day_screener
 from backend.screener.auction import auction_screener
 from backend.report.generator import generate_daily_report, save_report
 from backend.notify.feishu import (push_daily_report, push_late_day_picks,
-                                   push_standstill_notice, push_auction_picks)
+                                   push_standstill_notice, push_auction_picks,
+                                   push_holdings_feedback)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -506,6 +507,8 @@ def run_auction_screener(enable_push: bool = True):
     if enable_push and Config.FEISHU_WEBHOOK_URL:
         logger.info("--- 推送飞书竞价擒牛 ---")
         push_auction_picks(result)
+        # 持仓隔夜反馈（前一日尾盘买入/推荐名单的次日竞价核对）
+        push_holdings_feedback(result)
     else:
         logger.info("跳过飞书推送（未配置 Webook）")
 

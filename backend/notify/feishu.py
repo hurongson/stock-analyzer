@@ -1415,11 +1415,87 @@ def push_auction_picks(auction_data: Dict, webhook_url: str = None) -> bool:
         return False
 
 
+def push_holdings_feedback(auction_data: Dict, webhook_url: str = None) -> bool:
+    """
+    推送持仓隔夜反馈（竞价擒牛核对前一日尾盘买入/推荐名单的次日竞价表现）。
+    无持仓时不推送。
+    """
+    url = webhook_url or Config.FEISHU_WEBHOOK_URL
+    if not url:
+        logger.warning("飞书 Webhook 未配置，跳过推送")
+        return False
+    fb = auction_data.get("holdings_feedback") or {}
+    items = fb.get("items") or []
+    if not items:
+        return False
+    date = auction_data.get("date", "")
+
+    color_map = {
+        "强势高开": "green",
+        "小幅高开": "blue",
+        "小幅低开": "orange",
+        "明显低开": "red",
+        "触及止损": "red",
+    }
+    elements = []
+    n_risk = sum(1 for i in items if i["status"] in ("明显低开", "触及止损"))
+    n_strong = sum(1 for i in items if i["status"] == "强势高开")
+    head = (f"**📋 持仓隔夜反馈 - {date} 9:25**\n"
+            f"共 {len(items)} 只 | 强势 {n_strong} 只，"
+            f"需警惕 {n_risk} 只\n"
+            f"按竞价高开/低开与弱转强情况决定去留，严格执行止损")
+    elements.append({"tag": "div", "text": {"tag": "lark_md", "content": head}})
+    elements.append({"tag": "hr"})
+    for i, it in enumerate(items):
+        vr = f"量比{it['vol_ratio']}%" if it.get("vol_ratio") is not None else "量比未验证"
+        content = (f"{i+1}. **{it['name']}({it['code']})** "
+                   f"高开 {it['open_pct']}% | {vr} | "
+                   f"**{it['status']}**\n"
+                   f"   现价 {it['price']} | 止损 {it.get('stop_loss')} | "
+                   f"目标 {it.get('target')}\n"
+                   f"   建议：{it['action']}")
+        elements.append({"tag": "div",
+                         "text": {"tag": "lark_md", "content": content}})
+    elements.append({"tag": "hr"})
+    elements.append({"tag": "note", "elements": [{
+        "tag": "plain_text",
+        "content": "⚠️ 持仓反馈为隔夜核对参考，不构成投资建议，请结合自身持仓与风险承受能力决策。"
+    }]})
+
+    tpl = "red" if n_risk else ("green" if n_strong == len(items) else "blue")
+    payload = {
+        "msg_type": "interactive",
+        "card": {
+            "header": {
+                "title": {"tag": "plain_text",
+                          "content": f"📋 持仓隔夜反馈 {date}（{len(items)}只）"},
+                "template": tpl,
+            },
+            "elements": elements,
+        },
+    }
+    if Config.FEISHU_SECRET:
+        timestamp = int(time.time())
+        payload["timestamp"] = str(timestamp)
+        payload["sign"] = gen_sign(Config.FEISHU_SECRET, timestamp)
+
+    try:
+        resp = requests.post(url, json=payload, timeout=15)
+        rj = resp.json()
+        if rj.get("code") == 0 or rj.get("StatusCode") == 0:
+            logger.info(f"持仓隔夜反馈飞书推送成功，{len(items)}只")
+            return True
+        logger.error(f"持仓隔夜反馈飞书推送失败: {rj}")
+        return False
+    except Exception as e:
+        logger.error(f"持仓隔夜反馈飞书推送异常: {e}")
+        return False
+
+
 def push_intraday_anomaly(anomaly_data: Dict, webhook_url: str = None) -> bool:
     """
     推送盘中异动提醒（表2）
-    默认保持静默，只有出现异动时才推送
-    anomaly_data: {has_anomaly, anomaly_count, anomalies: [...], summary, check_time}
+    默认保持静默，只有出现异动时才推送    anomaly_data: {has_anomaly, anomaly_count, anomalies: [...], summary, check_time}
     """
     url = webhook_url or Config.FEISHU_WEBHOOK_URL
     if not url:
