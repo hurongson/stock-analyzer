@@ -5,13 +5,13 @@
     {
       "type": "板块扩散明显下降",
       "level": "high",
-      "up_count": 617,
-      "down_count": 4717,
-      "diffusion_ratio": 0.13,
-      "reason": "上涨617只，下跌4717只，涨跌比0.13，市场情绪偏弱",
-      "description": "上涨617只，下跌4717只，涨跌比0.13"
+      "up_count": 566,
+      "down_count": 4766,
+      "diffusion_ratio": 0.12,
+      "reason": "上涨566只，下跌4766只，涨跌比0.12，市场情绪偏弱",
+      "description": "上涨566只，下跌4766只，涨跌比0.12"
     }
   ],
   "summary": "板块扩散明显下降1起",
-  "check_time": "2026-10-27 06:52:14"
+  "check_time": "2026-10-27 08:16:44"
 }
