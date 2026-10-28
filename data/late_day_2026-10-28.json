@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-28",
+  "time": "14:30",
+  "market_timing": {
+    "indices": {
+      "sh": {
+        "code": "000001",
+        "name": "上证指数",
+        "price": 3681.47,
+        "pct_change": 0.91,
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "trend_strength": 32.4,
+          "ma5": 3675.16,
+          "ma10": 3697.89,
+          "ma20": 3764.55,
+          "ma60": 3863.93,
+          "ma120": 3955.29,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "macd": {
+          "dif": -58.2314,
+          "dea": -51.9913,
+          "macd": -12.48,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 36.47,
+          "rsi12": 32.14,
+          "rsi24": 32.85,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 45.58,
+          "d": 36.21,
+          "j": 64.32,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 3922.03,
+          "mid": 3764.55,
+          "lower": 3607.08,
+          "width": 8.37,
+          "position": 23.62,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "False"
+        },
+        "volume": {
+          "current_volume": 43362282900.0,
+          "vol_ma5": 45494831080.0,
+          "vol_ma10": 44623076000.0,
+          "vol_ma20": 45211026540.0,
+          "volume_ratio": 0.95,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "atr": {
+          "atr": 60.09,
+          "atr_ratio": 1.63,
+          "volatility_level": "低波动"
+        },
+        "obv": {
+          "obv": 365977002600.0,
+          "obv_ma10": 308581048880.0,
+          "trend_up": "True",
+          "divergence_bullish": "False"
+        }
+      },
+      "sz": {
+        "code": "399001",
+        "name": "深证成指",
+        "price": 11473.18,
+        "pct_change": 2.02,
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "trend_strength": 79.3,
+          "ma5": 11456.89,
+          "ma10": 11622.68,
+          "ma20": 12197.0,
+          "ma60": 13303.79,
+          "ma120": 14305.94,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "macd": {
+          "dif": -542.2723,
+          "dea": -507.0166,
+          "macd": -70.5114,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 38.41,
+          "rsi12": 27.54,
+          "rsi24": 24.38,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 30.62,
+          "d": 22.46,
+          "j": 46.95,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 13563.69,
+          "mid": 12197.0,
+          "lower": 10830.31,
+          "width": 22.41,
+          "position": 23.52,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "False"
+        },
+        "volume": {
+          "current_volume": "53773174552",
+          "vol_ma5": 56349863000.0,
+          "vol_ma10": 53541374410.0,
+          "vol_ma20": 53675623246.0,
+          "volume_ratio": 0.95,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "atr": {
+          "atr": 337.62,
+          "atr_ratio": 2.94,
+          "volatility_level": "中波动"
+        },
+        "obv": {
+          "obv": -562500351165.0,
+          "obv_ma10": -517757569079.0,
+          "trend_up": "False",
+          "divergence_bullish": "False"
+        }
+      },
+      "cyb": {
+        "code": "399006",
+        "name": "创业板指",
+        "price": 2634.76,
+        "pct_change": 3.4,
+        "trend": {
+          "trend": "下降趋势",
+          "trend_score": 20,
+          "trend_strength": 100,
+          "ma5": 2616.43,
+          "ma10": 2681.79,
+          "ma20": 2888.65,
+          "ma60": 3249.69,
+          "ma120": 3588.35,
+          "bullish_alignment": "False",
+          "bearish_alignment": "True"
+        },
+        "macd": {
+          "dif": -187.0254,
+          "dea": -171.9007,
+          "macd": -30.2493,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "hist_increasing": "True",
+          "zero_axis_above": "False"
+        },
+        "rsi": {
+          "rsi6": 39.39,
+          "rsi12": 27.04,
+          "rsi24": 23.7,
+          "status": "正常",
+          "golden_cross": "False"
+        },
+        "kdj": {
+          "k": 26.49,
+          "d": 18.94,
+          "j": 41.6,
+          "golden_cross": "False",
+          "death_cross": "False",
+          "overbought": "False",
+          "oversold": "False",
+          "j_overbought": "False",
+          "j_oversold": "False"
+        },
+        "bollinger": {
+          "upper": 3377.15,
+          "mid": 2888.65,
+          "lower": 2400.16,
+          "width": 33.82,
+          "position": 24.01,
+          "breakout_upper": "False",
+          "breakout_lower": "False",
+          "bandwidth_expanding": "False"
+        },
+        "volume": {
+          "current_volume": "18140998247",
+          "vol_ma5": 18138658754.0,
+          "vol_ma10": 16904535586.0,
+          "vol_ma20": 16168341980.0,
+          "volume_ratio": 1.0,
+          "volume_status": "量能正常",
+          "volume_price": "量价配合正常"
+        },
+        "atr": {
+          "atr": 107.45,
+          "atr_ratio": 4.08,
+          "volatility_level": "中波动"
+        },
+        "obv": {
+          "obv": -74577238698.0,
+          "obv_ma10": -55535306124.0,
+          "trend_up": "False",
+          "divergence_bullish": "False"
+        }
+      }
+    },
+    "sentiment": "偏悲观",
+    "sentiment_score": 31,
+    "position": "20-30%",
+    "reasons": [
+      "大盘下降趋势",
+      "深市/创业板同步走弱"
+    ]
+  },
+  "picks": [],
+  "all_picks": [],
+  "top_picks": [],
+  "special_picks": [],
+  "total_count": 0,
+  "top_count": 0,
+  "special_count": 0,
+  "market_sentiment": {
+    "phase": "发酵",
+    "risk_regime": "退潮",
+    "limit_up_count": 72,
+    "zhaban_count": 69,
+    "zhaban_rate": 48.9,
+    "dieting_count": 5,
+    "idx_weak_pct": 2.02,
+    "max_limit_board": 5,
+    "lianban_count": 8,
+    "dragon_alive": true,
+    "standstill": true,
+    "no_new_buy": true,
+    "note": "炸板率49%、跌停5只、最弱指数2.02%，情绪退潮，尾盘空仓观望，等待冰点"
+  },
+  "auto_check": {},
+  "summary": {
+    "total": 0,
+    "note": "情绪退潮，尾盘不做买入推荐"
+  }
+}
