@@ -3,15 +3,16 @@
   "anomaly_count": 1,
   "anomalies": [
     {
-      "type": "板块扩散明显下降",
+      "type": "板块级转强",
       "level": "high",
-      "up_count": 856,
-      "down_count": 4440,
-      "diffusion_ratio": 0.19,
-      "reason": "上涨856只，下跌4440只，涨跌比0.19，市场情绪偏弱",
-      "description": "上涨856只，下跌4440只，涨跌比0.19"
+      "industry": "",
+      "avg_pct": 2.45,
+      "stock_count": 5369,
+      "leader": "联赢激光",
+      "reason": "领涨股联赢激光(688518)涨幅20.0%",
+      "description": "板块平均涨幅2.5%，5369只股票上涨"
     }
   ],
-  "summary": "板块扩散明显下降1起",
-  "check_time": "2026-10-30 13:23:08"
+  "summary": "板块级转强1起",
+  "check_time": "2026-11-02 08:20:55"
 }
