@@ -1,18 +1,7 @@
 {
-  "has_anomaly": true,
-  "anomaly_count": 1,
-  "anomalies": [
-    {
-      "type": "板块级转强",
-      "level": "high",
-      "industry": "",
-      "avg_pct": 2.45,
-      "stock_count": 5369,
-      "leader": "联赢激光",
-      "reason": "领涨股联赢激光(688518)涨幅20.0%",
-      "description": "板块平均涨幅2.5%，5369只股票上涨"
-    }
-  ],
-  "summary": "板块级转强1起",
-  "check_time": "2026-11-02 16:28:11"
+  "has_anomaly": false,
+  "anomaly_count": 0,
+  "anomalies": [],
+  "summary": "盘中无异动，保持静默",
+  "check_time": "2026-11-03 08:37:12"
 }
