@@ -3,16 +3,15 @@
   "anomaly_count": 1,
   "anomalies": [
     {
-      "type": "板块级转强",
+      "type": "板块扩散明显下降",
       "level": "high",
-      "industry": "",
-      "avg_pct": 2.33,
-      "stock_count": 5370,
-      "leader": "酉立智能",
-      "reason": "领涨股酉立智能(920007)涨幅30.0%",
-      "description": "板块平均涨幅2.3%，5370只股票上涨"
+      "up_count": 677,
+      "down_count": 4626,
+      "diffusion_ratio": 0.15,
+      "reason": "上涨677只，下跌4626只，涨跌比0.15，市场情绪偏弱",
+      "description": "上涨677只，下跌4626只，涨跌比0.15"
     }
   ],
-  "summary": "板块级转强1起",
-  "check_time": "2026-11-05 14:52:49"
+  "summary": "板块扩散明显下降1起",
+  "check_time": "2026-11-06 08:31:42"
 }
