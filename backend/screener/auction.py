@@ -374,7 +374,7 @@ class AuctionScreener:
     # 竞价参数（可按回测调整）
     OPEN_MIN = 1.0          # 竞价涨幅下限（%）
     OPEN_STRONG_MIN = 2.0   # 强势下限
-    OPEN_MAX = 7.0          # 竞价涨幅上限（高开太多易被砸）
+    OPEN_MAX = 6.0          # 竞价涨幅上限（回测显示6-7%极端高开组均值-12%、全亏，故收紧）
     AUCTION_VOL_MIN = 2.0   # 竞价量占昨日量下限（%）
     PRICE_MIN = 2.0
     PRICE_MAX = 10.0
@@ -553,7 +553,7 @@ class AuctionScreener:
         elif op <= 5:
             s_open = 28 + (op - 2) * (7 / 3)     # 2-5% -> 28~35
         else:
-            s_open = 35 - (op - 5) * 4           # 5-7% 回落（高开风险）
+            s_open = 35 - (op - 5) * 4           # 5-6% 回落（高开风险，硬上限6%）
         s_open = max(0, min(35, s_open))
         # 竞价量能：竞价量占昨日量 2% 起，8% 满分
         vr = c["auction_vol_ratio"] or 0
