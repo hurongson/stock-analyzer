@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-19",
+  "snapshot_time": "09:25:00",
+  "data_source": "龙头候选池",
+  "in_auction_window": true,
+  "prev_regime": "健康",
+  "candidate_count": 4,
+  "holdings_feedback": {
+    "count": 3,
+    "items": [
+      {
+        "code": "601668",
+        "name": "中国建筑",
+        "open_pct": 0.21,
+        "price": 4.73,
+        "stop_loss": 4.58,
+        "target": 5.1,
+        "vol_ratio": null,
+        "status": "小幅高开",
+        "action": "符合预期，观察能否放量站稳"
+      },
+      {
+        "code": "000100",
+        "name": "TCL科技",
+        "open_pct": -0.21,
+        "price": 4.76,
+        "stop_loss": 4.63,
+        "target": 5.15,
+        "vol_ratio": null,
+        "status": "小幅低开",
+        "action": "不及预期，保持警惕、设好止损"
+      },
+      {
+        "code": "600467",
+        "name": "好当家",
+        "open_pct": -9.39,
+        "price": 2.51,
+        "stop_loss": 2.69,
+        "target": 2.99,
+        "vol_ratio": null,
+        "status": "触及止损",
+        "action": "严格执行止损，不抱侥幸"
+      }
+    ]
+  },
+  "mode": "实时竞价",
+  "picks": [],
+  "top_picks": [],
+  "groups": {},
+  "total_count": 0,
+  "top_count": 0,
+  "elapsed": 10.7
+}
