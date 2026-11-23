@@ -3,15 +3,16 @@
   "anomaly_count": 1,
   "anomalies": [
     {
-      "type": "板块扩散明显下降",
+      "type": "板块级转强",
       "level": "high",
-      "up_count": 280,
-      "down_count": 5076,
-      "diffusion_ratio": 0.06,
-      "reason": "上涨280只，下跌5076只，涨跌比0.06，市场情绪偏弱",
-      "description": "上涨280只，下跌5076只，涨跌比0.06"
+      "industry": "",
+      "avg_pct": 2.96,
+      "stock_count": 5370,
+      "leader": "920067",
+      "reason": "领涨股920067(920067)涨幅66.2%",
+      "description": "板块平均涨幅3.0%，5370只股票上涨"
     }
   ],
-  "summary": "板块扩散明显下降1起",
-  "check_time": "2026-11-20 15:42:00"
+  "summary": "板块级转强1起",
+  "check_time": "2026-11-23 18:39:12"
 }
