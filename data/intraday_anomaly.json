@@ -1,18 +1,7 @@
 {
-  "has_anomaly": true,
-  "anomaly_count": 1,
-  "anomalies": [
-    {
-      "type": "板块级转强",
-      "level": "high",
-      "industry": "",
-      "avg_pct": 2.96,
-      "stock_count": 5370,
-      "leader": "920067",
-      "reason": "领涨股920067(920067)涨幅66.2%",
-      "description": "板块平均涨幅3.0%，5370只股票上涨"
-    }
-  ],
-  "summary": "板块级转强1起",
-  "check_time": "2026-11-23 18:39:12"
+  "has_anomaly": false,
+  "anomaly_count": 0,
+  "anomalies": [],
+  "summary": "盘中无异动，保持静默",
+  "check_time": "2026-11-24 18:08:09"
 }
