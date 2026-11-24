@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-24",
+  "snapshot_time": "09:27:16",
+  "data_source": "龙头候选池",
+  "in_auction_window": true,
+  "prev_regime": "健康",
+  "candidate_count": 33,
+  "holdings_feedback": {
+    "count": 10,
+    "items": [
+      {
+        "code": "600186",
+        "name": "莲花控股",
+        "open_pct": 2.52,
+        "price": 9.37,
+        "stop_loss": 8.87,
+        "target": 9.87,
+        "vol_ratio": null,
+        "status": "小幅高开",
+        "action": "符合预期，观察能否放量站稳"
+      },
+      {
+        "code": "600360",
+        "name": "华微电子",
+        "open_pct": 2.42,
+        "price": 9.3,
+        "stop_loss": 8.81,
+        "target": 9.81,
+        "vol_ratio": null,
+        "status": "小幅高开",
+        "action": "符合预期，观察能否放量站稳"
+      },
+      {
+        "code": "000725",
+        "name": "京东方A",
+        "open_pct": 1.79,
+        "price": 4.55,
+        "stop_loss": 4.34,
+        "target": 4.83,
+        "vol_ratio": null,
+        "status": "小幅高开",
+        "action": "符合预期，观察能否放量站稳"
+      },
+      {
+        "code": "600839",
+        "name": "四川长虹",
+        "open_pct": 1.51,
+        "price": 5.39,
+        "stop_loss": 5.15,
+        "target": 5.73,
+        "vol_ratio": null,
+        "status": "小幅高开",
+        "action": "符合预期，观察能否放量站稳"
+      },
+      {
+        "code": "601006",
+        "name": "大秦铁路",
+        "open_pct": -0.2,
+        "price": 4.94,
+        "stop_loss": 4.8,
+        "target": 5.35,
+        "vol_ratio": null,
+        "status": "小幅低开",
+        "action": "不及预期，保持警惕、设好止损"
+      },
+      {
+        "code": "600930",
+        "name": "华电新能",
+        "open_pct": -0.5,
+        "price": 3.97,
+        "stop_loss": 3.87,
+        "target": 4.31,
+        "vol_ratio": null,
+        "status": "小幅低开",
+        "action": "不及预期，保持警惕、设好止损"
+      },
+      {
+        "code": "603030",
+        "name": "全筑股份",
+        "open_pct": -0.93,
+        "price": 2.13,
+        "stop_loss": 2.09,
+        "target": 2.32,
+        "vol_ratio": null,
+        "status": "小幅低开",
+        "action": "不及预期，保持警惕、设好止损"
+      },
+      {
+        "code": "600863",
+        "name": "华能蒙电",
+        "open_pct": -1.68,
+        "price": 5.28,
+        "stop_loss": 5.21,
+        "target": 5.8,
+        "vol_ratio": null,
+        "status": "小幅低开",
+        "action": "不及预期，保持警惕、设好止损"
+      },
+      {
+        "code": "601728",
+        "name": "中国电信",
+        "open_pct": -1.85,
+        "price": 6.9,
+        "stop_loss": 6.82,
+        "target": 7.59,
+        "vol_ratio": null,
+        "status": "小幅低开",
+        "action": "不及预期，保持警惕、设好止损"
+      },
+      {
+        "code": "600795",
+        "name": "国电电力",
+        "open_pct": -2.03,
+        "price": 5.31,
+        "stop_loss": 5.26,
+        "target": 5.85,
+        "vol_ratio": null,
+        "status": "明显低开",
+        "action": "弱转强失败，考虑减仓或离场"
+      }
+    ]
+  },
+  "mode": "实时竞价",
+  "picks": [],
+  "top_picks": [],
+  "groups": {},
+  "total_count": 0,
+  "top_count": 0,
+  "elapsed": 17.3
+}
